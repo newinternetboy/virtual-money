@@ -1,0 +1,144 @@
+{__NOLAYOUT__}
+{js href="__JS__/bootstrap-datetimepicker.min.js" /}
+{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
+{css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+<form data-method="post" data-action="{:url('admin/price/saveData')}" data-submit="ajax" data-validate="true" class="form-horizontal">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title">{$data['id']?lang('Edit'):lang('Add')}{:lang('Price')}</h3>
+                </div>
+                <input type="hidden" name="id" value="{$data.id ?? ''}">
+                <div class="modal-body">
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Name')}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="name" maxlength="20"  placeholder="{:lang('Up_characters',['langth' =>20])}" required value="{$data.name ?? ''}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Type')}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="type"  required value="{$data.type ?? ''}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Period')}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="period" required value="{$data.period ?? ''}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Basic Price')}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="basic_price" required value="{$data.basic_price ?? ''}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price First Price')}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="first_price" required value="{$data.first_price ?? ''}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price First Value')}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="first_val"  required value="{$data.first_val ?? ''}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Second Price')}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="second_price"  required value="{$data.second_price ?? ''}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Second Value')}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="second_val"  required value="{$data.second_val ?? ''}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Third Price')}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="third_price" required value="{$data.third_price ?? ''}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Third Value')}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="third_val" required value="{$data.third_val ?? ''}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Fourth Price')}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="fourth_price"  required value="{$data.fourth_price ?? ''}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('End Time')}</label>
+                            <div class="col-sm-7">
+                                <div class="input-append date">
+                                    <input id="datetimepicker" size="20" name="endtime" type="text" value="{$data.endtime ?date('Y-m-d H:i:s',$data.endtime) : ''}" class="form-control" required readonly>
+                                    <span class="add-on"><i class="icon-th"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                    <button type="submit" class="btn btn-primary">{:lang('Save')}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $("#datetimepicker").datetimepicker({
+        language:"zh-CN",
+        container:".modal-content",
+        format: "yyyy-mm-dd hh:ii:ss",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "top-right",
+        minuteStep: 1,
+        bootcssVer:3,
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+        event.preventDefault();
+        event.stopPropagation();
+    });
+</script>

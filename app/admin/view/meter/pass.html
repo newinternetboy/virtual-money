@@ -1,0 +1,247 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单标题概要 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Meter')}{:lang('Pass')}</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <!-- 表格数据 -->
+                    <form data-method="post" data-submit="ajax" data-validate="true" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: right">
+                                <div class="input-group">
+                                    <input id="M_Code" type="text" class="form-control" placeholder="请输入表号...">
+                                        <span class="input-group-btn">
+                                            <button id="search" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> </button>
+                                        </span>
+                                </div><!-- /input-group -->
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+
+                        <!--原表信息-->
+                        <h5>原表信息</h5>
+                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+                        <div id="meterInfo">
+                            <label for="M_Code_P" class="col-sm-2 control-label">表号</label>
+                            <div class="col-sm-4">
+                                <p id="M_Code_P" class="form-control" style="border: none"></p>
+                            </div>
+                            <label for="M_Type" class="col-sm-2 control-label">表具类型</label>
+                            <div class="col-sm-4">
+                                <p id="M_Type" class="form-control" style="border: none"></p>
+                            </div>
+                            <label for="username" class="col-sm-2 control-label">用户姓名</label>
+                            <div class="col-sm-4">
+                                <p id="username" class="form-control" style="border: none"></p>
+                            </div>
+                            <label for="left" class="col-sm-2 control-label">剩余金额</label>
+                            <div class="col-sm-4">
+                                <p id="left" class="form-control" style="border: none"></p>
+                            </div>
+                            <label for="telephone" class="col-sm-2 control-label">联系电话</label>
+                            <div class="col-sm-4">
+                                <p id="telephone" class="form-control" style="border: none"></p>
+                            </div>
+                            <label for="address" class="col-sm-2 control-label">安装地址</label>
+                            <div class="col-sm-4">
+                                <p id="address" class="form-control" style="border: none"></p>
+                            </div>
+                            <label for="family_num_P" class="col-sm-2 control-label">家庭人数</label>
+                            <div class="col-sm-4">
+                                <p id="family_num_P" class="form-control" style="border: none"></p>
+                            </div>
+                            <label for="building_area_P" class="col-sm-2 control-label">住宅面积(㎡)</label>
+                            <div class="col-sm-4">
+                                <p id="building_area_P" class="form-control" style="border: none"></p>
+                            </div>
+                            <label for="income_peryear_P" class="col-sm-2 control-label">年均收入(元)</label>
+                            <div class="col-sm-4">
+                                <p id="income_peryear_P" class="form-control" style="border: none"></p>
+                            </div>
+                        </div>
+                        <div style="clear: both"></div>
+                        <!--过户信息-->
+                        <h5>过户信息</h5>
+                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+                        <div id="newConsumerInfo">
+                            <div class="form-group">
+                                <label for="new_username" class="col-sm-2 control-label">新用户姓名</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control"  name="new_username" id="new_username" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="new_telephone" class="col-sm-2 control-label">新联系电话</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control"  name="new_telephone" id="new_telephone" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="new_identity" class="col-sm-2 control-label">新身份证号</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control"  name="new_identity" id="new_identity" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="family_num" class="col-sm-2 control-label">家庭人数</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control"  name="family_num" id="family_num" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="building_area" class="col-sm-2 control-label">住宅面积</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control"  name="building_area" id="building_area" placeholder="单位:m²" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="income_peryear" class="col-sm-2 control-label">年均收入</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control"  name="income_peryear" id="income_peryear" placeholder="单位:元">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="color:red">
+                            <label  class="col-sm-2 control-label">操作提示:</label>
+                            <div class="col-sm-10">
+                                <p class="form-control" style="border: none">请先在搜索框输入表号进行查询，返回符合条件的结果,再进行操作</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: right" class="btn btn-success" type="button" onclick="passMeter()" >提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#search').click(function(){
+        var M_Code = $('#M_Code').val();
+        if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
+            $.ajax({
+                url:"{:url('admin/meter/getMeterData')}",
+                method:'post',
+                dataType:'json',
+                data:{M_Code: M_Code},
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    if(res.code != 200){
+                        $('#meterInfo P').each(function(){$(this).text('')});
+                        alertMsg(res.msg);
+                    }else{
+                        fillText(res);
+                    }
+                },
+                error:function(){
+                    alertMsg("操作失败！");
+                }
+            })
+        }else{
+            alertMsg("请先填写表号");
+        }
+
+    })
+
+    function fillText(data){
+        var meter = data['meter'];
+        var consumer = data['consumer'];
+        $('#M_Code_P').text(meter.M_Code);
+
+        if( meter.meter_status == "undefined" || meter.meter_status == null || meter.meter_status == ''){
+            $('#username').text('');
+            $('#telephone').text('');
+            $('#family_num_P').text('');
+            $('#building_area_P').text('');
+            $('#income_peryear_P').text('');
+            $('#address').text('');
+            $('#M_Type').text("");
+        }else{
+            $('#username').text(consumer.username);
+            $('#telephone').text(consumer.telephone);
+            $('#family_num_P').text(consumer.family_num);
+            $('#building_area_P').text(consumer.building_area);
+            $('#income_peryear_P').text(consumer.income_peryear);
+            //$('#left').text(consumer.left);
+            $('#address').text(meter.area+' '+meter.detail_address);
+            if( meter.M_Type == "{$Think.const.METER_TYPE_WATER}" ){
+                $('#M_Type').text("水表");
+            }else if(meter.M_Type == "{$Think.const.METER_TYPE_ELECTRICITY}"){
+                $('#M_Type').text("电表");
+            }else if(meter.M_Type == "{$Think.const.METER_TYPE_GAS}"){
+                $('#M_Type').text("气表");
+            }
+        }
+    }
+
+    function passMeter(){
+        var M_Code = $('#M_Code_P').text();
+        var username = $('#new_username').val();
+        var telephone = $('#new_telephone').val();
+        var identity = $('#new_identity').val();
+        var family_num = $('#family_num').val();
+        var building_area = $('#building_area').val();
+        var income_peryear = $('#income_peryear').val();
+        var new_consumer = {"username": username, "telephone": telephone, "identity": identity, "family_num": family_num, "building_area": building_area, "income_peryear": income_peryear};
+        if( M_Code != 'undefined' && M_Code!= '' && M_Code != null && check(new_consumer)){
+            $.ajax({
+                url:"{:url('admin/meter/passMeter')}",
+                method:'post',
+                dataType:'json',
+                data:{M_Code: M_Code,consumer: JSON.stringify(new_consumer)},
+                beforeSend:function(){}, //覆盖main.js中的方法,否则success回调方法不能正常使用
+                success: function(res){
+                    alertMsg(res.msg);
+                    if( res.code == 200 ){
+                        setTimeout(function(){window.location.href = ''},1500);
+                    }
+                },
+                error:function(){
+                    alertMsg("操作失败！");
+                }
+            })
+        }
+    }
+
+    function check(consumer){
+        if( consumer.username == "" || consumer.username == null || consumer.username == "undefined"){
+            alertMsg("请先填写姓名");
+            return false;
+        }
+        if( consumer.telephone == "" || consumer.telephone == null || consumer.telephone == "undefined"){
+            alertMsg("请先填写电话");
+            return false;
+        }
+        if(!checkTelephone(consumer.telephone)){
+            return false;
+        }
+        if( consumer.identity == "" || consumer.identity == null || consumer.identity == "undefined"){
+            alertMsg("请先填写身份证号");
+            return false;
+        }
+        if (!checkCard(consumer.identity)) {
+            alertMsg("请输入正确的身份证号码");
+            return false;
+        }
+        return true;
+    }
+
+</script>

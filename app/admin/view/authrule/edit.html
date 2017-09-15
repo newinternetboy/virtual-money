@@ -1,0 +1,66 @@
+{__NOLAYOUT__}
+<form data-method="post" data-action="{:url('Authrule/saveData');}" data-submit="ajax" data-validate="true" class="form-horizontal" id="editForm">
+    <input type="hidden" value="{$data['id']}" name="id">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title">{:lang('Edit')}</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Auth Name')}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="title" maxlength="8" placeholder="{:lang('Up_characters',['langth' =>8])}" required value="{$data['title']}" >
+                            </div>
+                        </div>
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Parent Name')}</label>
+                            <div class="col-sm-7">
+                                <select class="form-control" name="pid">
+                                    <option class="form-control" value="0">根目录</option>
+                                    {foreach $authRules as $authRule}
+                                    <option  class="form-control" value="{$authRule.id}" {if condition="$data['pid'] eq $authRule['id']"}selected{/if}><?php echo $authRule['prefix'].'|--'.$authRule['title'];?></option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">RULE_VAL</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="rule_val" maxlength="255" placeholder="{:lang('Auth Val')}（module/controller/action)" required value="{$data['rule_val']}">
+                            </div>
+                        </div>
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Display')}</label>
+                            <div class="col-sm-7">
+                                <select class="form-control" name="display">
+                                    <option class="form-control" value="1" <?php echo $data['display']==1 ? 'selected' : ''?> >{:lang('Yes')}</option>
+                                    <option class="form-control" value="0" <?php echo $data['display']==0 ? 'selected' : ''?> >{:lang('No')}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Glyphicon')}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="glyphicon" maxlength="255" placeholder="{:lang('Glyphicon Placeholder')}" required value="{$data['glyphicon'] ?? ''}">
+                            </div>
+                        </div>
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Sort Rule')}</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" name="sortnum" placeholder="{:lang('Sort Num')}" required value="{$data['sortnum']}" >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                    <button type="submit" class="btn btn-primary">{:lang('Save')}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
