@@ -32,7 +32,7 @@
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 
                         <div id="meterInfo">
-                            <div class="form-group">
+                            <div class="form-group" style="display: none">
                                 <label for="M_Code" class="col-sm-2 control-label">表号</label>
                                 <div class="col-sm-10">
                                     <input class="form-control"  name="M_Code" id="M_Code" disabled="disabled" >
@@ -48,47 +48,55 @@
                                     <!--</select>-->
                                 <!--</div>-->
                             <!--</div>-->
-                            <div class="form-group">
+                            <h5>个人资料</h5>
+                            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+                            <div id="consumerinfo">
+                                <div class="form-group">
                                 <label for="username" class="col-sm-2 control-label">姓名</label>
                                 <div class="col-sm-10">
                                     <input class="form-control"  name="username" id="username"  >
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="telephone" class="col-sm-2 control-label">联系电话</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" name="telephone" id="telephone"  >
+                                <div class="form-group">
+                                    <label for="telephone" class="col-sm-2 control-label">联系电话</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="telephone" id="telephone"  >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="M_Address" class="col-sm-2 control-label">安装地址</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control"  name="M_Address" id="M_Address"  >
+                                            {foreach $areas as $area }
+                                            <option value="{$area.id}">{$area.name}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input class="form-control"  name="detail_address" id="detail_address" placeholder="请输入详细地址"  >
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="M_Address" class="col-sm-2 control-label">安装地址</label>
-                                <div class="col-sm-4">
-                                    <select class="form-control"  name="M_Address" id="M_Address"  >
-                                        {foreach $areas as $area }
-                                        <option value="{$area.id}">{$area.name}</option>
-                                        {/foreach}
-                                    </select>
+                            <h5>附加资料</h5>
+                            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+                            <div id="addtion">
+                                <div class="form-group">
+                                    <label for="family_num" class="col-sm-2 control-label">家庭人数</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control"  name="family_num" id="family_num" >
+                                    </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <input class="form-control"  name="detail_address" id="detail_address" placeholder="请输入详细地址"  >
+                                <div class="form-group">
+                                    <label for="building_area" class="col-sm-2 control-label">住宅面积</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control"  name="building_area" id="building_area" placeholder="单位:m²" >
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="family_num" class="col-sm-2 control-label">家庭人数</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  name="family_num" id="family_num" >
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="building_area" class="col-sm-2 control-label">住宅面积</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  name="building_area" id="building_area" placeholder="单位:m²" >
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="income_peryear" class="col-sm-2 control-label">年均收入</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  name="income_peryear" id="income_peryear" placeholder="单位:元">
+                                <div class="form-group">
+                                    <label for="income_peryear" class="col-sm-2 control-label">年均收入</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control"  name="income_peryear" id="income_peryear" placeholder="单位:元">
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group" style="color:red">
