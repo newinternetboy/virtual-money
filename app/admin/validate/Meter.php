@@ -14,6 +14,7 @@ class Meter extends Validate
         'M_Address'             => 'require',
         'detail_address'        => 'require',
         'change_reason'         => 'require',
+        'meter_status'          => 'require'
     ];
 
     protected $message  =   [
@@ -24,6 +25,7 @@ class Meter extends Validate
         'M_Address.require'             => '地址必须',
         'detail_address.require'        => '详细地址必须',
         'change_reason.require'         => '换表原因必须',
+        'meter_status.require'         => '表具状态必须',
     ];
 
     protected $scene = [
@@ -35,7 +37,9 @@ class Meter extends Validate
         'change_update_old_meter' => ['change_reason'],
         'change_update_new_meter' => ['M_Type','M_Code','P_ID','U_ID','M_Address','detail_address'],
         //表具修改
-        'edit' => ['M_Address','detail_address']
+        'edit' => ['M_Address','detail_address'],
+        //表具信息维护
+        'delete' => ['meter_status']
     ];
 }
 
