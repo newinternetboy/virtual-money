@@ -16,18 +16,18 @@ class Consumer extends Validate
     protected $rule =   [
         'M_Code'              => 'require',
         'username'              => 'require',
-        'telephone'             => 'require',
+        'tel'             => 'require',
         'identity'              => 'require',
     ];
 
     protected $message  =   [
         'M_Code.require'                => '表号必须',
         'username.require'              => '姓名必须',
-        'telephone.require'             => '电话号码必须',
+        'tel.require'                   => '电话号码必须',
         'identity.require'              => '身份证号必须',
     ];
 
     protected $scene = [
-        'edit' => ['username','telephone'],
+        'edit' => ['username','tel'],
     ];
 }

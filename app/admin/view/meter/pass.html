@@ -51,9 +51,9 @@
                             <div class="col-sm-4">
                                 <p id="left" class="form-control" style="border: none"></p>
                             </div>
-                            <label for="telephone" class="col-sm-2 control-label">联系电话</label>
+                            <label for="tel" class="col-sm-2 control-label">联系电话</label>
                             <div class="col-sm-4">
-                                <p id="telephone" class="form-control" style="border: none"></p>
+                                <p id="tel" class="form-control" style="border: none"></p>
                             </div>
                             <label for="address" class="col-sm-2 control-label">安装地址</label>
                             <div class="col-sm-4">
@@ -168,7 +168,7 @@
 
         if( meter.meter_status == "undefined" || meter.meter_status == null || meter.meter_status == ''){
             $('#username').text('');
-            $('#telephone').text('');
+            $('#tel').text('');
             $('#family_num_P').text('');
             $('#building_area_P').text('');
             $('#income_peryear_P').text('');
@@ -176,7 +176,7 @@
             $('#M_Type').text("");
         }else{
             $('#username').text(consumer.username);
-            $('#telephone').text(consumer.telephone);
+            $('#tel').text(consumer.tel);
             $('#family_num_P').text(consumer.family_num);
             $('#building_area_P').text(consumer.building_area);
             $('#income_peryear_P').text(consumer.income_peryear);
@@ -195,12 +195,12 @@
     function passMeter(){
         var M_Code = $('#M_Code_P').text();
         var username = $('#new_username').val();
-        var telephone = $('#new_telephone').val();
+        var tel = $('#new_telephone').val();
         var identity = $('#new_identity').val();
         var family_num = $('#family_num').val();
         var building_area = $('#building_area').val();
         var income_peryear = $('#income_peryear').val();
-        var new_consumer = {"username": username, "telephone": telephone, "identity": identity, "family_num": family_num, "building_area": building_area, "income_peryear": income_peryear};
+        var new_consumer = {"username": username, "tel": tel, "identity": identity, "family_num": family_num, "building_area": building_area, "income_peryear": income_peryear};
         if( M_Code != 'undefined' && M_Code!= '' && M_Code != null && check(new_consumer)){
             $.ajax({
                 url:"{:url('admin/meter/passMeter')}",
@@ -226,11 +226,11 @@
             alertMsg("请先填写姓名");
             return false;
         }
-        if( consumer.telephone == "" || consumer.telephone == null || consumer.telephone == "undefined"){
+        if( consumer.tel == "" || consumer.tel == null || consumer.tel == "undefined"){
             alertMsg("请先填写电话");
             return false;
         }
-        if(!checkTelephone(consumer.telephone)){
+        if(!checkTelephone(consumer.tel)){
             return false;
         }
         if( consumer.identity == "" || consumer.identity == null || consumer.identity == "undefined"){
