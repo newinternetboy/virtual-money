@@ -1,0 +1,82 @@
+{js href="__LIB__/jquery.validate.min.js" /}
+                        <div id="consumerinfo" style="padding-top:100px;">
+                        <form id="commentForm">
+                            <div class="form-group">
+                                <label for="username" class="col-sm-2 control-label">旧密码</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" rangelength="[6,16]"  name="oldpasswd" id="oldpasswd"  >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="telephone" class="col-sm-2 control-label">新密码</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" name="newpasswd" id="newpasswd" rangelength="[6,16]"  >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="identity" class="col-sm-2 control-label">确认新密码</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control"  name="surepasswd" id="surepasswd" rangelength="[6,16]" >
+                                </div>
+                            </div>
+                           <div class="form-group">
+                                <label  class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                   <button style="float: right" class="btn btn-success" type="button" onclick="saveData()" >提交</button>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+
+<script type="text/javascript">
+      function saveData(){
+        var oldpasswd = $('#oldpasswd').val();
+        var newpasswd = $('#newpasswd').val();
+        var surepasswd = $('#surepasswd').val();
+        var meter = {oldpasswd:oldpasswd, newpasswd: newpasswd, surepasswd:surepasswd};
+        if( !check(meter) ){
+            return false;
+        }
+        $.ajax({
+            url:"{:url('admin/user/updatepasswd')}",
+            method:'post',
+            dataType:'json',
+            data:meter,
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                alertMsg(res.msg);
+                if( res.code == 200 ){
+                    setTimeout(function(){window.location.href = ''},1500);
+                }
+            },
+            error:function(){
+                alertMsg("操作失败！");
+            }
+        })
+     }
+     function check(meter){
+        if( meter.oldpasswd == "" || meter.oldpasswd == null || meter.oldpasswd == "undefined"){
+            alertMsg("请先填写旧的密码");
+            return false;
+        }
+        if( meter.newpasswd == "" || meter.newpasswd == null || meter.newpasswd == "undefined"){
+            alertMsg("请先填写新密码");
+            return false;
+        }
+        if(!same(meter)){
+            alertMsg("两次输入的密码不一致");
+            return false;
+        }
+        
+        return true;
+    }
+    function same(meter){
+        if(meter.newpasswd==meter.surepasswd){
+            return true;
+        }
+    }
+</script>
+<script type="text/javascript">
+　$("#commentForm").validate() 
+</script>              
+                       

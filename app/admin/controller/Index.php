@@ -13,7 +13,7 @@ use think\Config;
 * 登录
 * @version 1.0 
 */
-class Index extends Admin
+class Index extends Admin 
 {
 	/**
 	 * 后台登录首页

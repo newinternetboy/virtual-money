@@ -2,7 +2,7 @@
 namespace app\admin\controller;
 
 use think\Loader;
-
+use think\validate;
 
 /**
 * 用户管理
@@ -118,6 +118,39 @@ class User extends Admin
 
         Loader::model('LogRecord')->record( lang('Delete User'),json_encode($id) );
         return Loader::model('User')->deleteById($id);
+    }
+    public function updatepasswd(){
+        if(request()->isPost()){ 
+            $ret['code'] = 200;
+             $ret['msg'] ='修改成功';
+            $validate=new Validate([
+               'oldpasswd'=>'require', 
+               'newpasswd'=>'require|max:12|min:6',
+               'surepasswd'=>'require|max:12|min:6'
+                ]);
+           $data=[
+           'oldpasswd'=>input('oldpasswd'),
+           'newpasswd'=>input('newpasswd'),
+           'surepasswd'=>input('surepasswd')
+          ];
+          if(!$validate->check($data)){
+             $ret['code'] = 9999;
+             $ret['msg'] =$validate->getError();
+             return json($ret);
+
+          }
+          $rs=db('user')->find($this->uid);
+          if(mduser($data['oldpasswd'])==$rs['password']){
+            $res=db('user')->where('id','=',$this->uid)->update(['password'=>mduser($data['newpasswd'])]);
+                return json($ret);      
+          }else{
+            $ret['code']=9999;
+            $ret['msg']='密码不正确请重试';
+            return json($ret);
+          }
+        }else{          
+           return $this->fetch();
+        }
     }
 
    
