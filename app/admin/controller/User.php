@@ -137,7 +137,7 @@ class User extends Admin
              $ret['code'] = 9999;
              $ret['msg'] =$validate->getError();
              return json($ret);
-
+    
           }
           $rs=db('user')->find($this->uid);
           if(mduser($data['oldpasswd'])==$rs['password']){
