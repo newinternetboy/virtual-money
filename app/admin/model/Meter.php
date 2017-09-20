@@ -23,4 +23,11 @@ class Meter extends Admin
     public function updateMeter($data,$scene){
         return $this->validate($scene)->isUpdate(true)->save($data);
     }
+
+    public function getMeterInfo($where,$method,$field = ''){
+        if( !$field ){
+            return $this->where($where)->$method();
+        }
+        return $this->where($field)->$method();
+    }
 }

@@ -72,4 +72,11 @@ class Area extends Admin
     public function getAreaById($id){
         return $this->where('id',$id)->find();
     }
+
+    public function getAreaInfo($where,$method,$field = ''){
+        if( !$field ){
+            return $this->where($where)->$method();
+        }
+        return $this->where($field)->$method();
+    }
 }

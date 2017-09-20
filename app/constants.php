@@ -16,6 +16,16 @@ define('METER_STATUS_CHANGED',20); //被更换的旧表
 define('METER_STATUS_BIND',10); //已绑定
 define('METER_STATUS_DELETE',30); //已删除
 
+//阀门
+//阀门控制方式
+define('VALVE_USER',1); //指定用户控制
+define('VALVE_AREA',2); //指定区域控制
+//阀门操作
+define('VALVE_OPEN',2); //开阀
+define('VALVE_CLOSE',1); //关阀
+//阀门控制记录状态
+define('VALVE_WAITING',1); //未执行
+define('VALVE_DONE',5);    //已执行
 
 //客户信息
 //客户状态

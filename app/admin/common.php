@@ -58,4 +58,8 @@ function sortChildren(& $authRule,$authRules){
         }
     }
 }
+
+function trimMCode($M_Code){
+    return trim($M_Code);
+}
 ?>
