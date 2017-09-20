@@ -118,6 +118,7 @@ class User extends Admin
 
         Loader::model('LogRecord')->record( lang('Delete User'),json_encode($id) );
         return Loader::model('User')->deleteById($id);
+        
     }
     public function updatepasswd(){
         return $this->fetch();
