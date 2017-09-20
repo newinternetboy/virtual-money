@@ -14,6 +14,7 @@ define('METER_TYPE_GAS',3); //气
 //表具状态
 define('METER_STATUS_CHANGED',20); //被更换的旧表
 define('METER_STATUS_BIND',10); //已绑定
+define('METER_STATUS_DELETE',30); //已删除
 
 
 //客户信息

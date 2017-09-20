@@ -1,0 +1,74 @@
+<!-- Data Tables -->
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单标题概要 -->
+                <div class="ibox-title">
+                    <h5>运行参数</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <!-- 用户控件（操作） -->
+                    {toolbar id="toolbar"}
+
+                    {/toolbar}
+                    <!-- 表格数据 -->
+                    <table id="table" data-toggle="gridview" class="table" data-url="{:url('admin/MeterParam/getList')}" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
+                        <thead>
+                        <tr>
+                            <th data-width="10" data-align="center" data-checkbox="true"></th>
+                            <th data-width="50" data-field="tag" >参数名称</th>
+                            <th data-width="50" data-field="pulseRatio" >脉冲常亮(imp/m³)</th>
+                            <th data-width="50" data-field="lowLimit">低剩余报警(元)</th>
+                            <th data-width="50" data-field="overdraftLimit" >透支限额(元)</th>
+                            <th data-width="50" data-field="overdraftTime" >透支限制时间(天)</th>
+                            <!--<th data-width="50" data-field="MP_FreezeTime" >冻结时间(日)</th>-->
+                            <th data-width="50" data-field="uploadTime" >自动上报时间(时隔小时)</th>
+                            <th data-width="50" data-field="SMSCode" >短信平台号码</th>
+                            <th data-width="50" data-field="transformerRatio" >开机脉冲数</th>
+                            <th data-width="50" data-field="overFlimit" >流量上限(吨/小时)</th>
+                            <th data-width="50" data-field="operate"   data-align="center" data-formatter="operateFormatter" data-events="operateEvents">{:lang('Operate')}</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function operateFormatter(value, row, index) {
+        return [
+            '<a class="btn btn-xs edit" href="javascript:void(0)" title="{$Think.lang.Edit}">',
+            '<i class="fa fa-edit"></i>',
+            '</a>  ',
+            '<a class="btn btn-xs delete" href="javascript:void(0)" title="{$Think.lang.Delete}">',
+            '<i class="fa fa-trash"></i>',
+            '</a>'
+        ].join('');
+    }
+
+    var operateEvents = {
+        'click .edit': function (e, value, row, index) {
+            var param = {
+                url: "{:url('admin/meterparam/edit');}",
+                data: {id: row.id}
+            }
+            $("#table").gridView('loadModal', param.url,param.data)
+        },
+        'click .delete': function (e, value, row, index) {
+            $("#table").gridView('deleteModal', 'delete', row)
+
+        }
+    };
+</script>

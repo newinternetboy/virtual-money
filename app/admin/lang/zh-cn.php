@@ -107,6 +107,9 @@ return [
     'Pass Meter' => '表具过户',
     'Change Meter' => '表具更换',
     'Edit Meter' => '表具修改',
+    'Delete Meter' => '表具删除',
+    'Edit MeterParam' => '运行参数修改',
+    'Delete MeterParam' => '运行参数删除',
 
     //价格维护
     'Price List' => '价格列表',
@@ -142,4 +145,5 @@ return [
     'Pass'  => '过户',
     'Change'  => '更换',
     'Edit'  => '修改',
+    'Index' => '信息维护'
 ];

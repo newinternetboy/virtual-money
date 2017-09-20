@@ -1,0 +1,128 @@
+<!-- Data Tables -->
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单标题概要 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Meter')}{:lang('Index')}</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <!-- 表格数据 -->
+
+                    <div class="form-group">
+                        <div class="col-lg-6" style="float: right">
+                            <div class="input-group">
+                                <input id="M_Code_S" type="text" class="form-control" placeholder="请输入表号...">
+                                        <span class="input-group-btn">
+                                            <button id="search" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> </button>
+                                        </span>
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
+                    </div>
+                    <div style="clear: both"></div>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+
+
+                    <table id="table" data-toggle="gridview" class="table" data-show-refresh="false" >
+                        <thead>
+                        <tr>
+                            <th data-width="50"  >表号</th>
+                            <th data-width="50" >表具类型</th>
+                            <th data-width="50" >安装地址</th>
+                            <th data-width="20">{:lang('Operate')}</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $('#search').click(function(){
+        var M_Code = $('#M_Code_S').val();
+        if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
+            $.ajax({
+                url:"{:url('admin/meter/getMeterData')}",
+                method:'post',
+                dataType:'json',
+                data:{M_Code: M_Code},
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    if(res.code != 200){
+                        alertMsg(res.msg);
+                    }else{
+                        fillTable(res);
+                    }
+                },
+                error:function(){
+                    alertMsg("操作失败！");
+                }
+            })
+        }else{
+            alertMsg("请先填写表号");
+        }
+    })
+
+    function fillTable(res){
+        $("#table  tr:not(:first)").empty("");
+        var meter = res.meter;
+        if( meter.M_Type == "{$Think.const.METER_TYPE_WATER}" ){
+            var mtype = "水表";
+        }else if(meter.M_Type == "{$Think.const.METER_TYPE_ELECTRICITY}"){
+            var mtype = "电表";
+        }else if(meter.M_Type == "{$Think.const.METER_TYPE_GAS}"){
+            var mtype = "气表";
+        }else{
+            var mtype = "无";
+        }
+        var address = meter.meter_status ? meter.area +' '+ meter.detail_address : "无";
+        var html = '<tr>' +
+                        '<th data-width="50">'+ meter.M_Code +'</th>' +
+                        '<th data-width="50"  >'+ mtype +'</th>' +
+                        '<th data-width="50"  >'+ address +'</th>' +
+                        '<th data-width="20"><a onclick="del(\''+meter.M_Code+'\')" class="btn btn-xs delete" href="javascript:void(0)" title="{$Think.lang.Delete}">' +
+                '<i class="fa fa-trash"></i>' +
+                '</a></th>'+
+                    '</tr>';
+        $('#table').append(html);
+    }
+
+function del(M_Code){
+    if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
+        alertConfirm('确认删除表具 '+M_Code+ ' ?',function(){
+            $.ajax({
+                url:"{:url('admin/meter/delete')}",
+                method:'post',
+                dataType:'json',
+                data:{M_Code: M_Code},
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    alertMsg(res.msg);
+                    if(res.code == 200) {
+                        setTimeout(function(){window.location.href = ''},1500);
+                    }
+                },
+                error:function(){
+                    alertMsg("操作失败！");
+                }
+            })
+         });
+    }else{
+        alertMsg("请先填写表号");
+    }
+}
+</script>

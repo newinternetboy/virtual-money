@@ -245,6 +245,10 @@ class Meter extends Admin
         return json($data);
     }
 
+    /**
+     * 表具修改
+     * @return \think\response\View
+     */
     public function edit(){
         $prices = model('Price')->getList(['company_id' => $this->company_id]);
         $this->assign('prices',$prices);
@@ -255,6 +259,10 @@ class Meter extends Admin
         return view();
     }
 
+    /**
+     * 表具修改api
+     * @return \think\response\Json
+     */
     public function editMeter(){
         $this->mustCheckRule($this->company_id,'');
         $data = input('data');
@@ -296,5 +304,51 @@ class Meter extends Admin
             $ret['msg'] = $e->getMessage();
         }
         return json($ret);
+    }
+
+    /**
+     * 表具信息
+     */
+    public function index(){
+        return view();
+    }
+
+    /**
+     * 表具信息删除
+     * @return \think\response\Json
+     */
+    public function delete(){
+        $this->mustCheckRule($this->company_id,'');
+        $M_Code = input('M_Code');
+        $data['code'] = 200;
+        $data['msg'] = '操作成功';
+        try{
+            if( !$M_Code ){
+                exception('删除失败,请提供表号');
+            }
+            if( !$meter = model('Meter')->getMeterByCode($M_Code) ){
+                exception('删除失败,表号不存在');
+            }
+            if( isset($meter['company_id']) && $meter['company_id'] != $this->company_id ){
+                exception("删除失败,您无权对该表具进行操作");
+            }
+            if( !isset($meter['meter_status']) ){
+                exception('删除失败,此表是新表,尚未绑定任何用户信息');
+            }
+            if( $meter['meter_status'] != METER_STATUS_BIND ){
+                exception('删除失败,您不能对该表进行此操作');
+            }
+
+            $updateData['id'] = $meter['id'];
+            $updateData['meter_status'] = METER_STATUS_DELETE;
+            if( !model('Meter')->updateMeter($updateData,'Meter.delete') ){
+                exception('操作失败: '.model('Meter')->getError());
+            };
+            model('LogRecord')->record( lang('Delete Meter'),$M_Code);
+        }catch  (\Exception $e){
+            $data['code'] = 9999;
+            $data['msg'] = $e->getMessage();
+        }
+        return json($data);
     }
 }

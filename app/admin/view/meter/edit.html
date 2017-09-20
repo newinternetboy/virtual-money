@@ -58,9 +58,9 @@
                                 </div>
                             </div>
                                 <div class="form-group">
-                                    <label for="telephone" class="col-sm-2 control-label">联系电话</label>
+                                    <label for="tel" class="col-sm-2 control-label">联系电话</label>
                                     <div class="col-sm-10">
-                                        <input class="form-control" name="telephone" id="telephone"  >
+                                        <input class="form-control" name="tel" id="tel"  >
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -156,7 +156,7 @@
             $('#M_Address').find('option[value="'+meter.M_Address+'"]').prop("selected",true);
             $('#detail_address').val(meter.detail_address);
             $('#username').val(consumer.username);
-            $('#telephone').val(consumer.telephone);
+            $('#tel').val(consumer.tel);
             $('#family_num').val(consumer.family_num);
             $('#building_area').val(consumer.building_area);
             $('#income_peryear').val(consumer.income_peryear);
@@ -165,7 +165,7 @@
             $('#M_Address option:selected').prop("selected",false)
             $('#detail_address').val('');
             $('#username').val('');
-            $('#telephone').val('');
+            $('#tel').val('');
             $('#family_num').val('');
             $('#building_area').val('');
             $('#income_peryear').val('');
@@ -176,14 +176,14 @@
         var M_Code = $('#M_Code').val();
 //        var P_ID = $('#P_ID').val();
         var username = $('#username').val();
-        var telephone = $('#telephone').val();
+        var tel = $('#tel').val();
         var M_Address = $('#M_Address').val();
         var detail_address = $('#detail_address').val();
         var family_num = $('#family_num').val();
         var building_area = $('#building_area').val();
         var income_peryear = $('#income_peryear').val();
         var meter = { M_Code: M_Code, M_Address: M_Address, detail_address: detail_address};
-        var consumer = {username: username, telephone: telephone, family_num: family_num, building_area: building_area, income_peryear: income_peryear};
+        var consumer = {username: username, tel: tel, family_num: family_num, building_area: building_area, income_peryear: income_peryear};
         if( !check(meter,consumer) ){
             return false;
         }
@@ -226,11 +226,11 @@
             alertMsg("请先填写姓名");
             return false;
         }
-        if( consumer.telephone == "" || consumer.telephone == null || consumer.telephone == "undefined"){
+        if( consumer.tel == "" || consumer.tel == null || consumer.tel == "undefined"){
             alertMsg("请先填写电话");
             return false;
         }
-        if(!checkTelephone(consumer.telephone)){
+        if(!checkTelephone(consumer.tel)){
             return false;
         }
         return true;
