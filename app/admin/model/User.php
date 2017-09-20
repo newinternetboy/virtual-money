@@ -163,4 +163,22 @@ class User extends Admin
 
 		return $data;
 	}
+	public function surepasswd($data,$uid){
+		     $ret['code'] = 200;
+             $ret['msg'] ='修改成功';
+		$userValidate =validate('Passwd');
+		if(!$userValidate->check($data)) {
+			$ret['msg']=$userValidate->getError();
+			return json($ret);
+		}
+           $rs=$this->find($uid);
+		 if(mduser($data['oldpasswd'])==$rs['password']){
+            $res=$this->where('id','=',$uid)->update(['password'=>mduser($data['newpasswd'])]);
+                return json($ret);      
+          }else{
+            $ret['code']=9999;
+            $ret['msg']='密码不正确请重试';
+            return json($ret);
+          }
+	}
 }

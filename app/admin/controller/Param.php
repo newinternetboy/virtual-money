@@ -1,44 +1,22 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hawk2fly
- * Date: 2017/9/11
- * Time: 下午5:14
- */
-
 namespace app\admin\controller;
-
-
-/**
- * 区域管理
- * Class Area
- * @package app\admin\controller
- */
-class Area extends Admin
+class Param extends Admin
 {
-    public function index(){
-        return view(); 
-    }
-
-    /**
-     * 异步获取列表数据
-     *
-     * @author chengbin
-     * @return mixed
-     */
-    public function getList()
+	function index(){
+		return view();
+	}
+   public function getList()
     {
         if(!request()->isAjax()) {
             $this->error(lang('Request type error'), 4001);
         }
         $request = request()->param();
         $request['company_id'] = $this->company_id;
-        $data = model('Area')->getList( $request );
-        $total = model('Area')->getTotalAreaNumber(['company_id' => $this->company_id]);
+        $data = model('Param')->getList( $request );
+        $total = model('Param')->getTotalAreaNumber(['company_id' => $this->company_id]);
         return json(["total" => $total,"rows" => $data]);
     }
-
-    /**
+        /**
      * 添加
      */
     public function add()
@@ -55,7 +33,7 @@ class Area extends Admin
         if(empty($id)){
             return info(lang('Data ID exception'), 0);
         }
-        $price = model('Area')->where(['id' => $id])->find();
+        $price = model('Param')->where(['id' => $id])->find();
         $this->assign('data', $price);
         return $this->fetch();
     }
@@ -78,8 +56,8 @@ class Area extends Admin
         if(empty($data['id'])){
             unset($data['id']);
         }
-        model('LogRecord')->record( lang('Save Area'),json_encode($data) );
-        return model('Area')->saveData( $data );
+        model('LogRecord')->record( lang('修改黑名单属性成功'),json_encode($data) );
+        return model('Param')->saveData( $data );
     }
 
     /**
@@ -91,7 +69,8 @@ class Area extends Admin
         if(empty($id)) {
             return info(lang('Data ID exception'), 0);
         }
-        model('LogRecord')->record( lang('Delete Area'),json_encode($id) );
-        return model('Area')->deleteById($id);
+        model('LogRecord')->record( lang('修改黑名单属性成功'),json_encode($id) );
+        return model('Param')->deleteById($id);
     }
+
 }

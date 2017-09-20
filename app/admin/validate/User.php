@@ -9,7 +9,7 @@ class User extends Validate
     protected $rule =   [
         'mobile'              => 'require|length:11',
         'password'              => 'length:6,16',
-        'role_id' => 'require',
+        'role_id' => 'require', 
     ];
 
     protected $message  =   [

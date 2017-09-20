@@ -12,7 +12,7 @@ namespace app\admin\model;
 class Meter extends Admin
 {
 
-    public function setMTypeAttr($value){
+    public function setMTypeAttr($value){ 
         return intval($value);
     }
 

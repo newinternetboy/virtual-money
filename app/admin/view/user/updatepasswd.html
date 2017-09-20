@@ -1,4 +1,4 @@
-{js href="__LIB__/jquery.validate.min.js" /}
+
                         <div id="consumerinfo" style="padding-top:100px;">
                         <form id="commentForm">
                             <div class="form-group">
@@ -38,7 +38,7 @@
             return false;
         }
         $.ajax({
-            url:"{:url('admin/user/updatepasswd')}",
+            url:"{:url('admin/user/changepasswd')}",
             method:'post',
             dataType:'json',
             data:meter,
