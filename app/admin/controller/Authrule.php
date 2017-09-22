@@ -33,8 +33,8 @@ class Authrule extends Admin
 			$this->error(lang('Request type error'), 4001);
 		}
 		//$request = input('get.'); //直接让用户查看所有权限,不做翻页功能
-		$request['company_id'] = $this->company_id;
-		$data = model('AuthRule')->getList( $request );
+		//$request['company_id'] = $this->company_id;  //权限通用,不再做公司id隔离
+		$data = model('AuthRule')->getList();
 		$data = sortAuthRoles($data);
 		$data = $this->listAuthRules($data);
 		foreach( $data as & $item ){
@@ -50,7 +50,7 @@ class Authrule extends Admin
 	 */
 	public function add()
 	{
-		$authRules = model('AuthRule')->getList(['company_id' => $this->company_id]);
+		$authRules = model('AuthRule')->getList();
 		$authRules = sortAuthRoles($authRules);
 		$authRules = $this->listAuthRules($authRules);
 		$this->assign('authRules',$authRules);
@@ -78,7 +78,7 @@ class Authrule extends Admin
 	public function setauth()
 	{
 		$role_id = input('role_id');
-		$levelData = model('AuthRule')->getLevelData($this->company_id);
+		$levelData = model('AuthRule')->getLevelData();
 		$this->assign('data', $levelData);
 		$ids = model('AuthAccess')->getIds( $role_id );
 		$this->assign('rule_ids', $ids);
@@ -95,7 +95,7 @@ class Authrule extends Admin
 	{
 		$data = model('AuthRule')->get(['id'=>$id]);
 		$this->assign( 'data', $data );
-		$authRules = model('AuthRule')->getList(['company_id' => $this->company_id]);
+		$authRules = model('AuthRule')->getList();
 		$authRules = sortAuthRoles($authRules);
 		$authRules = $this->listAuthRules($authRules);
 		$this->assign('authRules',$authRules);
@@ -112,7 +112,7 @@ class Authrule extends Admin
 			return info(lang('Request type error'));
 		}
 		$data = input('post.');
-		$data['company_id'] = $this->company_id;
+		//$data['company_id'] = $this->company_id;
 		model('AuthRule')->saveData($data);
 		Loader::model('LogRecord')->record( lang('Save AuthRule'),json_encode($data) );
 		$this->success(lang('Save success'));

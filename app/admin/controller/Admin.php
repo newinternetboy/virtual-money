@@ -47,8 +47,8 @@ class Admin extends Common
 
 		//获取sidebar列表
 		if( $this->administrator ){
-			$map['company_id'] = $this->company_id;
-			$menus = model('AuthRule')->getList( $map );
+			//$map['company_id'] = $this->company_id;
+			$menus = model('AuthRule')->getList( );
 		}else{
 			$menus = model('AuthAccess')->getRuleVals($this->uid);
 		}

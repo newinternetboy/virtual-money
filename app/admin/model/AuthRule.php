@@ -24,9 +24,12 @@ class AuthRule extends Admin
         return intval($value);
     }
 
-    public function getList($request)
+    public function getList($request = [])
     {
         $request = $this->fmtRequest( $request );
+        if( empty($request) ){
+            return $this->order('sortnum','asc')->select();
+        }
         if( $request['offset'] == 0 && $request['limit'] == 0 ){
             return $this->where($request['map'])->order('sortnum','asc')->select();
         }
@@ -106,9 +109,9 @@ class AuthRule extends Admin
         return $title;
     }
 
-    public function getLevelData($company_id)
+    public function getLevelData()
     {
-        $data = $this->where(['company_id' => $company_id])->order('pid asc')->order('sortnum','asc')->select();
+        $data = $this->order('pid asc')->order('sortnum','asc')->select();
         if( empty($data) ) {
             return $data;
         }
