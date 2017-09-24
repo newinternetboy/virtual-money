@@ -17,7 +17,7 @@ class Meter extends Admin
     }
 
     public function getMeterByCode($M_Code){
-        return $this->where('M_Code',$M_Code)->where('meter_status','in',[null,METER_STATUS_BIND])->find();
+        return $this->where('M_Code',$M_Code)->where('meter_status','in',[null,METER_STATUS_BIND])->where('meter_life','in',[null,METER_LIFE_INIT,METER_LIFE_START])->find();
     }
 
     public function updateMeter($data,$scene){

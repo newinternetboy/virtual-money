@@ -15,6 +15,10 @@ define('METER_TYPE_GAS',3); //气
 define('METER_STATUS_CHANGED',20); //被更换的旧表
 define('METER_STATUS_BIND',10); //已绑定
 define('METER_STATUS_DELETE',30); //已删除
+//表具生命周期状态
+define('METER_LIFE_INIT',1); //新表具
+define('METER_LIFE_START',5); //表具报装
+define('METER_LIFE_END',10); //表具一次生命周期结束
 
 //阀门
 //阀门控制方式

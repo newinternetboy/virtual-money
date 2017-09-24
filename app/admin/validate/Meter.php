@@ -14,7 +14,8 @@ class Meter extends Validate
         'M_Address'             => 'require',
         'detail_address'        => 'require',
         'change_reason'         => 'require',
-        'meter_status'          => 'require'
+        'meter_status'          => 'require',
+        'meter_life'            => 'require',
     ];
 
     protected $message  =   [
@@ -25,12 +26,13 @@ class Meter extends Validate
         'M_Address.require'             => '地址必须',
         'detail_address.require'        => '详细地址必须',
         'change_reason.require'         => '换表原因必须',
-        'meter_status.require'         => '表具状态必须',
+        'meter_status.require'          => '表具状态必须',
+        'meter_life.require'            => '表具生命周期状态必须',
     ];
 
     protected $scene = [
         //表具报装
-        'setup' => ['M_Type','M_Code','P_ID','U_ID','M_Address','detail_address'],
+        'setup' => ['M_Type','M_Code','P_ID','U_ID','M_Address','detail_address','meter_life'],
         //表具过户
         'pass' => ['U_ID'],
         //表具更换

@@ -81,7 +81,7 @@ class Meter extends Admin
             if( !$meter = model('Meter')->getMeterByCode($data['meter']['M_Code']) ){
                 exception('报装失败,表号不存在');
             }
-            if( isset($meter['meter_status']) ){
+            if( isset($meter['meter_status']) && $meter['meter_status'] == METER_STATUS_BIND ){
                 exception('该表具已被报装');
             }
             $data['consumer']['M_Code'] = $data['meter']['M_Code'];
@@ -94,6 +94,8 @@ class Meter extends Admin
             $data['meter']['id'] = $meter['id'];
             $data['meter']['company_id'] = $this->company_id;
             $data['meter']['meter_status'] = METER_STATUS_BIND;
+            $data['meter']['meter_life'] = METER_LIFE_START;
+            $data['meter']['setup_time'] = time();
             if( !model('Meter')->updateMeter($data['meter'],'Meter.setup') ){
                 exception('报装失败:'.model('Meter')->getError());
             }
@@ -221,6 +223,7 @@ class Meter extends Admin
             $old_meter_info['id'] = $old_meter['id'];
             $old_meter_info['change_reason'] = $changeinfo['change_reason'];
             $old_meter_info['meter_status'] = METER_STATUS_CHANGED;
+            $old_meter_info['meter_life'] = METER_LIFE_END;
             if( !model('Meter')->updateMeter($old_meter_info,'Meter.change_update_old_meter') ){
                 exception('更换失败:'.model('Meter')->getError());
             }
@@ -234,6 +237,7 @@ class Meter extends Admin
             $new_meter_data['U_ID'] = $old_meter['U_ID'];
             $new_meter_data['company_id'] = $old_meter['company_id'];
             $new_meter_data['meter_status'] = METER_STATUS_BIND;
+            $new_meter_data['meter_life'] = METER_LIFE_START;
             if( !model('Meter')->updateMeter($new_meter_data,'Meter.change_update_new_meter') ){
                 exception('更换失败:'.model('Meter')->getError());
             }
@@ -341,6 +345,7 @@ class Meter extends Admin
 
             $updateData['id'] = $meter['id'];
             $updateData['meter_status'] = METER_STATUS_DELETE;
+            $updateData['meter_life'] = METER_LIFE_END;
             if( !model('Meter')->updateMeter($updateData,'Meter.delete') ){
                 exception('操作失败: '.model('Meter')->getError());
             };
