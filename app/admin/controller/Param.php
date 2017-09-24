@@ -5,7 +5,7 @@ class Param extends Admin
 	function index(){
 		return view();
 	}
-   public function getList()
+   public function getList() 
     {
         if(!request()->isAjax()) {
             $this->error(lang('Request type error'), 4001);

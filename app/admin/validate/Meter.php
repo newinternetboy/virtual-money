@@ -39,7 +39,7 @@ class Meter extends Validate
         //表具修改
         'edit' => ['M_Address','detail_address'],
         //表具信息维护
-        'delete' => ['meter_status']
+        'delete' => ['meter_status'] 
     ];
 }
 

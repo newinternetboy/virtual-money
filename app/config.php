@@ -230,7 +230,6 @@ return [
     'paginate'               => [
         'type'      => 'bootstrap',
         'var_page'  => 'page',
-        'list_rows' => 15,
     ],
 
     //写安装程序的时候随即生成authId

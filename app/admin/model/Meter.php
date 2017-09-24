@@ -21,7 +21,7 @@ class Meter extends Admin
     }
 
     public function updateMeter($data,$scene){
-        return $this->validate($scene)->isUpdate(true)->save($data);
+        return $this->validate($scene)->isUpdate(true)->save($data); 
     }
 
     public function getMeterInfo($where,$method,$field = ''){
@@ -29,5 +29,17 @@ class Meter extends Admin
             return $this->where($where)->$method();
         }
         return $this->where($field)->$method();
+    }
+    public function getMeterByCodeandarea($where){
+        return $this->where($where)->paginate(10);
+    }
+    public function getallMeter(){
+        return $this->paginate(10);
+    }
+    public function area(){
+        return $this->belongsTO('area','M_Address');
+    }
+     public function price(){
+        return $this->belongsTO('price','P_ID');
     }
 }

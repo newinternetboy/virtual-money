@@ -34,9 +34,9 @@
         var newpasswd = $('#newpasswd').val();
         var surepasswd = $('#surepasswd').val();
         var meter = {oldpasswd:oldpasswd, newpasswd: newpasswd, surepasswd:surepasswd};
-        if( !check(meter) ){
-            return false;
-        }
+        // if( !check(meter) ){
+        //     return false;
+        // }
         $.ajax({
             url:"{:url('admin/user/changepasswd')}",
             method:'post',

@@ -123,15 +123,39 @@ class User extends Admin
     public function updatepasswd(){
         return $this->fetch();
     }
-    public function changepasswd(){             
-      $data=[
+    public function changepasswd(){ 
+             $ret['code'] = 200;
+             $ret['msg'] ='修改成功';            
+       $data=[
            'oldpasswd'=>input('oldpasswd'),
-           'newpasswd'=>input('newpasswd'),
+           'password'=>input('newpasswd'),
            'surepasswd'=>input('surepasswd')
-          ];
-         $res=model('User')->surepasswd($data,$this->uid);          
-         return $res;      
-    }
+            ];
+            // 验证合法性  
+            try {
+                  $userValidate = validate('User');
+               if(!$userValidate->scene('sure')->check($data)){
+                  exception($userValidate->getError());
+               } 
+                 $password=model('User')->getpasswd($this->uid);
+               if(mduser($data['oldpasswd'])!=$password['password']){
+                  exception('原始密码不正确');
+               }
+                $datas=[
+                   'id'=>$this->uid,
+                   'password'=>mduser($data['password'])
+                 ];
+               if(!model('User')->updatepasswd($datas)){
+                   exception(model('User')->getError());
+               }
+            } catch (\Exception $e) {
+                 $ret['code'] = 9999;
+                 $ret['msg'] = $e->getMessage();
+            }
+            Loader::model('LogRecord')->record('修改密码',json_encode($data));
+            return json($ret);
+        
+        }
 
    
 }

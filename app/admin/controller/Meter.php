@@ -35,7 +35,7 @@ class Meter extends Admin
      * 获取表具信息
      * @return \think\response\Json
      */
-    public function getMeterData(){
+    public function getMeterData(){ 
         $M_Code = input('M_Code');
         $data['code'] = 200;
         try{
@@ -49,7 +49,7 @@ class Meter extends Admin
             if( isset($meter['company_id']) && $meter['company_id'] != $this->company_id ){
                 exception("您无权查看该表具信息");
             }
-            $data['meter'] = $meter->toArray();
+            $data['meter'] = $meter->toArray(); 
             if( isset($meter['meter_status']) && $meter['meter_status'] == METER_STATUS_BIND && isset($meter['U_ID']) && $meter['U_ID'] ){
                 $consumer = model('Consumer')->getConsumerById($meter['U_ID']);
                 $consumer = $consumer->toArray();
@@ -87,7 +87,7 @@ class Meter extends Admin
             $data['consumer']['M_Code'] = $data['meter']['M_Code'];
             $data['consumer']['company_id'] = $this->company_id;
             $data['consumer']['consumer_state'] = CONSUMER_STATE_NORMAL;
-            if( !$consumer_id = model('Consumer')->InsertConsumer($data['consumer']) ){
+            if( !$consumer_id = model('Consumer')->InsertConsumer($data['consumer']) ){ 
                 exception('报装失败:'.model('Consumer')->getError());
             }
             $data['meter']['U_ID'] = $consumer_id;
@@ -351,4 +351,37 @@ class Meter extends Admin
         }
         return json($data);
     }
+    public function reach(){
+        $M_Code = input('M_Code');
+        $M_Address=input('Addressdd');
+        $detail_address=input('detail_address');
+        // var_dump($M_Address);exit;
+        $areas = model('Area')->getList(['company_id' => $this->company_id]);
+        $this->assign('areas',$areas);
+        if(!$M_Code&&!$M_Address&&!$detail_address){ 
+          // $where=1; 
+          $meter=model('Meter')->getallMeter();        
+        }else{
+          // $where['M_Code']=$M_Code;
+          if($M_Code){
+             $where['M_Code']=$M_Code;    
+          }else{
+            if($M_Address){
+              $where['M_Address']=$M_Address;
+              // $where['detail_address']=['like','%'.$detail_address.'%'];
+            }else{
+              if($detail_address){
+              $where['detail_address']=['like','%江南%'];      
+              } 
+            }
+          }
+          $meter = model('Meter')->getMeterByCodeandarea($where);
+        }
+        // var_dump($meter);exit();
+        $this->assign('meter',$meter);
+
+        return view();
+    }
+  
+ 
 }

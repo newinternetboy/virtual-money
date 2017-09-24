@@ -7,7 +7,6 @@ class Param extends Validate
 {
 
     protected $rule =   [
-        'param_id'              => 'require',
         'param_name'            => 'require',
         'rem'              => 'require',
         'param_type'           => 'require',
@@ -15,7 +14,6 @@ class Param extends Validate
     ];
 
     protected $message  =   [
-        'param_id.require'              => '标识ID必须',
         'param_name.require'            => '参数代号必须',
         'rem.require'              => '参数描述必须',
         'param_type.require'           => '参数类型必须',
