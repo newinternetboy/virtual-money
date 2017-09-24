@@ -9,14 +9,16 @@
                 </div>
                 <input type="hidden" name="id" value="{$data.id ?? ''}">
                 <div class="modal-body">
+                  
                     <div class="modal-body-content">
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">标识ID</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" name="param_id" required value="{$data.param_id ?? ''}">
+                               {$data.id ?? ''}
                             </div>
                         </div>
                     </div>
+                   
                     <div class="modal-body-content">
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">参数代号</label>
@@ -24,7 +26,6 @@
                                 <input type="text" class="form-control" name="param_name"  required value="{$data.param_name ?? ''}">
                             </div>
                         </div>
-
                     </div>
                     <div class="modal-body-content">
                         <div class="form-group must">

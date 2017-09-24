@@ -11,7 +11,15 @@ namespace app\admin\model;
 
 class Param extends Admin
 {
-
+    public function setParamnameAttr($value){
+        return intval($value);
+    }
+     public function setParamtypeAttr($value){
+        return intval($value);
+    }
+     public function setOptidAttr($value){
+        return intval($value);
+    }
     public function getList( $request )
     {
         $request = $this->fmtRequest( $request );
@@ -34,7 +42,7 @@ class Param extends Admin
         return $info;
     }
 
-    public function edit( $data )
+    public function edit( $data ) 
     {
         $result = $this->validate(true)->isUpdate(true)->save( $data );
         if( false === $result) {
