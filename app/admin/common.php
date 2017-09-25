@@ -23,7 +23,12 @@ function info($msg = '', $code = '', $url = '',  $data = '', $wait = 3 )
 	return $result;
 }
 
-function sortAuthRoles($authRules){
+/**
+ * 权限排序
+ * @param $authRules
+ * @return array
+ */
+function sortAuthRules($authRules){
     $ret = [];
     foreach( $authRules as $authRule ){
         $authRule = ($authRule instanceof Model) ? $authRule->toArray() : $authRule;
@@ -33,16 +38,6 @@ function sortAuthRoles($authRules){
         }
     }
     return $ret;
-
-//    foreach( $authRules as $authRule ){
-//        $authRule = ($authRule instanceof Model) ? $authRule->toArray() : $authRule;
-//        if( $authRule['pid'] == 0 ){
-//            $ret[$authRule['id']] = array_merge( isset($ret[$authRule['id']]) ? $ret[$authRule['id']] : [], $authRule);
-//        }else{
-//            $ret[$authRule['pid']]['children'][] = $authRule;
-//        }
-//    }
-//    return $ret;
 }
 
 function sortChildren(& $authRule,$authRules){
@@ -62,4 +57,5 @@ function sortChildren(& $authRule,$authRules){
 function trimMCode($M_Code){
     return trim($M_Code);
 }
+
 ?>

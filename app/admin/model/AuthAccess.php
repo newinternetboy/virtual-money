@@ -37,18 +37,13 @@ class AuthAccess extends Admin
     public function saveData( $role_id, $data )
     {
         if(empty($data)) {
-            return info(lang('Save success'), 1);
+            return true;
         }
-        try{
-            $rule_id = array_values($data);
-            if( $this->where(['role_id' => $role_id])->find() ){
-                $this->where(['role_id' => $role_id])->update([ 'rule_id' => $rule_id ]);
-            }else{
-                $this->save(['role_id' => $role_id,'rule_id' => $rule_id]);
-            }
-        }catch (\Exception $e) {
-            info(lang('Save fail'), 0);
+        $rule_id = array_values($data);
+        if( $this->where(['role_id' => $role_id])->find() ){
+            return $this->where(['role_id' => $role_id])->update([ 'rule_id' => $rule_id ]);
+        }else{
+            return $this->save(['role_id' => $role_id,'rule_id' => $rule_id]);
         }
-        return info(lang('Save success'), 1);
     }
 }

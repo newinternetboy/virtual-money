@@ -5,6 +5,7 @@ use think\Session;
 use think\Request;
 use think\Loader;
 use think\Db;
+use think\Log;
 
 /**
 * 角色管理
@@ -55,7 +56,7 @@ class Role extends Admin
 
     public function saveData()
     {
-        $this->mustCheckRule($this->company_id,'');
+        $this->mustCheckRule();
         if( !request()->isAjax() ) {
             $this->error(lang('Request type error'));
         }
@@ -63,21 +64,41 @@ class Role extends Admin
         if( empty($data['id']) ){
             unset($data['id']);
         }
+        if( isset($data['id']) ){
+            if( !$role = model('Role')->getRolesById($data['id'],$this->company_id) ){
+                $this->error('角色不存在');
+            }
+        }
         $data['company_id'] = $this->company_id;
-        Loader::model('LogRecord')->record( lang('Save Role'),json_encode($data) );
-        return model('role')->saveData( $data );
+        if( !model('role')->saveData( $data ) ){
+            Log::record(['保存角色失败' => model('Role')->getError(),'data' => $data],'error');
+            $this->error('操作失败');
+        }
+        Loader::model('LogRecord')->record( lang('Save Role'),$data );
+        $this->success(lang('Save success'));
     }
 
     /**
      * 删除
-     * @param  string $id 数据ID（主键）
+     * @param   string $id 数据ID（主键）支持多个id删除,逗号分隔
      */
     public function delete($id = 0){
-        $this->mustCheckRule($this->company_id,'');
+        $this->mustCheckRule();
         if(empty($id)){
             return info(lang('Data ID exception'), 0);
         }
-        Loader::model('LogRecord')->record( lang('Delete Role'),json_encode($id) );
-        return model('Role')->deleteById($id);
+        //判断当前用户是否对$id里的角色有操作权限
+        $roles = model('Role')->getRolesById($id,$this->company_id);
+        if( count($roles) != count(explode(',',$id)) ){
+            Log::record(['删除角色失败' => 0,'data' => $id],'error');
+            $this->error('操作失败,信息有误');
+        }
+
+        if( !model('Role')->deleteById($id) ){
+            Log::record(['删除角色失败' => model('Role')->getError(),'data' => $id],'error');
+            $this->error('操作失败');
+        }
+        Loader::model('LogRecord')->record( lang('Delete Role'),$id );
+        $this->success(lang('Delete succeed'));
     }
 }

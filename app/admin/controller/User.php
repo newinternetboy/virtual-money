@@ -3,6 +3,7 @@ namespace app\admin\controller;
 
 use think\Loader;
 use think\validate;
+use think\Log;
 
 /**
 * 用户管理
@@ -86,27 +87,38 @@ class User extends Admin
      */
     public function saveData()
     {
-        $this->mustCheckRule($this->company_id,'');
+        $this->mustCheckRule();
         if(!request()->isAjax()) {
             return info(lang('Request type error'));
         }
 
         $data = input('post.');
-        $data['company_id'] = $this->company_id;
         if(empty($data['id'])){
             unset($data['id']);
         }
-       // var_dump($data);die;
-        Loader::model('LogRecord')->record( lang('Save User'),json_encode($data) );
-        return model('User')->saveData( $data );
+        if( isset($data['id']) ){
+            if( !model('User')->getUsersById($data['id'],$this->company_id) ){
+                $this->error('用户不存在');
+            }
+        }
+        $data['company_id'] = $this->company_id;
+        $result = model('User')->saveData( $data );
+        if( $result['code'] != 1 ){
+            Log::record(['保存用户失败' => $result['msg'],'data' => $data],'error');
+            $this->error($result['msg']);
+        }
+        unset($data['password']);
+        unset($data['password2']);
+        Loader::model('LogRecord')->record( lang('Save User'),$data );
+        $this->success(lang('Save success'));
     }
 
     /**
      * 删除
-     * @param  string $id 数据ID（主键）
+     * @param  string $id 数据ID（主键）支持多个id删除,逗号分隔
      */
     public function delete($id = 0){
-        $this->mustCheckRule($this->company_id,'');
+        $this->mustCheckRule();
         if(empty($id)){
             return info(lang('Data ID exception'), 0);
         }
@@ -116,46 +128,54 @@ class User extends Admin
             return info(lang('Delete without authorization'), 0);
         }
 
-        Loader::model('LogRecord')->record( lang('Delete User'),json_encode($id) );
-        return Loader::model('User')->deleteById($id);
-        
-    }
-    public function updatepasswd(){
-        return $this->fetch();
-    }
-    public function changepasswd(){ 
-             $ret['code'] = 200;
-             $ret['msg'] ='修改成功';            
-       $data=[
-           'oldpasswd'=>input('oldpasswd'),
-           'password'=>input('newpasswd'),
-           'surepasswd'=>input('surepasswd')
-            ];
-            // 验证合法性  
-            try {
-                  $userValidate = validate('User');
-               if(!$userValidate->scene('sure')->check($data)){
-                  exception($userValidate->getError());
-               } 
-                 $password=model('User')->getpasswd($this->uid);
-               if(mduser($data['oldpasswd'])!=$password['password']){
-                  exception('原始密码不正确');
-               }
-                $datas=[
-                   'id'=>$this->uid,
-                   'password'=>mduser($data['password'])
-                 ];
-               if(!model('User')->updatepasswd($datas)){
-                   exception(model('User')->getError());
-               }
-            } catch (\Exception $e) {
-                 $ret['code'] = 9999;
-                 $ret['msg'] = $e->getMessage();
-            }
-            Loader::model('LogRecord')->record('修改密码',json_encode($data));
-            return json($ret);
-        
+        //判断当前用户是否对$id里的用户有操作权限
+        $users = model('User')->getUsersById($id,$this->company_id);
+        if( count($users) != count(explode(',',$id)) ){
+            Log::record(['删除用户失败' => 0,'data' => $id],'error');
+            $this->error('操作失败,信息有误');
         }
 
-   
+        if( !Loader::model('User')->deleteById($id) ){
+            Log::record(['删除用户失败' => model('User')->getError(),'data' => $id],'error');
+            $this->error('操作失败');
+        }
+        Loader::model('LogRecord')->record( lang('Delete User'),$id );
+        $this->success(lang('Delete succeed'));
+    }
+
+    public function updatePasswd(){
+        return $this->fetch();
+    }
+
+    public function changepasswd(){
+        $ret['code'] = 200;
+        $ret['msg'] ='修改成功';
+        $oldpasswd = input('oldpasswd');
+        $newpassword  = input('newpasswd');
+        $surepasswd = input('surepasswd');
+        // 验证合法性
+        try {
+            if( $newpassword != $surepasswd ){
+               exception('新密码与确认密码不一致',ERROR_CODE_DATA_ILLEGAL);
+            }
+
+            $userinfo = model('User')->getUserInfo(['id' => $this->uid],'find','password');
+            if( mduser($oldpasswd ) != $userinfo['password']){
+                exception('原始密码不正确',ERROR_CODE_DATA_ILLEGAL);
+            };
+            $updateData =[
+                'id'=>$this->uid,
+                'password'=>mduser($oldpasswd)
+            ];
+            if(!model('User')->updatePasswd($updateData)){
+                Log::record(['更改密码失败' => model('User')->getError(),'data' => $updateData ],'error');
+                exception('操作失败',ERROR_CODE_SYS);
+            }
+            Loader::model('LogRecord')->record('修改密码',$updateData);
+        } catch (\Exception $e) {
+                 $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+                 $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
 }

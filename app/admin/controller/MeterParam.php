@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 
+use think\Log;
 
 class MeterParam extends Admin
 {
@@ -64,7 +65,7 @@ class MeterParam extends Admin
      */
     public function saveData()
     {
-        $this->mustCheckRule($this->company_id,'');
+        $this->mustCheckRule();
         if(!request()->isAjax()) {
             return info(lang('Request type error'));
         }
@@ -74,8 +75,12 @@ class MeterParam extends Admin
         if(empty($data['id'])){
             unset($data['id']);
         }
-        model('LogRecord')->record( lang('Save MeterParam'),json_encode($data) );
-        return model('MeterParam')->saveData( $data );
+        if( !model('MeterParam')->saveData( $data ) ){
+            Log::record(['添加运行参数失败' => model('MeterParam')->getError(),'data' => $data],'error');
+            $this->error(model('MeterParam')->getError());
+        }
+        model('LogRecord')->record( lang('Edit MeterParam'),$data );
+        $this->success(lang('Save success'));
     }
 
     /**
@@ -83,11 +88,20 @@ class MeterParam extends Admin
      * @param  string $id 数据ID（主键）
      */
     public function delete($id = 0){
-        $this->mustCheckRule($this->company_id,'');
+        $this->mustCheckRule();
         if(empty($id)) {
             return info(lang('Data ID exception'), 0);
         }
-        model('LogRecord')->record( lang('Delete MeterParam'),json_encode($id) );
-        return model('MeterParam')->deleteById($id);
+        $meterParams = model('MeterParam')->getMeterParamsById($id,$this->company_id);
+        if( count($meterParams) != count(explode(',',$id)) ){
+            Log::record(['删除运行参数失败' => 0,'data' => $id],'error');
+            $this->error('操作失败,信息有误');
+        }
+        if( !model('MeterParam')->deleteById($id) ){
+            Log::record(['删除区域失败' => model('Role')->getError(),'data' => $id],'error');
+            $this->error('操作失败');
+        }
+        Loader::model('LogRecord')->record( lang('Delete MeterParam'),$id );
+        $this->success(lang('Delete succeed'));;
     }
 }

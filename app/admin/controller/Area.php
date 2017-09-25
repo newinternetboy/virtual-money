@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 
+use think\Log;
 
 /**
  * 区域管理
@@ -64,11 +65,10 @@ class Area extends Admin
      * 保存数据
      * @param array $data
      *
-     * @author chengbin
      */
     public function saveData()
     {
-        $this->mustCheckRule($this->company_id,'');
+        $this->mustCheckRule();
         if(!request()->isAjax()) {
             return info(lang('Request type error'));
         }
@@ -78,8 +78,12 @@ class Area extends Admin
         if(empty($data['id'])){
             unset($data['id']);
         }
-        model('LogRecord')->record( lang('Save Area'),json_encode($data) );
-        return model('Area')->saveData( $data );
+        if( !model('Area')->saveData( $data ) ){
+            Log::record(['添加区域失败' => model('Area')->getError(),'data' => $data],'error');
+            $this->error(model('Area')->getError());
+        }
+        model('LogRecord')->record( lang('Save Area'),$data );
+        $this->success(lang('Save success'));
     }
 
     /**
@@ -87,11 +91,20 @@ class Area extends Admin
      * @param  string $id 数据ID（主键）
      */
     public function delete($id = 0){
-        $this->mustCheckRule($this->company_id,'');
+        $this->mustCheckRule();
         if(empty($id)) {
             return info(lang('Data ID exception'), 0);
         }
-        model('LogRecord')->record( lang('Delete Area'),json_encode($id) );
-        return model('Area')->deleteById($id);
+        $areas = model('Area')->getAreasById($id,$this->company_id);
+        if( count($areas) != count(explode(',',$id)) ){
+            Log::record(['删除区域失败' => 0,'data' => $id],'error');
+            $this->error('操作失败,信息有误');
+        }
+        if( !model('Area')->deleteById($id) ){
+            Log::record(['删除区域失败' => model('Role')->getError(),'data' => $id],'error');
+            $this->error('操作失败');
+        }
+        Loader::model('LogRecord')->record( lang('Delete Area'),$id );
+        $this->success(lang('Delete succeed'));
     }
 }

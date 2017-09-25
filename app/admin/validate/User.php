@@ -7,28 +7,23 @@ class User extends Validate
 {
 
     protected $rule =   [
-        'oldpasswd'   =>  'require',
-        'mobile'              => 'require|length:11',
-        'password'              => 'length:6,16',
-        'role_id'           => 'require', 
-        'surepasswd'   =>  'require|confirm:password',
+        'mobile'            =>  'require|length:11',
+        'password'          =>  'length:6,16',
+        'role_id'           =>  'require',
+        'company_id'        =>  'require'
     ];
 
     protected $message  =   [
-        'mobile.require'      => 'Mobile require',
-        'mobile.length'       => 'Please enter a correct mobile',
+        'mobile.require'        => 'Mobile require',
+        'mobile.length'         => 'Please enter a correct mobile',
         'password.length'       => 'Please enter a correct password',
-        'oldpasswd.require'           => '原始密码不能为空',
-        'surepasswd.require'     =>'确认密码不能为空',
-        'surepasswd.confirm'     =>'两次输入的密码必须一致',
+        'company_id.require'    =>'公司id必须',
     ];
 
     protected $scene = [
-        'add' => ['mobile','password', 'role_id'],
-        'login' =>  ['mobile','password'],
-        'edit' => ['mobile', 'password', 'role_id'],
-        'sure' =>['oldpasswd','password','surepasswd'],
-        'update' =>['password'],
+        'add'       =>      ['mobile','password', 'role_id','company_id'],
+        'login'     =>      ['mobile','password'],
+        'edit'      =>      ['mobile', 'password', 'role_id'],
     ];
 
 }

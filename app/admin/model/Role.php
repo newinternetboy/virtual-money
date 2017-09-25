@@ -14,12 +14,6 @@ class Role extends Admin
         return intval($value);
     }
 
-    //根据uid返回角色 rule_val
-    public function getRoleInfo( $uid )
-    {
-
-    }
-
     public function getKvData($company_id)
     {
         return $this->where('status',1)->where('company_id',$company_id)->field('name,id')->select();
@@ -38,47 +32,24 @@ class Role extends Admin
     {
         if( isset( $data['id']) && !empty($data['id'])) {
             $data['update_time'] = time();
-            $info = $this->edit( $data );
+            return $this->isUpdate(true)->save( $data );
         } else {
             $data['create_time'] = time();
-            $info = $this->add( $data );
+            return $this->save( $data );
         }
-
-        return $info;
-    }
-
-    public function edit( $data )
-    {
-        $result = $this->update( $data );
-        if( false === $result) {
-            $info = info(lang('Edit failed'), 0);
-        } else {
-            $info = info(lang('Edit succeed'), 1);
-        }
-        return $info;
-    }
-
-    public function add( $data )
-    {
-        $this->save($data);
-        if( !$this->id) {
-            $info = info(lang('Add failed'), 0);
-        } else {
-            $info = info(lang('Add succeed'), 1, '', $this->id);
-        }
-
-        return $info;
     }
 
     public function deleteById($id)
     {
-        $result = Role::destroy($id);
-        if ($result > 0) {
-            return info(lang('Delete succeed'), 1);
-        }
+        return Role::destroy($id);
     }
 
     public function getTotalRoleNumber($where){
         return $this->where($where)->count();
+    }
+
+    public function getRolesById($id,$company_id){
+        $ids = explode(',',$id);
+        return $this->where('id','in',$ids)->where('company_id',$company_id)->select();
     }
 }

@@ -38,20 +38,20 @@ class Valve extends Admin
         $ret['msg'] = '操作成功';
         try{
             if( !$data ){
-                exception('操作失败,信息不完整');
+                exception('操作失败,信息不完整',ERROR_CODE_DATA_ILLEGAL);
             }
 
             //任务执行时间要大于当前时间
             if( !isset($data['exectime']) || !$data['exectime'] ){
-                exception('请先填写任务执行时间');
+                exception('请先填写任务执行时间',ERROR_CODE_DATA_ILLEGAL);
             }
             if( time() >= strtotime($data['exectime']) ){
-                exception('任务执行时间要大于当前时间');
+                exception('任务执行时间要大于当前时间',ERROR_CODE_DATA_ILLEGAL);
             }
 
             if( isset($data['valve_type']) && $data['valve_type'] == VALVE_USER ){ //指定用户控制
                 if( !isset($data['M_Codes']) || !$data['M_Codes'] ){
-                    exception('请先输入表号');
+                    exception('请先输入表号',ERROR_CODE_DATA_ILLEGAL);
                 }
                 $m_codes = $data['M_Codes'];
                 $m_codes = explode(';',$m_codes);
@@ -64,14 +64,14 @@ class Valve extends Admin
 
             }elseif( isset($data['valve_type']) && $data['valve_type'] == VALVE_AREA ){ //地区用户控制
                 if( !isset($data['area']) || !$data['area'] ){
-                    exception('请先选择区域');
+                    exception('请先选择区域',ERROR_CODE_DATA_ILLEGAL);
                 }
                 if( !model('Area')->getAreaInfo(['id' => $data['area'],'company_id' => $this->company_id],'find') ){
-                    exception('您无权对该区域进行此操作');
+                    exception('您无权对该区域进行此操作',ERROR_CODE_DATA_ILLEGAL);
                 }
                 $valveData['data'] = $data['area'];
             }else{
-                exception('方式选择不合法');
+                exception('方式选择不合法',ERROR_CODE_DATA_ILLEGAL);
             }
 
             $valveData['valve_type'] = $data['valve_type'];
@@ -80,10 +80,10 @@ class Valve extends Admin
             $valveData['valve_status'] = VALVE_WAITING;
             $valveData['company_id'] = $this->company_id;
             if( !model('Valve')->add($valveData,'Valve.add') ){
-                exception('操作失败: '.model('Valve')->getError());
+                exception('操作失败: '.model('Valve')->getError(),ERROR_CODE_DATA_ILLEGAL);
             }
         }catch (\Exception $e){
-            $ret['code'] = 9999;
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
         }
         return $ret;
@@ -101,7 +101,7 @@ class Valve extends Admin
             $where['meter_status'] = METER_STATUS_BIND;
             $isBelongs = model('Meter')->getMeterInfo($where,'find');
             if( !$isBelongs ){
-                exception('不能对表号 '.$m_code.' 进行此操作');
+                exception('不能对表号 '.$m_code.' 进行此操作',ERROR_CODE_DATA_ILLEGAL);
             }
         }
     }

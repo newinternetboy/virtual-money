@@ -41,7 +41,7 @@ class Admin extends Common
 		$this->company = model('Company')->getCompany(['id' => $this->company_id],'company_name');
 		$this->administrator = $userRow['administrator'];
 		$this->role_id = !$this->administrator ? $userRow['role_id'] : '';
-		if($userRow['administrator']!=1 && !$this->checkRule($this->uid, $rule_val,$this->company_id)) {
+		if($userRow['administrator']!=1 && !$this->checkRule($this->uid, $rule_val)) {
 			$this->error(lang('Without the permissions page'));
 		}
 
@@ -52,7 +52,7 @@ class Admin extends Common
 		}else{
 			$menus = model('AuthAccess')->getRuleVals($this->uid);
 		}
-		$menus = sortAuthRoles($menus);
+		$menus = sortAuthRules($menus);
 		$this->assign('menus',$menus);
 		$this->assign('username',$this->username);
 		$this->assign('company',$this->company);
@@ -64,10 +64,10 @@ class Admin extends Common
 		$this->redirect( url('admin/login/') );
 	}
 
-	public function checkRule($uid, $rule_val,$company_id)
+	public function checkRule($uid, $rule_val)
 	{
 		$authRule = Loader::model('AuthRule');
-		if(!$authRule->isCheck($rule_val,$company_id)) {
+		if(!$authRule->isCheck($rule_val)) { //不在权限表里配置的路径,默认是允许通过的
 			return true;
 		}
 		$authAccess = Loader::model('AuthAccess');
@@ -77,8 +77,9 @@ class Admin extends Common
 		return false;
 	}
 
-	//执行该动作必须验证权限，否则抛出异常
-	public function mustCheckRule( $company_id, $rule_val = '' )
+	//执行该动作必须验证权限
+	//数据库的增删改操作,执行前都要进行此校验
+	public function mustCheckRule(  $rule_val = '' )
 	{
 		$userRow = Session::get('userinfo', 'admin');
 		if( $userRow['administrator'] == 1 ) {
@@ -89,7 +90,7 @@ class Admin extends Common
 			$rule_val = $request->module().'/'.$request->controller().'/'.$request->action();
 		}
 
-		if(!model('AuthRule')->isCheck($rule_val,$company_id)) {
+		if(!model('AuthRule')->isCheck($rule_val)) {
 			$this->error(lang('This action must be rule'));
 		}
 	}

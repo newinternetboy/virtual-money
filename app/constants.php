@@ -6,6 +6,16 @@
  * Time: 下午6:24
  */
 
+//系统常量
+//错误代码
+define('ERROR_CODE_DEFAULT',9999);      //未定义错误代码 5000以上是系统错误代码
+define('ERROR_CODE_DATA_ILLEGAL',5000); //数据不合法导致的错误
+define('ERROR_CODE_SYS',5001);          //系统错误导致
+
+//操作的执行状态
+define('ACTION_SUCCESS',1); //操作成功
+define('ACTION_FAIL',5);    //操作失败
+
 //表具信息
 //表具类型
 define('METER_TYPE_WATER',1); //水

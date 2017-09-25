@@ -44,36 +44,11 @@ class MeterParam extends Admin
     {
         if( isset( $data['id']) && !empty($data['id'])) {
             $data['update_time'] = time();
-            $info = $this->edit( $data );
+            return $this->validate(true)->isUpdate(true)->save( $data );
         } else {
             $data['create_time'] = time();
-            $info = $this->add( $data );
+            return $this->validate(true)->save($data);
         }
-
-        return $info;
-    }
-
-    public function edit( $data )
-    {
-        $result = $this->validate(true)->isUpdate(true)->save( $data );
-        if( false === $result) {
-            $info = info($this->getError(), 0);
-        } else {
-            $info = info(lang('Edit succeed'), 1);
-        }
-        return $info;
-    }
-
-    public function add( $data )
-    {
-        $result = $this->validate(true)->save($data);
-        if( $result === false ) {
-            $info = info($this->getError(), 0);
-        } else {
-            $info = info(lang('Add succeed'), 1, '', $this->id);
-        }
-
-        return $info;
     }
 
     public function deleteById($id)
@@ -86,5 +61,11 @@ class MeterParam extends Admin
 
     public function getTotalMeterParamNumber($where){
         return $this->where($where)->count();
+    }
+
+    public function getMeterParamsById($id, $company_id)
+    {
+        $ids = explode(',', $id);
+        return $this->where('id', 'in', $ids)->where('company_id', $company_id)->select();
     }
 }

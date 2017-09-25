@@ -69,7 +69,6 @@ class User extends Admin
 			$data = $this->order('create_time desc')->where(['delete_time' => null])->where( $request['map'] )->limit($request['offset'], $request['limit'])->select();
 		}
 
-		//return $this->_fmtData( $data );
 		return $data;
 	}
 
@@ -136,26 +135,8 @@ class User extends Admin
 
 	public function deleteById($id)
 	{
-		$result = User::destroy($id);
-		if ($result > 0) {
-            return info(lang('Delete succeed'), 1);
-        }   
+		return User::destroy($id);
 	}
-
-	//格式化数据
-//	private function _fmtData( $data )
-//	{
-//		if(empty($data) && is_array($data)) {
-//			return $data;
-//		}
-//
-//		foreach ($data as $key => $value) {
-//			//$data[$key]['create_time'] = date('Y-m-d H:i:s',$value['create_time']);
-//			$data[$key]['status'] = $value['status'] == 1 ? lang('Start') : lang('Off');
-//		}
-//
-//		return $data;
-//	}
 
 	public function getTotalUserNumber($where){
 
@@ -163,10 +144,34 @@ class User extends Admin
 
 		return $data;
 	}
-	public function getpasswd($id){
-		return $this->find($id);
+
+	/**
+	 * 获取用户信息
+	 * @param $where
+	 * @param $method 查询方式 select/find
+	 * @param string $field
+	 * @return mixed
+     */
+	public function getUserInfo($where, $method, $field = ''){
+		if( !$field ){
+			return $this->where($where)->$method();
+		}
+		return $this->where($where)->field($field)->$method();
 	}
-	public function updatepasswd($datas){
-		return $this->update($datas);
+
+	public function updatePasswd($data){
+		return $this->update($data);
+	}
+
+	/**
+	 * 用户管理批量操作校验
+	 * @param $id
+	 * @param $company_id
+	 * @return false|\PDOStatement|string|\think\Collection
+     */
+	public function getUsersById($id, $company_id)
+	{
+		$ids = explode(',', $id);
+		return $this->where('id', 'in', $ids)->where('company_id', $company_id)->select();
 	}
 }

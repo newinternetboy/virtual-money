@@ -4,6 +4,7 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Loader;
 use \think\Model;
+use think\Log;
 
 /**
 * 登录
@@ -32,10 +33,9 @@ class Authrule extends Admin
 		if(!request()->isAjax()) {
 			$this->error(lang('Request type error'), 4001);
 		}
-		//$request = input('get.'); //直接让用户查看所有权限,不做翻页功能
-		//$request['company_id'] = $this->company_id;  //权限通用,不再做公司id隔离
+		//返回所有权限,不做分页处理
 		$data = model('AuthRule')->getList();
-		$data = sortAuthRoles($data);
+		$data = sortAuthRules($data);
 		$data = $this->listAuthRules($data);
 		foreach( $data as & $item ){
 			$item['title'] = $item['prefix'].'|--'.$item['title'];
@@ -51,7 +51,7 @@ class Authrule extends Admin
 	public function add()
 	{
 		$authRules = model('AuthRule')->getList();
-		$authRules = sortAuthRoles($authRules);
+		$authRules = sortAuthRules($authRules);
 		$authRules = $this->listAuthRules($authRules);
 		$this->assign('authRules',$authRules);
 		return view();
@@ -75,6 +75,10 @@ class Authrule extends Admin
 		return $tmp;
 	}
 
+	/**
+	 * 角色配置权限页
+	 * @return \think\response\View
+     */
 	public function setauth()
 	{
 		$role_id = input('role_id');
@@ -96,7 +100,7 @@ class Authrule extends Admin
 		$data = model('AuthRule')->get(['id'=>$id]);
 		$this->assign( 'data', $data );
 		$authRules = model('AuthRule')->getList();
-		$authRules = sortAuthRoles($authRules);
+		$authRules = sortAuthRules($authRules);
 		$authRules = $this->listAuthRules($authRules);
 		$this->assign('authRules',$authRules);
 		return view();
@@ -107,14 +111,16 @@ class Authrule extends Admin
 	 */
 	public function saveData()
 	{
-		$this->mustCheckRule($this->company_id,'');
+		$this->mustCheckRule();
 		if(!request()->isAjax()) {
 			return info(lang('Request type error'));
 		}
 		$data = input('post.');
-		//$data['company_id'] = $this->company_id;
-		model('AuthRule')->saveData($data);
-		Loader::model('LogRecord')->record( lang('Save AuthRule'),json_encode($data) );
+		if( !$ret = model('AuthRule')->saveData($data) ){
+			Log::record(['添加权限失败' => model('AuthRule')->getError(),'data' => json_encode($data)],'error');
+			$this->error('操作失败');
+		}
+		Loader::model('LogRecord')->record( lang('Save AuthRule'),$data );
 		$this->success(lang('Save success'));
 	}
 
@@ -122,26 +128,35 @@ class Authrule extends Admin
 	 * 删除
 	 */
 	public function delete($id = 0){
-		$this->mustCheckRule($this->company_id,'');
+		$this->mustCheckRule();
 		if(empty($id)){
 			return info(lang('Data ID exception'), 0);
 		}
-		Loader::model('LogRecord')->record( lang('Delete AuthRule'),json_encode($id) );
-		return model('AuthRule')->deleteById($id);
+		if( !model('AuthRule')->deleteById($id) ){
+			Log::record(['删除权限失败' => model('AuthRule')->getError(),'data' => $id],'error');
+			$this->error('操作失败');
+		}
+		Loader::model('LogRecord')->record( lang('Delete AuthRule'),$id );
+		$this->success(lang('Delete succeed'));
 	}
 
+	/**
+	 * 角色权限配置保存api
+	 * @return array|void
+     */
 	public function saveAuthAccess()
 	{
-		$this->mustCheckRule($this->company_id,'');
+		$this->mustCheckRule();
 		if(!request()->isAjax()) {
 			return info(lang('Request type error'));
 		}
 		$post_data = input('post.');
 		$data = isset($post_data['authrule'])?$post_data['authrule']:[];
-		$res = model('AuthAccess')->saveData($post_data['role_id'], $data);
-		Loader::model('LogRecord')->record( lang('Save AuthAccess'),json_encode($post_data) );
-		if ($res['code'] == 1) {
-			return $this->success(lang("Save success"),'admin/role/index');
+		if( !$res = model('AuthAccess')->saveData($post_data['role_id'], $data) ){
+			Log::record(['角色权限保存失败' => model('AuthAccess')->getError(),'data' => json_encode($post_data)],'error');
+			$this->error('操作失败');
 		}
+		Loader::model('LogRecord')->record( lang('Save AuthAccess'),$post_data );
+		return $this->success(lang("Save success"),'admin/role/index');
 	}
 }

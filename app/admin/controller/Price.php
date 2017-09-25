@@ -9,6 +9,7 @@
 namespace app\admin\controller;
 
 use think\Loader;
+use think\Log;
 
 /**
  * 价格维护
@@ -69,7 +70,7 @@ class Price extends Admin
      */
     public function saveData()
     {
-        $this->mustCheckRule($this->company_id,'');
+        $this->mustCheckRule();
         if(!request()->isAjax()) {
             return info(lang('Request type error'));
         }
@@ -79,8 +80,12 @@ class Price extends Admin
         if(empty($data['id'])){
             unset($data['id']);
         }
-        model('LogRecord')->record( lang('Save Price'),json_encode($data) );
-        return model('Price')->saveData( $data );
+        if( !model('Price')->saveData( $data ) ){
+            Log::record(['添加价格失败' => model('Price')->getError(),'data' => $data],'error');
+            $this->error(model('Price')->getError());
+        }
+        model('LogRecord')->record( lang('Save Price'),$data);
+        $this->success(lang('Save success'));
     }
 
     /**
@@ -88,11 +93,20 @@ class Price extends Admin
      * @param  string $id 数据ID（主键）
      */
     public function delete($id = 0){
-        $this->mustCheckRule($this->company_id,'');
+        $this->mustCheckRule();
         if(empty($id)) {
             return info(lang('Data ID exception'), 0);
         }
-        model('LogRecord')->record( lang('Delete Price'),json_encode($id) );
-        return model('Price')->deleteById($id);
+        $prices = model('Price')->getPricesById($id,$this->company_id);
+        if( count($prices) != count(explode(',',$id)) ){
+            Log::record(['删除价格失败' => 0,'data' => $id],'error');
+            $this->error('操作失败,信息有误');
+        }
+        if( !model('Price')->deleteById($id) ){
+            Log::record(['删除价格失败' => model('Price')->getError(),'data' => $id],'error');
+            $this->error('操作失败');
+        }
+        Loader::model('LogRecord')->record( lang('Delete Price'),$id );
+        $this->success(lang('Delete succeed'));
     }
 }
