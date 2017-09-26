@@ -159,8 +159,8 @@ class User extends Admin
 		return $this->where($where)->field($field)->$method();
 	}
 
-	public function updatePasswd($data){
-		return $this->update($data);
+	public function updatePasswd($data,$scene){
+		return $this->validate($scene)->isUpdate(true)->save($data);
 	}
 
 	/**
