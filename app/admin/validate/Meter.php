@@ -16,6 +16,8 @@ class Meter extends Validate
         'change_reason'         => 'require',
         'meter_status'          => 'require',
         'meter_life'            => 'require',
+        'company_id'            => 'require',
+        'balance'               => 'require',
     ];
 
     protected $message  =   [
@@ -27,21 +29,23 @@ class Meter extends Validate
         'detail_address.require'        => '详细地址必须',
         'change_reason.require'         => '换表原因必须',
         'meter_status.require'          => '表具状态必须',
-        'meter_life.require'            => '表具生命周期状态必须',
+        'meter_life.require'            => '表具活跃状态必须',
+        'company_id.require'            => '公司id必须',
+        'balance.require'               => '余额必须',
     ];
 
     protected $scene = [
         //表具报装
-        'setup' => ['M_Type','M_Code','P_ID','U_ID','M_Address','detail_address','meter_life'],
+        'setup' => ['M_Type','M_Code','P_ID','U_ID','M_Address','detail_address','meter_status','company_id'],
         //表具过户
         'pass' => ['U_ID'],
         //表具更换
-        'change_update_old_meter' => ['change_reason'],
-        'change_update_new_meter' => ['M_Type','M_Code','P_ID','U_ID','M_Address','detail_address'],
+        'change_update_old_meter' => ['change_reason','meter_status','meter_life'],
+        'change_update_new_meter' => ['M_Type','M_Code','P_ID','U_ID','M_Address','detail_address','meter_status','company_id'],
         //表具修改
         'edit' => ['M_Address','detail_address'],
         //表具信息维护
-        'delete' => ['meter_status'] 
+        'delete' => ['meter_status','meter_life']
     ];
 }
 

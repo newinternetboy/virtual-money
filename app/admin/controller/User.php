@@ -165,11 +165,11 @@ class User extends Admin
             };
             $updateData =[
                 'id'=>$this->uid,
-                'password'=>mduser($oldpasswd)
+                'password'=>mduser($newpassword)
             ];
-            if(!model('User')->updatePasswd($updateData)){
+            if(!model('User')->updatePasswd($updateData,'User.updatepasswd')){
                 Log::record(['更改密码失败' => model('User')->getError(),'data' => $updateData ],'error');
-                exception('操作失败',ERROR_CODE_SYS);
+                exception(model('User')->getError(),ERROR_CODE_SYS);
             }
             Loader::model('LogRecord')->record('修改密码',$updateData);
         } catch (\Exception $e) {

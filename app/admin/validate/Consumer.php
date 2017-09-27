@@ -14,10 +14,12 @@ use think\Validate;
 class Consumer extends Validate
 {
     protected $rule =   [
-        'M_Code'              => 'require',
+        'M_Code'                => 'require',
         'username'              => 'require',
-        'tel'             => 'require',
+        'tel'                   => 'require',
         'identity'              => 'require',
+        'company_id'            => 'require',
+        'consumer_state'        => 'require',
     ];
 
     protected $message  =   [
@@ -25,9 +27,13 @@ class Consumer extends Validate
         'username.require'              => '姓名必须',
         'tel.require'                   => '电话号码必须',
         'identity.require'              => '身份证号必须',
+        'company_id.require'            => '公司id必须',
+        'consumer_state.require'        => '用户状态必须',
     ];
 
     protected $scene = [
-        'edit' => ['username','tel'],
+        'insert'    => ['M_Code','username','tel','identity','company_id','consumer_state'],
+        'edit'      => ['username','tel'],
+        'setOld'    => ['consumer_state']
     ];
 }

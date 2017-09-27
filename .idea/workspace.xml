@@ -2,15 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5bea7ed7-fa8d-4451-8bf7-3ce3c1ab568e" name="默认" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/admin/model/MeterData.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/admin/validate/MeterData.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/config.php" afterPath="$PROJECT_DIR$/app/admin/config.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/controller/Meter.php" afterPath="$PROJECT_DIR$/app/admin/controller/Meter.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/controller/Price.php" afterPath="$PROJECT_DIR$/app/admin/controller/Price.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/model/LogRecord.php" afterPath="$PROJECT_DIR$/app/admin/model/LogRecord.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/controller/MeterParam.php" afterPath="$PROJECT_DIR$/app/admin/controller/MeterParam.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/controller/User.php" afterPath="$PROJECT_DIR$/app/admin/controller/User.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/model/Consumer.php" afterPath="$PROJECT_DIR$/app/admin/model/Consumer.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/model/Meter.php" afterPath="$PROJECT_DIR$/app/admin/model/Meter.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/model/Price.php" afterPath="$PROJECT_DIR$/app/admin/model/Price.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config.php" afterPath="$PROJECT_DIR$/app/config.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/admin/view/meter/reach.html" afterPath="$PROJECT_DIR$/app/admin/view/meter/search.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/model/User.php" afterPath="$PROJECT_DIR$/app/admin/model/User.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/validate/Consumer.php" afterPath="$PROJECT_DIR$/app/admin/validate/Consumer.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/validate/Meter.php" afterPath="$PROJECT_DIR$/app/admin/validate/Meter.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/validate/User.php" afterPath="$PROJECT_DIR$/app/admin/validate/User.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/constants.php" afterPath="$PROJECT_DIR$/app/constants.php" />
     </list>
     <ignored path="rrr.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -41,11 +46,43 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Meter.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Meter.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/admin/controller/Meter.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="316">
-              <caret line="379" column="60" selection-start-line="379" selection-start-column="60" selection-end-line="379" selection-end-column="60" />
+            <state relative-caret-position="2463">
+              <caret line="460" column="50" selection-start-line="460" selection-start-column="50" selection-end-line="460" selection-end-column="50" />
+              <folding>
+                <element signature="e#125#142#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/admin/config.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="102" column="10" selection-start-line="102" selection-start-column="10" selection-end-line="102" selection-end-column="10" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Meter.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/admin/model/Meter.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1863">
+              <caret line="72" column="0" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MeterParam.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/admin/controller/MeterParam.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -63,14 +100,14 @@
         <option value="$PROJECT_DIR$/app/config.php" />
         <option value="$PROJECT_DIR$/app/admin/model/Price.php" />
         <option value="$PROJECT_DIR$/app/admin/controller/Price.php" />
-        <option value="$PROJECT_DIR$/app/admin/config.php" />
         <option value="$PROJECT_DIR$/app/admin/model/User.php" />
         <option value="$PROJECT_DIR$/app/admin/model/LogRecord.php" />
-        <option value="$PROJECT_DIR$/app/admin/model/Meter.php" />
         <option value="$PROJECT_DIR$/app/admin/controller/Logrecord.php" />
         <option value="$PROJECT_DIR$/app/admin/view/logrecord/search.html" />
         <option value="$PROJECT_DIR$/app/admin/view/meter/search.html" />
         <option value="$PROJECT_DIR$/app/admin/controller/Meter.php" />
+        <option value="$PROJECT_DIR$/app/admin/config.php" />
+        <option value="$PROJECT_DIR$/app/admin/model/Meter.php" />
       </list>
     </option>
   </component>
@@ -241,77 +278,7 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="view" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ttt" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ttt" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="admin" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="view" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="meter" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ttt" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ttt" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="admin" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="model" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ttt" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ttt" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="admin" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controller" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -392,15 +359,15 @@
       <updated>1506086215530</updated>
       <workItem from="1506086221460" duration="198000" />
       <workItem from="1506389788172" duration="26578000" />
-      <workItem from="1506476651554" duration="21377000" />
+      <workItem from="1506476651554" duration="22423000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="48153000" />
+    <option name="totallyTimeSpent" value="49199000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17700455" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -586,14 +553,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/admin/config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="106" column="26" selection-start-line="106" selection-start-column="26" selection-end-line="106" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/admin/controller/Blacklist.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
@@ -614,14 +573,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="62" column="35" selection-start-line="62" selection-start-column="35" selection-end-line="62" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/admin/model/Meter.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="32" column="46" selection-start-line="32" selection-start-column="46" selection-end-line="32" selection-end-column="46" />
           <folding />
         </state>
       </provider>
@@ -677,10 +628,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/controller/MeterParam.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/admin/controller/Meter.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="379" column="60" selection-start-line="379" selection-start-column="60" selection-end-line="379" selection-end-column="60" />
+        <state relative-caret-position="2463">
+          <caret line="460" column="50" selection-start-line="460" selection-start-column="50" selection-end-line="460" selection-end-column="50" />
+          <folding>
+            <element signature="e#125#142#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="102" column="10" selection-start-line="102" selection-start-column="10" selection-end-line="102" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/model/Meter.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1863">
+          <caret line="72" column="0" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
           <folding />
         </state>
       </provider>

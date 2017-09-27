@@ -98,7 +98,7 @@ class MeterParam extends Admin
             $this->error('操作失败,信息有误');
         }
         if( !model('MeterParam')->deleteById($id) ){
-            Log::record(['删除区域失败' => model('Role')->getError(),'data' => $id],'error');
+            Log::record(['删除运行参数失败' => model('Role')->getError(),'data' => $id],'error');
             $this->error('操作失败');
         }
         Loader::model('LogRecord')->record( lang('Delete MeterParam'),$id );
