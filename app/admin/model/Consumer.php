@@ -42,15 +42,20 @@ class Consumer extends Admin
         }
     }
 
-    public function setConsumerOld($id){
-        $data = [
-            'id' => $id,
-            'consumer_state' => CONSUMER_STATE_OLD
-        ];
-        return $this->update($data);
-    }
+    /**
+     * 插入/更新 用户信息
+     * @param $data
+     * @param $scene
+     * @return false|int
+     */
+    public function upsertConsumer($data, $scene){
+        if( isset($data['id']) ){
+            return $this->validate($scene)->isUpdate(true)->save($data);
+        }
+        if( $this->validate($scene)->save($data) ){
+            return $this->data['id'];
+        }
+        return false;
 
-    public function updateConsumer($data,$scene){
-        return $this->validate($scene)->isUpdate(true)->save($data);
     }
 }

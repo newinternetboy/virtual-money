@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 
+use think\Loader;
 use think\Log;
 
 /**
@@ -38,31 +39,31 @@ class Meter extends Admin
      */
     public function getMeterData(){ 
         $M_Code = input('M_Code');
-        $data['code'] = 200;
+        $ret['code'] = 200;
         try{
             if(!$M_Code){
                 exception("请先填写表号再查询",ERROR_CODE_DATA_ILLEGAL);
             }
-            $meter = model('Meter')->getMeterByCode($M_Code);
-            if( !$meter ){
-                exception("表具不存在或已废弃,请检查表号",ERROR_CODE_DATA_ILLEGAL);
+            //检查用户能否查看该表具
+            $where['M_Code'] = $M_Code;
+            $where['company_id'] = ['in',[null,$this->company_id]];
+            if( !$meter = model('Meter')->getMeterInfo($where,'find') ){
+                exception("表具不存在,请检查表号",ERROR_CODE_DATA_ILLEGAL);
             }
-            if( isset($meter['company_id']) && $meter['company_id'] != $this->company_id ){
-                exception("您无权查看该表具信息",ERROR_CODE_DATA_ILLEGAL);
-            }
-            $data['meter'] = $meter->toArray(); 
+            $ret['meter'] = $meter->toArray();
+            //如果表具已绑定,返回绑定用户信息
             if( isset($meter['meter_status']) && $meter['meter_status'] == METER_STATUS_BIND && isset($meter['U_ID']) && $meter['U_ID'] ){
                 $consumer = model('Consumer')->getConsumerById($meter['U_ID']);
                 $consumer = $consumer->toArray();
                 $area = model('Area')->getAreaById($meter['M_Address']);
-                $data['consumer'] = $consumer;
-                $data['meter']['area'] = $area['address'];
+                $ret['consumer'] = $consumer;
+                $ret['meter']['area'] = $area['address'];
             }
         }catch (\Exception $e){
-            $data['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
-            $data['msg'] = $e->getMessage();
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
         }
-        return json($data);
+        return json($ret);
     }
 
     /**
@@ -79,26 +80,44 @@ class Meter extends Admin
             if( empty($data) || !isset($data['meter']) || !isset($data['consumer']) ){
                 exception('报装失败,表具信息不完整',ERROR_CODE_DATA_ILLEGAL);
             }
-            if( !$meter = model('Meter')->getMeterByCode($data['meter']['M_Code']) ){
-                exception('报装失败,表号不存在',ERROR_CODE_DATA_ILLEGAL);
+            //检查表具状态是否允许报装
+            $where['M_Code'] = $data['meter']['M_Code'];
+            $where['company_id'] = ['eq',null];
+            $where['meter_status'] = ['eq',METER_STATUS_NEW];
+            if( !$meter = model('Meter')->getMeterInfo($where,'find') ){
+                exception("报装失败,表具不能报装",ERROR_CODE_DATA_ILLEGAL);
             }
-            if( isset($meter['meter_status']) && $meter['meter_status'] == METER_STATUS_BIND ){
-                exception('该表具已被报装',ERROR_CODE_DATA_ILLEGAL);
-            }
+            //插入报装用户信息
             $data['consumer']['M_Code'] = $data['meter']['M_Code'];
             $data['consumer']['company_id'] = $this->company_id;
             $data['consumer']['consumer_state'] = CONSUMER_STATE_NORMAL;
-            if( !$consumer_id = model('Consumer')->InsertConsumer($data['consumer']) ){
-                exception('报装失败: '.model('Consumer')->getError(), ERROR_CODE_DATA_ILLEGAL);
+            if( !$consumer_id = model('Consumer')->upsertConsumer($data['consumer'],'Consumer.insert') ){
+                $error = model('Consumer')->getError();
+                Log::record(['报装用户失败' => $error,'data' => $data],'error');
+                exception('添加用户失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
+            //更新表具信息
             $data['meter']['U_ID'] = $consumer_id;
             $data['meter']['id'] = $meter['id'];
             $data['meter']['company_id'] = $this->company_id;
             $data['meter']['meter_status'] = METER_STATUS_BIND;
-            $data['meter']['meter_life'] = METER_LIFE_START;
             $data['meter']['setup_time'] = time();
             if( !model('Meter')->updateMeter($data['meter'],'Meter.setup') ){
-                exception('报装失败: '.model('Meter')->getError(), ERROR_CODE_DATA_ILLEGAL);
+                $error = model('Consumer')->getError();
+                Log::record(['报装表具失败' => $error,'data' => $data],'error');
+                exception('更新表具失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
+            }
+            //记录入表具上报数据表
+            $meterData['meter_M_Code'] =  $meter['M_Code'];
+            $meterData['meter_id'] = $meter['id'];
+            $meterData['U_ID'] = $consumer_id;
+            $meterData['company_id'] = $this->company_id;
+            $meterData['source_type'] = BUSINESS;
+            $meterData['action_type'] = BUSINESS_SETUP;
+            if( !model('MeterData')->upsert($meterData,'MeterData.business') ){
+                $error = model('MeterData')->getError();
+                Log::record(['报装数据记录失败' => $error,'data' => $meterData],'error');
+                exception('插入报装记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
             model('LogRecord')->record( lang('Save Meter'),$data );
         }catch (\Exception $e){
@@ -125,53 +144,71 @@ class Meter extends Admin
         $M_Code = input('M_Code');
         $new_consumer = input('consumer');
         $new_consumer = json_decode($new_consumer,true);
-        $data['code'] = 200;
-        $data['msg'] = '操作成功';
+        $ret['code'] = 200;
+        $ret['msg'] = '操作成功';
         try{
             if( !$M_Code ){
                 exception("过户失败,表具信息不完整",ERROR_CODE_DATA_ILLEGAL);
             }
-            if( !$meter = model('Meter')->getMeterByCode($M_Code) ){
-                exception('过户失败,表号不存在',ERROR_CODE_DATA_ILLEGAL);
-            }
-            if( isset($meter['company_id']) && $meter['company_id'] != $this->company_id ){
-                exception('过户失败,您无权对该表具进行操作',ERROR_CODE_DATA_ILLEGAL);
-            }
-            if( !isset($meter['meter_status']) ){
-                exception('过户失败,此表尚未绑定任何用户',ERROR_CODE_DATA_ILLEGAL);
-            }
-            if( $meter['meter_status'] != METER_STATUS_BIND ){
-                exception('过户失败,此表不能过户',ERROR_CODE_DATA_ILLEGAL);
-            }
-            $old_consumer = model('Consumer')->getConsumerById($meter['U_ID']);
-            if( $old_consumer['identity'] == $new_consumer['identity'] ){
-                exception('不能将表具过户给自己,如需修改表具信息,请在[表具修改]菜单操作',ERROR_CODE_DATA_ILLEGAL);
-            }
             if(!$new_consumer){
                 exception('过户失败,过户新用户信息不完整',ERROR_CODE_DATA_ILLEGAL);
             }
+            //检查表具状态是否允许过户
+            $where['M_Code'] = $M_Code;
+            $where['company_id'] = ['eq',$this->company_id];
+            $where['meter_status'] = ['eq',METER_STATUS_BIND];
+            if( !$meter = model('Meter')->getMeterInfo($where,'find')){
+                exception("过户失败,表具不能过户",ERROR_CODE_DATA_ILLEGAL);
+            }
+            $old_consumer = model('Consumer')->getConsumerById($meter['U_ID'],'identity');
+            if( $old_consumer['identity'] == $new_consumer['identity'] ){
+                exception('不能将表具过户给自己,如需修改表具信息,请在[表具修改]菜单操作',ERROR_CODE_DATA_ILLEGAL);
+            }
             //更新旧用户状态
-            if( !model('Consumer')->setConsumerOld($meter['U_ID']) ){
-                exception("过户失败:".model('Consumer')->getError(),ERROR_CODE_DATA_ILLEGAL);
+            $updateOldData['id'] = $meter['U_ID'];
+            $updateOldData['consumer_state'] = CONSUMER_STATE_OLD;
+            if( !model('Consumer')->upsertConsumer($updateOldData,'Consumer.setOld') ){
+                $error = model('Consumer')->getError();
+                Log::record(['过户旧用户失败' => $error,'data' => $updateOldData],'error');
+                exception("更新旧用户失败:".$error,ERROR_CODE_DATA_ILLEGAL);
             }
             //插入新用户
+            Loader::clearInstance(); //框架是单例模式,初始化更新旧用户时实例化的对象,否则插入新用户受干扰
             $new_consumer['M_Code'] = $M_Code;
             $new_consumer['consumer_state'] = CONSUMER_STATE_NORMAL;
-            if( !$consumer_id = model('Consumer')->InsertConsumer($new_consumer) ){
-                exception("过户失败:".model('Consumer')->getError(),ERROR_CODE_DATA_ILLEGAL);
+            $new_consumer['company_id'] = $this->company_id;
+            if( !$new_consumer_id = model('Consumer')->upsertConsumer($new_consumer,'Consumer.insert') ){
+                $error = model('Consumer')->getError();
+                Log::record(['过户新用户失败' => $error,'data' => $new_consumer],'error');
+                exception("插入新用户失败:".$error,ERROR_CODE_DATA_ILLEGAL);
             }
             //更新表具所属用户
-            $meterInfo['U_ID'] = $consumer_id;
+            $meterInfo['U_ID'] = $new_consumer_id;
             $meterInfo['id'] = $meter['id'];
-            if( !$consumer_id = model('Meter')->updateMeter($meterInfo,'Meter.pass') ){
-                exception("过户失败:".model('Meter')->getError(),ERROR_CODE_DATA_ILLEGAL);
+            $meterInfo['pass_time'] = time();
+            if( !$new_consumer_id = model('Meter')->updateMeter($meterInfo,'Meter.pass') ){
+                $error = model('Meter')->getError();
+                Log::record(['过户表具失败' => $error,'data' => $meterInfo],'error');
+                exception("更新表具失败:".$error,ERROR_CODE_DATA_ILLEGAL);
             }
-            model('LogRecord')->record( lang('Pass Meter'),'M_Code: '.$M_Code.', ori_consumer: '.$meter['U_ID'].', new_consumer: '.$consumer_id );
+            //记录入表具上报数据表
+            $meterData['meter_M_Code'] =  $meter['M_Code'];
+            $meterData['meter_id'] = $meter['id'];
+            $meterData['U_ID'] = $meter['U_ID'];
+            $meterData['company_id'] = $this->company_id;
+            $meterData['source_type'] = BUSINESS;
+            $meterData['action_type'] = BUSINESS_PASS;
+            if( !model('MeterData')->upsert($meterData,'MeterData.business') ){
+                $error = model('MeterData')->getError();
+                Log::record(['过户数据记录失败' => $error,'data' => $meterData],'error');
+                exception('插入过户记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('LogRecord')->record( lang('Pass Meter'),'M_Code: '.$M_Code.', ori_consumer: '.$meter['U_ID'].', new_consumer: '.$new_consumer_id );
         }catch (\Exception $e){
-            $data['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
-            $data['msg'] = $e->getMessage();
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
         }
-        return json($data);
+        return json($ret);
     }
 
     /**
@@ -190,43 +227,42 @@ class Meter extends Admin
         $this->mustCheckRule();
         $changeinfo = input('changeinfo');
         $changeinfo = json_decode($changeinfo,true);
-        $data['code'] = 200;
-        $data['msg'] = '操作成功';
+        $ret['code'] = 200;
+        $ret['msg'] = '操作成功';
         try{
             if(!$changeinfo){
                 exception("更换失败,表具信息不完整",ERROR_CODE_DATA_ILLEGAL);
             }
             if( !isset($changeinfo['old_M_Code']) || !isset($changeinfo['change_reason']) ){
-                exception("更换失败,旧表具信息不完整",ERROR_CODE_DATA_ILLEGAL);
+                exception("更换失败,原表具信息不完整",ERROR_CODE_DATA_ILLEGAL);
             }
             if( !isset($changeinfo['new_M_Code']) ){
                 exception("更换失败,新表具信息不完整",ERROR_CODE_DATA_ILLEGAL);
             }
-            if( !$old_meter = model('Meter')->getMeterByCode($changeinfo['old_M_Code']) ){
-                exception('更换失败,旧表号不存在',ERROR_CODE_DATA_ILLEGAL);
+            //校验旧表状态
+            $old_meter_where['M_Code'] = $changeinfo['old_M_Code'];
+            $old_meter_where['meter_status'] = METER_STATUS_BIND;
+            $old_meter_where['company_id'] = $this->company_id;
+            if( !$old_meter = model('Meter')->getMeterInfo($old_meter_where,'find') ){
+                exception("更换失败,原表具不符合更换条件",ERROR_CODE_DATA_ILLEGAL);
             }
-            if( !isset($old_meter['meter_status']) ){
-                exception('更换失败,旧表尚未绑定任何用户',ERROR_CODE_DATA_ILLEGAL);
-            }
-            if( isset($old_meter['company_id']) && $old_meter['company_id'] != $this->company_id ){
-                exception("更换失败,您无权对该表具进行操作",ERROR_CODE_DATA_ILLEGAL);
-            }
-            if( $old_meter['meter_status'] != METER_STATUS_BIND ){
-                exception('更换失败,您不能对旧表进行此操作',ERROR_CODE_DATA_ILLEGAL);
-            }
-            if( !$new_meter = model('Meter')->getMeterByCode($changeinfo['new_M_Code']) ){
-                exception('更换失败,新表号不存在或已废弃',ERROR_CODE_DATA_ILLEGAL);
-            }
-            if( isset($new_meter['meter_status'])  ){
-                exception('更换失败,新表号已经被绑定或已废弃',ERROR_CODE_DATA_ILLEGAL);
+            //校验新表状态
+            $new_meter_where['M_Code'] = $changeinfo['new_M_Code'];
+            $new_meter_where['meter_status'] = METER_STATUS_NEW;
+            if( !$new_meter = model('Meter')->getMeterInfo($new_meter_where,'find') ){
+                exception("更换失败,新表具不符合更换条件",ERROR_CODE_DATA_ILLEGAL);
             }
             //更新旧表状态
             $old_meter_info['id'] = $old_meter['id'];
             $old_meter_info['change_reason'] = $changeinfo['change_reason'];
+            $old_meter_info['new_meter_M_Code'] = $new_meter['M_Code'];
             $old_meter_info['meter_status'] = METER_STATUS_CHANGED;
-            $old_meter_info['meter_life'] = METER_LIFE_END;
+            $old_meter_info['meter_life'] = METER_LIFE_INACTIVE;
+            $old_meter_info['change_time'] = time();
             if( !model('Meter')->updateMeter($old_meter_info,'Meter.change_update_old_meter') ){
-                exception('更换失败:'.model('Meter')->getError(),ERROR_CODE_DATA_ILLEGAL);
+                $error = model('Meter')->getError();
+                Log::record(['更换更新旧表失败' => $error,'data' => $old_meter_info],'error');
+                exception('更新旧表具失败:'.$error,ERROR_CODE_DATA_ILLEGAL);
             }
             //更新新表状态
             $new_meter_data['id'] = $new_meter['id'];
@@ -238,16 +274,34 @@ class Meter extends Admin
             $new_meter_data['U_ID'] = $old_meter['U_ID'];
             $new_meter_data['company_id'] = $old_meter['company_id'];
             $new_meter_data['meter_status'] = METER_STATUS_BIND;
-            $new_meter_data['meter_life'] = METER_LIFE_START;
+
+            //TODO:原表具数据转移
+
             if( !model('Meter')->updateMeter($new_meter_data,'Meter.change_update_new_meter') ){
-                exception('更换失败:'.model('Meter')->getError(),ERROR_CODE_DATA_ILLEGAL);
+                $error = model('Meter')->getError();
+                Log::record(['更换更新新表失败' => $error,'data' => $new_meter_data],'error');
+                exception('更新新表具失败:'.$error,ERROR_CODE_DATA_ILLEGAL);
+            }
+            //记录入表具上报数据表
+            $meterData['meter_M_Code'] =  $old_meter['M_Code'];
+            $meterData['meter_id'] = $old_meter['id'];
+            $meterData['U_ID'] = $old_meter['U_ID'];
+            $meterData['company_id'] = $this->company_id;
+            $meterData['source_type'] = BUSINESS;
+            $meterData['action_type'] = BUSINESS_CHANGE;
+            $meterData['new_meter_M_Code'] = $new_meter['M_Code'];
+            $meterData['change_reason'] = $changeinfo['change_reason'];
+            if( !model('MeterData')->upsert($meterData,'MeterData.business') ){
+                $error = model('MeterData')->getError();
+                Log::record(['更换数据记录失败' => $error,'data' => $meterData],'error');
+                exception('插入更换记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
             model('LogRecord')->record( lang('Pass Meter'),$changeinfo );
         }catch (\Exception $e){
-            $data['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
-            $data['msg'] = $e->getMessage();
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
         }
-        return json($data);
+        return json($ret);
     }
 
     /**
@@ -278,30 +332,48 @@ class Meter extends Admin
             if( empty($data) || !isset($data['meter']) || !isset($data['consumer']) ){
                 exception('修改失败,表具信息不完整',ERROR_CODE_DATA_ILLEGAL);
             }
-            if( !$meter = model('Meter')->getMeterByCode($data['meter']['M_Code']) ){
-                exception('修改失败,表号不存在',ERROR_CODE_DATA_ILLEGAL);
-            }
-            if( isset($meter['company_id']) && $meter['company_id'] != $this->company_id ){
-                exception("修改失败,您无权对该表具进行操作",ERROR_CODE_DATA_ILLEGAL);
-            }
-            if( !isset($meter['meter_status']) || $meter['meter_status'] != METER_STATUS_BIND ){
-                exception('修改失败,您不能对该表进行此操作',ERROR_CODE_DATA_ILLEGAL);
-            }
             if( isset($data['consumer']['identity']) ){
                 exception('修改失败,用户变更请在[表具过户]菜单进行操作',ERROR_CODE_DATA_ILLEGAL);
             }
+            //检查表具状态是否允许修改
+            $where['M_Code'] = $data['meter']['M_Code'];
+            $where['company_id'] = ['eq',$this->company_id];
+            $where['meter_status'] = ['eq',METER_STATUS_BIND];
+            if( !$meter = model('Meter')->getMeterInfo($where,'find')){
+                exception("修改失败,表具不能修改",ERROR_CODE_DATA_ILLEGAL);
+            }
             //更新表具信息
-            $meterData = $data['meter'];
-            unset($meterData['M_Code']);
-            $meterData['id'] = $meter['id'];
-            if( !model('Meter')->updateMeter($meterData,'Meter.edit') ){
-                exception('修改失败: '.model('Meter')->getError(),ERROR_CODE_DATA_ILLEGAL);
+            $updateData['id'] = $meter['id'];
+            $updateData['M_Address'] = $data['meter']['M_Address'];
+            $updateData['detail_address'] = $data['meter']['detail_address'];
+            if( !model('Meter')->updateMeter($updateData,'Meter.edit') ){
+                $error = model('Meter')->getError();
+                Log::record(['修改更新表具失败' => $error,'data' => $updateData],'error');
+                exception('修改失败: '.$error,ERROR_CODE_DATA_ILLEGAL);
             }
             //更新用户信息
-            $consumerData = $data['consumer'];
             $consumerData['id'] = $meter['U_ID'];
-            if( !model('Consumer')->updateConsumer($consumerData,'Consumer.edit') ){
-                exception('修改失败: '.model('Consumer')->getError(),ERROR_CODE_DATA_ILLEGAL);
+            $consumerData['username'] = $data['consumer']['username'];
+            $consumerData['tel'] = $data['consumer']['tel'];
+            $consumerData['family_num'] = $data['consumer']['family_num'];
+            $consumerData['building_area'] = $data['consumer']['building_area'];
+            $consumerData['income_peryear'] = $data['consumer']['income_peryear'];
+            if( !model('Consumer')->upsertConsumer($consumerData,'Consumer.edit') ){
+                $error = model('Consumer')->getError();
+                Log::record(['修改更新用户失败' => $error,'data' => $consumerData],'error');
+                exception('修改失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
+            }
+            //记录入表具上报数据表
+            $meterData['meter_M_Code'] =  $meter['M_Code'];
+            $meterData['meter_id'] = $meter['id'];
+            $meterData['U_ID'] = $meter['U_ID'];
+            $meterData['company_id'] = $this->company_id;
+            $meterData['source_type'] = BUSINESS;
+            $meterData['action_type'] = BUSINESS_EDIT;
+            if( !model('MeterData')->upsert($meterData,'MeterData.business') ){
+                $error = model('MeterData')->getError();
+                Log::record(['修改数据记录失败' => $error,'data' => $meterData],'error');
+                exception('插入表具修改记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
             model('LogRecord')->record( lang('Edit Meter'),$data);
         }catch (\Exception $e){
@@ -325,37 +397,47 @@ class Meter extends Admin
     public function delete(){
         $this->mustCheckRule();
         $M_Code = input('M_Code');
-        $data['code'] = 200;
-        $data['msg'] = '操作成功';
+        $ret['code'] = 200;
+        $ret['msg'] = '操作成功';
         try{
             if( !$M_Code ){
                 exception('删除失败,请提供表号',ERROR_CODE_DATA_ILLEGAL);
             }
-            if( !$meter = model('Meter')->getMeterByCode($M_Code) ){
-                exception('删除失败,表号不存在',ERROR_CODE_DATA_ILLEGAL);
+            //检查表具状态是否允许操作
+            $where['M_Code'] = $M_Code;
+            $where['company_id'] = ['eq',$this->company_id];
+            $where['meter_status'] = ['eq',METER_STATUS_BIND];
+            if( !$meter = model('Meter')->getMeterInfo($where,'find')){
+                exception("删除失败,表具不能删除",ERROR_CODE_DATA_ILLEGAL);
             }
-            if( isset($meter['company_id']) && $meter['company_id'] != $this->company_id ){
-                exception("删除失败,您无权对该表具进行操作",ERROR_CODE_DATA_ILLEGAL);
-            }
-            if( !isset($meter['meter_status']) ){
-                exception('删除失败,此表是新表,尚未绑定任何用户信息',ERROR_CODE_DATA_ILLEGAL);
-            }
-            if( $meter['meter_status'] != METER_STATUS_BIND ){
-                exception('删除失败,您不能对该表进行此操作',ERROR_CODE_DATA_ILLEGAL);
-            }
-
+            //更新表具为删除状态
             $updateData['id'] = $meter['id'];
             $updateData['meter_status'] = METER_STATUS_DELETE;
-            $updateData['meter_life'] = METER_LIFE_END;
+            $updateData['meter_life'] = METER_LIFE_INACTIVE;
+            $updateData['delete_time'] = time();
             if( !model('Meter')->updateMeter($updateData,'Meter.delete') ){
-                exception('操作失败: '.model('Meter')->getError(),ERROR_CODE_DATA_ILLEGAL);
+                $error = model('Meter')->getError();
+                Log::record(['删除表具失败' => $error,'data' => $updateData],'error');
+                exception('操作失败: '.$error,ERROR_CODE_DATA_ILLEGAL);
             };
+            //记录入表具上报数据表
+            $meterData['meter_M_Code'] =  $meter['M_Code'];
+            $meterData['meter_id'] = $meter['id'];
+            $meterData['U_ID'] = $meter['U_ID'];
+            $meterData['company_id'] = $this->company_id;
+            $meterData['source_type'] = BUSINESS;
+            $meterData['action_type'] = BUSINESS_DELETE;
+            if( !model('MeterData')->upsert($meterData,'MeterData.business') ){
+                $error = model('MeterData')->getError();
+                Log::record(['删除表具数据记录失败' => $error,'data' => $meterData],'error');
+                exception('插入删除表具记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
+            }
             model('LogRecord')->record( lang('Delete Meter'),$M_Code);
         }catch  (\Exception $e){
-            $data['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
-            $data['msg'] = $e->getMessage();
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
         }
-        return json($data);
+        return json($ret);
     }
 
     public function reach(){
@@ -389,6 +471,6 @@ class Meter extends Admin
 
         return view();
     }
-  
- 
+
+
 }
