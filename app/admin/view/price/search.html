@@ -1,0 +1,57 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单标题概要 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Price List')}</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>价格名称</th>
+								<th>类型</th>
+								<th>周期</th>
+								<th>第一阶梯价</th>
+								<th>第一阶梯量</th>
+								<th>第二阶梯价</th>
+								<th>第二阶梯量</th>
+								<th>第三阶梯价</th>
+								<th>第三阶梯量</th>
+								<th>第四阶梯价</th>
+							</tr>
+						</thead>
+						<tbody>
+						{volist name="price" id="val"}
+							<tr>
+								<td>{$val.name}</td>
+								<td>{$val.type}</td>
+								<td>{$val.period}</td>
+								<td>{$val.first_price}</td>
+								<td>{$val.first_val}</td>
+								<td>{$val.second_price}</td>
+								<td>{$val.second_val}</td>
+								<td>{$val.third_price}</td>
+								<td>{$val.third_val}</td>
+								<td>{$val.fourth_price}</td>
+							</tr>
+						{/volist}	
+						</tbody>
+					</table>
+			    </div>
+			    <div style="float: right">
+			 {$price->render()}
+			    </div>
+            </div>
+        </div>
+    </div>
+</div>

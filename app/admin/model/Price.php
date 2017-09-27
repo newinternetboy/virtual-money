@@ -100,4 +100,8 @@ class Price extends Admin
         $ids = explode(',', $id);
         return $this->where('id', 'in', $ids)->where('company_id', $company_id)->select();
     }
+    public function getLists( $data )
+    {
+        return $this->order('create_time desc')->where($data)->paginate();
+    }
 }

@@ -1,0 +1,99 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单标题概要 -->
+                <div class="ibox-title">
+                    <h5>表具查询</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>t
+                    </div>
+                </div>
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <!-- 表格数据 -->
+                    <form data-method="post" method="" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="input-group">
+                                    表号:<input name="M_Code" type="text" class="form-control" placeholder="请输入表号...">        
+                                </div><!-- /input-group -->
+                            </div><!-- /.col-lg-6 -->
+                             <div class="col-lg-6" style="float: right">
+                                <div class="input-group">
+                                    安装地址:<select class="form-control" placeholder="请输入表号..." name="M_Address">
+                                        <option value="">请选择</option>
+                                      {volist name="areas" id="val" }
+                                        <option value="{$val.id}">{$val.name}</option>
+                                      {/volist}
+                                    </select>       
+                                </div><!-- /input-group -->
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="input-group">
+                                    安装位置:<input name="detail_address" type="text" class="form-control" placeholder="请输入安装位置....">
+                                </div><!-- /input-group -->
+                            </div><!-- /.col-lg-6 -->   
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: right" class="btn btn-success" type="submit"  >查询</button>
+                            </div>
+                        </div>
+                    </form>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <!--原表信息-->
+                        <div><table class="table table-hover">
+                            <thead>
+                                <tr>
+                                   <th>表号{$meter|count}</th>
+                                   <th>价格类型{$meter->total()}</th>
+                                   <th>安装地址</th>
+                                   <th>安装位置</th>
+                                   <th>初始用量</th>
+                                   <th>累计用量</th>
+                                   <th>使用金额</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {volist name='meter' id='vo'}
+                                  <tr>
+                                   <td>{$vo.M_Code}</td>
+                                   <td>{$vo.price.name}</td>
+                                   <td>{$vo.area.name}</td>
+                                   <td>{$vo.detail_address}</td>
+                                   <td>0.00</td>
+                                   <td>0.00</td>
+                                   <td>0.00</td>
+                                  </tr>
+                            {/volist}
+                            </tbody>
+                           
+                        </table></div>
+                        <div>
+                            {$meter->render()}
+                        </div>
+                        <!--换表信息-->
+                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+                   
+                        <div class="form-group" style="color:red">
+                            <label  class="col-sm-2 control-label">操作提示:</label>
+                            <div class="col-sm-10">
+                                <p class="form-control" style="border: none">请先在搜索框输入查询条件进行查询，返回符合条件的结果</p>
+                            </div>
+                        </div>    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                   

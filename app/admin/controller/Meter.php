@@ -358,36 +358,28 @@ class Meter extends Admin
         return json($data);
     }
 
-    public function reach(){
-        $M_Code = input('M_Code');
-        $M_Address=input('Addressdd');
-        $detail_address=input('detail_address');
-        // var_dump($M_Address);exit;
+    public function search(){
+        $M_Code    = input('M_Code');
+        $M_Address = input('M_Address');
+        $detail_address = input('detail_address');
         $areas = model('Area')->getList(['company_id' => $this->company_id]);
         $this->assign('areas',$areas);
-        if(!$M_Code&&!$M_Address&&!$detail_address){ 
-          // $where=1; 
-          $meter=model('Meter')->getallMeter();        
-        }else{
-          // $where['M_Code']=$M_Code;
-          if($M_Code){
-             $where['M_Code']=$M_Code;    
-          }else{
-            if($M_Address){
-              $where['M_Address']=$M_Address;
-              // $where['detail_address']=['like','%'.$detail_address.'%'];
-            }else{
-              if($detail_address){
-              $where['detail_address']=['like','%江南%'];      
-              } 
-            }
-          }
-          $meter = model('Meter')->getMeterByCodeandarea($where);
+        $where['company_id'] = ['neq',''];
+        if($M_Code){
+            $where['M_Code'] = $M_Code;
         }
-        // var_dump($meter);exit();
+        if($M_Address){
+            $where['M_Address'] = $M_Address;
+        }
+        if($detail_address){
+            $where['detail_address'] = $detail_address;
+        }
+        $data['M_Code'] = $M_Code;
+        $data['M_Address'] = $M_Address;
+        $data['detail_address'] = $detail_address;
+        $meter = model('Meter')->getallMeter($where,$data );
         $this->assign('meter',$meter);
-
-        return view();
+        return $this->fetch();
     }
   
  

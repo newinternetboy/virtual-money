@@ -14,7 +14,7 @@ class logRecord extends Admin
     protected $updateTime = false;
     protected $insert     = ['ip', 'user_id','browser','os'];
     protected $type       = [
-        'create_time' => 'int',
+        'create_time' => 'timestamp',
     ];
 
     /**
@@ -65,6 +65,20 @@ class logRecord extends Admin
         $data = $this->column('ip');
         $data = count( array_unique($data) );
         return $data;
+    }
+    /*
+     * 查询日志信息
+     */
+    public function getLogrecord($where,$data)
+    {
+        return $this->order('create_time')->where($where)->paginate()->appends($data);
+    }
+    /*
+     * 关联user表;
+     */
+    public function user()
+    {
+        return $this->belongsTO('user','user_id');
     }
 
 }

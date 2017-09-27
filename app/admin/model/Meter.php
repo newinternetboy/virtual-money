@@ -30,11 +30,11 @@ class Meter extends Admin
         }
         return $this->where($field)->$method();
     }
-    public function getMeterByCodeandarea($where){
-        return $this->where($where)->paginate(10);
+    public function getallMeter($where,$data){
+            return $this->where($where)->paginate()->appends($data);
     }
-    public function getallMeter(){
-        return $this->paginate(10);
+    public function getCount($data){
+        return $this->order('create_time desc')->where($data)->count();
     }
     public function area(){
         return $this->belongsTO('area','M_Address');

@@ -1,0 +1,147 @@
+{js href="__JS__/bootstrap-datetimepicker.min.js" /}
+{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
+{css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单标题概要 -->
+                <div class="ibox-title">
+                    <h5>表具查询</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <!-- 表格数据 -->
+                    <form data-method="post" method="" class="form-horizontal">
+                        <div class="form-group">
+                             <div class="col-lg-6" style="float: left">
+                                <div class="input-group">
+                                    操作人:<input name="user_name" type="text" class="form-control" placeholder="请输入表号...">
+                                </div><!-- /input-group -->
+                             </div><!-- /.col-lg-6 -->
+                             <div class="col-lg-6" style="float: right">
+                                <div class="input-group">
+                                    记录类型:<select class="form-control" placeholder="请输入表号..." name="remark">
+                                        <option value="">请选择</option>
+                                        <option value="修改黑名单属性成功">修改黑名单属性成功</option>
+                                        <option value="登录成功">登录成功</option>
+                                        <option value="登出成功">登出成功</option>
+                                        <option value="修改/添加权限">修改/添加权限</option>
+                                        <option value="添加/修改价格">添加/修改价格</option>
+                                        <option value="修改密码">修改密码</option>
+                                        <option value="修改权限">修改权限</option>
+                                        <option value="修改/添加用户">修改/添加用户</option>
+                                        <option value="添加/修改价格">添加/修改价格</option>
+                                        <option value="添加/修改区域">添加/修改区域</option>
+                                        <option value="表具过户">表具过户</option>
+                                        <option value="表具修改">表具修改</option>
+                                        <option value="表具报装">表具报装</option>
+                                    </select>
+                                </div><!-- /input-group -->
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="input-group">
+                                    开始时间:<input id="start_datetimepicker" name="start_time" type="text" class="form-control">
+                                </div><!-- /input-group -->
+                            </div><!-- /.col-lg-6 -->
+                            <div class="col-lg-6" style="float: left">
+                                <div class="input-group">
+                                    结束时间:<input id="end_datetimepicker" name="end_time" type="text" class="form-control">
+                                </div><!-- /input-group -->
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: right" class="btn btn-success" type="submit"  >查询</button>
+                            </div>
+                        </div>
+                    </form>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <!--原表信息-->
+                        <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                   <th>记录号</th>
+                                   <th>记录类型</th>
+                                   <th>添加时间</th>
+                                   <th>记录内容</th>
+                                   <th>操作人</th>
+                                   <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {volist name='logrecord' id='vo'}
+                                <tr>
+                                   <td>{$vo.id}</td>
+                                   <td>{$vo.remark}</td>
+                                   <td>{$vo.create_time}</td>
+                                   <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{$vo.data}</td>
+                                   <td>{$vo.user.username}</td>
+                                   <td><button class="record">展开记录</button></td>
+                                </tr>
+                            {/volist}
+                            </tbody>
+                           
+                        </table></div>
+                        <div>
+                            {$logrecord->render()}
+                        </div>
+                        <!--换表信息-->
+                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+                   
+                        <div class="form-group" style="color:red">
+                            <label  class="col-sm-2 control-label">操作提示:</label>
+                            <div class="col-sm-10">
+                                <p class="form-control" style="border: none">请先在搜索框输入查询条件进行查询，返回符合条件的结果</p>
+                            </div>
+                        </div>    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#start_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd hh:ii:ss",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "top-right",
+        minuteStep: 1,
+        bootcssVer:3,
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+        event.preventDefault();
+        event.stopPropagation();
+    });
+    $("#end_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd hh:ii:ss",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "top-right",
+        minuteStep: 1,
+        bootcssVer:3,
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+        event.preventDefault();
+        event.stopPropagation();
+    });
+    $('.record').click(function(){
+        var record=$(this).parent().prev().prev().html();
+         alert(record);
+    })
+</script>
+
+                   

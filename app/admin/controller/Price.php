@@ -109,4 +109,11 @@ class Price extends Admin
         Loader::model('LogRecord')->record( lang('Delete Price'),$id );
         $this->success(lang('Delete succeed'));
     }
+    public function search(){
+        $this->mustCheckRule($this->company_id,'');
+        $data['company_id'] = $this->company_id;
+        $price = model('Price')->getLists($data);
+        $this->assign('price',$price);
+        return $this->fetch();
+    }
 }
