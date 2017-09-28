@@ -446,21 +446,25 @@ class Meter extends Admin
         $detail_address = input('detail_address');
         $areas = model('Area')->getList(['company_id' => $this->company_id]);
         $this->assign('areas',$areas);
-        $where['company_id'] = ['neq',''];
+        $where = [];
+        $param  = [];
         if($M_Code){
             $where['M_Code'] = $M_Code;
+            $param['M_Code'] = $M_Code;
         }
         if($M_Address){
             $where['M_Address'] = $M_Address;
+            $param['M_Address'] = $M_Address;
         }
         if($detail_address){
-            $where['detail_address'] = $detail_address;
+            $where['detail_address'] = ['like',$detail_address];
+            $param['detail_address'] = $detail_address;
         }
-        $data['M_Code'] = $M_Code;
-        $data['M_Address'] = $M_Address;
-        $data['detail_address'] = $detail_address;
-        $meter = model('Meter')->getallMeter($where,$data );
+        $meter = model('Meter')->getMyMetersUsePaginate($where,$param);
         $this->assign('meter',$meter);
+        $this->assign('M_Code',$M_Code);
+        $this->assign('M_Address',$M_Address);
+        $this->assign('detail_address',$detail_address);
         return $this->fetch();
     }
 

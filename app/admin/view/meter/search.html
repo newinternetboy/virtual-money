@@ -11,17 +11,17 @@
                         </a>
                         <a class="close-link">
                             <i class="fa fa-times"></i>
-                        </a>t
+                        </a>
                     </div>
                 </div>
                 <!-- 表单内容 -->
                 <div class="ibox-content">
                     <!-- 表格数据 -->
-                    <form data-method="post" method="" class="form-horizontal">
+                    <form data-method="post" method="get" class="form-horizontal">
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="input-group">
-                                    表号:<input name="M_Code" type="text" class="form-control" placeholder="请输入表号...">        
+                                    表号:<input name="M_Code" type="text" class="form-control" placeholder="请输入表号..." value="{$M_Code ?? ''}">
                                 </div><!-- /input-group -->
                             </div><!-- /.col-lg-6 -->
                              <div class="col-lg-6" style="float: right">
@@ -29,7 +29,7 @@
                                     安装地址:<select class="form-control" placeholder="请输入表号..." name="M_Address">
                                         <option value="">请选择</option>
                                       {volist name="areas" id="val" }
-                                        <option value="{$val.id}">{$val.name}</option>
+                                        <option value="{$val.id}" {if condition="$M_Address eq $val.id"}selected{/if}>{$val.name}</option>
                                       {/volist}
                                     </select>       
                                 </div><!-- /input-group -->
@@ -38,7 +38,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="input-group">
-                                    安装位置:<input name="detail_address" type="text" class="form-control" placeholder="请输入安装位置....">
+                                    安装位置:<input name="detail_address" type="text" class="form-control" placeholder="请输入安装位置...." value="{$detail_address ?? ''}">
                                 </div><!-- /input-group -->
                             </div><!-- /.col-lg-6 -->   
                         </div>
@@ -50,12 +50,13 @@
                         </div>
                     </form>
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
-                        <!--原表信息-->
-                        <div><table class="table table-hover">
+                        <!--结果列表-->
+                        <div>
+                            <table class="table table-hover">
                             <thead>
                                 <tr>
-                                   <th>表号{$meter|count}</th>
-                                   <th>价格类型{$meter->total()}</th>
+                                   <th>表号</th>
+                                   <th>价格类型</th>
                                    <th>安装地址</th>
                                    <th>安装位置</th>
                                    <th>初始用量</th>
@@ -76,24 +77,15 @@
                                   </tr>
                             {/volist}
                             </tbody>
-                           
-                        </table></div>
-                        <div>
-                            {$meter->render()}
+                            </table>
+
                         </div>
-                        <!--换表信息-->
-                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-                   
-                        <div class="form-group" style="color:red">
-                            <label  class="col-sm-2 control-label">操作提示:</label>
-                            <div class="col-sm-10">
-                                <p class="form-control" style="border: none">请先在搜索框输入查询条件进行查询，返回符合条件的结果</p>
-                            </div>
-                        </div>    
+                    <div>
+                        {$meter->render()}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
                    

@@ -38,10 +38,6 @@ class Meter extends Admin
         return intval($value);
     }
 
-//    public function getMeterByCode($M_Code){
-//        return $this->where('M_Code',$M_Code)->where('meter_status','in',[null,METER_STATUS_BIND])->where('meter_life','in',[null,METER_LIFE_INIT,METER_LIFE_START])->find();
-//    }
-
     /**
      * 更新表具状态
      * @param $data
@@ -64,6 +60,13 @@ class Meter extends Admin
         return $this->getAllMeterInfo($where, $method, $field);
     }
 
+    /**
+     * 获取所有表具信息
+     * @param $where
+     * @param $method
+     * @param string $field
+     * @return mixed
+     */
     public function getAllMeterInfo($where, $method, $field = ''){
         if( !$field ){
             return $this->where($where)->$method();
@@ -71,11 +74,27 @@ class Meter extends Admin
         return $this->where($where)->field($field)->$method();
     }
 
-    public function getallMeter($where,$data){
-            return $this->where($where)->paginate()->appends($data);
+    /**
+     * 获取用户所在公司表具信息,带分页
+     * @param $where
+     * @param $param
+     * @return mixed
+     */
+    public function getMyMetersUsePaginate($where, $param){
+        $where['meter_status'] = METER_STATUS_BIND;
+        $where['meter_life'] = METER_LIFE_ACTIVE;
+        $userRow = session('userinfo','', 'admin');
+        $where['company_id'] = $userRow['company_id'];
+        return $this->getAllMetersUsePaginate($where,$param);
     }
-    public function getCount($data){
-        return $this->order('create_time desc')->where($data)->count();
 
+    /**
+     * 获取所有表具信息,带分页
+     * @param $where
+     * @param $param  分页标签附带参数
+     * @return $this
+     */
+    public function getAllMetersUsePaginate($where, $param){
+        return $this->where($where)->paginate()->appends($param);
     }
 }
