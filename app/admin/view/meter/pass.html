@@ -1,172 +1,258 @@
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单标题概要 -->
-                <div class="ibox-title">
-                    <h5>{:lang('Meter')}{:lang('Pass')}</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
+<div id="content" style="opacity: 1;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                    <!-- 表单标题概要 -->
+                    <div class="ibox-title">
+                        <h5>{:lang('Meter')}{:lang('Pass')}</h5>
+
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <!-- 表单内容 -->
-                <div class="ibox-content">
-                    <!-- 表格数据 -->
-                    <form data-method="post" data-submit="ajax" data-validate="true" class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: right">
-                                <div class="input-group">
-                                    <input id="M_Code" type="text" class="form-control" placeholder="请输入表号...">
-                                        <span class="input-group-btn">
-                                            <button id="search" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> </button>
+                    <!-- 表单内容 -->
+                    <div class="ibox-content">
+                        <!-- 表格数据 -->
+                        <form data-method="post" data-submit="ajax" data-validate="true" class="form-horizontal">
+                            <div class="form-group" style="margin-bottom: 50px">
+                                <div class="col-md-10">
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" placeholder="请输入表号" name="M_Code"
+                                               id="M_Code">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button id="search" class="btn btn-primary" type="button" style="width: 100%;">查询
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!--<div class="form-group">-->
+                            <!--<div class="col-lg-6" style="float: right">-->
+                            <!--<div class="input-group">-->
+                            <!--<input id="M_Code" type="text" class="form-control" placeholder="请输入表号...">-->
+                            <!--<span class="input-group-btn">-->
+                            <!--<button id="search" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> </button>-->
+                            <!--</span>-->
+                            <!--</div>&lt;!&ndash; /input-group &ndash;&gt;-->
+                            <!--</div>&lt;!&ndash; /.col-lg-6 &ndash;&gt;-->
+                            <!--</div>-->
+
+                            <hr style="height:1px;border:none;border-top:1px solid #aaaaaa;"/>
+
+                            <!--原表信息-->
+                            <fieldset>
+                                <legend>原表信息</legend>
+                                <div id="meterInfo" class="form-group">
+                                    <label for="M_Code_P" class="col-sm-2 control-label">表号</label>
+
+                                    <div class="col-sm-4">
+                                        <p id="M_Code_P" class="form-control" style="border: none"></p>
+                                    </div>
+
+                                    <label for="M_Type" class="col-sm-2 control-label">表具类型</label>
+
+                                    <div class="col-sm-4">
+                                        <p id="M_Type" class="form-control" style="border: none"></p>
+                                    </div>
+
+                                    <label for="username" class="col-sm-2 control-label">用户姓名</label>
+
+                                    <div class="col-sm-4">
+                                        <p id="username" class="form-control" style="border: none"></p>
+                                    </div>
+
+                                    <label for="left" class="col-sm-2 control-label">剩余金额</label>
+
+                                    <div class="col-sm-4">
+                                        <p id="left" class="form-control" style="border: none"></p>
+                                    </div>
+
+                                    <label for="tel" class="col-sm-2 control-label">联系电话</label>
+
+                                    <div class="col-sm-4">
+                                        <p id="tel" class="form-control" style="border: none"></p>
+                                    </div>
+
+                                    <label for="address" class="col-sm-2 control-label">安装地址</label>
+
+                                    <div class="col-sm-4">
+                                        <p id="address" class="form-control" style="border: none"></p>
+                                    </div>
+
+                                    <label for="family_num_P" class="col-sm-2 control-label">家庭人数</label>
+
+                                    <div class="col-sm-4">
+                                        <p id="family_num_P" class="form-control" style="border: none"></p>
+                                    </div>
+
+                                    <label for="building_area_P" class="col-sm-2 control-label">住宅面积(㎡)</label>
+
+                                    <div class="col-sm-4">
+                                        <p id="building_area_P" class="form-control" style="border: none"></p>
+                                    </div>
+
+                                    <label for="income_peryear_P" class="col-sm-2 control-label">年均收入(元)</label>
+
+                                    <div class="col-sm-4">
+                                        <p id="income_peryear_P" class="form-control" style="border: none"></p>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div style="clear: both"></div>
+                            <!--过户信息-->
+                            <fieldset id="newConsumerInfo">
+                                <legend>过户信息</legend>
+                                <div class="form-group">
+                                    <label for="new_username" class="col-md-2 control-label">新用户姓名</label>
+
+                                    <div class="col-md-10">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="请输入用户姓名"
+                                                   name="new_username" id="new_username">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-user fa-fw"></i>
                                         </span>
-                                </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
-                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new_telephone" class="col-md-2 control-label">新联系电话</label>
 
-                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                                    <div class="col-md-10">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="请输入联系电话"
+                                                   name="new_telephone" id="new_telephone">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-phone fa-fw"></i>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new_identity" class="col-md-2 control-label">新身份证号</label>
 
-                        <!--原表信息-->
-                        <h5>原表信息</h5>
-                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-                        <div id="meterInfo">
-                            <label for="M_Code_P" class="col-sm-2 control-label">表号</label>
-                            <div class="col-sm-4">
-                                <p id="M_Code_P" class="form-control" style="border: none"></p>
-                            </div>
-                            <label for="M_Type" class="col-sm-2 control-label">表具类型</label>
-                            <div class="col-sm-4">
-                                <p id="M_Type" class="form-control" style="border: none"></p>
-                            </div>
-                            <label for="username" class="col-sm-2 control-label">用户姓名</label>
-                            <div class="col-sm-4">
-                                <p id="username" class="form-control" style="border: none"></p>
-                            </div>
-                            <label for="left" class="col-sm-2 control-label">剩余金额</label>
-                            <div class="col-sm-4">
-                                <p id="left" class="form-control" style="border: none"></p>
-                            </div>
-                            <label for="tel" class="col-sm-2 control-label">联系电话</label>
-                            <div class="col-sm-4">
-                                <p id="tel" class="form-control" style="border: none"></p>
-                            </div>
-                            <label for="address" class="col-sm-2 control-label">安装地址</label>
-                            <div class="col-sm-4">
-                                <p id="address" class="form-control" style="border: none"></p>
-                            </div>
-                            <label for="family_num_P" class="col-sm-2 control-label">家庭人数</label>
-                            <div class="col-sm-4">
-                                <p id="family_num_P" class="form-control" style="border: none"></p>
-                            </div>
-                            <label for="building_area_P" class="col-sm-2 control-label">住宅面积(㎡)</label>
-                            <div class="col-sm-4">
-                                <p id="building_area_P" class="form-control" style="border: none"></p>
-                            </div>
-                            <label for="income_peryear_P" class="col-sm-2 control-label">年均收入(元)</label>
-                            <div class="col-sm-4">
-                                <p id="income_peryear_P" class="form-control" style="border: none"></p>
-                            </div>
-                        </div>
-                        <div style="clear: both"></div>
-                        <!--过户信息-->
-                        <h5>过户信息</h5>
-                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-                        <div id="newConsumerInfo">
-                            <div class="form-group">
-                                <label for="new_username" class="col-sm-2 control-label">新用户姓名</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  name="new_username" id="new_username" >
+                                    <div class="col-md-10">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="请输入联系电话"
+                                                   name="new_identity" id="new_identity">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-credit-card fa-fw"></i>
+                                        </span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="new_telephone" class="col-sm-2 control-label">新联系电话</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  name="new_telephone" id="new_telephone" >
+                                <div class="form-group">
+                                    <label for="family_num" class="col-md-2 control-label">家庭人数</label>
+
+                                    <div class="col-md-10">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="请输入家庭人数"
+                                                   name="family_num" id="family_num">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-users fa-fw"></i>
+                                        </span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="new_identity" class="col-sm-2 control-label">新身份证号</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  name="new_identity" id="new_identity" >
+                                <div class="form-group">
+                                    <label for="building_area" class="col-md-2 control-label">住宅面积</label>
+
+                                    <div class="col-md-10">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="请输入住宅面积(单位:m²)"
+                                                   name="building_area" id="building_area">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-home fa-fw"></i>
+                                        </span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="family_num" class="col-sm-2 control-label">家庭人数</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  name="family_num" id="family_num" >
+                                <div class="form-group">
+                                    <label for="income_peryear" class="col-md-2 control-label">年均收入</label>
+
+                                    <div class="col-md-10">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="请输入年均收入(单位:元)"
+                                                   name="income_peryear" id="income_peryear">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-money fa-fw"></i>
+                                        </span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="building_area" class="col-sm-2 control-label">住宅面积</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  name="building_area" id="building_area" placeholder="单位:m²" >
+                                <div class="form-group" style="color:red">
+                                    <label class="col-sm-2 control-label">操作提示:</label>
+
+                                    <div class="col-sm-10">
+                                        <p class="form-control" style="border: none">请先在搜索框输入表号进行查询，返回符合条件的结果,再进行操作</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="income_peryear" class="col-sm-2 control-label">年均收入</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  name="income_peryear" id="income_peryear" placeholder="单位:元">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label"></label>
+
+                                    <div class="col-sm-10">
+                                        <button style="float: right" class="btn btn-success" type="button"
+                                                onclick="passMeter()">提交
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="form-group" style="color:red">
-                            <label  class="col-sm-2 control-label">操作提示:</label>
-                            <div class="col-sm-10">
-                                <p class="form-control" style="border: none">请先在搜索框输入表号进行查询，返回符合条件的结果,再进行操作</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
-                            <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="button" onclick="passMeter()" >提交</button>
-                            </div>
-                        </div>
-                    </form>
+                            </fieldset>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 <script>
-    $('#search').click(function(){
+    $('#search').click(function () {
         var M_Code = $('#M_Code').val();
-        if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
+        if (M_Code != 'undefined' && M_Code != '' && M_Code != null) {
             $.ajax({
-                url:"{:url('admin/meter/getMeterData')}",
-                method:'post',
-                dataType:'json',
-                data:{M_Code: M_Code},
-                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
-                success: function(res){
-                    if(res.code != 200){
-                        $('#meterInfo P').each(function(){$(this).text('')});
+                url: "{:url('admin/meter/getMeterData')}",
+                method: 'post',
+                dataType: 'json',
+                data: {M_Code: M_Code},
+                beforeSend: function () {
+                }, //覆盖main.js中的方法,否则不能正常使用
+                success: function (res) {
+                    if (res.code != 200) {
+                        $('#meterInfo P').each(function () {
+                            $(this).text('')
+                        });
                         alertMsg(res.msg);
-                    }else{
+                    } else {
                         fillText(res);
                     }
                 },
-                error:function(){
+                error: function () {
                     alertMsg("操作失败！");
                 }
             })
-        }else{
+        } else {
             alertMsg("请先填写表号");
         }
 
     })
 
-    function fillText(data){
+    function fillText(data) {
         var meter = data['meter'];
         var consumer = data['consumer'];
         $('#M_Code_P').text(meter.M_Code);
 
-        if( meter.meter_status == "undefined" || meter.meter_status == null || meter.meter_status == ''){
+        if (meter.meter_status == "undefined" || meter.meter_status == null || meter.meter_status == '') {
             $('#username').text('');
             $('#tel').text('');
             $('#family_num_P').text('');
@@ -174,25 +260,25 @@
             $('#income_peryear_P').text('');
             $('#address').text('');
             $('#M_Type').text("");
-        }else{
+        } else {
             $('#username').text(consumer.username);
             $('#tel').text(consumer.tel);
             $('#family_num_P').text(consumer.family_num);
             $('#building_area_P').text(consumer.building_area);
             $('#income_peryear_P').text(consumer.income_peryear);
             //$('#left').text(consumer.left);
-            $('#address').text(meter.area+' '+meter.detail_address);
-            if( meter.M_Type == "{$Think.const.METER_TYPE_WATER}" ){
+            $('#address').text(meter.area + ' ' + meter.detail_address);
+            if (meter.M_Type == "{$Think.const.METER_TYPE_WATER}") {
                 $('#M_Type').text("水表");
-            }else if(meter.M_Type == "{$Think.const.METER_TYPE_ELECTRICITY}"){
+            } else if (meter.M_Type == "{$Think.const.METER_TYPE_ELECTRICITY}") {
                 $('#M_Type').text("电表");
-            }else if(meter.M_Type == "{$Think.const.METER_TYPE_GAS}"){
+            } else if (meter.M_Type == "{$Think.const.METER_TYPE_GAS}") {
                 $('#M_Type').text("气表");
             }
         }
     }
 
-    function passMeter(){
+    function passMeter() {
         var M_Code = $('#M_Code_P').text();
         var username = $('#new_username').val();
         var tel = $('#new_telephone').val();
@@ -200,40 +286,50 @@
         var family_num = $('#family_num').val();
         var building_area = $('#building_area').val();
         var income_peryear = $('#income_peryear').val();
-        var new_consumer = {"username": username, "tel": tel, "identity": identity, "family_num": family_num, "building_area": building_area, "income_peryear": income_peryear};
-        if( M_Code != 'undefined' && M_Code!= '' && M_Code != null && check(new_consumer)){
+        var new_consumer = {
+            "username": username,
+            "tel": tel,
+            "identity": identity,
+            "family_num": family_num,
+            "building_area": building_area,
+            "income_peryear": income_peryear
+        };
+        if (M_Code != 'undefined' && M_Code != '' && M_Code != null && check(new_consumer)) {
             $.ajax({
-                url:"{:url('admin/meter/passMeter')}",
-                method:'post',
-                dataType:'json',
-                data:{M_Code: M_Code,consumer: JSON.stringify(new_consumer)},
-                beforeSend:function(){}, //覆盖main.js中的方法,否则success回调方法不能正常使用
-                success: function(res){
+                url: "{:url('admin/meter/passMeter')}",
+                method: 'post',
+                dataType: 'json',
+                data: {M_Code: M_Code, consumer: JSON.stringify(new_consumer)},
+                beforeSend: function () {
+                }, //覆盖main.js中的方法,否则success回调方法不能正常使用
+                success: function (res) {
                     alertMsg(res.msg);
-                    if( res.code == 200 ){
-                        setTimeout(function(){window.location.href = ''},1500);
+                    if (res.code == 200) {
+                        setTimeout(function () {
+                            window.location.href = ''
+                        }, 1500);
                     }
                 },
-                error:function(){
+                error: function () {
                     alertMsg("操作失败！");
                 }
             })
         }
     }
 
-    function check(consumer){
-        if( consumer.username == "" || consumer.username == null || consumer.username == "undefined"){
+    function check(consumer) {
+        if (consumer.username == "" || consumer.username == null || consumer.username == "undefined") {
             alertMsg("请先填写姓名");
             return false;
         }
-        if( consumer.tel == "" || consumer.tel == null || consumer.tel == "undefined"){
+        if (consumer.tel == "" || consumer.tel == null || consumer.tel == "undefined") {
             alertMsg("请先填写电话");
             return false;
         }
-        if(!checkTelephone(consumer.tel)){
+        if (!checkTelephone(consumer.tel)) {
             return false;
         }
-        if( consumer.identity == "" || consumer.identity == null || consumer.identity == "undefined"){
+        if (consumer.identity == "" || consumer.identity == null || consumer.identity == "undefined") {
             alertMsg("请先填写身份证号");
             return false;
         }
