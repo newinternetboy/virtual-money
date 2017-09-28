@@ -257,7 +257,6 @@ class Meter extends Admin
             $old_meter_info['change_reason'] = $changeinfo['change_reason'];
             $old_meter_info['new_meter_M_Code'] = $new_meter['M_Code'];
             $old_meter_info['meter_status'] = METER_STATUS_CHANGED;
-            $old_meter_info['meter_life'] = METER_LIFE_INACTIVE;
             $old_meter_info['change_time'] = time();
             if( !model('Meter')->updateMeter($old_meter_info,'Meter.change_update_old_meter') ){
                 $error = model('Meter')->getError();
@@ -274,7 +273,7 @@ class Meter extends Admin
             $new_meter_data['U_ID'] = $old_meter['U_ID'];
             $new_meter_data['company_id'] = $old_meter['company_id'];
             $new_meter_data['meter_status'] = METER_STATUS_BIND;
-
+            $new_meter_data['change_time'] = time();
             //TODO:原表具数据转移
 
             if( !model('Meter')->updateMeter($new_meter_data,'Meter.change_update_new_meter') ){
@@ -413,7 +412,6 @@ class Meter extends Admin
             //更新表具为删除状态
             $updateData['id'] = $meter['id'];
             $updateData['meter_status'] = METER_STATUS_DELETE;
-            $updateData['meter_life'] = METER_LIFE_INACTIVE;
             $updateData['delete_time'] = time();
             if( !model('Meter')->updateMeter($updateData,'Meter.delete') ){
                 $error = model('Meter')->getError();

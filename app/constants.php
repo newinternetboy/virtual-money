@@ -27,8 +27,8 @@ define('METER_STATUS_BIND',10); //已绑定
 define('METER_STATUS_DELETE',30); //已删除
 define('METER_STATUS_NEW',5); //新表
 //表具活跃状态
-define('METER_LIFE_ACTIVE',1); //活跃表具(新表/已绑定)
-define('METER_LIFE_INACTIVE',5); //表具停止使用(被更换/被删除)
+define('METER_LIFE_ACTIVE',1); //活跃表具
+define('METER_LIFE_INACTIVE',2); //表具停止使用
 
 /*************表具上报记录表*************/
 //source_type字段
