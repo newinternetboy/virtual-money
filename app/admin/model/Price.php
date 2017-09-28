@@ -100,8 +100,25 @@ class Price extends Admin
         $ids = explode(',', $id);
         return $this->where('id', 'in', $ids)->where('company_id', $company_id)->select();
     }
-    public function getLists( $data )
+
+    /**
+     * 获取用户所属公司的价格列表,带分页
+     * @param array $where
+     * @return \think\Paginator
+     */
+    public function getMyPricesUsePaginate($where = [] )
     {
-        return $this->order('create_time desc')->where($data)->paginate();
+        $userRow = session('userinfo','','admin');
+        $where['company_id'] = $userRow['company_id'];
+        return $this->getAllPricesUsePaginate($where);
+    }
+
+    /**
+     * 获取所有价格列表,带分页
+     * @param array $where
+     * @return \think\Paginator
+     */
+    public function getAllPricesUsePaginate($where = []){
+        return $this->where($where)->order('create_time desc')->paginate();
     }
 }
