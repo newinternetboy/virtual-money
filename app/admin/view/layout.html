@@ -75,6 +75,27 @@
 		</div>
 		<div style="clear: both;"></div>
 		<div id="main_menu" style="width: 100%; height: 40px; background-color: #2D8CC1;">
+
+
+			<!--{foreach $menus as $menu}-->
+			<!--<li>-->
+				<!--{if condition="$menu.display eq 1"}-->
+				<!--<a href="#"><i class="{$menu.glyphicon}"></i> <span class="nav-label">{$menu.title}</span><span class="fa arrow"></span></a>-->
+				<!--<ul class="nav nav-second-level collapse">-->
+					<!--{if condition="isset($menu.children)"}-->
+					<!--{foreach $menu.children as $children}-->
+					<!--{if condition="$children.display eq 1"}-->
+					<!--<li class=""><a href="/{$children['rule_val']}">{$children.title}</a></li>-->
+					<!--{/if}-->
+					<!--{/foreach}-->
+					<!--{/if}-->
+				<!--</ul>-->
+				<!--{/if}-->
+			<!--</li>-->
+			<!--{/foreach}-->
+
+
+
 			<div class="menu-cell" onclick="checkActive(this)">
 				<span>业务</span>
 			</div>
