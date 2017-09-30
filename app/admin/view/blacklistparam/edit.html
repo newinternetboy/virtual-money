@@ -1,5 +1,5 @@
 {__NOLAYOUT__}
-<form data-method="post" data-action="{:url('admin/Param/saveData')}" data-submit="ajax" data-validate="true" class="form-horizontal">
+<form data-method="post" data-action="{:url('admin/Blacklistparam/saveData')}" data-submit="ajax" data-validate="true" class="form-horizontal">
     <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -9,15 +9,6 @@
                 </div>
                 <input type="hidden" name="id" value="{$data.id ?? ''}">
                 <div class="modal-body">
-                  
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label class="col-sm-3 control-label">标识ID</label>
-                            <div class="col-sm-7">
-                               {$data.id ?? ''}
-                            </div>
-                        </div>
-                    </div>
                    
                     <div class="modal-body-content">
                         <div class="form-group must">
@@ -31,7 +22,7 @@
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">参数描述</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" name="rem" required value="{$data.rem ?? ''}">
+                                <input type="text" class="form-control" name="desc" required value="{$data.desc ?? ''}">
                             </div>
                         </div>
 
@@ -54,9 +45,10 @@
                         </div>
 
                     </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
-                    <button type="submit" class="btn btn-primary">{:lang('Save')}</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                        <button type="submit" class="btn btn-primary">{:lang('Save')}</button>
+                    </div>
                 </div>
             </div>
         </div>

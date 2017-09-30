@@ -22,13 +22,12 @@
 
                     {/toolbar}
                     <!-- 表格数据 -->
-                    <table id="table" data-toggle="gridview" class="table" data-url="{:url('admin/param/getList')}" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
+                    <table id="table" data-toggle="gridview" class="table" data-url="{:url('admin/blacklistparam/getList')}" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
                         <thead>
                         <tr>
                             <th data-width="10" data-align="center" data-checkbox="true"></th>
-                            <th data-width="50" data-field="id" >标识ID</th>
                             <th data-width="80" data-field="param_name" data-align="center">参数代号</th>
-                            <th data-width="50" data-field="rem" >参数描述</th>
+                            <th data-width="50" data-field="desc" >参数描述</th>
                             <th data-width="50" data-field="param_type">参数类型</th>
                             <th data-width="50" data-field="opt_id">参数</th>
                             <th data-width="80" data-field="operate"   data-align="center" data-formatter="operateFormatter" data-events="operateEvents">{:lang('Operate')}</th>
@@ -56,7 +55,7 @@
     var operateEvents = {
         'click .edit': function (e, value, row, index) {
             var param = {
-                url: "{:url('admin/param/edit');}",
+                url: "{:url('admin/blacklistparam/edit');}",
                 data: {id: row.id}
             }
             $("#table").gridView('loadModal', param.url,param.data)
