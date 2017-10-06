@@ -6,7 +6,7 @@
  * Time: 下午3:49
  */
 
-namespace app\admin\validate;
+namespace app\common\validate;
 
 
 use think\Validate;

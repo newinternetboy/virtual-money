@@ -1,5 +1,5 @@
 <?php
-namespace app\admin\validate;
+namespace app\common\validate;
 
 use think\Validate;
 
@@ -18,6 +18,8 @@ class Meter extends Validate
         'meter_life'            => 'require',
         'company_id'            => 'require',
         'balance'               => 'require',
+        'initialCube'           => 'require',
+        'totalCube'             => 'require',
     ];
 
     protected $message  =   [
@@ -32,6 +34,8 @@ class Meter extends Validate
         'meter_life.require'            => '表具活跃状态必须',
         'company_id.require'            => '公司id必须',
         'balance.require'               => '余额必须',
+        'initialCube.require'           => '初始用量必须',
+        'totalCube.require'             => '累计用量必须',
     ];
 
     protected $scene = [
@@ -45,7 +49,13 @@ class Meter extends Validate
         //表具修改
         'edit' => ['M_Address','detail_address'],
         //表具信息维护
-        'delete' => ['meter_status','meter_life']
+        'delete' => ['meter_status','meter_life'],
+        //初始化新表时,旧表具生命周期结束
+        'init_old' => ['meter_life'],
+        //初始化新表具
+        'init_new' => ['M_Code','meter_life','meter_status'],
+        //表具上报
+        'report' => ['balance','initialCube','totalCube']
     ];
 }
 

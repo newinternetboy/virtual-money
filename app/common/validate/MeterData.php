@@ -6,7 +6,7 @@
  * Time: 下午3:56
  */
 
-namespace app\admin\validate;
+namespace app\common\validate;
 
 
 use think\Validate;
@@ -34,5 +34,6 @@ class MeterData extends Validate
 
     protected $scene = [
         'business'    => ['meter_id','meter_M_Code','U_ID','company_id','source_type','action_type'],   //业务
+        'report'      => ['meter_id','meter_M_Code','source_type','action_type'],                       //上报数据
     ];
 }
