@@ -20,6 +20,7 @@ class Meter extends Validate
         'balance'               => 'require',
         'initialCube'           => 'require',
         'totalCube'             => 'require',
+        'operator'              => 'require'
     ];
 
     protected $message  =   [
@@ -36,6 +37,7 @@ class Meter extends Validate
         'balance.require'               => '余额必须',
         'initialCube.require'           => '初始用量必须',
         'totalCube.require'             => '累计用量必须',
+        'operator.require'              => '操作员必须'
     ];
 
     protected $scene = [
@@ -44,7 +46,7 @@ class Meter extends Validate
         //表具过户
         'pass' => ['U_ID'],
         //表具更换
-        'change_update_old_meter' => ['change_reason','meter_status','meter_life'],
+        'change_update_old_meter' => ['change_reason','meter_status','operator'],
         'change_update_new_meter' => ['M_Type','M_Code','P_ID','U_ID','M_Address','detail_address','meter_status','company_id'],
         //表具修改
         'edit' => ['M_Address','detail_address'],

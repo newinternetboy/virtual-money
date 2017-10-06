@@ -254,6 +254,7 @@ class Meter extends Admin
             }
             //更新旧表状态
             $old_meter_info['id'] = $old_meter['id'];
+            $old_meter_info['operator'] = $this->uid;
             $old_meter_info['change_reason'] = $changeinfo['change_reason'];
             $old_meter_info['new_meter_M_Code'] = $new_meter['M_Code'];
             $old_meter_info['meter_status'] = METER_STATUS_CHANGED;
