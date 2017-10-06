@@ -284,7 +284,7 @@ class Index extends Controller
             }
         }
         //获取下派新任务
-        $newTask = db($this->taskTableName)->where(['meter_id' => $meter_id])->order('seq','asc')->find();
+        $newTask = db($this->taskTableName)->where(['meter_id' => $meter_id,'status' => TASK_WAITING])->order('seq','asc')->find();
         if( $newTask ){
             //更新新任务状态为已下派
             $updateData['id'] = $newTask['id'];
