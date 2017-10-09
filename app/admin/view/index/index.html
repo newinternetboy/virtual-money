@@ -59,29 +59,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(function () {
-        var data = {}
-        $.ajax({
-            url: 'https://api.github.com/repos/Astonep/tp-admin',
-            type: 'get',
-            data:  '',
-            dataType:  'json',
-            success:function(ajaxData){
-                data.github = ajaxData.stargazers_count
-                console.log(data.github)
-                $("#github-star-count").text(data.github)
-            }
-        })
-
-        if (localStorage.pagecount){
-               localStorage.pagecount = Number(localStorage.pagecount)+1
-           }
-           else{
-              localStorage.pagecount = 1
-           }
-           $("#page-view").text(localStorage.pagecount)
-        
-    })
-</script>

@@ -1,37 +1,76 @@
 <div class="sidebar-collapse">
     <ul class="nav metismenu" id="side-menu">
-        <!-- 个人信息 -->
-        <li class="nav-header">
-                <div class="dropdown profile-element">
-            <a href="{:url('admin/index/index')}">
-                    <span><img alt="image" width="64" height="64" class="img-circle" src="__IMG__/logo.jpg" /></span>
-            </a>
-                </div>
-            <div class="logo-element">
-                Red
-            </div>
-        </li>
-        <!-- 菜单列表 -->
-        <!-- 一级菜单 -->
-        <li>
-            <a href="{:url('admin/index/index')}"><i class="fa fa-th-large"></i> <span class="nav-label">{$Think.lang.Dashboards}</span></a>
-        </li>
-        <!-- 二级菜单 -->
-        {foreach $menus as $menu}
-        <li>
-            {if condition="$menu.display eq 1"}
-                <a href="#"><i class="{$menu.glyphicon}"></i> <span class="nav-label">{$menu.title}</span><span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level collapse">
-                    {if condition="isset($menu.children)"}
-                        {foreach $menu.children as $children}
-                            {if condition="$children.display eq 1"}
-                                <li class=""><a href="/{$children['rule_val']}">{$children.title}</a></li>
-                            {/if}
-                        {/foreach}
-                    {/if}
-                </ul>
-            {/if}
-        </li>
-        {/foreach}
+
+        <!--<li>-->
+            <!--<a href="/admin/meter/setup">表具报装</a>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<a href="/admin/meter/pass">表具过户</a>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<a href="/admin/meter/change">表具更换</a>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<a href="/admin/meter/edit">表具修改</a>-->
+        <!--</li>-->
+
+        <!--&lt;!&ndash; 二级菜单 &ndash;&gt;-->
+        <!--{foreach $menus as $menu}-->
+        <!--<li>-->
+            <!--{if condition="$menu.display eq 1"}-->
+                <!--<a href="#"><i class="{$menu.glyphicon}"></i> <span class="nav-label">{$menu.title}</span><span class="fa arrow"></span></a>-->
+                <!--<ul class="nav nav-second-level collapse">-->
+                    <!--{if condition="isset($menu.children)"}-->
+                        <!--{foreach $menu.children as $children}-->
+                            <!--{if condition="$children.display eq 1"}-->
+                                <!--<li class=""><a href="/{$children['rule_val']}">{$children.title}</a></li>-->
+                            <!--{/if}-->
+                        <!--{/foreach}-->
+                    <!--{/if}-->
+                <!--</ul>-->
+            <!--{/if}-->
+        <!--</li>-->
+        <!--{/foreach}-->
+
+
     </ul>
 </div>
+
+<script>
+    var list_Content;
+
+    switch (STR) {
+        case "meter" :
+            $("#main_menu").children().removeClass("active");
+            $("#main_menu").children(".menu-cell").eq(0).addClass("active");
+            list_Content = "<li>" +
+                    "<a href='/admin/meter/setup#meter'>表具报装</a>" +
+                    "</li>" +
+                    "<li>" +
+                    "<a href='/admin/meter/pass#meter'>表具过户</a>" +
+                    "</li>" +
+                    "<li>" +
+                    "<a href='/admin/meter/change#meter'>表具更换</a>" +
+                    "</li>" +
+                    "<li>" +
+                    "<a href='/admin/meter/edit#meter'>表具修改</a>" +
+                    "</li>";
+            break;
+
+        case "manage" :
+            $("#main_menu").children().removeClass("active");
+            $("#main_menu").children(".menu-cell").eq(1).addClass("active");
+            list_Content = "<li>" +
+                    "<a href='/admin/value/index#manage'>远程阀门控制</a>" +
+                    "</li>" +
+                    "<li>" +
+                    "<a href='/admin/area/index#manage'>区域管理</a>" +
+                    "</li>" +
+                    "<li>" +
+                    "<a href='/admin/price/index#manage'>价格维护</a>" +
+                    "</li>";
+            break;
+    }
+
+    $("#side-menu").append(list_Content);
+</script>

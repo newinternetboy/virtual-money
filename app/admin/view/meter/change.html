@@ -1,4 +1,94 @@
-<div class="wrapper wrapper-content animated fadeInRight">
+<div id="content" style="opacity: 1;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                    <!-- 表单标题概要 -->
+                    <div class="ibox-title">
+                        <h5>{:lang('Meter')}{:lang('Change')}</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- 表单内容 -->
+                    <div class="ibox-content">
+                        <form data-method="post" data-submit="ajax" data-validate="true" class="form-horizontal">
+                            <div class="form-group" style="margin-bottom: 50px">
+                                <div class="col-md-10">
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" placeholder="请输入表号" name="M_Code" id="M_Code">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button id="search" class="btn btn-primary" type="button" style="width: 100%;">查询</button>
+                                </div>
+                            </div>
+                            <hr style="height:1px;border:none;border-top:1px solid #aaaaaa;" />
+                            <fieldset>
+                                <legend>原表信息</legend>
+                                <div id="meterInfo" class="form-group">
+                                    <label for="M_Code_P" class="col-sm-2 control-label">表号</label>
+                                    <div class="col-sm-4">
+                                        <p id="M_Code_P" class="form-control" style="border: none"></p>
+                                    </div>
+
+                                    <label for="M_Type" class="col-sm-2 control-label">表具类型</label>
+                                    <div class="col-sm-4">
+                                        <p id="M_Type" class="form-control" style="border: none"></p>
+                                    </div>
+
+                                    <label for="username" class="col-sm-2 control-label">用户姓名</label>
+                                    <div class="col-sm-4">
+                                        <p id="username" class="form-control" style="border: none"></p>
+                                    </div>
+
+                                    <label for="left" class="col-sm-2 control-label">剩余金额</label>
+                                    <div class="col-sm-4">
+                                        <p id="left" class="form-control" style="border: none"></p>
+                                    </div>
+
+                                    <label for="tel" class="col-sm-2 control-label">联系电话</label>
+                                    <div class="col-sm-4">
+                                        <p id="tel" class="form-control" style="border: none"></p>
+                                    </div>
+
+                                    <label for="address" class="col-sm-2 control-label">安装地址</label>
+                                    <div class="col-sm-4">
+                                        <p id="address" class="form-control" style="border: none"></p>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset id="newMeterInfo">
+                                <legend>换表信息</legend>
+                                <div class="form-group">
+                                    <label for="new_M_Code" class="col-md-2 control-label">新表号</label>
+
+                                    <div class="col-md-10">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="请输入新表号"
+                                                   name="new_M_Code" id="new_M_Code">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-user fa-fw"></i>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
@@ -18,16 +108,16 @@
                 <div class="ibox-content">
                     <!-- 表格数据 -->
                     <form data-method="post" data-submit="ajax" data-validate="true" class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: right">
-                                <div class="input-group">
-                                    <input id="M_Code" type="text" class="form-control" placeholder="请输入表号...">
-                                        <span class="input-group-btn">
-                                            <button id="search" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> </button>
-                                        </span>
-                                </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
-                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<div class="col-lg-6" style="float: right">-->
+                                <!--<div class="input-group">-->
+                                    <!--<input id="M_Code" type="text" class="form-control" placeholder="请输入表号...">-->
+                                        <!--<span class="input-group-btn">-->
+                                            <!--<button id="search" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> </button>-->
+                                        <!--</span>-->
+                                <!--</div>&lt;!&ndash; /input-group &ndash;&gt;-->
+                            <!--</div>&lt;!&ndash; /.col-lg-6 &ndash;&gt;-->
+                        <!--</div>-->
 
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 
@@ -94,7 +184,8 @@
         </div>
     </div>
 </div>
-
+    </section>
+</div>
 <script>
     $('#search').click(function(){
         var M_Code = $('#M_Code').val();

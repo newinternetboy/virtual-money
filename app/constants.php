@@ -27,8 +27,8 @@ define('METER_STATUS_BIND',10); //已绑定
 define('METER_STATUS_DELETE',30); //已删除
 define('METER_STATUS_NEW',5); //新表
 //表具活跃状态
-define('METER_LIFE_ACTIVE',1); //活跃表具(新表/已绑定)
-define('METER_LIFE_INACTIVE',5); //表具停止使用(被更换/被删除)
+define('METER_LIFE_ACTIVE',1); //活跃表具
+define('METER_LIFE_INACTIVE',2); //表具停止使用
 
 /*************表具上报记录表*************/
 //source_type字段
@@ -41,6 +41,8 @@ define('BUSINESS_PASS',2);      //过户
 define('BUSINESS_CHANGE',3);    //换表
 define('BUSINESS_EDIT',4);      //修改
 define('BUSINESS_DELETE',5);    //删除
+define('METER_INIT',1);      //初始化
+define('METER_REPORT',2);    //上报数据
 
 /*****************阀门*****************/
 //阀门控制方式
@@ -57,3 +59,12 @@ define('VALVE_DONE',5);    //已执行
 //客户状态
 define('CONSUMER_STATE_NORMAL',10); //正常(绑定了表具)
 define('CONSUMER_STATE_OLD',15);    //过户(过户前的用户信息)
+
+//按月统计流量表名
+define('MONTH_FLOW_TABLE_NAME','month_flow_');
+
+//task状态
+define('TASK_WAITING',1);  //待处理任务
+define('TASK_SENT',2);     //已下发任务
+define('TASK_SUCCESS',3);  //执行成功
+define('TASK_FAIL',4);     //执行失败

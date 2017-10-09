@@ -44,8 +44,8 @@ class Meter extends Admin
      * @param $scene
      * @return false|int
      */
-    public function updateMeter($data, $scene){
-        return $this->validate($scene)->isUpdate(true)->save($data); 
+    public function updateMeter($data, $scene, $where = []){
+        return $this->validate($scene)->isUpdate(true)->save($data,$where);
     }
 
     /**
@@ -96,5 +96,12 @@ class Meter extends Admin
      */
     public function getAllMetersUsePaginate($where, $param){
         return $this->where($where)->paginate()->appends($param);
+    }
+
+    public function InitMeter($data, $scene){
+        if( $this->validate($scene)->isUpdate(false)->save($data) ){
+            return $this->data['id'];
+        }
+        return false;
     }
 }
