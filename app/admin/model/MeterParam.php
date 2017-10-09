@@ -68,4 +68,8 @@ class MeterParam extends Admin
         $ids = explode(',', $id);
         return $this->where('id', 'in', $ids)->where('company_id', $company_id)->select();
     }
+    //根据company_id查询出所有的运行参数数据
+    public function getAllMeterParams($where){
+        return $this->where($where)->paginate();
+    }
 }

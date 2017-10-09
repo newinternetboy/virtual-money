@@ -104,4 +104,15 @@ class MeterParam extends Admin
         Loader::model('LogRecord')->record( lang('Delete MeterParam'),$id );
         $this->success(lang('Delete succeed'));;
     }
+    /**
+     * 查询数据
+     *
+     * @author ducongshu
+     */
+    public function search(){
+        $this->mustCheckRule();
+        $meter_param = model('MeterParam')->getAllMeterParams(['company_id'=>$this->company_id]);
+        $this->assign('meter_param',$meter_param);
+        return $this->fetch();
+    }
 }

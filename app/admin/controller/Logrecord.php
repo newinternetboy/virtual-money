@@ -11,7 +11,9 @@ class Logrecord extends Admin
         $remark     = input( 'remark' );
         $start_time = input( 'start_time' );
         $end_time   = input( 'end_time' );
-        $where['company_id'] = ['neq',''];
+        $logtypes = config('logtypes');
+        $this->assign('logtypes',$logtypes);
+        $where=[];
         if($user_name){
             $user = model('User')->getUserInfo(['username'=>$user_name], 'find','id');
             $where['user_id'] = $user['id'];
@@ -33,6 +35,10 @@ class Logrecord extends Admin
         $data['start_time'] = $start_time;
         $data['end_time']   = $end_time;
         $logrecord = model('LogRecord')->getLogrecord( $where , $data);
+        $this->assign('user_name',$user_name);
+        $this->assign('remark',$remark);
+        $this->assign('start_time',$start_time);
+        $this->assign('end_time',$end_time);
         $this->assign('logrecord',$logrecord);
         return $this->fetch();
     }

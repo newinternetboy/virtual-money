@@ -1,0 +1,45 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单标题概要 -->
+                <div class="ibox-title">
+                    <h5>运行参数</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>参数名称</th>
+								<th>低剩余报警(元)</th>
+								<th>透支限额(元)</th>
+								<th>开机脉冲数</th>
+							</tr>
+						</thead>
+						<tbody>
+						{volist name="meter_param" id="val"}
+							<tr>
+								<td>{$val.tag}</td>
+								<td>{$val.lowLimit}</td>
+								<td>{$val.overdraftLimit}</td>
+								<td>{$val.transformerRatio}</td>
+							</tr>
+						{/volist}	
+						</tbody>
+					</table>
+			    </div>
+			    <div style="float: right">
+			 {$meter_param->render()}
+			    </div>
+            </div>
+        </div>
+    </div>
+</div>

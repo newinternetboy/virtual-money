@@ -1,31 +1,52 @@
-<div id="consumerinfo" style="padding-top:100px;">
-    <form id="commentForm">
-        <div class="form-group">
-            <label for="oldpasswd" class="col-sm-2 control-label">旧密码</label>
-            <div class="col-sm-10">
-                <input class="form-control" rangelength="[6,16]"  name="oldpasswd" id="oldpasswd"  >
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单标题概要 -->
+                <div class="ibox-title">
+                    <h5>密码修改</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <form id="commentForm">
+                        <div class="form-group">
+                            <label for="oldpasswd" class="col-sm-2 control-label">旧密码</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" rangelength="[6,16]"  name="oldpasswd" id="oldpasswd"  >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="newpasswd" class="col-sm-2 control-label">新密码</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="newpasswd" id="newpasswd"   >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="surepasswd" class="col-sm-2 control-label">确认新密码</label>
+                            <div class="col-sm-10">
+                                <input class="form-control"  name="surepasswd" id="surepasswd" rangelength="[6,16]" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: right" class="btn btn-success" type="button" onclick="saveData()" >提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="newpasswd" class="col-sm-2 control-label">新密码</label>
-            <div class="col-sm-10">
-                <input class="form-control" name="newpasswd" id="newpasswd" rangelength="[6,16]"  >
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="surepasswd" class="col-sm-2 control-label">确认新密码</label>
-            <div class="col-sm-10">
-                <input class="form-control"  name="surepasswd" id="surepasswd" rangelength="[6,16]" >
-            </div>
-        </div>
-        <div class="form-group">
-            <label  class="col-sm-2 control-label"></label>
-            <div class="col-sm-10">
-                <button style="float: right" class="btn btn-success" type="button" onclick="saveData()" >提交</button>
-            </div>
-        </div>
-    </form>
+    </div>
 </div>
+
 
 
 <script type="text/javascript">
@@ -34,9 +55,9 @@
         var newpasswd = $('#newpasswd').val();
         var surepasswd = $('#surepasswd').val();
         var meter = {oldpasswd:oldpasswd, newpasswd: newpasswd, surepasswd:surepasswd};
-        // if( !check(meter) ){
-        //     return false;
-        // }
+        if( !check(meter) ){
+             return false;
+        }
         $.ajax({
             url:"{:url('admin/user/changepasswd')}",
             method:'post',
@@ -67,13 +88,13 @@
             alertMsg("两次输入的密码不一致");
             return false;
         }
-        
         return true;
     }
     function same(meter){
         if(meter.newpasswd==meter.surepasswd){
             return true;
         }
+        return false;
     }
 </script>
                        

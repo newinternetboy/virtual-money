@@ -17,6 +17,14 @@ class logRecord extends Admin
         'create_time' => 'timestamp',
     ];
 
+    /*
+     * 关联user表;
+     */
+    public function user()
+    {
+        return $this->belongsTO('user','user_id');
+    }
+
     /**
      * 记录ip地址
      */
@@ -73,12 +81,6 @@ class logRecord extends Admin
     {
         return $this->order('create_time')->where($where)->paginate()->appends($data);
     }
-    /*
-     * 关联user表;
-     */
-    public function user()
-    {
-        return $this->belongsTO('user','user_id');
-    }
+
 
 }

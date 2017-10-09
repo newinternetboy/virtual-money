@@ -163,11 +163,16 @@ class User extends Admin
             if( mduser($oldpasswd ) != $userinfo['password']){
                 exception('原始密码不正确',ERROR_CODE_DATA_ILLEGAL);
             };
+            $passwdData =['password'=>$newpassword];
+            $validate = model('User')->checkPasswd($passwdData,'updatepasswd');
+            if($validate['code'] == 4001){
+                exception($validate['msg'],ERROR_CODE_DATA_ILLEGAL);
+            }
             $updateData =[
                 'id'=>$this->uid,
                 'password'=>mduser($newpassword)
             ];
-            if(!model('User')->updatePasswd($updateData,'User.updatepasswd')){
+            if(!model('User')->updatePasswd($updateData)){
                 Log::record(['更改密码失败' => model('User')->getError(),'data' => $updateData ],'error');
                 exception(model('User')->getError(),ERROR_CODE_SYS);
             }

@@ -24,26 +24,16 @@
                         <div class="form-group">
                              <div class="col-lg-6" style="float: left">
                                 <div class="input-group">
-                                    操作人:<input name="user_name" type="text" class="form-control" placeholder="请输入表号...">
+                                    操作人:<input name="user_name" type="text" value="{$user_name ?? ''}" class="form-control" placeholder="请输入表号...">
                                 </div><!-- /input-group -->
                              </div><!-- /.col-lg-6 -->
                              <div class="col-lg-6" style="float: right">
                                 <div class="input-group">
                                     记录类型:<select class="form-control" placeholder="请输入表号..." name="remark">
                                         <option value="">请选择</option>
-                                        <option value="修改黑名单属性成功">修改黑名单属性成功</option>
-                                        <option value="登录成功">登录成功</option>
-                                        <option value="登出成功">登出成功</option>
-                                        <option value="修改/添加权限">修改/添加权限</option>
-                                        <option value="添加/修改价格">添加/修改价格</option>
-                                        <option value="修改密码">修改密码</option>
-                                        <option value="修改权限">修改权限</option>
-                                        <option value="修改/添加用户">修改/添加用户</option>
-                                        <option value="添加/修改价格">添加/修改价格</option>
-                                        <option value="添加/修改区域">添加/修改区域</option>
-                                        <option value="表具过户">表具过户</option>
-                                        <option value="表具修改">表具修改</option>
-                                        <option value="表具报装">表具报装</option>
+                                        {volist name="logtypes" id="logtype"}
+                                        <option value="{$logtype}" {if condition="$logtype eq $remark"}selected{/if}>{$logtype}</option>
+                                        {/volist}
                                     </select>
                                 </div><!-- /input-group -->
                             </div><!-- /.col-lg-6 -->
@@ -51,12 +41,12 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="input-group">
-                                    开始时间:<input id="start_datetimepicker" name="start_time" type="text" class="form-control">
-                                </div><!-- /input-group -->
+                                    开始时间:<input id="start_datetimepicker" name="start_time" value="{$start_time ?? ''}" type="text" class="form-control">
+                                </div><!-- /input-group -->k
                             </div><!-- /.col-lg-6 -->
                             <div class="col-lg-6" style="float: left">
                                 <div class="input-group">
-                                    结束时间:<input id="end_datetimepicker" name="end_time" type="text" class="form-control">
+                                    结束时间:<input id="end_datetimepicker" name="end_time" value="{$end_time ?? ''}" type="text" class="form-control">
                                 </div><!-- /input-group -->
                             </div><!-- /.col-lg-6 -->
                         </div>
@@ -72,7 +62,6 @@
                         <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
                             <thead>
                                 <tr>
-                                   <th>记录号</th>
                                    <th>记录类型</th>
                                    <th>添加时间</th>
                                    <th>记录内容</th>
@@ -83,10 +72,9 @@
                             <tbody>
                             {volist name='logrecord' id='vo'}
                                 <tr>
-                                   <td>{$vo.id}</td>
                                    <td>{$vo.remark}</td>
                                    <td>{$vo.create_time}</td>
-                                   <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{$vo.data}</td>
+                                   <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{$vo.data|json_encode=JSON_UNESCAPED_UNICODE}</td>
                                    <td>{$vo.user.username}</td>
                                    <td><button class="record">展开记录</button></td>
                                 </tr>
@@ -99,7 +87,6 @@
                         </div>
                         <!--换表信息-->
                         <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-                   
                         <div class="form-group" style="color:red">
                             <label  class="col-sm-2 control-label">操作提示:</label>
                             <div class="col-sm-10">
