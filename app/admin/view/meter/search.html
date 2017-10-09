@@ -23,7 +23,7 @@
                                 <div class="form-group">
                                     <label for="M_Code" class="col-sm-2 control-label">表号:</label>
                                     <div class="col-sm-6">
-                                        <input name="M_Code" type="text" class="form-control" placeholder="请输入表号..." value="{$M_Code ?? ''}">
+                                        <input name="M_Code" id="M_Code" type="text" class="form-control" placeholder="请输入表号..." value="{$M_Code ?? ''}">
                                     </div>
                                 </div><!-- /form-group -->
                             </div><!-- /.col-lg-6 -->
@@ -31,7 +31,7 @@
                                 <div class="form-group">
                                     <label for="M_Address" class="col-sm-2 control-label">安装地址:</label>
                                     <div class="col-sm-6">
-                                        <select class="form-control" placeholder="请输入表号..." name="M_Address">
+                                        <select id="M_Address" class="form-control" placeholder="请输入表号..." name="M_Address">
                                             <option value="">请选择</option>
                                             {volist name="areas" id="val" }
                                             <option value="{$val.id}" {if condition="$M_Address eq $val.id"}selected{/if}>{$val.name}</option>
@@ -46,7 +46,7 @@
                                 <div class="form-group">
                                     <label for="detail_address" class="col-sm-2 control-label">安装位置:</label>
                                     <div class="col-sm-6">
-                                        <input name="detail_address" type="text" class="form-control" placeholder="请输入安装位置...." value="{$detail_address ?? ''}">
+                                        <input name="detail_address" id="detail_address" type="text" class="form-control" placeholder="请输入安装位置...." value="{$detail_address ?? ''}">
                                     </div>
                                 </div><!-- /form-group -->
                             </div><!-- /.col-lg-6 -->   

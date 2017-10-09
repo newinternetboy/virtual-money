@@ -18,7 +18,7 @@ class User extends Validate
         'mobile.length'         => 'Please enter a correct mobile',
         'password.require'      => '密码必须',
         'password.length'       => '密码长度6-16位',
-        'company_id.require'    =>'公司id必须',
+        'company_id.require'    => '公司id必须',
     ];
 
     protected $scene = [
