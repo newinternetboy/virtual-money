@@ -18,4 +18,11 @@ class MeterData extends Admin
         }
         return $this->validate($scene)->save($data);
     }
+
+    public function getMeterDataInfo($where, $method = 'select', $field = '', $orderfield = 'create_time',$orderRule = 'desc'){
+        if( !$field ){
+            return $this->where($where)->order($orderfield,$orderRule)->field($field)->$method();
+        }
+        return $this->where($where)->order($orderfield,$orderRule)->$method();
+    }
 }
