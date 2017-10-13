@@ -8,21 +8,26 @@
                 <!-- 表单内容 -->
                 <div class="ibox-content">
                     <!-- 表格数据 -->
-                    <form data-method="post" method="" class="form-horizontal">
+                    <form  method="" class="form-horizontal">
                         <div class="form-group">
-                             <div class="col-lg-6" style="float: left">
+                             <div class="col-lg-6" style="float: right">
                                 <div class="form-group">
                                     <label for="user_name" class="col-sm-2 control-label">操作人:</label>
                                     <div class="col-sm-6">
-                                        <input name="user_name" id="user_name" type="text" value="{$user_name ?? ''}" class="form-control" placeholder="请输入表号...">
+                                        <select class="form-control" id="user_name" name="user_name">
+                                            <option value="">选全部</option>
+                                            {volist name="users" id="user"}
+                                            <option value="{$user.id}" {if condition="$user eq $user_name"}selected{/if}>{$user.username}</option>
+                                            {/volist}
+                                        </select>
                                     </div>
-                                </div><!-- /input-group -->
-                             </div><!-- /.col-lg-6 -->
+                                </div>
+                             </div>
                              <div class="col-lg-6" style="float: right">
                                 <div class="form-group">
                                     <label for="remark" class="col-sm-2 control-label">记录类型:</label>
                                     <div class="col-sm-6">
-                                        <select class="form-control" id="remark" placeholder="请输入表号..." name="remark">
+                                        <select class="form-control" id="remark" name="remark">
                                             <option value="">选全部</option>
                                             {volist name="logtypes" id="logtype"}
                                             <option value="{$logtype}" {if condition="$logtype eq $remark"}selected{/if}>{$logtype}</option>

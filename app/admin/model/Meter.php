@@ -30,6 +30,13 @@ class Meter extends Admin
         return $this->belongsTo('price','P_ID');
     }
 
+    /**关联模型
+     * @return \think\model\relation\BelongsTo
+     */
+    public function user(){
+        return $this->belongsTo('user','operator');
+    }
+
     /**
      * @param $value
      * @return int
@@ -77,24 +84,10 @@ class Meter extends Admin
     /**
      * 获取用户所在公司表具信息,带分页
      * @param $where
-     * @param $param
+     * @param $param  分页标签附带参数
      * @return mixed
      */
     public function getMyMetersUsePaginate($where, $param){
-        $where['meter_status'] = METER_STATUS_BIND;
-        $where['meter_life'] = METER_LIFE_ACTIVE;
-        $userRow = session('userinfo','', 'admin');
-        $where['company_id'] = $userRow['company_id'];
-        return $this->getAllMetersUsePaginate($where,$param);
-    }
-
-    /**
-     * 获取所有表具信息,带分页
-     * @param $where
-     * @param $param  分页标签附带参数
-     * @return $this
-     */
-    public function getAllMetersUsePaginate($where, $param){
         return $this->where($where)->paginate()->appends($param);
     }
 

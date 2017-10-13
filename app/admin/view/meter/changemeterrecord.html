@@ -1,0 +1,126 @@
+{js href="__JS__/bootstrap-datetimepicker.min.js" /}
+{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
+{css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <!-- 表格数据 -->
+                    <form data-method="post" method="get" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="M_Code" class="col-sm-3 control-label">原表号:</label>
+                                    <div class="col-sm-6">
+                                        <input name="M_Code" id="M_Code" type="text" class="form-control" placeholder="请输入原表号..." value="{$M_Code ?? ''}">
+                                    </div>
+                                </div><!-- /form-group -->
+                            </div><!-- /.col-lg-6 -->
+                             <div class="col-lg-6" style="float: right">
+                                <div class="form-group">
+                                    <label for="new_meter_M_Code" class="col-sm-3 control-label">新表号:</label>
+                                    <div class="col-sm-6">
+                                        <input name="new_meter_M_Code" id="new_meter_M_Code" type="text" class="form-control" placeholder="请输入新表号..." value="{$new_meter_M_Code ?? ''}">
+                                    </div>
+                                </div><!-- /form-group -->
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="start_datetimepicker" class="col-sm-3 control-label">换表时间 从：</label>
+                                    <div class="col-sm-6">
+                                        <input name="start_time" id="start_datetimepicker" type="text" class="form-control" value="{$start_time ?? ''}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="end_datetimepicker" class="col-sm-3 control-label">至：</label>
+                                    <div class="col-sm-6">
+                                        <input name="end_time" id="end_datetimepicker" type="text" class="form-control" value="{$end_time ?? ''}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: right" class="btn btn-success" type="submit"  >查询</button>
+                            </div>
+                        </div>
+                    </form>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <!--结果列表-->
+                        <div>
+                            <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                   <th>安装地址</th>
+                                   <th>原表号</th>
+                                   <th>新表号</th>
+                                   <th>换表人</th>
+                                   <th>换表原因</th>
+                                   <th>剩余金额</th>
+                                   <th>累计用量</th>
+                                   <th>日期</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {volist name='meter' id='vo'}
+                                  <tr>
+                                   <td>{$vo.area.name}{$vo.detail_address}</td>
+                                   <td>{$vo.M_Code}</td>
+                                   <td>{$vo.new_meter_M_Code}</td>
+                                   <td>{$vo.user.username}</td>
+                                   <td>{$vo.change_reason}</td>
+                                   <td>{$vo.balance}</td>
+                                   <td>{$vo.totalCube}</td>
+                                   <td>{$vo.change_time|date="y-m-d H:i:s",###}</td>
+                                  </tr>
+                            {/volist}
+                            </tbody>
+                            </table>
+
+                        </div>
+                    <div>
+                        {$meter->render()}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#start_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: "month",
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+                event.preventDefault();
+                event.stopPropagation();
+            });
+    $("#end_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: "month",
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+                event.preventDefault();
+                event.stopPropagation();
+            });
+</script>
+                   

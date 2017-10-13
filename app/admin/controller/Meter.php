@@ -445,7 +445,9 @@ class Meter extends Admin
         $detail_address = input('detail_address');
         $areas = model('Area')->getList(['company_id' => $this->company_id]);
         $this->assign('areas',$areas);
-        $where = [];
+        $where['meter_status'] = METER_STATUS_BIND;
+        $where['meter_life'] = METER_LIFE_ACTIVE;
+        $where['company_id'] = $this->company_id;
         $param  = [];
         if($M_Code){
             $where['M_Code'] = $M_Code;
@@ -464,6 +466,41 @@ class Meter extends Admin
         $this->assign('M_Code',$M_Code);
         $this->assign('M_Address',$M_Address);
         $this->assign('detail_address',$detail_address);
+        return $this->fetch();
+    }
+    public function changeMeterRecord(){
+        $M_Code    = input('M_Code');
+        $new_meter_M_Code = input('new_meter_M_Code');
+        $start_time = input('start_time');
+        $end_time = input('end_time');
+        $where['meter_status'] = METER_STATUS_CHANGED ;
+        $where['company_id'] = $this->company_id;
+        $param  = [];
+        if($M_Code){
+            $where['M_Code'] = $M_Code;
+        }
+        if($new_meter_M_Code){
+            $where['new_meter_M_Code'] = $new_meter_M_Code;
+        }
+        if($start_time){
+            $where['change_time'] = ['>',strtotime($start_time)];
+        }
+        if($end_time){
+            $where['change_time'] = ['<',strtotime($end_time)];
+        }
+        if($start_time&&$end_time){
+            $where['change_time'] = ['between',[strtotime($start_time),strtotime($end_time)]];
+        }
+        $param['M_Code'] = $M_Code;
+        $param['new_meter_M_Code'] = $new_meter_M_Code;
+        $param['start_time'] = $start_time;
+        $param['end_time'] = $end_time;
+        $meter = model('Meter')->getMyMetersUsePaginate($where,$param);
+        $this->assign('meter',$meter);
+        $this->assign('M_Code',$M_Code);
+        $this->assign('new_meter_M_Code',$new_meter_M_Code);
+        $this->assign('start_time',$start_time);
+        $this->assign('end_time',$end_time);
         return $this->fetch();
     }
 

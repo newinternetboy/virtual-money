@@ -103,8 +103,7 @@ class logRecord extends Admin
     }
     //解析修改黑名单属性成功
     public function UpdateBlacklistparam($data){
-        $data = json_decode($data,true);
-        return "参数代号是：".$data['param_name']."；参数描述：".$data['rem']."；参数类型：".$data['param_type']."；参数：".$data['opt_id'];
+        return "参数代号是：".$data['param_name']."；参数描述：".$data['desc']."；参数类型：".$data['param_type']."；参数：".$data['opt_id'];
     }
     //解析修改/添加权限
     public function UpdateandAddauth($data){

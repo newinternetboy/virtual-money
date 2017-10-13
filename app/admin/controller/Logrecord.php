@@ -13,10 +13,11 @@ class Logrecord extends Admin
         $end_time   = input( 'end_time' );
         $logtypes = config('logtypes');
         $this->assign('logtypes',$logtypes);
+        $users = model('User')->getUserInfo(['company_id'=>$this->company_id],'select','id,username');
+        $this->assign('users',$users);
         $where=[];
         if($user_name){
-            $user = model('User')->getUserInfo(['username'=>$user_name], 'find','id');
-            $where['user_id'] = $user['id'];
+            $where['user_id'] = $user_name;
         }
         if($remark){
             $where['remark'] = $remark;
