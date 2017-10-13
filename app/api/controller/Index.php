@@ -90,9 +90,10 @@ class Index extends Controller
 //        foreach( $this->fields as $key => $field ){
 //            $result[$field] = $data[$key];
 //        }
-        $data['totalCube'] = intval($data['totalCube']);
-        $data['initialCube'] = intval($data['initialCube']);
-        $data['balance'] = intval($data['balance']);
+        $data['totalCube'] = floatval($data['totalCube']);
+        $data['initialCube'] = floatval($data['initialCube']);
+        $data['balance'] = floatval($data['balance']);
+        $data['totalCost'] = floatval($data['totalCost']);
         return $data;
     }
 
@@ -148,12 +149,16 @@ class Index extends Controller
                 $data['source_type'] = METER;
                 $data['action_type'] = $action_type;
                 $data['meter_M_Code'] = $data['M_Code'];
+                $data['diffCost'] = 0;
+                $data['diffCube'] = 0;
                 break;
             case METER_REPORT:
                 $data['source_type'] = METER;
                 $data['action_type'] = $action_type;
                 $data['meter_id'] = $meterInfo['id'];
                 $data['meter_M_Code'] = $data['M_Code'];
+                $data['diffCost'] = $data['totalCost'] - $meterInfo['totalCost'];
+                $data['diffCube'] = $data['totalCube'] - $meterInfo['totalCube'];
                 //表具绑定用户,才插入用户id
                 if(isset($meterInfo['U_ID'])){
                     $data['U_ID'] = $meterInfo['U_ID'];
@@ -192,7 +197,7 @@ class Index extends Controller
     private function getMeterInfo($M_Code){
         $where['M_Code'] = $M_Code;
         $where['meter_life'] = METER_LIFE_ACTIVE;
-        $field = 'M_Code,U_ID,company_id,totalCube';
+        $field = 'M_Code,U_ID,company_id,totalCube,totalCost';
         if( !$meterInfo = model('app\admin\model\meter')->getMeterInfo($where,'find',$field) ){
             Log::record(['没有符合上报数据表号的数据' => 0,'data' => $M_Code],'error');
             exception('没有符合上报数据表号的数据',ERROR_CODE_DATA_ILLEGAL);
@@ -210,6 +215,7 @@ class Index extends Controller
         $meterData['initialCube'] = $data['initialCube'];
         $meterData['totalCube'] = $data['totalCube'];
         $meterData['balance'] = $data['balance'];
+        $meterData['totalCost'] = $data['totalCost'];
         if( !model('app\admin\model\meter')->updateMeter($meterData,'Meter.report') ){
             Log::record(['同步表具信息失败' => model('app\admin\model\meter')->getError(),'data' => $data],'error');
             exception('同步表具信息失败',ERROR_CODE_DATA_ILLEGAL);

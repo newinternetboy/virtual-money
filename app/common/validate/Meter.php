@@ -20,7 +20,8 @@ class Meter extends Validate
         'balance'               => 'require',
         'initialCube'           => 'require',
         'totalCube'             => 'require',
-        'operator'              => 'require'
+        'operator'              => 'require',
+        'totalCost'              => 'require',
     ];
 
     protected $message  =   [
@@ -37,7 +38,7 @@ class Meter extends Validate
         'balance.require'               => '余额必须',
         'initialCube.require'           => '初始用量必须',
         'totalCube.require'             => '累计用量必须',
-        'operator.require'              => '操作员必须'
+        'totalCost.require'             => '累计金额必须'
     ];
 
     protected $scene = [
