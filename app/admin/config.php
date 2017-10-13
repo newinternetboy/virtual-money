@@ -99,7 +99,6 @@ return [
     'user_auth_key'     => 'Astonep@tp-admin!@#$',
 
     'response_auto_output' => false,
-
     //分页配置
     'paginate'               => [
         'type'      => 'bootstrap',
@@ -119,7 +118,6 @@ return [
         '修改密码',
         '修改权限',
         '修改/添加用户',
-        '添加/修改价格',
         '添加/修改区域',
     ],
 

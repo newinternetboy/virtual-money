@@ -2,36 +2,24 @@
     <div class="row">
         <div class=" table-responsive">
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单标题概要 -->
-                <div class="ibox-title">
-                    <h5>密码修改</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
-                </div>
                 <div class="ibox-content">
                     <form id="commentForm" class="form-horizontal">
                         <div class="form-group">
                             <label for="oldpasswd" class="col-sm-2 control-label">旧密码:</label>
                             <div class="col-sm-6">
-                                <input class="form-control" rangelength="[6,16]"  name="oldpasswd" id="oldpasswd"  >
+                                <input class="form-control" name="oldpasswd" id="oldpasswd"  >
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="newpasswd" class="col-sm-2 control-label">新密码:</label>
                             <div class="col-sm-6">
-                                <input class="form-control" name="newpasswd" id="newpasswd"   >
+                                <input class="form-control" name="newpasswd" id="newpasswd"  >
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="surepasswd" class="col-sm-2 control-label">确认新密码:</label>
                             <div class="col-sm-6">
-                                <input class="form-control"  name="surepasswd" id="surepasswd" rangelength="[6,16]" >
+                                <input class="form-control"  name="surepasswd" id="surepasswd" >
                             </div>
                         </div>
                         <div class="form-group">
@@ -47,17 +35,56 @@
     </div>
 </div>
 
-
-
 <script type="text/javascript">
-      function saveData(){
+
+    $().ready(function(){
+        $("#commentForm").validate({
+            onsubmit:true,
+            rules:{
+                oldpasswd:{
+                    minlength:6,
+                    maxlength:16
+                },
+                newpasswd:{
+                    minlength:6,
+                    maxlength:16
+                },
+                surepasswd:{
+                    minlength:6,
+                    maxlength:16
+                }
+            },
+            messages:{
+                oldpasswd:{
+                    minlength:"最小长度为6位",
+                    maxlength:"最大长度为16位"
+                },
+                newpasswd:{
+                    minlength:"最小长度为6位",
+                    maxlength:"最大长度为16位"
+                },
+                surepasswd:{
+                    minlength:"最小长度为6位",
+                    maxlength:"最大长度为16位"
+                }
+            }
+        });
+    })
+
+
+    function saveData(){
+        var flag = $("#commentForm").valid();
+        if(!flag){
+            return false;
+        }
         var oldpasswd = $('#oldpasswd').val();
         var newpasswd = $('#newpasswd').val();
         var surepasswd = $('#surepasswd').val();
         var meter = {oldpasswd:oldpasswd, newpasswd: newpasswd, surepasswd:surepasswd};
-        if( !check(meter) ){
-             return false;
-        }
+
+//        if( !check(meter) ){
+//             return false;
+//        }
         $.ajax({
             url:"{:url('admin/user/changepasswd')}",
             method:'post',
@@ -74,27 +101,27 @@
                 alertMsg("操作失败！");
             }
         })
-     }
-     function check(meter){
-        if( meter.oldpasswd == "" || meter.oldpasswd == null || meter.oldpasswd == "undefined"){
-            alertMsg("请先填写旧的密码");
-            return false;
-        }
-        if( meter.newpasswd == "" || meter.newpasswd == null || meter.newpasswd == "undefined"){
-            alertMsg("请先填写新密码");
-            return false;
-        }
-        if(!same(meter)){
-            alertMsg("两次输入的密码不一致");
-            return false;
-        }
-        return true;
     }
-    function same(meter){
-        if(meter.newpasswd==meter.surepasswd){
-            return true;
-        }
-        return false;
-    }
+//    function check(meter){
+//        if( meter.oldpasswd == "" || meter.oldpasswd == null || meter.oldpasswd == "undefined"){
+//            alertMsg("请先填写旧的密码");
+//            return false;
+//        }
+//        if( meter.newpasswd == "" || meter.newpasswd == null || meter.newpasswd == "undefined"){
+//            alertMsg("请先填写新密码");
+//            return false;
+//        }
+//        if(!same(meter)){
+//            alertMsg("两次输入的密码不一致");
+//            return false;
+//        }
+//        return true;
+//    }
+//    function same(meter){
+//        if(meter.newpasswd==meter.surepasswd){
+//            return true;
+//        }
+//        return false;
+//    }
 </script>
                        

@@ -72,7 +72,6 @@ class Area extends Admin
         if(!request()->isAjax()) {
             return info(lang('Request type error'));
         }
-
         $data = input('post.');
         $data['company_id'] = $this->company_id;
         if(empty($data['id'])){

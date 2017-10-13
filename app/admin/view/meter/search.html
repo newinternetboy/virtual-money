@@ -2,18 +2,6 @@
     <div class="row">
         <div class=" table-responsive">
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单标题概要 -->
-                <div class="ibox-title">
-                    <h5>表具查询</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
-                </div>
                 <!-- 表单内容 -->
                 <div class="ibox-content">
                     <!-- 表格数据 -->
@@ -32,7 +20,7 @@
                                     <label for="M_Address" class="col-sm-2 control-label">安装地址:</label>
                                     <div class="col-sm-6">
                                         <select id="M_Address" class="form-control" placeholder="请输入表号..." name="M_Address">
-                                            <option value="">请选择</option>
+                                            <option value="">请选择区域</option>
                                             {volist name="areas" id="val" }
                                             <option value="{$val.id}" {if condition="$M_Address eq $val.id"}selected{/if}>{$val.name}</option>
                                             {/volist}
@@ -46,7 +34,7 @@
                                 <div class="form-group">
                                     <label for="detail_address" class="col-sm-2 control-label">安装位置:</label>
                                     <div class="col-sm-6">
-                                        <input name="detail_address" id="detail_address" type="text" class="form-control" placeholder="请输入安装位置...." value="{$detail_address ?? ''}">
+                                        <input name="detail_address" id="detail_address" type="text" class="form-control" placeholder="请输入详细地址...." value="{$detail_address ?? ''}">
                                     </div>
                                 </div><!-- /form-group -->
                             </div><!-- /.col-lg-6 -->   

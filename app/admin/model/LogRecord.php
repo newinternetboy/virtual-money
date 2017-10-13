@@ -81,6 +81,55 @@ class logRecord extends Admin
     {
         return $this->order('create_time')->where($where)->paginate()->appends($data);
     }
-
+    //解析修改密码
+    public function UpdatePasswd($data){
+        @$str  = '新密码为'.$data['password'];
+        return $str;
+    }
+    //解析表具过户
+    public function MeterPass($data){
+        $data = json_decode($data,true);
+        return "就表号是：".$data['old_M_Code']."；新表号是：".$data['new_M_Code']."；原因是：".$data['change_reason'];
+    }
+    //解析表具修改
+    public function MeterUpdate($data){
+        $data = json_decode($data,true);
+        return "修改后的表号是：".$data['meter']['M_Code']."；地址是：".$data['meter']['detail_address']."；用户是：".$data['consumer']['username'];
+    }
+    //解析表具报装
+    public function MeterBinding($data){
+        $data = json_decode($data,true);
+        return "报装的类型是：".$data['meter']['M_Type']."；表号是：".$data['meter']['M_Code']."；用户是：".$data['consumer']['username'];
+    }
+    //解析修改黑名单属性成功
+    public function UpdateBlacklistparam($data){
+        $data = json_decode($data,true);
+        return "参数代号是：".$data['param_name']."；参数描述：".$data['rem']."；参数类型：".$data['param_type']."；参数：".$data['opt_id'];
+    }
+    //解析修改/添加权限
+    public function UpdateandAddauth($data){
+        $data = json_decode($data,true);
+        return "修改或添加的标题为：".$data['title']."；路径是：".$data['rule_val'];
+    }
+    //解析添加/修改价格
+    public function UpdateandAddprice($data){
+        $data = json_decode($data,true);
+        return "价格名称是：".$data['name'];
+    }
+    //解析修改权限
+    public function UpdateAuth($data){
+        $data = json_decode($data,true);
+        return "角色id：".$data['role_id'];
+    }
+    //解析修改/添加用户
+    public function UpdateandAdduser($data){
+        $data = json_decode($data,true);
+        return "用户名为：".$data['username']."；号码是：".$data['mobile'];
+    }
+    //解析添加/修改区域
+    public function UpdateandAddarea($data){
+        $data = json_decode($data,true);
+        return "区域名称为：".$data['name']."；所属区域为：".$data['belong']."；描述：".$data['desc']."；详细地址为：".$data['address'];
+    }
 
 }

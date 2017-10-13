@@ -5,18 +5,6 @@
     <div class="row">
         <div class=" table-responsive">
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单标题概要 -->
-                <div class="ibox-title">
-                    <h5>日志查询</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
-                </div>
                 <!-- 表单内容 -->
                 <div class="ibox-content">
                     <!-- 表格数据 -->
@@ -35,7 +23,7 @@
                                     <label for="remark" class="col-sm-2 control-label">记录类型:</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" id="remark" placeholder="请输入表号..." name="remark">
-                                            <option value="">请选择</option>
+                                            <option value="">选全部</option>
                                             {volist name="logtypes" id="logtype"}
                                             <option value="{$logtype}" {if condition="$logtype eq $remark"}selected{/if}>{$logtype}</option>
                                             {/volist}
@@ -88,7 +76,7 @@
                                    <td>{$vo.create_time}</td>
                                    <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{$vo.data|json_encode=JSON_UNESCAPED_UNICODE}</td>
                                    <td>{$vo.user.username}</td>
-                                   <td><button class="record">展开记录</button></td>
+                                   <td><button class="btn btn-default record">展开记录</button></td>
                                 </tr>
                             {/volist}
                             </tbody>
@@ -113,12 +101,13 @@
 <script>
     $("#start_datetimepicker").datetimepicker({
         language:"zh-CN",
-        format: "yyyy-mm-dd hh:ii:ss",
+        format: "yyyy-mm-dd",
         autoclose: true,
         todayBtn: true,
-        pickerPosition: "top-right",
+        pickerPosition: "bottom-left",
         minuteStep: 1,
         bootcssVer:3,
+        minView: "month",
 //        startDate: new Date()
     }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
         event.preventDefault();
@@ -126,12 +115,13 @@
     });
     $("#end_datetimepicker").datetimepicker({
         language:"zh-CN",
-        format: "yyyy-mm-dd hh:ii:ss",
+        format: "yyyy-mm-dd",
         autoclose: true,
         todayBtn: true,
-        pickerPosition: "top-right",
+        pickerPosition: "bottom-left",
         minuteStep: 1,
         bootcssVer:3,
+        minView: "month",
 //        startDate: new Date()
     }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
         event.preventDefault();
