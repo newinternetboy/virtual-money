@@ -14,12 +14,13 @@
             <!--<a href="/admin/meter/edit">表具修改</a>-->
         <!--</li>-->
 
-        <!--&lt;!&ndash; 二级菜单 &ndash;&gt;-->
+        <!-- 二级菜单 -->
         <!--{foreach $menus as $menu}-->
-        <!--<li>-->
+        <!--&lt;!&ndash;<?php var_dump($menu) ?>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>&ndash;&gt;-->
             <!--{if condition="$menu.display eq 1"}-->
-                <!--<a href="#"><i class="{$menu.glyphicon}"></i> <span class="nav-label">{$menu.title}</span><span class="fa arrow"></span></a>-->
-                <!--<ul class="nav nav-second-level collapse">-->
+                <!--&lt;!&ndash;<a href="#"><i class="{$menu.glyphicon}"></i> <span class="nav-label">{$menu.title}</span><span class="fa arrow"></span></a>&ndash;&gt;-->
+                <!--&lt;!&ndash;<ul class="nav nav-second-level collapse">&ndash;&gt;-->
                     <!--{if condition="isset($menu.children)"}-->
                         <!--{foreach $menu.children as $children}-->
                             <!--{if condition="$children.display eq 1"}-->
@@ -27,9 +28,9 @@
                             <!--{/if}-->
                         <!--{/foreach}-->
                     <!--{/if}-->
-                <!--</ul>-->
+                <!--&lt;!&ndash;</ul>&ndash;&gt;-->
             <!--{/if}-->
-        <!--</li>-->
+        <!--&lt;!&ndash;</li>&ndash;&gt;-->
         <!--{/foreach}-->
 
 
@@ -37,40 +38,40 @@
 </div>
 
 <script>
-    var list_Content;
-
-    switch (STR) {
-        case "meter" :
-            $("#main_menu").children().removeClass("active");
-            $("#main_menu").children(".menu-cell").eq(0).addClass("active");
-            list_Content = "<li>" +
-                    "<a href='/admin/meter/setup#meter'>表具报装</a>" +
-                    "</li>" +
-                    "<li>" +
-                    "<a href='/admin/meter/pass#meter'>表具过户</a>" +
-                    "</li>" +
-                    "<li>" +
-                    "<a href='/admin/meter/change#meter'>表具更换</a>" +
-                    "</li>" +
-                    "<li>" +
-                    "<a href='/admin/meter/edit#meter'>表具修改</a>" +
-                    "</li>";
-            break;
-
-        case "manage" :
-            $("#main_menu").children().removeClass("active");
-            $("#main_menu").children(".menu-cell").eq(1).addClass("active");
-            list_Content = "<li>" +
-                    "<a href='/admin/value/index#manage'>远程阀门控制</a>" +
-                    "</li>" +
-                    "<li>" +
-                    "<a href='/admin/area/index#manage'>区域管理</a>" +
-                    "</li>" +
-                    "<li>" +
-                    "<a href='/admin/price/index#manage'>价格维护</a>" +
-                    "</li>";
-            break;
-    }
-
-    $("#side-menu").append(list_Content);
+//    var list_Content;
+//
+//    switch (STR) {
+//        case "meter" :
+//            $("#main_menu").children().removeClass("active");
+//            $("#main_menu").children(".menu-cell").eq(0).addClass("active");
+//            list_Content = "<li>" +
+//                    "<a href='/admin/meter/setup#meter'>表具报装</a>" +
+//                    "</li>" +
+//                    "<li>" +
+//                    "<a href='/admin/meter/pass#meter'>表具过户</a>" +
+//                    "</li>" +
+//                    "<li>" +
+//                    "<a href='/admin/meter/change#meter'>表具更换</a>" +
+//                    "</li>" +
+//                    "<li>" +
+//                    "<a href='/admin/meter/edit#meter'>表具修改</a>" +
+//                    "</li>";
+//            break;
+//
+//        case "manage" :
+//            $("#main_menu").children().removeClass("active");
+//            $("#main_menu").children(".menu-cell").eq(1).addClass("active");
+//            list_Content = "<li>" +
+//                    "<a href='/admin/value/index#manage'>远程阀门控制</a>" +
+//                    "</li>" +
+//                    "<li>" +
+//                    "<a href='/admin/area/index#manage'>区域管理</a>" +
+//                    "</li>" +
+//                    "<li>" +
+//                    "<a href='/admin/price/index#manage'>价格维护</a>" +
+//                    "</li>";
+//            break;
+//    }
+//
+////    $("#side-menu").append(list_Content);
 </script>
