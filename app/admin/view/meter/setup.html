@@ -260,7 +260,7 @@
             $('#M_Address option:selected').prop("selected",false)
             $('#detail_address').val('');
             $('#username').val('');
-            $('#telephone').val('');
+            $('#tel').val('');
             $('#identity').val('');
             $('#family_num').val('');
             $('#building_area').val('');
@@ -272,7 +272,7 @@
             $('#detail_address').val(meter.detail_address);
 
             $('#username').val(consumer.username);
-            $('#telephone').val(consumer.telephone);
+            $('#tel').val(consumer.tel);
             $('#identity').val(consumer.identity);
             $('#family_num').val(consumer.family_num);
             $('#building_area').val(consumer.building_area);
@@ -295,7 +295,7 @@
         var M_Code = $('#M_Code').val();
         var P_ID = $('#P_ID').val();
         var username = $('#username').val();
-        var telephone = $('#telephone').val();
+        var tel = $('#tel').val();
         var identity  =  $('#identity').val();
         var M_Address = $('#M_Address').val();
         var detail_address = $('#detail_address').val();
@@ -303,7 +303,7 @@
         var building_area = $('#building_area').val();
         var income_peryear = $('#income_peryear').val();
         var meter = {M_Type: M_Type, M_Code: M_Code, P_ID: P_ID, M_Address: M_Address, detail_address: detail_address};
-        var consumer = {username: username, telephone: telephone, identity: identity, family_num: family_num, building_area: building_area, income_peryear: income_peryear};
+        var consumer = {username: username, tel: tel, identity: identity, family_num: family_num, building_area: building_area, income_peryear: income_peryear};
 //        if( !check(meter,consumer) ){
 //            return false;
 //        }
