@@ -64,7 +64,7 @@ class Index extends Controller
                 //上报数据入库
                 $this->insertMeterData($data,METER_REPORT,$meterInfo);
                 //更新累计流量表
-                $this->updateMonthFlow($data['totalCube'] - $meterInfo['totalCube'],$meterInfo);
+                $this->updateMonthFlow($data['totalCube'] - $meterInfo['totalCube'],$data['totalCost']-$meterInfo['totalCost'],$meterInfo);
                 //更新表具信息
                 $this->updateMeter($data,$meterInfo);
                 //处理task
@@ -226,10 +226,11 @@ class Index extends Controller
      * 更新按月统计流量使用情况表
      * 未包装的表具也允许上报数据,在上报时,一旦发现表具绑定了用户,则更新绑定用户和公司信息
      * @param $diffCube 新增流量
+     * @param $diffCost 新增金额
      * @param $meterInfo 当前表具信息
      * @throws \think\Exception
      */
-    private function updateMonthFlow($diffCube, $meterInfo){
+    private function updateMonthFlow($diffCube, $diffCost, $meterInfo){
         $tableName = MONTH_FLOW_TABLE_NAME.date('Y');
         $month = date('M');
         if( $info = db($tableName)->where(['meter_id' => $meterInfo['id']])->find() ){
@@ -248,11 +249,17 @@ class Index extends Controller
             }else{
                 $updateData[$month] = $diffCube;
             }
+            if( isset($info[$month.'_cost']) ){
+                $updateData[$month.'_cost'] = $info[$month.'_cost'] + $diffCost;
+            }else{
+                $updateData[$month.'_cost'] = $diffCost;
+            }
             db($tableName)->update($updateData);
         }else{
             $insertData['M_Code'] = $meterInfo['M_Code'];
             $insertData['meter_id'] = $meterInfo['id'];
             $insertData[$month] = $diffCube;
+            $insertData[$month.'_cost'] = $diffCost;
             $insertData['create_time'] = time();
             //表具绑定用户,才插入用户id
             if(isset($meterInfo['U_ID'])){
