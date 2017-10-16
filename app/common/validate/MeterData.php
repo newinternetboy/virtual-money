@@ -16,7 +16,7 @@ class MeterData extends Validate
 
     protected $rule =   [
         'meter_id'                  =>  'require',
-        'meter_M_Code'              =>  'require',
+        'M_Code'                    =>  'require',
         'U_ID'                      =>  'require',
         'company_id'                =>  'require',
         'source_type'               =>  'require',
@@ -25,7 +25,7 @@ class MeterData extends Validate
 
     protected $message  =   [
         'meter_id.require'                => '表具id必须',
-        'meter_M_Code.require'            => '表号必须',
+        'M_Code.require'                  => '表号必须',
         'U_ID.require'                    => '用户id必须',
         'company_id.require'              => '公司id必须',
         'source_type.require'             => '数据来源必须',
@@ -33,7 +33,7 @@ class MeterData extends Validate
     ];
 
     protected $scene = [
-        'business'    => ['meter_id','meter_M_Code','U_ID','company_id','source_type','action_type'],   //业务
-        'report'      => ['meter_id','meter_M_Code','source_type','action_type'],                       //上报数据
+        'business'    => ['meter_id','M_Code','U_ID','company_id','source_type','action_type'],   //业务
+        'report'      => ['meter_id','M_Code','source_type','action_type'],                       //上报数据
     ];
 }

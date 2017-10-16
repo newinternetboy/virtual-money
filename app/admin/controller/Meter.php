@@ -108,13 +108,13 @@ class Meter extends Admin
                 exception('更新表具失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
             //记录入表具上报数据表
-            $meterData['meter_M_Code'] =  $meter['M_Code'];
+            $meterData['M_Code'] =  $meter['M_Code'];
             $meterData['meter_id'] = $meter['id'];
             $meterData['U_ID'] = $consumer_id;
             $meterData['company_id'] = $this->company_id;
             $meterData['source_type'] = BUSINESS;
             $meterData['action_type'] = BUSINESS_SETUP;
-            if( !model('MeterData')->upsert($meterData,'MeterData.business') ){
+            if( !model('MeterData')->upsert($meter['M_Code'],$meterData,'business') ){
                 $error = model('MeterData')->getError();
                 Log::record(['报装数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入报装记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
@@ -192,13 +192,13 @@ class Meter extends Admin
                 exception("更新表具失败:".$error,ERROR_CODE_DATA_ILLEGAL);
             }
             //记录入表具上报数据表
-            $meterData['meter_M_Code'] =  $meter['M_Code'];
+            $meterData['M_Code'] =  $meter['M_Code'];
             $meterData['meter_id'] = $meter['id'];
             $meterData['U_ID'] = $meter['U_ID'];
             $meterData['company_id'] = $this->company_id;
             $meterData['source_type'] = BUSINESS;
             $meterData['action_type'] = BUSINESS_PASS;
-            if( !model('MeterData')->upsert($meterData,'MeterData.business') ){
+            if( !model('MeterData')->upsert($meter['M_Code'],$meterData,'business') ){
                 $error = model('MeterData')->getError();
                 Log::record(['过户数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入过户记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
@@ -283,15 +283,15 @@ class Meter extends Admin
                 exception('更新新表具失败:'.$error,ERROR_CODE_DATA_ILLEGAL);
             }
             //记录入表具上报数据表
-            $meterData['meter_M_Code'] =  $old_meter['M_Code'];
-            $meterData['meter_id'] = $old_meter['id'];
+            $meterData['M_Code'] =  $new_meter['M_Code'];
+            $meterData['meter_id'] = $new_meter['id'];
             $meterData['U_ID'] = $old_meter['U_ID'];
             $meterData['company_id'] = $this->company_id;
             $meterData['source_type'] = BUSINESS;
             $meterData['action_type'] = BUSINESS_CHANGE;
-            $meterData['new_meter_M_Code'] = $new_meter['M_Code'];
+            $meterData['old_meter_M_Code'] = $old_meter['M_Code'];
             $meterData['change_reason'] = $changeinfo['change_reason'];
-            if( !model('MeterData')->upsert($meterData,'MeterData.business') ){
+            if( !model('MeterData')->upsert($new_meter['M_Code'],$meterData,'business') ){
                 $error = model('MeterData')->getError();
                 Log::record(['更换数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入更换记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
@@ -364,13 +364,13 @@ class Meter extends Admin
                 exception('修改失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
             //记录入表具上报数据表
-            $meterData['meter_M_Code'] =  $meter['M_Code'];
+            $meterData['M_Code'] =  $meter['M_Code'];
             $meterData['meter_id'] = $meter['id'];
             $meterData['U_ID'] = $meter['U_ID'];
             $meterData['company_id'] = $this->company_id;
             $meterData['source_type'] = BUSINESS;
             $meterData['action_type'] = BUSINESS_EDIT;
-            if( !model('MeterData')->upsert($meterData,'MeterData.business') ){
+            if( !model('MeterData')->upsert($meter['M_Code'],$meterData,'business') ){
                 $error = model('MeterData')->getError();
                 Log::record(['修改数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入表具修改记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
@@ -420,13 +420,13 @@ class Meter extends Admin
                 exception('操作失败: '.$error,ERROR_CODE_DATA_ILLEGAL);
             };
             //记录入表具上报数据表
-            $meterData['meter_M_Code'] =  $meter['M_Code'];
+            $meterData['M_Code'] =  $meter['M_Code'];
             $meterData['meter_id'] = $meter['id'];
             $meterData['U_ID'] = $meter['U_ID'];
             $meterData['company_id'] = $this->company_id;
             $meterData['source_type'] = BUSINESS;
             $meterData['action_type'] = BUSINESS_DELETE;
-            if( !model('MeterData')->upsert($meterData,'MeterData.business') ){
+            if( !model('MeterData')->upsert($meter['M_Code'],$meterData,'business') ){
                 $error = model('MeterData')->getError();
                 Log::record(['删除表具数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入删除表具记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);

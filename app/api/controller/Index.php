@@ -148,7 +148,6 @@ class Index extends Controller
             case METER_INIT:
                 $data['source_type'] = METER;
                 $data['action_type'] = $action_type;
-                $data['meter_M_Code'] = $data['M_Code'];
                 $data['diffCost'] = 0;
                 $data['diffCube'] = 0;
                 break;
@@ -156,7 +155,6 @@ class Index extends Controller
                 $data['source_type'] = METER;
                 $data['action_type'] = $action_type;
                 $data['meter_id'] = $meterInfo['id'];
-                $data['meter_M_Code'] = $data['M_Code'];
                 $data['diffCost'] = $data['totalCost'] - $meterInfo['totalCost'];
                 $data['diffCube'] = $data['totalCube'] - $meterInfo['totalCube'];
                 //表具绑定用户,才插入用户id
@@ -169,7 +167,7 @@ class Index extends Controller
                 }
                 break;
         }
-        if( !model('app\admin\model\meterData')->upsert($data,'MeterData.report') ){
+        if( !model('app\admin\model\meterData')->upsert($data['M_Code'],$data,'report') ){
             $error = model('app\admin\model\meterData')->getError();
             Log::record(['上报数据入库失败' => $error,'data' => $data]);
             exception('上报数据入库失败: '.$error,ERROR_CODE_DATA_ILLEGAL);

@@ -32,11 +32,11 @@ class MeterData extends Admin
             //获取止日期记录
             $whereEndTime = $endTime ? strtotime($endTime.' 23:59:59') : time();
             $where['create_time'] = ['<=',$whereEndTime];
-            $reportEnd = model('MeterData')->getMeterDataInfo($where,'find','totalCube,totalCost');
+            $reportEnd = model('MeterData')->getMeterDataInfo($M_Code,$where,'find','totalCube,totalCost');
             //获取起日期记录
             $whereStartTime = $startTime ? strtotime($startTime.' 00:00:00') : time()-config('meterDataRangeTime');
             $where['create_time'] = ['>=',$whereStartTime];
-            $reportStart =  model('MeterData')->getMeterDataInfo($where,'find','totalCube,totalCost','create_time','asc');
+            $reportStart =  model('MeterData')->getMeterDataInfo($M_Code,$where,'find','totalCube,totalCost','create_time','asc');
             $ret['data']['M_Code'] = $M_Code;
             $ret['data']['cube'] = $reportEnd['totalCube'] - $reportStart['totalCube'];
             $ret['data']['cost'] = $reportEnd['totalCost'] - $reportStart['totalCost'];
