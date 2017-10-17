@@ -67,6 +67,16 @@ function mduser( $str )
     return md5(md5($user_auth_key).$str);
 }
 
+/**
+ * php库函数生成的12个月英文缩写
+ * @return array
+ */
+function getMonthAbbreviation(){
+    for($i=0;$i<=11;$i++){
+        $abbr[$i] = date('M',strtotime("+$i months",strtotime(date('Y').'0101')));
+    }
+    return $abbr;
+}
 
 /**
  * 获取自增id
@@ -96,4 +106,13 @@ function getAutoIncId($table, $query, $autoField, $step){
     $result = $mongodb->executeCommand($database,$command);
     $result = $result->toArray();
     return $result[0]->value->$autoField;
+}
+
+function getKilo($x){
+    return round($x/1000,3);
+}
+
+function bcryptHash($str){
+    $bcrypt = new \bcrypt\Bcrypt();
+    return $bcrypt->hashPassword($str);
 }
