@@ -66,3 +66,34 @@ function mduser( $str )
     $user_auth_key = \think\Config::get('user_auth_key');
     return md5(md5($user_auth_key).$str);
 }
+
+
+/**
+ * 获取自增id
+ * 注:调用此方法前,数据库中必须存在$table表,且存在包含$query,$autoField字段的数据
+ * @param String $table         自增表名
+ * @param Array $query          查询条件
+ * @param Field $autoField      自增字段
+ * @param Number $step          自增量
+ * @return  Int                 自增值
+ */
+function getAutoIncId($table, $query, $autoField, $step){
+    $update = [
+        '$inc' => [
+                    $autoField => $step
+            ]
+    ];
+
+    $mongodb = new MongoDB\Driver\Manager();
+    $command = new MongoDB\Driver\Command([
+        'findandmodify'=> $table,
+        'update'=>$update,
+        'query'=>$query,
+        'new'=>true,
+        'upsert'=>true
+    ]);
+    $database = config('database.database');
+    $result = $mongodb->executeCommand($database,$command);
+    $result = $result->toArray();
+    return $result[0]->value->$autoField;
+}
