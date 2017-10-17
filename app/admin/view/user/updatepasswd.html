@@ -42,36 +42,42 @@
             onsubmit:true,
             rules:{
                 oldpasswd:{
+                    required:true,
                     minlength:6,
                     maxlength:16
                 },
                 newpasswd:{
+                    required:true,
                     minlength:6,
                     maxlength:16
                 },
                 surepasswd:{
+                    required:true,
                     minlength:6,
-                    maxlength:16
+                    maxlength:16,
+                    equalTo:"#newpasswd"
                 }
             },
             messages:{
                 oldpasswd:{
+                    required:"旧密码不能为空",
                     minlength:"最小长度为6位",
                     maxlength:"最大长度为16位"
                 },
                 newpasswd:{
+                    required:"新密码不能为空",
                     minlength:"最小长度为6位",
                     maxlength:"最大长度为16位"
                 },
                 surepasswd:{
+                    required:"确认密码不能为空",
                     minlength:"最小长度为6位",
-                    maxlength:"最大长度为16位"
+                    maxlength:"最大长度为16位",
+                    equalTo:"两次输入的密码不一致"
                 }
             }
         });
     })
-
-
     function saveData(){
         var flag = $("#commentForm").valid();
         if(!flag){
@@ -81,10 +87,6 @@
         var newpasswd = $('#newpasswd').val();
         var surepasswd = $('#surepasswd').val();
         var meter = {oldpasswd:oldpasswd, newpasswd: newpasswd, surepasswd:surepasswd};
-
-//        if( !check(meter) ){
-//             return false;
-//        }
         $.ajax({
             url:"{:url('admin/user/changepasswd')}",
             method:'post',
@@ -102,26 +104,5 @@
             }
         })
     }
-//    function check(meter){
-//        if( meter.oldpasswd == "" || meter.oldpasswd == null || meter.oldpasswd == "undefined"){
-//            alertMsg("请先填写旧的密码");
-//            return false;
-//        }
-//        if( meter.newpasswd == "" || meter.newpasswd == null || meter.newpasswd == "undefined"){
-//            alertMsg("请先填写新密码");
-//            return false;
-//        }
-//        if(!same(meter)){
-//            alertMsg("两次输入的密码不一致");
-//            return false;
-//        }
-//        return true;
-//    }
-//    function same(meter){
-//        if(meter.newpasswd==meter.surepasswd){
-//            return true;
-//        }
-//        return false;
-//    }
 </script>
                        
