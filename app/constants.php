@@ -65,6 +65,6 @@ define('MONTH_FLOW_TABLE_NAME','month_flow_');
 
 //task状态
 define('TASK_WAITING',1);  //待处理任务
-define('TASK_SENT',2);     //已下发任务
+//define('TASK_SENT',2);     //已下发任务
 define('TASK_SUCCESS',3);  //执行成功
 define('TASK_FAIL',4);     //执行失败

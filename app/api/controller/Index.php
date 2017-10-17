@@ -5,6 +5,7 @@ namespace app\api\controller;
 use think\Controller;
 use think\Log;
 use think\Loader;
+use think\Db;
 
 class Index extends Controller
 {
@@ -68,7 +69,7 @@ class Index extends Controller
                 //更新表具信息
                 $this->updateMeter($data,$meterInfo);
                 //处理task
-                $newTask = $this->handleTask($meterInfo['id'],isset($data['seq']) ? $data['seq'] : '',isset($data['seqStatus']) ? $data['seqStatus'] : '');
+                $newTask = $this->handleTask($meterInfo['id'],isset($data['seq']) ? intval($data['seq']) : '',isset($data['seqStatus']) ? $data['seqStatus'] : '');
             }
             if( $newTask ){
                 $ret['task'] = $newTask;
@@ -282,29 +283,25 @@ class Index extends Controller
     private function handleTask($meter_id, $lastSeq = null, $lastSeqStatus = null){
         //如果存在上次任务的执行结果
         if( $lastSeq ){
-            $lastTask = db($this->taskTableName)->where(['meter_id' => $meter_id,'seq' => $lastSeq])->find();
-            if( $lastTask ){
-                if( $lastSeqStatus ) {
-                    $updateData['status'] = TASK_SUCCESS;
-                }else{
-                    $updateData['status'] = TASK_FAIL;
-                }
-                $updateData['id'] = $lastTask['id'];
-                $updateData['update_time'] = time();
-                db($this->taskTableName)->update($updateData);
+            //更新小于$lastSeq的task状态
+            $where['meter_id'] = $meter_id;
+            $where['seq_id'] = ['<',$lastSeq];
+            $updatePre['status'] = TASK_SUCCESS;
+            $updatePre['update_time'] = time();
+            db($this->taskTableName)->where(['meter_id' => $meter_id, 'seq_id' => ['<',$lastSeq], 'status' => TASK_WAITING])->update($updatePre);
+            //更新$lastSeq的task状态
+            if( $lastSeqStatus ) {
+                $updateCur['status'] = TASK_SUCCESS;
+            }else{
+                $updateCur['status'] = TASK_FAIL;
             }
+            $updateCur['update_time'] = time();
+            db($this->taskTableName)->where(['meter_id' => $meter_id, 'seq_id' => $lastSeq])->update($updateCur);
         }
         //获取下派新任务
-        $newTask = db($this->taskTableName)->where(['meter_id' => $meter_id,'status' => TASK_WAITING])->order('seq','asc')->find();
-        if( $newTask ){
-            //更新新任务状态为已下派
-            $updateData['id'] = $newTask['id'];
-            $updateData['status'] = TASK_SENT;
-            $updateData['update_time'] = time();
-            db($this->taskTableName)->update($updateData);
-        }
+        $newTask = db($this->taskTableName)->where(['meter_id' => $meter_id,'status' => TASK_WAITING,'seq_id' => ['>',$lastSeq ? $lastSeq : 0]])->order('seq','asc')->find();
 
-        $newTask = $this->parseTask($newTask);
+        //$newTask = $this->parseTask($newTask);
         return $newTask;
     }
 
@@ -318,5 +315,28 @@ class Index extends Controller
             return $newTask['cmd'];
         }
         return $newTask;
+    }
+
+    public function addTask(){
+        $data = input('post.');
+        $ret['code'] = 200;
+        $ret['msg'] = '操作成功';
+        try{
+            if( !isset($data['M_Code']) ){
+                exception('请先提供表号',ERROR_CODE_DATA_ILLEGAL);
+            }
+            if( !$meterInfo = model('app\admin\model\meter')->getMeterInfo(['M_Code' => $data['M_Code'],'meter_life' => METER_LIFE_ACTIVE],'find','id') ){
+                exception('表号不存在',ERROR_CODE_DATA_ILLEGAL);
+            }
+            $data['meter_id'] = $meterInfo['id'];
+            $data['status'] = TASK_WAITING;
+            $data['seq_id'] = getAutoIncId('autoinc',['name' => 'task'],'seq_id',1);
+            $data['create_time'] = time();
+            Db::name('task')->insert($data);
+        }catch (\Exception $e){
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
     }
 }
