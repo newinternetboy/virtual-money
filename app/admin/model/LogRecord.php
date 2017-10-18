@@ -83,7 +83,7 @@ class logRecord extends Admin
     }
     //解析修改密码
     public function UpdatePasswd($data){
-        @$str  = '新密码为'.$data['password'];
+        @$str  = '修改密码';
         return $str;
     }
     //解析表具过户
@@ -112,7 +112,6 @@ class logRecord extends Admin
     }
     //解析添加/修改价格
     public function UpdateandAddprice($data){
-        $data = json_decode($data,true);
         return "价格名称是：".$data['name'];
     }
     //解析修改权限
@@ -127,8 +126,11 @@ class logRecord extends Admin
     }
     //解析添加/修改区域
     public function UpdateandAddarea($data){
-        $data = json_decode($data,true);
         return "区域名称为：".$data['name']."；所属区域为：".$data['belong']."；描述：".$data['desc']."；详细地址为：".$data['address'];
+    }
+    //解析修改运行参数；
+    public function UpdateMeterparam($data){
+        return "脉冲常量：".$data['pulseRatio']."；低剩余报警：".$data['lowLimit']."；透视限额：".$data['overdraftLimit']."；透支限制时间：".$data['overdraftTime']."；冻结时间：".$data['freezeTime']."；自动上报时间".$data['uploadTime']."；短信平台号码：".$data['SMSCode']."；开机脉冲数：".$data['transformerRatio']."；流量上限：".$data['overFlimit']."；参数名称：".$data['tag'];
     }
 
 }

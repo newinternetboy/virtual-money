@@ -468,6 +468,11 @@ class Meter extends Admin
         $this->assign('detail_address',$detail_address);
         return $this->fetch();
     }
+
+    /**
+     * @return mixed
+     * 查询换表记录；
+     */
     public function changeMeterRecord(){
         $M_Code    = input('M_Code');
         $new_meter_M_Code = input('new_meter_M_Code');
@@ -483,13 +488,13 @@ class Meter extends Admin
             $where['new_meter_M_Code'] = $new_meter_M_Code;
         }
         if($start_time){
-            $where['change_time'] = ['>',strtotime($start_time)];
+            $where['change_time'] = ['>',strtotime($start_time." 00:00:00")];
         }
         if($end_time){
-            $where['change_time'] = ['<',strtotime($end_time)];
+            $where['change_time'] = ['<',strtotime($end_time." 23:59:59")];
         }
         if($start_time&&$end_time){
-            $where['change_time'] = ['between',[strtotime($start_time),strtotime($end_time)]];
+            $where['change_time'] = ['between',[strtotime($start_time." 00:00:00"),strtotime($end_time." 23:59:59")]];
         }
         $param['M_Code'] = $M_Code;
         $param['new_meter_M_Code'] = $new_meter_M_Code;

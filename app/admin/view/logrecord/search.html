@@ -79,13 +79,12 @@
                                 <tr>
                                    <td>{$vo.remark}</td>
                                    <td>{$vo.create_time}</td>
-                                   <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{$vo.data|json_encode=JSON_UNESCAPED_UNICODE}</td>
+                                   <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{$vo.data}</td>
                                    <td>{$vo.user.username}</td>
-                                   <td><button class="btn btn-default record">展开记录</button></td>
+                                   <td><button class="btn btn-primary record">内容详情</button></td>
                                 </tr>
                             {/volist}
                             </tbody>
-                           
                         </table></div>
                         <div>
                             {$logrecord->render()}
@@ -97,7 +96,7 @@
                             <div class="col-sm-10">
                                 <p class="form-control" style="border: none">请先在搜索框输入查询条件进行查询，返回符合条件的结果</p>
                             </div>
-                        </div>    
+                        </div>
                 </div>
             </div>
         </div>

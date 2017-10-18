@@ -23,13 +23,13 @@ class Logrecord extends Admin
             $where['remark'] = $remark;
         }
         if($start_time){
-            $where['create_time'] = ['>',strtotime($start_time)];
+            $where['create_time'] = ['>',strtotime($start_time." 00:00:00")];
         }
         if($end_time){
-            $where['create_time'] = ['<',strtotime($end_time)];
+            $where['create_time'] = ['<',strtotime($end_time." 23:59:59")];
         }
         if($start_time&&$end_time){
-            $where['create_time'] = ['between',[strtotime($start_time),strtotime($end_time)]];
+            $where['create_time'] = ['between',[strtotime($start_time." 00:00:00"),strtotime($end_time." 23:59:59")]];
         }
         $data['user_name']  = $user_name;
         $data['remark']     = $remark;
@@ -68,6 +68,9 @@ class Logrecord extends Admin
                     break;
                 case '添加/修改区域':
                     $vol['data'] = model('LogRecord')->UpdateandAddarea($vol['data']);
+                    break;
+                case '运行参数修改':
+                    $vol['data'] = model('LogRecord')->UpdateMeterparam($vol['data']);
                     break;
             }
         }
