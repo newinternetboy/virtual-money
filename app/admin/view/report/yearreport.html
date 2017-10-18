@@ -1,0 +1,196 @@
+{js href="__JS__/bootstrap-datetimepicker.min.js" /}
+{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
+{js href="__JS__/echarts.js" /}
+{js href="__JS__/jquery.jqprint-0.3.js" /}
+{css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <!-- 搜索条件 -->
+                    <form action="" method="post" class="form-horizontal" onsubmit="return check();">
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="startYear" class="col-sm-2 control-label">开始年份</label>
+                                    <div class="col-sm-6">
+                                        <input id="startYear" name="startYear" value="{$startYear ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div><!-- /.col-lg-6 -->
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="endYear" class="col-sm-2 control-label">结束年份</label>
+                                    <div class="col-sm-6">
+                                        <input id="endYear" name="endYear" value="{$endYear ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div><!-- /.col-lg-6 -->
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button style="float: right" class="btn btn-success" type="submit" >查询</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--报表-->
+                    <div id="table">
+                        <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>年份</th>
+                                <th>用户数</th>
+                                <th>本年用量(方)</th>
+                                <th>本年金额(元)</th>
+                            </tr>
+                            </thead>
+                            {foreach $report as $year => $item}
+                                <tr>
+                                    <td>{$year}</td>
+                                    <td>{$item.consumers}</td>
+                                    <td>{$item.cube}</td>
+                                    <td>{$item.cost}</td>
+                                </tr>
+                            {/foreach}
+                            <tr>
+                                <td>总计</td>
+                                <td></td>
+                                <td>{$report|array_column=###,'cube'|array_sum=###}</td>
+                                <td>{$report|array_column=###,'cost'|array_sum=###}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="chart" style="width: 800px;height:400px;display:none"></div>
+                    <button id="print" style="float: right;margin-left: 1vw" class="btn btn-success" type="button" >打印</button>
+                    <button id="switch" style="float: right" class="btn btn-success" type="button" >显示图形</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#startYear").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy",
+        autoclose: true,
+        todayBtn: false,
+        pickerPosition: "bottom-left",
+        startView: 4,
+        bootcssVer:3,
+        minView: 4,
+    });
+    $("#endYear").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy",
+        autoclose: true,
+        todayBtn: false,
+        pickerPosition: "bottom-left",
+        startView: 4,
+        bootcssVer:3,
+        minView: 4,
+    });
+</script>
+<script >
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('chart'));
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '表具用量年报表',
+            subtext: "客户名称:双得利集团",
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross'
+            },
+            formatter: '{b0} 年:<br /> 累计用量:{c0} 方'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: {$years|json_encode}
+        },
+        yAxis: {
+            type: 'value',
+            name: '用量单位: 方',
+            nameLocation: 'center',
+            nameGap:50, //坐标轴名称与轴线之间的距离
+            axisLabel: {
+                formatter: '{value}'
+            },
+            axisPointer: {
+                snap: true
+            }
+        },
+        series: [
+            {
+                name:'用量',
+                type:'line',
+                smooth: true,
+                data: {$report|array_column=###,"cube"|json_encode}
+
+    }
+    ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+
+<script>
+    $('#switch').click(function(){
+        if($('#table').css('display') === 'none'){
+            $('#table').show();
+            $('#chart').hide();
+        }else{
+            $('#table').hide();
+            $('#chart').show();
+        }
+    })
+
+    $('#print').click(function(){
+        if($('#table').css('display') === 'none'){
+            var img = new Image();
+            var imgSrc = myChart.getDataURL();
+            img.src = imgSrc;
+            img.onload = function() {
+                $(img).jqprint();
+            }
+        }else{
+            $('#table').jqprint();
+        }
+    })
+
+    function check(){
+        var start = $('#startYear').val();
+        if( start == '' || start == 'undefined' || start == null ){
+            alertMsg('请选择开始年份');
+            return false;
+        }
+        var end = $('#endYear').val();
+        if( end == '' || end == 'undefined' || end == null ){
+            alertMsg('请选择结束年份');
+            return false;
+        }
+        var regEx = new RegExp("\\-","gi");
+        var d1 = start.replace(regEx,"/");
+        var d2 = end.replace(regEx,"/");
+        if( d1 > d2 ){
+            alertMsg('开始年份不能大于结束年份');
+            return false;
+        }
+    }
+</script>

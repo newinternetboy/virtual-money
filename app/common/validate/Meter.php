@@ -48,7 +48,7 @@ class Meter extends Validate
         'pass' => ['U_ID'],
         //表具更换
         'change_update_old_meter' => ['change_reason','meter_status','operator'],
-        'change_update_new_meter' => ['M_Type','M_Code','P_ID','U_ID','M_Address','detail_address','meter_status','company_id'],
+        'change_update_new_meter' => ['M_Type','P_ID','U_ID','M_Address','detail_address','meter_status','company_id'],
         //表具修改
         'edit' => ['M_Address','detail_address'],
         //表具信息维护

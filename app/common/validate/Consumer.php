@@ -20,6 +20,7 @@ class Consumer extends Validate
         'identity'              => 'require',
         'company_id'            => 'require',
         'consumer_state'        => 'require',
+        'password'              => 'require',
     ];
 
     protected $message  =   [
@@ -29,11 +30,13 @@ class Consumer extends Validate
         'identity.require'              => '身份证号必须',
         'company_id.require'            => '公司id必须',
         'consumer_state.require'        => '用户状态必须',
+        'password.require'              => '用户密码必须',
     ];
 
     protected $scene = [
-        'insert'    => ['M_Code','username','tel','identity','company_id','consumer_state'],
-        'edit'      => ['username','tel'],
-        'setOld'    => ['consumer_state']
+        'insert'        => ['M_Code','username','tel','identity','company_id','consumer_state','password'],
+        'changeMeter'   => ['M_Code','password'],
+        'edit'          => ['username','tel'],
+        'setOld'        => ['consumer_state']
     ];
 }
