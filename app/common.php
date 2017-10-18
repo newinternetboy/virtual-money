@@ -73,7 +73,7 @@ function mduser( $str )
  */
 function getMonthAbbreviation(){
     for($i=0;$i<=11;$i++){
-        $abbr[$i] = date('M',strtotime("+$i months",strtotime(date('Y').'0101')));
+        $abbr[$i+1] = date('M',strtotime("+$i months",strtotime(date('Y').'0101')));
     }
     return $abbr;
 }
@@ -106,10 +106,6 @@ function getAutoIncId($table, $query, $autoField, $step){
     $result = $mongodb->executeCommand($database,$command);
     $result = $result->toArray();
     return $result[0]->value->$autoField;
-}
-
-function getKilo($x){
-    return round($x/1000,3);
 }
 
 function bcryptHash($str){
