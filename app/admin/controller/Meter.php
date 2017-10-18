@@ -276,13 +276,13 @@ class Meter extends Admin
             $new_meter_data['company_id'] = $old_meter['company_id'];
             $new_meter_data['meter_status'] = METER_STATUS_BIND;
             $new_meter_data['change_time'] = time();
-            //TODO:原表具数据转移
-
             if( !model('Meter')->updateMeter($new_meter_data,'Meter.change_update_new_meter') ){
                 $error = model('Meter')->getError();
                 Log::record(['更换更新新表失败' => $error,'data' => $new_meter_data],'error');
                 exception('更新新表具失败:'.$error,ERROR_CODE_DATA_ILLEGAL);
             }
+
+            //TODO:旧表数据同步新表task
 
             //更新用户表号和密码
             $consumerInfo['id'] = $old_meter['U_ID'];
