@@ -14,7 +14,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="startYear" class="col-sm-2 control-label">开始年份</label>
+                                    <label for="startYear" class="col-sm-2 control-label">{:lang('Start Year')}</label>
                                     <div class="col-sm-6">
                                         <input id="startYear" name="startYear" value="{$startYear ?? ''}" type="text" class="form-control">
                                     </div>
@@ -22,7 +22,7 @@
                             </div><!-- /.col-lg-6 -->
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="endYear" class="col-sm-2 control-label">结束年份</label>
+                                    <label for="endYear" class="col-sm-2 control-label">{:lang('End Year')}</label>
                                     <div class="col-sm-6">
                                         <input id="endYear" name="endYear" value="{$endYear ?? ''}" type="text" class="form-control">
                                     </div>
@@ -42,10 +42,10 @@
                         <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
                             <thead>
                             <tr>
-                                <th>年份</th>
-                                <th>用户数</th>
-                                <th>本年用量(方)</th>
-                                <th>本年金额(元)</th>
+                                <th>{:lang('Years')}</th>
+                                <th>{:lang('User Number')}</th>
+                                <th>{:lang('This Year Cube')}</th>
+                                <th>{:lang('This year the amount(yuan)')}</th>
                             </tr>
                             </thead>
                             {foreach $report as $year => $item}

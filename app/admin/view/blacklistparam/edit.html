@@ -5,14 +5,14 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-                    <h3 class="modal-title">{$data['id']?lang('Edit'):lang('Add')}黑名单属性</h3>
+                    <h3 class="modal-title">{$data['id']?lang('Edit'):lang('Add')}{:lang('Blacklist Param' )}</h3>
                 </div>
                 <input type="hidden" name="id" value="{$data.id ?? ''}">
                 <div class="modal-body">
                    
                     <div class="modal-body-content">
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">参数代号</label>
+                            <label class="col-sm-3 control-label">{:lang('Param Mark')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="param_name"  required value="{$data.param_name ?? ''}">
                             </div>
@@ -20,7 +20,7 @@
                     </div>
                     <div class="modal-body-content">
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">参数描述</label>
+                            <label class="col-sm-3 control-label">{:lang('Param Description')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="desc" required value="{$data.desc ?? ''}">
                             </div>
@@ -29,7 +29,7 @@
                     </div>
                     <div class="modal-body-content">
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">参数类型</label>
+                            <label class="col-sm-3 control-label">{:lang('Param Type')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="param_type" required value="{$data.param_type ?? ''}">
                             </div>
@@ -38,7 +38,7 @@
                     </div>
                       <div class="modal-body-content">
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">参数</label>
+                            <label class="col-sm-3 control-label">{:lang('Param')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="opt_id" required value="{$data.opt_id ?? ''}">
                             </div>

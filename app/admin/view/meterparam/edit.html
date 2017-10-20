@@ -11,61 +11,61 @@
                 <div class="modal-body">
                     <div class="modal-body-content">
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">脉冲常量(imp/m³)</label>
+                            <label class="col-sm-3 control-label">{:lang('Pulse Constant(imp/m³)')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="pulseRatio" maxlength="20"  placeholder="{:lang('Up_characters',['langth' =>20])}" required value="{$data.pulseRatio ?? ''}">
                             </div>
                         </div>
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">低剩余报警(元)</label>
+                            <label class="col-sm-3 control-label">{:lang('Low Residual Alarm (yuan)')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="lowLimit"  required value="{$data.lowLimit ?? ''}">
                             </div>
                         </div>
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">透支限额(元)</label>
+                            <label class="col-sm-3 control-label">{:lang('Limit Of Overdrawn Account(YUAN)')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="overdraftLimit" required value="{$data.overdraftLimit ?? ''}">
                             </div>
                         </div>
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">透支限制时间(天)</label>
+                            <label class="col-sm-3 control-label">{:lang('Overdraft Limit Time(day)')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="overdraftTime" required value="{$data.overdraftTime ?? ''}">
                             </div>
                         </div>
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">冻结时间(日)</label>
+                            <label class="col-sm-3 control-label">{:lang('Freezetime (day)')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="freezeTime" required value="{$data.freezeTime ?? ''}">
                             </div>
                         </div>
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">自动上报时间(间隔小时)</label>
+                            <label class="col-sm-3 control-label">{:lang('Automatic Reporting Time (Hour)')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="uploadTime"  required value="{$data.uploadTime ?? ''}">
                             </div>
                         </div>
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">短信平台号码</label>
+                            <label class="col-sm-3 control-label">{:lang('SMS Platform Number')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="SMSCode"  required value="{$data.SMSCode ?? ''}">
                             </div>
                         </div>
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">开机脉冲数</label>
+                            <label class="col-sm-3 control-label">{:lang('Boot Pulse Number')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="transformerRatio"  required value="{$data.transformerRatio ?? ''}">
                             </div>
                         </div>
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">流量上限(吨/小时)</label>
+                            <label class="col-sm-3 control-label">{:lang('Upper limit of flow (ton / hour)')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="overFlimit" required value="{$data.overFlimit ?? ''}">
                             </div>
                         </div>
                         <div class="form-group must">
-                            <label class="col-sm-3 control-label">备用字段</label>
+                            <label class="col-sm-3 control-label">{:lang('Reserve Field')}</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="tag" required value="{$data.tag ?? ''}">
                             </div>

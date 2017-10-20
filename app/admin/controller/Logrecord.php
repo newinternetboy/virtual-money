@@ -39,37 +39,37 @@ class Logrecord extends Admin
         //对取出来的数据按照remark字段的值进行解析；返回的结果重新赋值给$logrecord;
         foreach($logrecord as & $vol){
             switch($vol['remark']){
-                case '修改密码':
+                case 'Update Password':
                     $vol['data'] = model('LogRecord')->UpdatePasswd($vol['data']);
                     break;
-                case '表具过户':
+                case 'Pass Meter':
                     $vol['data'] = model('LogRecord')->MeterPass($vol['data']);
                     break;
-                case '表具修改':
+                case 'Edit Meter':
                     $vol['data'] = model('LogRecord')->MeterUpdate($vol['data']);
                     break;
-                case '表具报装':
+                case 'Save Meter':
                     $vol['data'] = model('LogRecord')->MeterBinding($vol['data']);
                     break;
-                case '修改黑名单属性成功':
+                case 'Update Blacklist Param':
                     $vol['data'] = model('LogRecord')->UpdateBlacklistparam($vol['data']);
                     break;
-                case '修改/添加权限':
+                case 'Save AuthRule':
                     $vol['data'] = model('LogRecord')->UpdateandAddauth($vol['data']);
                     break;
-                case '添加/修改价格':
+                case 'Save Price':
                     $vol['data'] = model('LogRecord')->UpdateandAddprice($vol['data']);
                     break;
-                case '修改权限':
+                case 'Save AuthAccess':
                     $vol['data'] = model('LogRecord')->UpdateAuth($vol['data']);
                     break;
-                case '修改/添加用户':
+                case 'Save User':
                     $vol['data'] = model('LogRecord')->UpdateandAdduser($vol['data']);
                     break;
-                case '添加/修改区域':
+                case 'Save Area':
                     $vol['data'] = model('LogRecord')->UpdateandAddarea($vol['data']);
                     break;
-                case '运行参数修改':
+                case 'Edit MeterParam':
                     $vol['data'] = model('LogRecord')->UpdateMeterparam($vol['data']);
                     break;
             }

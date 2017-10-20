@@ -120,7 +120,7 @@ class Meter extends Admin
                 Log::record(['报装数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入报装记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
-            model('LogRecord')->record( lang('Save Meter'),$data );
+            model('LogRecord')->record('Save Meter',$data );
         }catch (\Exception $e){
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
@@ -205,7 +205,7 @@ class Meter extends Admin
                 Log::record(['过户数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入过户记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
-            model('LogRecord')->record( lang('Pass Meter'),'M_Code: '.$M_Code.', ori_consumer: '.$meter['U_ID'].', new_consumer: '.$new_consumer_id );
+            model('LogRecord')->record( 'Pass Meter','M_Code: '.$M_Code.', ori_consumer: '.$meter['U_ID'].', new_consumer: '.$new_consumer_id );
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
@@ -308,7 +308,7 @@ class Meter extends Admin
                 Log::record(['更换数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入更换记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
-            model('LogRecord')->record( lang('Pass Meter'),$changeinfo );
+            model('LogRecord')->record( 'Change Meter',$changeinfo );
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
@@ -387,7 +387,7 @@ class Meter extends Admin
                 Log::record(['修改数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入表具修改记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
-            model('LogRecord')->record( lang('Edit Meter'),$data);
+            model('LogRecord')->record( 'Edit Meter',$data);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
@@ -443,7 +443,7 @@ class Meter extends Admin
                 Log::record(['删除表具数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入删除表具记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
-            model('LogRecord')->record( lang('Delete Meter'),$M_Code);
+            model('LogRecord')->record('Delete Meter',$M_Code);
         }catch  (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();

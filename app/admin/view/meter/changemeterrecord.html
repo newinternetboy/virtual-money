@@ -12,7 +12,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="M_Code" class="col-sm-3 control-label">原表号:</label>
+                                    <label for="M_Code" class="col-sm-3 control-label">{:lang('Old M_Code')}:</label>
                                     <div class="col-sm-6">
                                         <input name="M_Code" id="M_Code" type="text" class="form-control" placeholder="请输入原表号..." value="{$M_Code ?? ''}">
                                     </div>
@@ -20,7 +20,7 @@
                             </div><!-- /.col-lg-6 -->
                              <div class="col-lg-6" style="float: right">
                                 <div class="form-group">
-                                    <label for="new_meter_M_Code" class="col-sm-3 control-label">新表号:</label>
+                                    <label for="new_meter_M_Code" class="col-sm-3 control-label">{:lang('New M_Code')}:</label>
                                     <div class="col-sm-6">
                                         <input name="new_meter_M_Code" id="new_meter_M_Code" type="text" class="form-control" placeholder="请输入新表号..." value="{$new_meter_M_Code ?? ''}">
                                     </div>
@@ -30,7 +30,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="start_datetimepicker" class="col-sm-3 control-label">换表时间 从：</label>
+                                    <label for="start_datetimepicker" class="col-sm-3 control-label">{:lang('Change Code Time from')}：</label>
                                     <div class="col-sm-6">
                                         <input name="start_time" id="start_datetimepicker" type="text" class="form-control" value="{$start_time ?? ''}">
                                     </div>
@@ -38,7 +38,7 @@
                             </div>
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="end_datetimepicker" class="col-sm-3 control-label">至：</label>
+                                    <label for="end_datetimepicker" class="col-sm-3 control-label">{:lang('To')}：</label>
                                     <div class="col-sm-6">
                                         <input name="end_time" id="end_datetimepicker" type="text" class="form-control" value="{$end_time ?? ''}">
                                     </div>
@@ -58,14 +58,14 @@
                             <table class="table table-hover">
                             <thead>
                                 <tr>
-                                   <th>安装地址</th>
-                                   <th>原表号</th>
-                                   <th>新表号</th>
-                                   <th>换表人</th>
-                                   <th>换表原因</th>
-                                   <th>剩余金额</th>
-                                   <th>累计用量</th>
-                                   <th>日期</th>
+                                   <th>{:lang('Installation Address')}</th>
+                                   <th>{:lang('Old M_Code')}</th>
+                                   <th>{:lang('New M_Code')}</th>
+                                   <th>{:lang('Change Code People')}</th>
+                                   <th>{:lang('Change')}{:lang('Reason')}</th>
+                                   <th>{:lang("Charge Balance")}</th>
+                                   <th>{:lang('Cumulative Amount')}</th>
+                                   <th>{:lang('Date')}</th>
                                 </tr>
                             </thead>
                             <tbody>

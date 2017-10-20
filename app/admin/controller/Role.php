@@ -74,7 +74,7 @@ class Role extends Admin
             Log::record(['保存角色失败' => model('Role')->getError(),'data' => $data],'error');
             $this->error('操作失败');
         }
-        Loader::model('LogRecord')->record( lang('Save Role'),$data );
+        Loader::model('LogRecord')->record( 'Save Role',$data );
         $this->success(lang('Save success'));
     }
 
@@ -98,7 +98,7 @@ class Role extends Admin
             Log::record(['删除角色失败' => model('Role')->getError(),'data' => $id],'error');
             $this->error('操作失败');
         }
-        Loader::model('LogRecord')->record( lang('Delete Role'),$id );
+        Loader::model('LogRecord')->record( 'Delete Role',$id );
         $this->success(lang('Delete succeed'));
     }
 }

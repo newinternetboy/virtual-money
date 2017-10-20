@@ -7,7 +7,7 @@
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
                 <!-- 表单标题概要 -->
                 <div class="ibox-title">
-                    <h5>远程阀门控制</h5>
+                    <h5>{:lang('Remote Valve Control')}</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -21,37 +21,37 @@
                 <div class="ibox-content">
                     <form id="save" method="post" class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="valve_type" class="col-sm-2 control-label">方式选择</label>
+                            <label for="valve_type" class="col-sm-2 control-label">{:lang('Method Search')}</label>
                             <div class="col-sm-10" id="valve_type" >
                                 <label class="radio-inline">
-                                    <input type="radio" class="form-control" checked name="valve_type" value=1>指定用户控制
+                                    <input type="radio" class="form-control" checked name="valve_type" value=1>{:lang('The specified user control')}
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" class="form-control" name="valve_type" value=2>地区用户控制
+                                    <input type="radio" class="form-control" name="valve_type" value=2>{:lang('The user control area')}
                                 </label>
                             </div>
                         </div>
                         <div id="content" style="margin-top: 2vw">
                             <div class="form-group">
-                                <label for="M_Codes" class="col-sm-2 control-label">表号</label>
+                                <label for="M_Codes" class="col-sm-2 control-label">{:lang('M_Code')}</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control"  name="M_Codes" id="M_Codes" rows=3  placeholder="请输入用户表号,用;号分隔" ></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">操作</label>
+                            <label class="col-sm-2 control-label">{:lang('Operate')}</label>
                             <div class="col-sm-10">
                                 <label class="radio-inline">
-                                    <input type="radio" class="form-control" checked name="option"  value=1>关阀
+                                    <input type="radio" class="form-control" checked name="option"  value=1>{:lang('Close Valve')}
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" class="form-control" name="option"  value=2>开阀
+                                    <input type="radio" class="form-control" name="option"  value=2>{:lang('Open Valve')}
                                 </label>
                             </div>
                         </div>
                         <div class="form-group" style="margin-top: 2vw">
-                            <label class="col-sm-2 control-label">任务执行时间</label>
+                            <label class="col-sm-2 control-label">{:lang('Completion Time')}</label>
                             <div class="col-sm-10">
                                 <div class="input-append date">
                                     <input id="datetimepicker" size="20" name="exectime" type="text" class="form-control" required>
@@ -62,7 +62,7 @@
                         <div class="form-group">
                             <label  class="col-sm-2 control-label"></label>
                             <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="button" onclick="saveData()" >提交</button>
+                                <button style="float: right" class="btn btn-success" type="button" onclick="saveData()" >{:lang('Button')}</button>
                             </div>
                         </div>
                     </form>

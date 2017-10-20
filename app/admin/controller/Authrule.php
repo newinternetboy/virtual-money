@@ -120,7 +120,7 @@ class Authrule extends Admin
 			Log::record(['添加权限失败' => model('AuthRule')->getError(),'data' => json_encode($data)],'error');
 			$this->error('操作失败');
 		}
-		Loader::model('LogRecord')->record( lang('Save AuthRule'),$data );
+		Loader::model('LogRecord')->record('Save AuthRule',$data );
 		$this->success(lang('Save success'));
 	}
 
@@ -136,7 +136,7 @@ class Authrule extends Admin
 			Log::record(['删除权限失败' => model('AuthRule')->getError(),'data' => $id],'error');
 			$this->error('操作失败');
 		}
-		Loader::model('LogRecord')->record( lang('Delete AuthRule'),$id );
+		Loader::model('LogRecord')->record( 'Delete AuthRule',$id );
 		$this->success(lang('Delete succeed'));
 	}
 
@@ -156,7 +156,7 @@ class Authrule extends Admin
 			Log::record(['角色权限保存失败' => model('AuthAccess')->getError(),'data' => json_encode($post_data)],'error');
 			$this->error('操作失败');
 		}
-		Loader::model('LogRecord')->record( lang('Save AuthAccess'),$post_data );
+		Loader::model('LogRecord')->record('Save AuthAccess',$post_data );
 		return $this->success(lang("Save success"),'admin/role/index');
 	}
 }

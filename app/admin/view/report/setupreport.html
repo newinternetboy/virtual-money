@@ -14,7 +14,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="year" class="col-sm-2 control-label">选择年份</label>
+                                    <label for="year" class="col-sm-2 control-label">{:lang('Search Year')}</label>
                                     <div class="col-sm-6">
                                         <input id="year" name="year" value="{$year ?? ''}" type="text" class="form-control">
                                     </div>
@@ -34,8 +34,8 @@
                         <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
                             <thead>
                             <tr>
-                                <th>月份</th>
-                                <th>安装数量</th>
+                                <th>{:lang('months')}</th>
+                                <th>{:lang('Install Number')}</th>
                             </tr>
                             </thead>
                             {foreach $report as $month => $item}

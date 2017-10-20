@@ -109,7 +109,7 @@ class User extends Admin
         }
         unset($data['password']);
         unset($data['password2']);
-        Loader::model('LogRecord')->record( lang('Save User'),$data );
+        Loader::model('LogRecord')->record( 'Save User',$data );
         $this->success(lang('Save success'));
     }
 
@@ -139,7 +139,7 @@ class User extends Admin
             Log::record(['删除用户失败' => model('User')->getError(),'data' => $id],'error');
             $this->error('操作失败');
         }
-        Loader::model('LogRecord')->record( lang('Delete User'),$id );
+        Loader::model('LogRecord')->record( 'Delete User',$id );
         $this->success(lang('Delete succeed'));
     }
 
@@ -176,7 +176,7 @@ class User extends Admin
                 Log::record(['更改密码失败' => model('User')->getError(),'data' => $updateData ],'error');
                 exception(model('User')->getError(),ERROR_CODE_SYS);
             }
-            Loader::model('LogRecord')->record('修改密码',$updateData);
+            Loader::model('LogRecord')->record('Update Password',$updateData);
         } catch (\Exception $e) {
                  $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
                  $ret['msg'] = $e->getMessage();

@@ -9,7 +9,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="M_Code" class="col-sm-2 control-label">表号:</label>
+                                    <label for="M_Code" class="col-sm-2 control-label">{:lang('M_Code')}:</label>
                                     <div class="col-sm-6">
                                         <input name="M_Code" id="M_Code" type="text" class="form-control" placeholder="请输入表号..." value="{$M_Code ?? ''}">
                                     </div>
@@ -17,10 +17,10 @@
                             </div><!-- /.col-lg-6 -->
                              <div class="col-lg-6" style="float: right">
                                 <div class="form-group">
-                                    <label for="M_Address" class="col-sm-2 control-label">安装地址:</label>
+                                    <label for="M_Address" class="col-sm-2 control-label">{:lang('Installation Address')}:</label>
                                     <div class="col-sm-6">
                                         <select id="M_Address" class="form-control" placeholder="请输入表号..." name="M_Address">
-                                            <option value="">请选择区域</option>
+                                            <option value="">{:lang('Please Search')}{:lang('Area')}</option>
                                             {volist name="areas" id="val" }
                                             <option value="{$val.id}" {if condition="$M_Address eq $val.id"}selected{/if}>{$val.name}</option>
                                             {/volist}
@@ -32,7 +32,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="detail_address" class="col-sm-2 control-label">安装位置:</label>
+                                    <label for="detail_address" class="col-sm-2 control-label">{:lang('Detail Address')}:</label>
                                     <div class="col-sm-6">
                                         <input name="detail_address" id="detail_address" type="text" class="form-control" placeholder="请输入详细地址...." value="{$detail_address ?? ''}">
                                     </div>
@@ -42,7 +42,7 @@
                         <div class="form-group">
                             <label  class="col-sm-2 control-label"></label>
                             <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="submit"  >查询</button>
+                                <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
                             </div>
                         </div>
                     </form>
@@ -52,13 +52,13 @@
                             <table class="table table-hover">
                             <thead>
                                 <tr>
-                                   <th>表号</th>
-                                   <th>价格类型</th>
-                                   <th>安装地址</th>
-                                   <th>安装位置</th>
-                                   <th>初始用量</th>
-                                   <th>累计用量</th>
-                                   <th>使用金额</th>
+                                   <th>{:lang('M_Code')}</th>
+                                   <th>{:lang('Price')}{:lang('Price Type')}</th>
+                                   <th>{:lang('Installation Address')}</th>
+                                   <th>{:lang('Detail Address')}</th>
+                                   <th>{:lang('Initial Dosage')}</th>
+                                   <th>{:lang('Cumulative Amount')}</th>
+                                   <th>{:lang('Used Amount')}</th>
                                 </tr>
                             </thead>
                             <tbody>

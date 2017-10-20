@@ -81,7 +81,7 @@ class Area extends Admin
             Log::record(['添加区域失败' => model('Area')->getError(),'data' => $data],'error');
             $this->error(model('Area')->getError());
         }
-        model('LogRecord')->record( lang('Save Area'),$data );
+        model('LogRecord')->record('Save Area',$data );
         $this->success(lang('Save success'));
     }
 
@@ -103,7 +103,7 @@ class Area extends Admin
             Log::record(['删除区域失败' => model('Role')->getError(),'data' => $id],'error');
             $this->error('操作失败');
         }
-        Loader::model('LogRecord')->record( lang('Delete Area'),$id );
+        Loader::model('LogRecord')->record( 'Delete Area',$id );
         $this->success(lang('Delete succeed'));
     }
 }

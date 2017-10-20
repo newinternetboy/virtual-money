@@ -84,7 +84,7 @@ class Price extends Admin
             Log::record(['添加价格失败' => model('Price')->getError(),'data' => $data],'error');
             $this->error(model('Price')->getError());
         }
-        model('LogRecord')->record( lang('Save Price'),$data);
+        model('LogRecord')->record( 'Save Price',$data);
         $this->success(lang('Save success'));
     }
 
@@ -106,7 +106,7 @@ class Price extends Admin
             Log::record(['删除价格失败' => model('Price')->getError(),'data' => $id],'error');
             $this->error('操作失败');
         }
-        Loader::model('LogRecord')->record( lang('Delete Price'),$id );
+        Loader::model('LogRecord')->record( 'Delete Price',$id );
         $this->success(lang('Delete succeed'));
     }
 

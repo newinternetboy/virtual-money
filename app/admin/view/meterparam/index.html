@@ -5,7 +5,7 @@
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
                 <!-- 表单标题概要 -->
                 <div class="ibox-title">
-                    <h5>运行参数</h5>
+                    <h5>{:lang('MeterParam')}</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -26,16 +26,16 @@
                         <thead>
                         <tr>
                             <th data-width="10" data-align="center" data-checkbox="true"></th>
-                            <th data-width="50" data-field="tag" >参数名称</th>
-                            <th data-width="50" data-field="pulseRatio" >脉冲常亮(imp/m³)</th>
-                            <th data-width="50" data-field="lowLimit">低剩余报警(元)</th>
-                            <th data-width="50" data-field="overdraftLimit" >透支限额(元)</th>
-                            <th data-width="50" data-field="overdraftTime" >透支限制时间(天)</th>
+                            <th data-width="50" data-field="tag" >{:lang('MeterParam Name')}</th>
+                            <th data-width="50" data-field="pulseRatio" >{:lang('Pulse Constant(imp/m³)')}</th>
+                            <th data-width="50" data-field="lowLimit">{:lang('Low Residual Alarm (yuan)')}</th>
+                            <th data-width="50" data-field="overdraftLimit" >{:lang('Limit Of Overdrawn Account(YUAN)')}</th>
+                            <th data-width="50" data-field="overdraftTime" >{:lang('Overdraft Limit Time(day)')}</th>
                             <!--<th data-width="50" data-field="MP_FreezeTime" >冻结时间(日)</th>-->
-                            <th data-width="50" data-field="uploadTime" >自动上报时间(时隔小时)</th>
-                            <th data-width="50" data-field="SMSCode" >短信平台号码</th>
-                            <th data-width="50" data-field="transformerRatio" >开机脉冲数</th>
-                            <th data-width="50" data-field="overFlimit" >流量上限(吨/小时)</th>
+                            <th data-width="50" data-field="uploadTime" >{:lang('Automatic Reporting Time (Hour)')}</th>
+                            <th data-width="50" data-field="SMSCode" >{:lang('SMS Platform Number')}</th>
+                            <th data-width="50" data-field="transformerRatio" >{:lang('Boot Pulse Number')}</th>
+                            <th data-width="50" data-field="overFlimit" >{:lang('Upper limit of flow (ton / hour)')}</th>
                             <th data-width="50" data-field="operate"   data-align="center" data-formatter="operateFormatter" data-events="operateEvents">{:lang('Operate')}</th>
                         </tr>
                         </thead>

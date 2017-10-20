@@ -66,7 +66,7 @@ class BlacklistParam extends Admin
             Log::record(['黑名单参数配置失败' => model('BlacklistParam')->getError(),'data' => $data],'error');
             $this->error('操作失败');
         }
-        model('LogRecord')->record('修改黑名单属性成功', $data);
+        model('LogRecord')->record('Update Blacklist Param', $data);
         $this->success(lang('Save success'));
     }
 
@@ -89,7 +89,7 @@ class BlacklistParam extends Admin
             Log::record(['删除黑名单失败' => model('BlacklistParam')->getError(),'data' => $id],'error');
             $this->error('操作失败');
         }
-        Loader::model('LogRecord')->record( '删除黑名单参数',$id );
+        Loader::model('LogRecord')->record( 'Delete Blacklist Param',$id );
         $this->success(lang('Delete succeed'));
     }
 

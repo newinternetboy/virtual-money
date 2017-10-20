@@ -12,7 +12,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="M_Code" class="col-sm-2 control-label">表号</label>
+                                    <label for="M_Code" class="col-sm-2 control-label">{:lang('M_Code')}</label>
                                     <div class="col-sm-6">
                                         <input name="M_Code" id="M_Code" type="text" value="{$M_Code ?? ''}" class="form-control" placeholder="请输入表号...">
                                     </div>
@@ -22,7 +22,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="startTime" class="col-sm-2 control-label">开始时间:</label>
+                                    <label for="startTime" class="col-sm-2 control-label">{:lang('Start Time')}:</label>
                                     <div class="col-sm-6">
                                         <input id="startTime" name="startTime" value="{$startTime ?? ''}" type="text" class="form-control">
                                     </div>
@@ -30,7 +30,7 @@
                             </div><!-- /.col-lg-6 -->
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="endTime" class="col-sm-2 control-label">结束时间:</label>
+                                    <label for="endTime" class="col-sm-2 control-label">{:lang('End Time')}:</label>
                                     <div class="col-sm-6">
                                         <input id="endTime" name="endTime" value="{$endTime ?? ''}" type="text" class="form-control">
                                     </div>
@@ -40,7 +40,7 @@
                         <div class="form-group">
                             <label  class="col-sm-2 control-label"></label>
                             <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="button" onclick="getReport();" >查询</button>
+                                <button style="float: right" class="btn btn-success" type="button" onclick="getReport();" >{:lang('Search')}</button>
                             </div>
                         </div>
                     </form>
@@ -50,11 +50,11 @@
                         <table id="report" class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
                             <thead>
                             <tr>
-                                <th>表号</th>
-                                <th>表具用量</th>
-                                <th>使用金额</th>
-                                <th>采集时间</th>
-                                <th>操作</th>
+                                <th>{:lang('M_Code')}</th>
+                                <th>{:lang('Dosage Of Meter')}</th>
+                                <th>{:lang('Used Amount')}</th>
+                                <th>{:lang('Acquisition Time')}</th>
+                                <th>{:lang('Operate')}</th>
                             </tr>
                             </thead>
                         <!--<tbody>-->
