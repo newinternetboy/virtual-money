@@ -297,6 +297,11 @@ class Index extends Controller
             }
             $updateCur['update_time'] = time();
             db($this->taskTableName)->where(['meter_id' => $meter_id, 'seq_id' => $lastSeq])->update($updateCur);
+        }elseif($lastSeq === null){ //如果是初始化表具,增加task自增seq_id记录
+            $autoIncData['name'] = 'task';
+            $autoIncData['meter_id'] = $meter_id;
+            $autoIncData['seq_id'] = 0;
+            initAuthoIncId('autoinc',$autoIncData);
         }
         //获取下派新任务
         $newTask = db($this->taskTableName)->where(['meter_id' => $meter_id,'status' => TASK_WAITING,'seq_id' => ['>',$lastSeq ? $lastSeq : 0]])->order('seq','asc')->find();
@@ -330,7 +335,7 @@ class Index extends Controller
             }
             $data['meter_id'] = $meterInfo['id'];
             $data['status'] = TASK_WAITING;
-            $data['seq_id'] = getAutoIncId('autoinc',['name' => 'task'],'seq_id',1);
+            $data['seq_id'] = getAutoIncId('autoinc',['name' => 'task','meter_id' => $meterInfo['id']],'seq_id',1);
             $data['create_time'] = time();
             Db::name('task')->insert($data);
         }catch (\Exception $e){

@@ -108,6 +108,10 @@ function getAutoIncId($table, $query, $autoField, $step){
     return $result[0]->value->$autoField;
 }
 
+function initAuthoIncId($table,$data){
+    return Db($table)->insert($data);
+}
+
 function bcryptHash($str){
     $bcrypt = new \bcrypt\Bcrypt();
     return $bcrypt->hashPassword($str);
