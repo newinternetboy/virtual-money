@@ -98,7 +98,6 @@ class logRecord extends Admin
     }
     //解析表具报装
     public function MeterBinding($data){
-        $data = json_decode($data,true);
         return "报装的类型是：".$data['meter']['M_Type']."；表号是：".$data['meter']['M_Code']."；用户是：".$data['consumer']['username'];
     }
     //解析修改黑名单属性成功
@@ -131,6 +130,10 @@ class logRecord extends Admin
     //解析修改运行参数；
     public function UpdateMeterparam($data){
         return "脉冲常量：".$data['pulseRatio']."；低剩余报警：".$data['lowLimit']."；透视限额：".$data['overdraftLimit']."；透支限制时间：".$data['overdraftTime']."；冻结时间：".$data['freezeTime']."；自动上报时间".$data['uploadTime']."；短信平台号码：".$data['SMSCode']."；开机脉冲数：".$data['transformerRatio']."；流量上限：".$data['overFlimit']."；参数名称：".$data['tag'];
+    }
+    //登录成功；
+    public function LoginSucceed($data){
+        return '登录成功';
     }
 
 }

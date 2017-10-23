@@ -72,6 +72,9 @@ class Logrecord extends Admin
                 case 'Edit MeterParam':
                     $vol['data'] = model('LogRecord')->UpdateMeterparam($vol['data']);
                     break;
+                case 'Login succeed':
+                    $vol['data'] = model('LogRecord')->LoginSucceed($vol['data']);
+                    break;
             }
         }
         $this->assign('user_name',$user_name);

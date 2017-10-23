@@ -24,6 +24,15 @@ class Meter extends Admin
      * @return \think\response\View
      */
     public function setup(){
+        $M_Code = input('M_Code');
+        if($M_Code){
+            $where['M_Code'] = $M_Code;
+            $where['company_id'] = ['in',[null,$this->company_id]];
+            $meter = model('Meter')->getMeterInfo($where,'find');
+            $consumer = model('Consumer')->getConsumerById($meter['U_ID']);
+            $this->assign('meter',$meter);
+            $this->assign('consumer',$consumer);
+        }
         $prices = model('Price')->getList(['company_id' => $this->company_id]);
         $this->assign('prices',$prices);
         $areas = model('Area')->getList(['company_id' => $this->company_id]);
@@ -121,6 +130,7 @@ class Meter extends Admin
                 exception('插入报装记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
             model('LogRecord')->record('Save Meter',$data );
+            $ret['meter']=$data['meter']['M_Code'];
         }catch (\Exception $e){
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();

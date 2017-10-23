@@ -82,7 +82,7 @@
                                    <td>{$vo.create_time}</td>
                                    <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{$vo.data}</td>
                                    <td>{$vo.user.username}</td>
-                                   <td><button class="btn btn-primary" data-toggle="modal" data-target="#myModal">内容详情</button></td>
+                                   <td><button class="btn btn-primary record" >内容详情</button></td>
                                 </tr>
                             {/volist}
                             </tbody>
@@ -98,25 +98,6 @@
                                 <p class="form-control" style="border: none">请先在搜索框输入查询条件进行查询，返回符合条件的结果</p>
                             </div>
                         </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" tabindex="-1" id="myModal" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-                    <h3 class="modal-title">{$data['id']?lang('Edit'):lang('Add')}{:lang('Area')}</h3>
-                </div>
-                <div class="modal-body">
-                    <div class="modal-body-content uuu">
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
-                        <button type="submit" class="btn btn-primary">{:lang('Save')}</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -151,24 +132,17 @@
         event.preventDefault();
         event.stopPropagation();
     });
-    var record='';
     $('.record').click(function(){
-        record=$(this).parent().prev().prev().html();
+        var record=$(this).parent().prev().prev().html();
+        layer.open({
+            type: 1 //Page层类型
+            ,area: ['400px', '160px']
+            ,title: '记录内容'
+            ,shade: 0.6 //遮罩透明度
+            ,anim: 1 //0-6的动画形式，-1不开启
+            ,content: '<div style="padding:20px;">'+record+'</div>'
+        });
     })
-    $('#myModal').on('shown.bs.modal', function () {
-        $('.uuu').html(record);
-    })
-//    $('.record').click(function(){
-//        var record=$(this).parent().prev().prev().html();
-//        layer.open({
-//            type: 1 //Page层类型
-//            ,area: ['400px', '160px']
-//            ,title: '记录内容'
-//            ,shade: 0.6 //遮罩透明度
-//            ,anim: 1 //0-6的动画形式，-1不开启
-//            ,content: '<div style="padding:20px;">'+record+'</div>'
-//        });
-//    })
 </script>
 
                    
