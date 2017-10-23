@@ -26,12 +26,17 @@ class Admin extends Common
 	function _initialize()
 	{
 		parent::_initialize();
-		//判断是否已经登录
 
+		//判断是否已经登录
 		if( !Session::has('userinfo', 'admin') ) {
 			$this->error('Please login first', url('admin/Login/index'));
 		}
+
 		$userRow = Session::get('userinfo', 'admin');
+		//判断用户所属平台
+		if($userRow['type'] != PLATFORM_ADMIN){
+			$this->error(lang('Without the permissions page'),url('admin/Login/out'));
+		}
 		//验证权限
 		$request = Request::instance();
 		$rule_val = $request->module().'/'.$request->controller().'/'.$request->action();

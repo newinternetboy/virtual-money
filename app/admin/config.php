@@ -96,7 +96,6 @@ return [
 
     //伪静态
     'url_html_suffix' => false,
-    'user_auth_key'     => 'Astonep@tp-admin!@#$',
 
     'response_auto_output' => false,
     //分页配置

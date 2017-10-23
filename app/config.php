@@ -43,7 +43,7 @@ return [
     // 默认时区
     'default_timezone'       => 'PRC',
     // 是否开启多语言
-    'lang_switch_on'         => true,
+    'lang_switch_on'         => false,
     // 默认全局过滤方法 用逗号分隔多个
     'default_filter'         => '',
     // 默认语言
@@ -62,7 +62,7 @@ return [
     // 禁止访问模块
     'deny_module_list'       => ['common'],
     //允许访问模块
-    'allow_module_list'      => ['www','admin'],
+    'allow_module_list'      => ['manage','admin','api'],
     // 默认控制器名
     'default_controller'     => 'Index',
     // 默认操作名
@@ -233,6 +233,6 @@ return [
         'list_rows' => 10,
     ],
 
-    //写安装程序的时候随即生成authId
-    'user_auth_key' => 'authId',
+    //后台用户密码salt
+    'user_auth_key'     => 'Astonep@tp-admin!@#$',
 ];

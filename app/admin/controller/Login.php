@@ -51,7 +51,11 @@ class Login extends Common
 		unset($ret['data']['password']);
 		Session::set('userinfo', $ret['data'], 'admin');
 		Loader::model('LogRecord')->record( 'Login succeed' );
-		return $this->success($ret['msg'], url('admin/index/index'));
+		if( $ret['data']['type'] == PLATFORM_ADMIN ){
+			return $this->success($ret['msg'], url('admin/index/index'));
+		}else{
+			return $this->success($ret['msg'], url('manage/index/index'));
+		}
 	}
 
 	/**

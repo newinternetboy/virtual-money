@@ -63,8 +63,13 @@ define('CONSUMER_STATE_OLD',15);    //过户(过户前的用户信息)
 //按月统计流量表名
 define('MONTH_FLOW_TABLE_NAME','month_flow_');
 
+/***************task表***************/
 //task状态
 define('TASK_WAITING',1);  //待处理任务
 //define('TASK_SENT',2);     //已下发任务
 define('TASK_SUCCESS',3);  //执行成功
 define('TASK_FAIL',4);     //执行失败
+
+/***************后台用户表***************/
+define('PLATFORM_ADMIN',1);  //运营商后台用户
+define('PLATFORM_MANAGE',2); //清分平台用户
