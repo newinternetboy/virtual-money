@@ -97,7 +97,8 @@ class User extends Admin
             unset($data['id']);
         }
         if( isset($data['id']) ){
-            if( !model('User')->getUsersById($data['id'],$this->company_id) ){
+            $result=model('User')->getUsersById($data['id'],$this->company_id);
+            if( !$result ){
                 $this->error('用户不存在');
             }
         }

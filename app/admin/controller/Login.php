@@ -41,7 +41,7 @@ class Login extends Common
 			//return $this->error( lang('Captcha error') );
 		};
 		$loginData = array(
-			'mobile'=>$postData['mobile'],
+			'login_name'=>$postData['login_name'],
 			'password'=>$postData['password']
 		);
 		$ret = Loader::model('User')->login( $loginData );

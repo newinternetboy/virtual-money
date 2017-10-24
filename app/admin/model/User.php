@@ -29,7 +29,7 @@ class User extends Admin
 			return info($msg, $code);
 		}
 		$map = [
-			'mobile' => $data['mobile'],
+			'login_name' => $data['login_name'],
 			'status' => 1,
 		];
 		$userRow = $this->where($map)->find();
@@ -89,7 +89,7 @@ class User extends Admin
 		if(!$userValidate->scene('add')->check($data)) {
 			return info(lang($userValidate->getError()), 4001);
 		}
-		$user = User::get(['mobile' => $data['mobile']]);
+		$user = User::get(['login_name' => $data['login_name']]);
 		if (!empty($user)) {
 			return info(lang('Mobile already exists'), 0);
 		}
@@ -113,7 +113,7 @@ class User extends Admin
 		if(!$userValidate->scene('edit')->check($data)) {
 			return info(lang($userValidate->getError()), 4001);
 		}
-		$moblie = $this->where(['mobile'=>$data['mobile']])->where('id', '<>', $data['id'])->value('mobile');
+		$moblie = $this->where(['login_name'=>$data['login_name']])->where('id', '<>', $data['id'])->value('login_name');
 		if (!empty($moblie)) {
 			return info(lang('Mobile already exists'), 0);
 		}
@@ -182,4 +182,5 @@ class User extends Admin
 		$ids = explode(',', $id);
 		return $this->where('id', 'in', $ids)->where('company_id', $company_id)->select();
 	}
+
 }
