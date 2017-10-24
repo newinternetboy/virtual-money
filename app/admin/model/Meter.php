@@ -97,4 +97,15 @@ class Meter extends Admin
         }
         return false;
     }
+
+    /**
+     * 更新金额
+     * @param $meter_id
+     * @param $method inc/dec
+     * @param $money
+     * @return false|int
+     */
+    public function updateMoney($meter_id, $method, $field, $money){
+        return $this->where('id', $meter_id)->$method($field, $money)->update([]);
+    }
 }

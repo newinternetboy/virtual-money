@@ -73,3 +73,13 @@ define('TASK_FAIL',4);     //执行失败
 /***************后台用户表***************/
 define('PLATFORM_ADMIN',1);  //运营商后台用户
 define('PLATFORM_MANAGE',2); //清分平台用户
+
+/***************moneyLog表***************/
+//钱类型
+define('MONEY_TYPE_RMB',1); //人民币
+define('MONEY_TYPE_DELI',2); //得力币
+//消费类型
+define('MONEY_PAY',1); //消费
+define('MONEY_PERSON',2); //个人电商中消费
+define('MONEY_COMPANY',3); //企业电商中消费
+define('MONEY_DELI',4); //得力专供中消费
