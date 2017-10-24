@@ -14,7 +14,11 @@ return [
         // 日志保存目录
         'path'  => LOG_PATH,
         // 日志记录级别
-        'level' => ['error'],
+        'level' => [],
+    ],
+
+    'whitelist' => [
+        
     ],
 
 ];

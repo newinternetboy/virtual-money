@@ -63,8 +63,8 @@ class Login extends Common
 	 */
 	public function out()
 	{
-		session::clear('admin');
 		Loader::model('LogRecord')->record('Logout succeed');
+		session::clear('admin');
 		return $this->success('退出成功！', url('admin/login/index'));
 	}
 }
