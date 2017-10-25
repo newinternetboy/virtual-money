@@ -98,6 +98,7 @@ class Meter extends Admin
             }
             //插入报装用户信息
             $data['consumer']['M_Code'] = $data['meter']['M_Code'];
+            $data['consumer']['meter_id'] = $meter['id'];
             $data['consumer']['password'] = bcryptHash(substr($meter['M_Code'],-6));
             $data['consumer']['company_id'] = $this->company_id;
             $data['consumer']['consumer_state'] = CONSUMER_STATE_NORMAL;
@@ -186,6 +187,7 @@ class Meter extends Admin
             //插入新用户
             Loader::clearInstance(); //框架是单例模式,初始化更新旧用户时实例化的对象,否则插入新用户受干扰
             $new_consumer['M_Code'] = $M_Code;
+            $new_consumer['meter_id'] = $old_consumer['meter_id'];
             $data['consumer']['password'] = (new \bcrypt\Bcrypt())->hashPassword(substr($meter['M_Code'],-6));
             $new_consumer['consumer_state'] = CONSUMER_STATE_NORMAL;
             $new_consumer['company_id'] = $this->company_id;
@@ -297,6 +299,7 @@ class Meter extends Admin
             //更新用户表号和密码
             $consumerInfo['id'] = $old_meter['U_ID'];
             $consumerInfo['M_Code'] = $new_meter['M_Code'];
+            $consumerInfo['meter_id'] = $new_meter['id'];
             $consumerInfo['password'] = bcryptHash(substr($new_meter['M_Code'],-6));
             if( !model('Consumer')->upsertConsumer($consumerInfo,'Consumer.changeMeter') ){
                 $error = model('Consumer')->getError();
