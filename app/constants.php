@@ -83,3 +83,8 @@ define('MONEY_PAY',1); //消费
 define('MONEY_PERSON',2); //个人电商中消费
 define('MONEY_COMPANY',3); //企业电商中消费
 define('MONEY_DELI',4); //得力专供中消费
+
+/***************运营商表***************/
+//charge_status
+define('UNCHARGE',1); //未收费
+define('CHARGED',2); //已收费
