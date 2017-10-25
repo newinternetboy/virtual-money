@@ -15,7 +15,7 @@ return [
     'Input error'         => '输入错误',
     'Login failed'        => '登录失败',
     'Login succeed'       => '登录成功',
-    'login name'          => '登录名',
+    'login name'          => '账号',
     'login_name already'  => '登录名已存在',
     'Without the permissions page' => '对不起,您无该操作权限',
     'Please login first' => '请先登录',
@@ -36,7 +36,8 @@ return [
     'Captcha' => '验证码',
     'Captcha error'  => '验证码错误',
     'login_name require' => '登录名必须',
-    'Operation fail'    => '操作失败！',
+    'Operation fail'    => '操作失败 ',
+    'Operation Success'    => '操作成功 ',
     'show graph'      => '显示图形',
     'Please Search Year' => '请选择年份',
     'Execution time can not be earlier than current time'  => '执行时间不能早于当前时间',
@@ -77,7 +78,7 @@ return [
     'Operate' => '操作',
     'Operate People' => '操作人',
     'Search All'     => '选全部',
-    'Login Name' => '登录名',
+    'Login Name' => '账号',
     'Name' => '姓名',
     'Mobile Number' => '手机号码',
     'Password' => '密码',
@@ -286,7 +287,8 @@ return [
 
     /******************************清分系统**************************/
     'Manage'                            => '管理',
-    'Require'                           => '必须',
+    'Operation'                         => '操作',
+
     //运营管理
     'Operation Management'              => '运营管理',
     'Company Name'                      => '名称',
@@ -340,4 +342,23 @@ return [
     'Left Times Require'                       => '剩余次数必须',
     'Desc Require'                             => '备注必须',
     'Alarm Tel Require'                        => '报警电话必须',
+    'Status Require'                           => '运营商状态必须',
+    'Confirm Delete Company'                   => '请确认是否要删除运营商',
+    'OPT_ID Not Exist'                         => '运营商编号不存在',
+    'Add/Edit Company'                         => '添加/编辑运营商',
+    'Del Company'                              => '删除运营商',
+
+    //运营商管理
+    'Company Management'                => '运营商管理',
+    'Company Info'                      => '运营商信息',
+    'User Status'                       => '账户状态',
+    'User Name Require'                 => '姓名必须',
+    'Login Name Require'                => '账号必须',
+    'Password Require'                  => '密码必须',
+    'Confirm Password Require'          => '确认密码必须',
+    'UKEY Require'                      => 'UKEY必须',
+    'Status Require'                    => '账号状态必须',
+    'Role Require'                      => '账号角色必须',
+    'Password and Confirm Password inconsistent'    => '密码与确认密码不一致',
+
 ];
