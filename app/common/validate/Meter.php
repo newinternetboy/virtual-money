@@ -25,20 +25,20 @@ class Meter extends Validate
     ];
 
     protected $message  =   [
-        'M_Type.require'                => '表具类型必须',
-        'M_Code.require'                => '表号必须',
-        'P_ID.require'                  => '价格类型必须',
-        'U_ID.require'                  => '用户必须',
-        'M_Address.require'             => '地址必须',
-        'detail_address.require'        => '详细地址必须',
-        'change_reason.require'         => '换表原因必须',
-        'meter_status.require'          => '表具状态必须',
-        'meter_life.require'            => '表具活跃状态必须',
-        'company_id.require'            => '公司id必须',
-        'balance.require'               => '余额必须',
-        'initialCube.require'           => '初始用量必须',
-        'totalCube.require'             => '累计用量必须',
-        'totalCost.require'             => '累计金额必须'
+        'M_Type.require'                => '{%Meter Type Require}',
+        'M_Code.require'                => '{%Meter Code Require}',
+        'P_ID.require'                  => '{%Price Type Require}',
+        'U_ID.require'                  => '{%User Require}',
+        'M_Address.require'             => '{%M_Address Require}',
+        'detail_address.require'        => '{%Detail Address Require}',
+        'change_reason.require'         => '{%Change Reason Require}',
+        'meter_status.require'          => '{%Meter Status Require}',
+        'meter_life.require'            => '{%Meter Life Status Require}',
+        'company_id.require'            => '{%Company_id Require}',
+        'balance.require'               => '{%Balance Require}',
+        'initialCube.require'           => '{%Initial Cube Require}',
+        'totalCube.require'             => '{%Total Cube Require}',
+        'totalCost.require'             => '{%Total Cost Require}'
     ];
 
     protected $scene = [

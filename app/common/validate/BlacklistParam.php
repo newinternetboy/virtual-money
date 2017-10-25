@@ -14,10 +14,10 @@ class BlacklistParam extends Validate
     ];
 
     protected $message  =   [
-        'param_name.require'            => '参数代号必须',
-        'desc.require'                   => '参数描述必须',
-        'param_type.require'            => '参数类型必须',
-        'opt_id.require'                => '参数必须',
+        'param_name.require'            => '{%Param_name Require}',
+        'desc.require'                   => '{%Param Desc Require}',
+        'param_type.require'            => '{%Param Type Require}',
+        'opt_id.require'                => '{%Param Require}',
     ];
 }
 

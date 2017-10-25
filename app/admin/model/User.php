@@ -91,7 +91,7 @@ class User extends Admin
 		}
 		$user = User::get(['login_name' => $data['login_name']]);
 		if (!empty($user)) {
-			return info(lang('Mobile already exists'), 0);
+			return info(lang('login_name already exists'), 0);
 		}
 		if($data['password2'] != $data['password']){
             return info(lang('The password is not the same twice'), 0);
@@ -115,7 +115,7 @@ class User extends Admin
 		}
 		$moblie = $this->where(['login_name'=>$data['login_name']])->where('id', '<>', $data['id'])->value('login_name');
 		if (!empty($moblie)) {
-			return info(lang('Mobile already exists'), 0);
+			return info(lang('login_name already exists'), 0);
 		}
 
 		if($data['password2'] != $data['password']){

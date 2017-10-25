@@ -22,12 +22,12 @@ class Valve extends Validate
     ];
 
     protected $message  =   [
-        'valve_type.require'    => '控制方式必须',
-        'valve_type.in'         => '控制方式状态有误',
-        'data.require'          => '数据必须',
-        'option.require'        => '操作方式必须',
-        'option.in'             => '操作方式状态有误',
-        'exectime.require'      => '执行时间必须'
+        'valve_type.require'    => '{%Valve Type Require}',
+        'valve_type.in'         => '{%The state of the control mode is incorrect}',
+        'data.require'          => '{%Date Require}',
+        'option.require'        => '{%Opeation Type Require}',
+        'option.in'             => '{%Operation state error}',
+        'exectime.require'      => '{%Exectime Require}'
     ];
 
     protected $scene = [
