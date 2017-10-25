@@ -27,15 +27,15 @@ class MeterParam extends Validate
     ];
 
     protected $message  =   [
-        'pulseRatio.require'        => '脉冲常量必须',
-        'lowLimit.require'          => '低剩余报警必须',
-        'overdraftLimit.require'    => '透支限额必须',
-        'overdraftTime.require'     => '透支限制时间必须',
-        'freezeTime.require'        => '冻结时间必须',
-        'uploadTime.require'        => '自动上报时间必须',
-        'SMSCode.require'           => '短信平台号码必须',
-        'transformerRatio.require'  => '开机脉冲数必须',
-        'overFlimit.require'               => '流量上限必须',
-        'tag.require'        => '备用字段必须',
+        'pulseRatio.require'        => '{%PulseRatio Require}',
+        'lowLimit.require'          => '{%Low Residual Alarm Require}',
+        'overdraftLimit.require'    => '{%Overdraft Limit Require}',
+        'overdraftTime.require'     => '{%Overdraft Time Require}',
+        'freezeTime.require'        => '{%Freeze Time Require}',
+        'uploadTime.require'        => '{%Upload Record Time Require}',
+        'SMSCode.require'           => '{%SMS Code Require}',
+        'transformerRatio.require'  => '{%TransformerRatio Require}',
+        'overFlimit.require'        => '{%OverFlimit Require}',
+        'tag.require'               => '{%Tag Require}',
     ];
 }

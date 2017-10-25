@@ -14,10 +14,10 @@ class Area extends Validate
     ];
 
     protected $message  =   [
-        'name.require'              => '区域名称必须',
-        'belong.require'            => '区域所属必须',
-        'desc.require'              => '备注必须',
-        'address.require'           => '基础价格必须',
+        'name.require'              => '{%Area Name Require}',
+        'belong.require'            => '{%Area Belong Require}',
+        'desc.require'              => '{%Desc Require}',
+        'address.require'           => '{%Address Require}',
     ];
 }
 

@@ -14,11 +14,11 @@ class User extends Validate
     ];
 
     protected $message  =   [
-        'login_name.require'        => 'login_name require',
-        'login_name.length'         => 'Please enter a correct login_name',
-        'password.require'      => '密码必须',
-        'password.length'       => '密码长度6-16位',
-        'company_id.require'    => '公司id必须',
+        'login_name.require'        => '{%login_name require}',
+        'login_name.length'         => '{%Please enter a correct login_name}',
+        'password.require'          => '{%Password Require}',
+        'password.length'           => '{%The Password Length Is 6-16 Bits}',
+        'company_id.require'        => '{%Company_id Require}',
     ];
 
     protected $scene = [

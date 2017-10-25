@@ -24,13 +24,13 @@ class Consumer extends Validate
     ];
 
     protected $message  =   [
-        'M_Code.require'                => '表号必须',
-        'username.require'              => '姓名必须',
-        'tel.require'                   => '电话号码必须',
-        'identity.require'              => '身份证号必须',
-        'company_id.require'            => '公司id必须',
-        'consumer_state.require'        => '用户状态必须',
-        'password.require'              => '用户密码必须',
+        'M_Code.require'                => '{%M_Code Require}',
+        'username.require'              => '{%Username Require}',
+        'tel.require'                   => '{%Telephone Require}',
+        'identity.require'              => '{%Identity Require}',
+        'company_id.require'            => '{%Company_id Require}',
+        'consumer_state.require'        => '{%Consumer_State Require}',
+        'password.require'              => '{%Password Require}',
     ];
 
     protected $scene = [

@@ -21,17 +21,17 @@ class Price extends Validate
     ];
 
     protected $message  =   [
-        'name.require'              => '价格名称必须',
-        'type.require'              => '类型必须',
-        'period.require'            => '周期必须',
-        'first_price.require'       => '第一阶梯价格必须',
-        'first_val.require'         => '第一阶梯量必须',
-        'second_price.require'      => '第二阶梯价格必须',
-        'second_val.require'        => '第二阶梯量必须',
-        'third_price.require'       => '第三阶梯价格必须',
-        'third_val.require'         => '第三阶梯量必须',
-        'fourth_price.require'      => '第四阶梯价格必须',
-        'endtime.require'           => '结束时间必须',
+        'name.require'              => '{%Price Name Require}',
+        'type.require'              => '{%Type Require}',
+        'period.require'            => '{%Period Require}',
+        'first_price.require'       => '{%First Price Require}',
+        'first_val.require'         => '{%First value Require}',
+        'second_price.require'      => '{%Second Price Require}',
+        'second_val.require'        => '{%Secong Value Require}',
+        'third_price.require'       => '{%Third Price Require}',
+        'third_val.require'         => '{%Third Value Require}',
+        'fourth_price.require'      => '{%Fourth Price Require}',
+        'endtime.require'           => '{%End Time Require}',
     ];
 }
 

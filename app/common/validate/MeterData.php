@@ -24,12 +24,12 @@ class MeterData extends Validate
     ];
 
     protected $message  =   [
-        'meter_id.require'                => '表具id必须',
-        'M_Code.require'                  => '表号必须',
-        'U_ID.require'                    => '用户id必须',
-        'company_id.require'              => '公司id必须',
-        'source_type.require'             => '数据来源必须',
-        'action_type.require'             => '操作行为必须',
+        'meter_id.require'                => '{%Meter Id Require}',
+        'M_Code.require'                  => '{%M_Code Require}',
+        'U_ID.require'                    => '{%User Id Require}',
+        'company_id.require'              => '{%Company_id Require}',
+        'source_type.require'             => '{%Data Sources Require}',
+        'action_type.require'             => '{%Action Type Require}',
     ];
 
     protected $scene = [
