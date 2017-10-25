@@ -23,7 +23,7 @@
                             <div class="form-group" style="margin-bottom: 50px">
                                 <div class="col-md-10">
                                     <div class="input-group">
-                                        <input class="form-control" type="text" placeholder="请输入表号" name="M_Code"
+                                        <input class="form-control" type="text" placeholder="{:lang('Please enter M_Code')}" name="M_Code"
                                                id="M_Code">
                                             <span class="input-group-addon">
                                                 <i class="fa fa-search"></i>
@@ -118,7 +118,7 @@
 
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入用户姓名"
+                                            <input class="form-control" type="text" placeholder="{:lang('Please enter username')}"
                                                    name="new_username" id="new_username">
                                         <span class="input-group-addon">
                                             <i class="fa fa-user fa-fw"></i>
@@ -131,7 +131,7 @@
 
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入联系电话"
+                                            <input class="form-control" type="text" placeholder="{:lang('Please enter mobile')}"
                                                    name="new_telephone" id="new_telephone">
                                         <span class="input-group-addon">
                                             <i class="fa fa-phone fa-fw"></i>
@@ -144,7 +144,7 @@
 
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入联系电话"
+                                            <input class="form-control" type="text" placeholder="{:lang('Please enter')}{:lang('PIN-codes')}"
                                                    name="new_identity" id="new_identity">
                                         <span class="input-group-addon">
                                             <i class="fa fa-credit-card fa-fw"></i>
@@ -157,7 +157,7 @@
 
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入家庭人数"
+                                            <input class="form-control" type="text" placeholder="{:lang('Please enter')}{:lang('Family Size')}"
                                                    name="family_num" id="family_num">
                                         <span class="input-group-addon">
                                             <i class="fa fa-users fa-fw"></i>
@@ -170,7 +170,7 @@
 
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入住宅面积(单位:m²)"
+                                            <input class="form-control" type="text" placeholder="{:lang('Please enter')}{:lang('Residential Buildings')}({:lang('Unit:m²')})"
                                                    name="building_area" id="building_area">
                                         <span class="input-group-addon">
                                             <i class="fa fa-home fa-fw"></i>
@@ -183,7 +183,7 @@
 
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入年均收入(单位:元)"
+                                            <input class="form-control" type="text" placeholder="{:lang('Please enter')}{:lang('Annual Income')}({:lang('Unit:yuan')})"
                                                    name="income_peryear" id="income_peryear">
                                         <span class="input-group-addon">
                                             <i class="fa fa-money fa-fw"></i>
@@ -192,10 +192,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group" style="color:red">
-                                    <label class="col-sm-2 control-label">操作提示:</label>
+                                    <label class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
 
                                     <div class="col-sm-10">
-                                        <p class="form-control" style="border: none">请先在搜索框输入表号进行查询，返回符合条件的结果,再进行操作</p>
+                                        <p class="form-control" style="border: none">{:lang('Please in the search box enter the query query, return the result')}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -238,11 +238,11 @@
                     }
                 },
                 error: function () {
-                    alertMsg("操作失败！");
+                    alertMsg("{:lang('Operation fail')}");
                 }
             })
         } else {
-            alertMsg("请先填写表号");
+            alertMsg("{:lang('Please fill in the form M_Code first')}");
         }
 
     })
@@ -269,11 +269,11 @@
             //$('#left').text(consumer.left);
             $('#address').text(meter.area + ' ' + meter.detail_address);
             if (meter.M_Type == "{$Think.const.METER_TYPE_WATER}") {
-                $('#M_Type').text("水表");
+                $('#M_Type').text("{:lang('Water Code')}");
             } else if (meter.M_Type == "{$Think.const.METER_TYPE_ELECTRICITY}") {
-                $('#M_Type').text("电表");
+                $('#M_Type').text("{:lang('Electric Code')}");
             } else if (meter.M_Type == "{$Think.const.METER_TYPE_GAS}") {
-                $('#M_Type').text("气表");
+                $('#M_Type').text("{:lang('Gas Code')}");
             }
         }
     }
@@ -311,7 +311,7 @@
                     }
                 },
                 error: function () {
-                    alertMsg("操作失败！");
+                    alertMsg("{:lang('Operation fail')}");
                 }
             })
         }
@@ -319,22 +319,22 @@
 
     function check(consumer) {
         if (consumer.username == "" || consumer.username == null || consumer.username == "undefined") {
-            alertMsg("请先填写姓名");
+            alertMsg("{:lang('Please fill in name')}");
             return false;
         }
         if (consumer.tel == "" || consumer.tel == null || consumer.tel == "undefined") {
-            alertMsg("请先填写电话");
+            alertMsg("{:lang('Please fill in mobile')}");
             return false;
         }
         if (!checkTelephone(consumer.tel)) {
             return false;
         }
         if (consumer.identity == "" || consumer.identity == null || consumer.identity == "undefined") {
-            alertMsg("请先填写身份证号");
+            alertMsg("{:lang('Please enter')}{:lang('PIN-codes')}");
             return false;
         }
         if (!checkCard(consumer.identity)) {
-            alertMsg("请输入正确的身份证号码");
+            alertMsg("{:lang('Please enter')}{:lang('true')}{:lang('PIN-codes')}");
             return false;
         }
         return true;

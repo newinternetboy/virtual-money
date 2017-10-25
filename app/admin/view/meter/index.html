@@ -22,7 +22,7 @@
                     <div class="form-group">
                         <div class="col-lg-6" style="float: right">
                             <div class="input-group">
-                                <input id="M_Code_S" type="text" class="form-control" placeholder="请输入表号...">
+                                <input id="M_Code_S" type="text" class="form-control" placeholder="{:lang('Please enter M_Code')}">
                                         <span class="input-group-btn">
                                             <button id="search" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> </button>
                                         </span>
@@ -69,11 +69,11 @@
                     }
                 },
                 error:function(){
-                    alertMsg("操作失败！");
+                    alertMsg("{:lang('Operation fail')}");
                 }
             })
         }else{
-            alertMsg("请先填写表号");
+            alertMsg("{:lang('Please fill in the form M_Code first')}");
         }
     })
 
@@ -81,15 +81,15 @@
         $("#table  tr:not(:first)").empty("");
         var meter = res.meter;
         if( meter.M_Type == "{$Think.const.METER_TYPE_WATER}" ){
-            var mtype = "水表";
+            var mtype = "{:lang('Water Code')}";
         }else if(meter.M_Type == "{$Think.const.METER_TYPE_ELECTRICITY}"){
-            var mtype = "电表";
+            var mtype = "{:lang('Electric Code')}";
         }else if(meter.M_Type == "{$Think.const.METER_TYPE_GAS}"){
-            var mtype = "气表";
+            var mtype = "{:lang('Gas Code')}";
         }else{
-            var mtype = "无";
+            var mtype = "{:lang('None')}";
         }
-        var address = meter.meter_status ? meter.area +' '+ meter.detail_address : "无";
+        var address = meter.meter_status ? meter.area +' '+ meter.detail_address : "{:lang('None')}";
         var html = '<tr>' +
                         '<th data-width="50">'+ meter.M_Code +'</th>' +
                         '<th data-width="50"  >'+ mtype +'</th>' +
@@ -103,7 +103,7 @@
 
 function del(M_Code){
     if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
-        alertConfirm('确认删除表具 '+M_Code+ ' ?',function(){
+        alertConfirm("{:lang('Confirm delete meter')}"+M_Code+ ' ?',function(){
             $.ajax({
                 url:"{:url('admin/meter/delete')}",
                 method:'post',
@@ -117,12 +117,12 @@ function del(M_Code){
                     }
                 },
                 error:function(){
-                    alertMsg("操作失败！");
+                    alertMsg("{:lang('Operation fail')}");
                 }
             })
          });
     }else{
-        alertMsg("请先填写表号");
+        alertMsg("{:lang('Please fill in the form M_Code first')}");
     }
 }
 </script>

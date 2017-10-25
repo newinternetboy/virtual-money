@@ -14,7 +14,7 @@
                                 <div class="form-group">
                                     <label for="M_Code" class="col-sm-2 control-label">{:lang('M_Code')}</label>
                                     <div class="col-sm-6">
-                                        <input name="M_Code" id="M_Code" type="text" value="{$M_Code ?? ''}" class="form-control" placeholder="请输入表号...">
+                                        <input name="M_Code" id="M_Code" type="text" value="{$M_Code ?? ''}" class="form-control" placeholder="{:lang('Please enter M_Code')}">
                                     </div>
                                 </div><!-- /input-group -->
                             </div><!-- /.col-lg-6 -->
@@ -96,7 +96,7 @@
         var d1 = startTime.replace(regEx,"/");
         var d2 = endTime.replace(regEx,"/");
         if( d1 > d2 ){
-            alertMsg('开始日期不能大于结束日期');
+            alertMsg("{:lang('The start date cannot be greater than the end date')}");
             return false;
         }
         var data = {M_Code: M_Code, startTime: startTime, endTime: endTime};
@@ -122,7 +122,7 @@
                 }
             },
             error:function(){
-                alertMsg("操作失败！");
+                alertMsg("{:lang('Operation fail')}");
             }
         })
 

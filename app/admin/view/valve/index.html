@@ -35,7 +35,7 @@
                             <div class="form-group">
                                 <label for="M_Codes" class="col-sm-2 control-label">{:lang('M_Code')}</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control"  name="M_Codes" id="M_Codes" rows=3  placeholder="请输入用户表号,用;号分隔" ></textarea>
+                                    <textarea class="form-control"  name="M_Codes" id="M_Codes" rows=3  placeholder="{:lang("Please enter the user's table number, use ；separation")}" ></textarea>
                                 </div>
                             </div>
                         </div>
@@ -127,7 +127,7 @@
         if( valve_type == "1" ){
             var M_Codes = $('#M_Codes').val();
             if( M_Codes == '' || M_Codes == null || M_Codes == 'undefined' ){
-                alertMsg('请先填写表号');
+                alertMsg("{:lang('Please fill in the form M_Code first')}");
                 return false;
             }
             if( M_Codes.indexOf('；') > 0 ){
@@ -138,7 +138,7 @@
         }else{
             var area = $('#area').val();
             if( area == '' || area == null || area == 'undefined' ){
-                alertMsg('请先选择区域');
+                alertMsg("{:lang('Please Search area first')}");
                 return false;
             }
             var data = {valve_type: valve_type, area: area, option: option, exectime: exectime};
@@ -156,7 +156,7 @@
                 }
             },
             error:function(){
-                alertMsg("操作失败！");
+                alertMsg("{:lang('Operation fail')}");
             }
         })
     }
@@ -166,7 +166,7 @@
         var exectime = eval('new Date(' + strTime.replace(/\d+(?=-[^-]+$)/,function (a) { return parseInt(a, 10) - 1; }).match(/\d+/g) + ')');
         var currentTime = new Date();
         if( exectime <=  currentTime ){
-            alertMsg('执行时间不能早于当前时间');
+            alertMsg("{:lang('Execution time can not be earlier than current time')}");
             return false;
         }
         return true;
