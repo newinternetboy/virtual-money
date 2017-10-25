@@ -73,11 +73,11 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input class="form-control"  name="detail_address" id="detail_address" placeholder="请输入详细地址"  >
+                                        <input class="form-control"  name="detail_address" id="detail_address" placeholder="{:lang('Please enter')}{:lang('Area Address')}"  >
                                     </div>
                                 </div>
                             </div>
-                            <h5>附加资料</h5>
+                            <h5>{:lang('Additional Resources')}</h5>
                             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
                             <div id="addtion">
                                 <div class="form-group">
@@ -89,26 +89,26 @@
                                 <div class="form-group">
                                     <label for="building_area" class="col-sm-2 control-label">{:lang('Residential Buildings')}</label>
                                     <div class="col-sm-10">
-                                        <input class="form-control"  name="building_area" id="building_area" placeholder="单位:m²" >
+                                        <input class="form-control"  name="building_area" id="building_area" placeholder="{:lang('Unit:m²')}" >
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="income_peryear" class="col-sm-2 control-label">{:lang('Annual Income')}</label>
                                     <div class="col-sm-10">
-                                        <input class="form-control"  name="income_peryear" id="income_peryear" placeholder="单位:元">
+                                        <input class="form-control"  name="income_peryear" id="income_peryear" placeholder="{:lang('Unit:yuan')}">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group" style="color:red">
-                                <label  class="col-sm-2 control-label">操作提示:</label>
+                                <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
                                 <div class="col-sm-10">
-                                    <p class="form-control" style="border: none">在表号输入框内输入表号，返回符合条件的结果,再进行操作</p>
+                                    <p class="form-control" style="border: none">{:lang('Please in the search box enter the query query, return the result')}</p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label  class="col-sm-2 control-label"></label>
                                 <div class="col-sm-10">
-                                    <button style="float: right" class="btn btn-success" type="button" onclick="editMeter()" >修改</button>
+                                    <button style="float: right" class="btn btn-success" type="button" onclick="editMeter()" >{:lang('Edit')}</button>
                                 </div>
                             </div>
                         </div>
@@ -138,11 +138,11 @@
                     }
                 },
                 error:function(){
-                    alertMsg("操作失败！");
+                    alertMsg("{:lang('Operation fail')}");
                 }
             })
         }else{
-            alertMsg("请先填写表号");
+            alertMsg("{:lang('Please fill in the form M_Code first')}");
         }
 
     })
@@ -200,14 +200,14 @@
                 }
             },
             error:function(){
-                alertMsg("操作失败！");
+                alertMsg("{:lang('Operation fail')}");
             }
         })
     }
 
     function check(meter,consumer){
         if( meter.M_Code == "" || meter.M_Code == null || meter.M_Code == "undefined"){
-            alertMsg("请先填写表号");
+            alertMsg("{:lang('Please fill in the form M_Code first')}");
             return false;
         }
 //        if( meter.P_ID == "" || meter.P_ID == null || meter.P_ID == "undefined"){
@@ -215,19 +215,19 @@
 //            return false;
 //        }
         if( meter.M_Address == "" || meter.M_Address == null || meter.M_Address == "undefined"){
-            alertMsg("请先选择安装地址");
+            alertMsg("{:lang('Please select the installation address first')}");
             return false;
         }
         if( meter.detail_address == "" || meter.detail_address == null || meter.detail_address == "undefined"){
-            alertMsg("请先填写详细地址");
+            alertMsg("{:lang('Please fill in detail address')}");
             return false;
         }
         if( consumer.username == "" || consumer.username == null || consumer.username == "undefined"){
-            alertMsg("请先填写姓名");
+            alertMsg("{:lang('Please fill in name')}");
             return false;
         }
         if( consumer.tel == "" || consumer.tel == null || consumer.tel == "undefined"){
-            alertMsg("请先填写电话");
+            alertMsg("{:lang('Please fill in mobile')}");
             return false;
         }
         if(!checkTelephone(consumer.tel)){

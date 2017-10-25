@@ -24,9 +24,9 @@
                         <form id="save" action="{:url('admin/meter/saveData')}" method="post" class="form-horizontal" role="form" novalidate="novalidate">
 
                             <fieldset>
-                                <legend>表具资料</legend>
+                                <legend>{:lang('M_Code Resources')}</legend>
                                 <div class="form-group">
-                                    <label for="M_Type" class="col-md-2 control-label">表具类型</label>
+                                    <label for="M_Type" class="col-md-2 control-label">{:lang('Meter Type')}</label>
                                     <div class="col-md-10">
                                         {foreach $company_type as $type}
                                         <label class="radio radio-inline">
@@ -47,7 +47,7 @@
                                     <label for="M_Code" class="col-md-2 control-label">{:lang('M_Code')}</label>
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入表号" name="M_Code" id="M_Code" value="{$meter.M_Code ?? ''}" required>
+                                            <input class="form-control" type="text" placeholder="{:lang('Please enter M_Code')}" name="M_Code" id="M_Code" value="{$meter.M_Code ?? ''}" required>
                                         <span class="input-group-addon">
                                             <i class="fa fa-warning"></i>
                                         </span>
@@ -78,7 +78,7 @@
                                     <label for="username" class="col-md-2 control-label">{:lang('Name')}</label>
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入用户姓名" name="username" value="{$consumer.username ?? ''}" id="username">
+                                            <input class="form-control" type="text" placeholder="{:lang('Please enter username')}" name="username" value="{$consumer.username ?? ''}" id="username">
                                         <span class="input-group-addon">
                                             <i class="fa fa-user fa-fw"></i>
                                         </span>
@@ -89,7 +89,7 @@
                                     <label for="tel" class="col-md-2 control-label">{:lang('Contact Number')}</label>
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入联系电话" name="tel" value="{$consumer.tel ?? ''}" id="tel">
+                                            <input class="form-control" type="text" placeholder="{:lang('Please enter mobile')}" name="tel" value="{$consumer.tel ?? ''}" id="tel">
                                         <span class="input-group-addon">
                                             <i class="fa fa-phone fa-fw"></i>
                                         </span>
@@ -100,7 +100,7 @@
                                     <label for="identity" class="col-md-2 control-label">{:lang('PIN-codes')}</label>
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入身份证号" name="identity" value="{$consumer.identity ?? ''}" id="identity">
+                                            <input class="form-control" type="text" placeholder="{:lang('Please enter')}{:lang('PIN-codes')}" name="identity" value="{$consumer.identity ?? ''}" id="identity">
                                         <span class="input-group-addon">
                                             <i class="fa fa-credit-card fa-fw"></i>
                                         </span>
@@ -127,7 +127,7 @@
                                     <label for="detail_address" style="display: none"></label>
                                     <div class="col-md-12" style="padding-left: 0">
                                         <div class="input-group">
-                                            <input class="form-control" style="float: right" type="text" placeholder="请输入详细地址" value="{$meter.detail_address ?? ''}" name="detail_address" id="detail_address" required>
+                                            <input class="form-control" style="float: right" type="text" placeholder="{:lang('Please enter')}{:lang('detail address')}" value="{$meter.detail_address ?? ''}" name="detail_address" id="detail_address" required>
                                             <span class="input-group-addon">
                                                 <i class="fa fa-map-marker fa-fw"></i>
                                             </span>
@@ -142,7 +142,7 @@
                                     <label for="family_num" class="col-md-2 control-label">{:lang('Family Size')}</label>
                                     <div class="col-md-4">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入家庭人数" name="family_num" value="{$consumer.family_num ?? ''}" id="family_num">
+                                            <input class="form-control" type="text" placeholder="{:lang('Please enter')}{:lang('Family Size')}" name="family_num" value="{$consumer.family_num ?? ''}" id="family_num">
                                         <span class="input-group-addon">
                                             <i class="fa">人</i>
                                         </span>

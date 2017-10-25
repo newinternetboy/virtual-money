@@ -21,14 +21,14 @@
                             <div class="form-group" style="margin-bottom: 50px">
                                 <div class="col-md-10">
                                     <div class="input-group">
-                                        <input class="form-control" type="text" placeholder="请输入表号" name="M_Code" id="M_Code">
+                                        <input class="form-control" type="text" placeholder="{:lang('Please enter M_Code')}" name="M_Code" id="M_Code">
                                             <span class="input-group-addon">
                                                 <i class="fa fa-search"></i>
                                             </span>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <button id="search" class="btn btn-primary" type="button" style="width: 100%;">查询</button>
+                                    <button id="search" class="btn btn-primary" type="button" style="width: 100%;">{:lang('Search')}</button>
                                 </div>
                             </div>
                             <hr style="height:1px;border:none;border-top:1px solid #aaaaaa;" />
@@ -73,7 +73,7 @@
 
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入新表号"
+                                            <input class="form-control" type="text" placeholder="{:lang('Please enter M_Code')}"
                                                    name="new_M_Code" id="new_M_Code">
                                         <span class="input-group-addon">
                                             <i class="fa fa-user fa-fw"></i>
@@ -122,7 +122,7 @@
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 
                         <!--原表信息-->
-                        <h5>原表信息</h5>
+                        <h5>{:lang('Old Meter Message')}</h5>
                         <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
                         <div id="meterInfo">
                             <label for="M_Code_P" class="col-sm-2 control-label">{:lang('M_Code')}</label>
@@ -167,15 +167,15 @@
                                 </div>
                             </div>
                         <div class="form-group" style="color:red">
-                            <label  class="col-sm-2 control-label">操作提示:</label>
+                            <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
                             <div class="col-sm-10">
-                                <p class="form-control" style="border: none">请先在搜索框输入表号进行查询，返回符合条件的结果,再进行操作</p>
+                                <p class="form-control" style="border: none">{:lang('Please in the search box enter the query query, return the result')}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label  class="col-sm-2 control-label"></label>
                             <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="button" onclick="changeMeter()" >提交</button>
+                                <button style="float: right" class="btn btn-success" type="button" onclick="changeMeter()" >{:lang('Button')}</button>
                             </div>
                         </div>
                     </form>
@@ -205,11 +205,11 @@
                     }
                 },
                 error:function(){
-                    alertMsg("操作失败！");
+                    alertMsg("{:lang('Operation fail')}");
                 }
             })
         }else{
-            alertMsg("请先填写表号");
+            alertMsg("{:lang('Please fill in the form M_Code first')}");
         }
 
     })
@@ -219,11 +219,11 @@
         var consumer = data['consumer'];
         $('#M_Code_P').text(meter.M_Code);
         if( meter.M_Type == "{$Think.const.METER_TYPE_WATER}" ){
-            $('#M_Type').text("水表");
+            $('#M_Type').text("{:lang('Water Code')}");
         }else if(meter.M_Type == "{$Think.const.METER_TYPE_ELECTRICITY}"){
-            $('#M_Type').text("电表");
+            $('#M_Type').text("{:lang('Electric Code')}");
         }else if(meter.M_Type == "{$Think.const.METER_TYPE_GAS}"){
-            $('#M_Type').text("气表");
+            $('#M_Type').text("{:lang('Gas Code')}");
         }
         if( consumer == "undefined" || consumer == null || consumer == ''){
 
@@ -254,7 +254,7 @@
                     }
                 },
                 error:function(){
-                    alertMsg("操作失败！");
+                    alertMsg("{:lang('Operation fail')}");
                 }
             })
         }
@@ -262,15 +262,15 @@
 
     function check(meter){
         if( meter.old_M_Code == "" || meter.old_M_Code == null || meter.old_M_Code == "undefined"){
-            alertMsg("请先搜索表号");
+            alertMsg("{:lang('Please search table No.')}");
             return false;
         }
         if( meter.new_M_Code == "" || meter.new_M_Code == null || meter.new_M_Code == "undefined"){
-            alertMsg("请先填写新表号");
+            alertMsg("{:lang('Please fill in the new code number first')}");
             return false;
         }
         if( meter.change_reason == "" || meter.change_reason == null || meter.change_reason == "undefined"){
-            alertMsg("请先填写换表原因");
+            alertMsg("{:lang('Please fill in change meter for reasons')}");
             return false;
         }
         return true;

@@ -11,7 +11,7 @@
                                 <div class="form-group">
                                     <label for="M_Code" class="col-sm-2 control-label">{:lang('M_Code')}:</label>
                                     <div class="col-sm-6">
-                                        <input name="M_Code" id="M_Code" type="text" class="form-control" placeholder="请输入表号..." value="{$M_Code ?? ''}">
+                                        <input name="M_Code" id="M_Code" type="text" class="form-control" placeholder="{:lang('Please enter M_Code')}" value="{$M_Code ?? ''}">
                                     </div>
                                 </div><!-- /form-group -->
                             </div><!-- /.col-lg-6 -->
@@ -19,7 +19,7 @@
                                 <div class="form-group">
                                     <label for="M_Address" class="col-sm-2 control-label">{:lang('Installation Address')}:</label>
                                     <div class="col-sm-6">
-                                        <select id="M_Address" class="form-control" placeholder="请输入表号..." name="M_Address">
+                                        <select id="M_Address" class="form-control" placeholder="{:lang('Please enter')}{:lang('Installation Address')}..." name="M_Address">
                                             <option value="">{:lang('Please Search')}{:lang('Area')}</option>
                                             {volist name="areas" id="val" }
                                             <option value="{$val.id}" {if condition="$M_Address eq $val.id"}selected{/if}>{$val.name}</option>
@@ -34,7 +34,7 @@
                                 <div class="form-group">
                                     <label for="detail_address" class="col-sm-2 control-label">{:lang('Detail Address')}:</label>
                                     <div class="col-sm-6">
-                                        <input name="detail_address" id="detail_address" type="text" class="form-control" placeholder="请输入详细地址...." value="{$detail_address ?? ''}">
+                                        <input name="detail_address" id="detail_address" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('detail address')}" value="{$detail_address ?? ''}">
                                     </div>
                                 </div><!-- /form-group -->
                             </div><!-- /.col-lg-6 -->   

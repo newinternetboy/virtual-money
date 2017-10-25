@@ -57,8 +57,8 @@
                         </table>
                     </div>
                     <div id="chart" style="width: 800px;height:400px;display:none"></div>
-                    <button id="print" style="float: right;margin-left: 1vw" class="btn btn-success" type="button" >打印</button>
-                    <button id="switch" style="float: right" class="btn btn-success" type="button" >显示图形</button>
+                    <button id="print" style="float: right;margin-left: 1vw" class="btn btn-success" type="button" >{:lang('Print')}</button>
+                    <button id="switch" style="float: right" class="btn btn-success" type="button" >{:lang('show graph')}</button>
                 </div>
             </div>
         </div>
@@ -161,7 +161,7 @@
     function check() {
         var year = $('#year').val();
         if (year == '' || year == 'undefined' || year == null) {
-            alertMsg('请选择年份');
+            alertMsg("{:lang('Please Search Year')}");
             return false;
         }
     }

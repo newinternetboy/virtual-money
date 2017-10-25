@@ -13,10 +13,10 @@
                         <div class="form-group">
                              <div class="col-lg-6" style="float: right">
                                 <div class="form-group">
-                                    <label for="user_name" class="col-sm-2 control-label">操作人:</label>
+                                    <label for="user_name" class="col-sm-2 control-label">{:lang('Operate People')}:</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" id="user_name" name="user_name">
-                                            <option value="">选全部</option>
+                                            <option value="">{:lang('Search All')}</option>
                                             {volist name="users" id="user"}
                                             <option value="{$user.id}" {if condition="$user eq $user_name"}selected{/if}>{$user.username}</option>
                                             {/volist}
@@ -26,10 +26,10 @@
                              </div>
                              <div class="col-lg-6" style="float: right">
                                 <div class="form-group">
-                                    <label for="remark" class="col-sm-2 control-label">记录类型:</label>
+                                    <label for="remark" class="col-sm-2 control-label">{:lang('Record Type')}:</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" id="remark" name="remark">
-                                            <option value="">选全部</option>
+                                            <option value="">{:lang('Search All')}</option>
                                             {volist name="logtypes" id="logtype"}
                                             <option value="{$logtype}" {if condition="$logtype eq $remark"}selected{/if}>{:lang($logtype)}</option>
                                             {/volist}
@@ -41,7 +41,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="start_datetimepicker" class="col-sm-2 control-label">开始时间:</label>
+                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Start Time')}:</label>
                                     <div class="col-sm-6">
                                         <input id="start_datetimepicker" name="start_time" value="{$start_time ?? ''}" type="text" class="form-control">
                                     </div>
@@ -49,7 +49,7 @@
                             </div><!-- /.col-lg-6 -->
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="end_datetimepicker" class="col-sm-2 control-label">结束时间:</label>
+                                    <label for="end_datetimepicker" class="col-sm-2 control-label">{:lang('End Time')}:</label>
                                     <div class="col-sm-6">
                                         <input id="end_datetimepicker" name="end_time" value="{$end_time ?? ''}" type="text" class="form-control">
                                     </div>
@@ -59,7 +59,7 @@
                         <div class="form-group">
                             <label  class="col-sm-2 control-label"></label>
                             <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="submit"  >查询</button>
+                                <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
                             </div>
                         </div>
                     </form>
@@ -82,7 +82,7 @@
                                    <td>{$vo.create_time}</td>
                                    <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{$vo.data}</td>
                                    <td>{$vo.user.username}</td>
-                                   <td><button class="btn btn-primary record" >内容详情</button></td>
+                                   <td><button class="btn btn-primary record" >{:lang('Detailed Content')}</button></td>
                                 </tr>
                             {/volist}
                             </tbody>
@@ -93,9 +93,9 @@
                         <!--换表信息-->
                         <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
                         <div class="form-group" style="color:red">
-                            <label  class="col-sm-2 control-label">操作提示:</label>
+                            <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
                             <div class="col-sm-10">
-                                <p class="form-control" style="border: none">请先在搜索框输入查询条件进行查询，返回符合条件的结果</p>
+                                <p class="form-control" style="border: none">{:lang('Please in the search box enter the query query, return the result')}</p>
                             </div>
                         </div>
                 </div>

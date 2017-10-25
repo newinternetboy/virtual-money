@@ -15,7 +15,8 @@ class Logrecord extends Admin
         $this->assign('logtypes',$logtypes);
         $users = model('User')->getUserInfo(['company_id'=>$this->company_id],'select','id,username');
         $this->assign('users',$users);
-        $where=[];
+        $where['company_id'] = $this->company_id;
+        $where['type'] = PLATFORM_ADMIN ;
         if($user_name){
             $where['user_id'] = $user_name;
         }
