@@ -1,0 +1,291 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单标题概要 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Company Management')}</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <!--search-->
+                    <form id="companySelect" action="{:url('manage/manage/manageCompany')}"  method="get" class="form-horizontal">
+                        <div class="form-group">
+                            <div style="float: left">
+                                <label for="company_name">{:lang('Company Name')}:</label>
+                                <input id="company_name" name="company_name" value="{$company_name ?? ''}" />
+                            </div>
+                            <div style="float: left;margin-left: 2vw">
+                                <label for="address">{:lang('Address')}:</label>
+                                <input id="address" name="address" value="{$address ?? ''}" />
+                            </div>
+                        </div>
+                        <div class="form-group" >
+                            <div style="float: right">
+                                <button  class="btn btn-danger">{:lang('Search')}</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div style="clear: both"></div>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--search End-->
+
+                    <!--company Info-->
+                    <h6>{:lang('Company Info')}</h6>
+                    <div >
+                        <p style="float: left;width: 50%;padding-left: 10%">{:lang('Company')}{:lang('Company Name')}: {$companyInfo.company_name ?? ''}</p>
+                        <p style="float: left;width: 50%;padding-left: 10%">{:lang('Address')}: {$companyInfo.address ?? ''}</p>
+                        <p style="float: left;width: 50%;padding-left: 10%">{:lang('Contacts Tel')}: {$companyInfo.contacts_tel ?? ''}</p>
+                        <p style="float: left;width: 50%;padding-left: 10%">{:lang('SMS Tel')}: {$companyInfo.sms_tel ?? ''}</p>
+                    </div>
+                    <div style="clear: both"></div>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--company Info End-->
+
+                    <!--user table-->
+                    <button  class="btn btn-success" onclick="addUser()">{:lang('Add')}</button>
+                    <!-- 表格数据 -->
+                    <table id="table"  class="table" >
+                        <thead>
+                        <tr>
+                            <th>{:lang('User Name')}</th>
+                            <th>{:lang('Login Name')}</th>
+                            <th>{:lang('User Status')}</th>
+                            <th>{:lang('Contact Number')}</th>
+                            <th>{:lang('Operation')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $users as $user}
+                                <tr>
+                                    <td>{$user.username}</td>
+                                    <td>{$user.login_name}</td>
+                                    <td>{if condition="$user.status eq 1"}
+                                            {:lang('Start')}
+                                        {else /}
+                                            {:lang('Off')}
+                                        {/if}
+                                    </td>
+                                    <td>{$user.tel}</td>
+                                    <td><button class="btn btn-success" onclick="editUser('{$user.id}')">{:lang('Edit')}</button></td>
+                                </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                    <!--user table End-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{:lang('Save User')}</h4>
+            </div>
+            <div class="modal-body">
+                <input style="display: none" name="id" value="" id="id" />
+                <div class="form-group">
+                    <label for="username" class="col-md-2 control-label">{:lang('Name')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="username" id="username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="login_name" class="col-md-2 control-label">{:lang('Login Name')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="login_name" id="login_name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="col-md-2 control-label">{:lang('Password')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="password" id="password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password" class="col-md-2 control-label">{:lang('Confirm Password')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="confirm_password" id="confirm_password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tel" class="col-md-2 control-label">{:lang('Contacts Tel')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="tel" id="tel">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ukey" class="col-md-2 control-label">{:lang('UKEY')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="ukey" id="ukey">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="status" class="col-md-2 control-label">{:lang('Login Name')}{:lang('Status')}</label>
+                    <div class="col-md-10">
+                        <select name="status" id="status">
+                            <option value=1>{:lang('Start')}</option>
+                            <option value=2>{:lang('Off')}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="role" class="col-md-2 control-label">{:lang('Login Name')}{:lang('Role')}</label>
+                    <div>
+                        <label>
+                            <input type="radio" name="role" id="role" value=1 checked>{:lang('Administrator')}
+                        </label>
+                        {foreach $roles as $role}
+                            <label class="radio-inline">
+                                <input type="radio" name="role" value="{$role.id}">{$role.name}
+                            </label>
+                        {/foreach}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var company_id = "{$companyInfo.id ?? ''}";
+
+    function clearModal(){
+        $('#login_name').prop('disabled',false);
+        $('input[name="role"][value="1"]').prop('checked',true);
+        $('#status option:selected').prop("selected",false)
+        $('.modal-body input').not(':radio').each(function(){
+            $(this).val('');
+        })
+    }
+
+    function addUser(){
+        clearModal();
+        $('#myModal').modal('show')
+    }
+
+    function sub(){
+        var id = $('#id').val();
+        var username = $('#username').val();
+        var login_name = $('#login_name').val();
+        var password = $('#password').val();
+        var confirm_password = $('#confirm_password').val();
+        var tel = $('#tel').val();
+        var ukey = $('#ukey').val();
+        var status = $('#status').val();
+        var role_id = $('input:radio[name="role"]:checked').val();
+        if( username == '' || username == 'undefined' || username == null ){
+            alertMsg("{:lang('User Name Require')}");
+            return false;
+        }
+        if( login_name == '' || login_name == 'undefined' || login_name == null ){
+            alertMsg("{:lang('Login Name Require')}");
+            return false;
+        }
+        if( password == '' || password == 'undefined' || password == null ){
+            alertMsg("{:lang('Password Require')}");
+            return false;
+        }
+        if( confirm_password == '' || confirm_password == 'undefined' || confirm_password == null ){
+            alertMsg("{:lang('Confirm Password Require')}");
+            return false;
+        }
+        if( password != confirm_password ){
+            alertMsg("{:lang('Password and Confirm Password inconsistent')}");
+            return false;
+        }
+        if( tel == '' || tel == 'undefined' || tel == null ){
+            alertMsg("{:lang('Contacts Tel Require')}");
+            return false;
+        }
+        if( ukey == '' || ukey == 'undefined' || ukey == null ){
+            alertMsg("{:lang('UKEY Require')}");
+            return false;
+        }
+        if( status == '' || status == 'undefined' || status == null ){
+            alertMsg("{:lang('Status Require')}");
+            return false;
+        }
+        if( role_id == '' || role_id == 'undefined' || role_id == null ){
+            alertMsg("{:lang('Role Require')}");
+            return false;
+        }
+        if( role_id === "1" ){
+            var data = {id: id,username: username, login_name: login_name, password: password, ukey: ukey,tel: tel, status: status, administrator: role_id, company_id: company_id};
+        }else{
+            var data = {id: id,username: username, login_name: login_name, password: password, ukey: ukey,tel: tel, status: status, role_id: role_id, company_id: company_id};
+        }
+        $.ajax({
+            url:"{:url('manage/manage/saveUser')}",
+            method:'post',
+            dataType:'json',
+            data: {data: JSON.stringify(data)},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    alertMsg(res.msg);
+                    window.location.href = '';
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+    function editUser(user_id){
+        $.ajax({
+            url:"{:url('manage/manage/getUserInfoById')}",
+            method:'post',
+            dataType:'json',
+            data: {id: user_id},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    clearModal();
+                    $('#login_name').prop('disabled',true);
+                    fillModal(res.data);
+                    $('#myModal').modal('show')
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+    function fillModal(data){
+        $('#id').val(data.id);
+        $('#username').val(data.username);
+        $('#login_name').val(data.login_name);
+        $('#tel').val(data.tel);
+        $('#ukey').val(data.ukey);
+        $('#status').val(data.status);
+        if(data.administrator){
+            $('input:radio[name="role"][value="1"]').prop("checked",true);
+        }else{
+            $('input:radio[name="role"][value="'+String(data.role_id)+'"]').prop("checked",true);
+        }
+    }
+</script>

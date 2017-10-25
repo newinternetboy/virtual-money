@@ -33,8 +33,7 @@
                     </form>
                     <div class="col-lg-4" >
                         <div style="float: right">
-                            <button style="margin-right: 1vw" class="btn btn-success" data-toggle="modal" data-target="#addModal">{:lang('Add')}</button>
-                            <button class="btn btn-danger">{:lang('Delete')}</button>
+                            <button style="margin-right: 1vw" class="btn btn-success" onclick="showAddModal()">{:lang('Add')}</button>
                         </div>
                     </div>
                     <div style="clear: both"></div>
@@ -43,17 +42,19 @@
                     <table id="table"  class="table" >
                         <thead>
                         <tr>
+                            <th data-width="50" >{:lang('OPT_ID')}</th>
                             <th data-width="50" >{:lang('Company Name')}</th>
-                            <th data-width="50" >{:lang('Edit')}</th>
                             <th data-width="50" >{:lang('Admin')}</th>
+                            <th data-width="50" >{:lang('Operation')}</th>
                         </tr>
                         </thead>
                         <tbody>
                             {foreach $companys as $company}
                             <tr>
+                                <th>{$company.OPT_ID}</th>
                                 <th>{$company.company_name}</th>
-                                <th>编辑</th>
-                                <th>管理员</th>
+                                <th><button class="btn btn-toolbar" onclick="editAdmin('{$company.OPT_ID}')">{:lang('Admin')}</button></th>
+                                <th><button class="btn btn-toolbar" onclick="editCompany('{$company.id}')">{:lang('Edit')}</button> <button class="btn btn-danger" onclick="delCompany('{$company.OPT_ID}','{$company.company_name}')">{:lang('Delete')}</button></th>
                             </tr>
                             {/foreach}
                         </tbody>
@@ -73,177 +74,176 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="addModalLabel">{:lang('Add')}</h4>
             </div>
-            <form action="{:url('manage/manage/addCompany')}" method="post" >
-                <div class="modal-body">
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="company_name" class="col-md-2 control-label">{:lang('Company Name')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="company_name" id="company_name"  required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="OPT_ID" class="col-md-2 control-label">{:lang('OPT_ID')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="OPT_ID" id="OPT_ID"  required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="address" class="col-md-2 control-label">{:lang('Address')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="address" id="address" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="quality" class="col-md-2 control-label">{:lang('Quality')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="quality" id="quality"  required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="contacts_tel" class="col-md-2 control-label">{:lang('Contacts Tel')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="contacts_tel" id="contacts_tel" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="contacts_name" class="col-md-2 control-label">{:lang('Contacts Name')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="contacts_name" id="contacts_name" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="fax" class="col-md-2 control-label">{:lang('Fax')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="fax" id="fax" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="legal_person" class="col-md-2 control-label">{:lang('Legal Person')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="legal_person" id="legal_person" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="bank_name" class="col-md-2 control-label">{:lang('Bank Name')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="bank_name" id="bank_name" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="bank_card" class="col-md-2 control-label">{:lang('Bank Card')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="bank_card" id="bank_card" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="tax_code" class="col-md-2 control-label">{:lang('Tax Code')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="tax_code" id="tax_code" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="sms_tel" class="col-md-2 control-label">{:lang('SMS Tel')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="sms_tel" id="sms_tel" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="secret_key_url" class="col-md-2 control-label">{:lang('Secret Key URL')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="secret_key_url" id="secret_key_url" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="secret_key" class="col-md-2 control-label">{:lang('Secret Key')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="secret_key" id="secret_key" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="charge_status" class="col-md-2 control-label">{:lang('Charge Status')}</label>
-                            <div class="col-md-10">
-                                <select class="form-control" name="charge_status" id="charge_status">
-                                    <option value={$Think.const.UNCHARGE} >{:lang('Uncharge')}</option>
-                                    <option value={$Think.const.CHARGED} >{:lang('Charged')}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="charge_date" class="col-md-2 control-label">{:lang('Charge Date')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="charge_date" id="charge_date" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="limit_times" class="col-md-2 control-label">{:lang('Limit Times')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="limit_times" id="limit_times" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="left_times" class="col-md-2 control-label">{:lang('Left Times')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="left_times" id="left_times" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="desc" class="col-md-2 control-label">{:lang('Desc')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="desc" id="desc" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body-content">
-                        <div class="form-group must">
-                            <label for="alarm_tel" class="col-md-2 control-label">{:lang('Alarm Tel')}</label>
-                            <div class="col-md-10">
-                                <input class="form-control" name="alarm_tel" id="alarm_tel" required>
-                            </div>
+            <div class="modal-body">
+                <input style="display: none" name="id" value="" id="id" />
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="company_name" class="col-md-2 control-label">{:lang('Company Name')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="company_name" id="company_name"  required>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
-                    <button type="submit" class="btn btn-primary">{:lang('Save')}</button>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="OPT_ID" class="col-md-2 control-label">{:lang('OPT_ID')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="OPT_ID" id="OPT_ID"  required>
+                        </div>
+                    </div>
                 </div>
-            </form>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="address" class="col-md-2 control-label">{:lang('Address')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="address" id="address" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="quality" class="col-md-2 control-label">{:lang('Quality')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="quality" id="quality"  required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="contacts_tel" class="col-md-2 control-label">{:lang('Contacts Tel')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="contacts_tel" id="contacts_tel" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="contacts_name" class="col-md-2 control-label">{:lang('Contacts Name')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="contacts_name" id="contacts_name" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="fax" class="col-md-2 control-label">{:lang('Fax')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="fax" id="fax" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="legal_person" class="col-md-2 control-label">{:lang('Legal Person')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="legal_person" id="legal_person" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="bank_name" class="col-md-2 control-label">{:lang('Bank Name')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="bank_name" id="bank_name" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="bank_card" class="col-md-2 control-label">{:lang('Bank Card')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="bank_card" id="bank_card" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="tax_code" class="col-md-2 control-label">{:lang('Tax Code')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="tax_code" id="tax_code" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="sms_tel" class="col-md-2 control-label">{:lang('SMS Tel')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="sms_tel" id="sms_tel" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="secret_key_url" class="col-md-2 control-label">{:lang('Secret Key URL')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="secret_key_url" id="secret_key_url" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="secret_key" class="col-md-2 control-label">{:lang('Secret Key')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="secret_key" id="secret_key" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="charge_status" class="col-md-2 control-label">{:lang('Charge Status')}</label>
+                        <div class="col-md-10">
+                            <select class="form-control" name="charge_status" id="charge_status">
+                                <option value={$Think.const.UNCHARGE} >{:lang('Uncharge')}</option>
+                                <option value={$Think.const.CHARGED} >{:lang('Charged')}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="charge_date" class="col-md-2 control-label">{:lang('Charge Date')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="charge_date" id="charge_date" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="limit_times" class="col-md-2 control-label">{:lang('Limit Times')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" type="number" name="limit_times" id="limit_times" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="left_times" class="col-md-2 control-label">{:lang('Left Times')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" type="number" name="left_times" id="left_times" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="desc" class="col-md-2 control-label">{:lang('Desc')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="desc" id="desc" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="alarm_tel" class="col-md-2 control-label">{:lang('Alarm Tel')}</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="alarm_tel" id="alarm_tel" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
+            </div>
         </div>
     </div>
 </div>
@@ -253,4 +253,196 @@
     $('#company').change(function(){
         $('#companySelect').submit();
     })
+
+    function sub(){
+        var id = $('#id').val();
+        var company_name = $('#company_name').val();
+        var OPT_ID = $('#OPT_ID').val();
+        var address = $('#address').val();
+        var quality = $('#quality').val();
+        var contacts_tel = $('#contacts_tel').val();
+        var contacts_name = $('#contacts_name').val();
+        var fax = $('#fax').val();
+        var legal_person = $('#legal_person').val();
+        var bank_name = $('#bank_name').val();
+        var bank_card = $('#bank_card').val();
+        var tax_code = $('#tax_code').val();
+        var sms_tel = $('#sms_tel').val();
+        var secret_key_url = $('#secret_key_url').val();
+        var secret_key = $('#secret_key').val();
+        var charge_status = $('#charge_status').val();
+        var charge_date = $('#charge_date').val();
+        var limit_times = $('#limit_times').val();
+        var left_times = $('#left_times').val();
+        var desc = $('#desc').val();
+        var alarm_tel = $('#alarm_tel').val();
+        if( company_name == '' || company_name == null || company_name == 'undefined' ){
+            alertMsg("{:lang('Company Name Require')}");
+            return false;
+        }
+        if( id == '' || id == 'undefined' || id ==null ){
+            if( OPT_ID == '' || OPT_ID == null || OPT_ID == 'undefined' ){
+                alertMsg("{:lang('OPT_ID Require')}");
+                return false;
+            }
+        }
+        if( address == '' || address == null || address == 'undefined' ){
+            alertMsg("{:lang('Address Require')}");
+            return false;
+        }
+        if( quality == '' || quality == null || quality == 'undefined' ){
+            alertMsg("{:lang('Quality Require')}");
+            return false;
+        }
+        if( contacts_tel == '' || contacts_tel == null || contacts_tel == 'undefined' ){
+            alertMsg("{:lang('Contacts Tel Require')}");
+            return false;
+        }
+        if( contacts_name == '' || contacts_name == null || contacts_name == 'undefined' ){
+            alertMsg("{:lang('Contacts Name Require')}");
+            return false;
+        }
+        if( fax == '' || fax == null || fax == 'undefined' ){
+            alertMsg("{:lang('Fax Require')}");
+            return false;
+        }
+        if( legal_person == '' || legal_person == null || legal_person == 'undefined' ){
+            alertMsg("{:lang('Legal Person Require')}");
+            return false;
+        }
+        if( bank_name == '' || bank_name == null || bank_name == 'undefined' ){
+            alertMsg("{:lang('Bank Name Require')}");
+            return false;
+        }
+        if( bank_card == '' || bank_card == null || bank_card == 'undefined' ){
+            alertMsg("{:lang('Bank Card Require')}");
+            return false;
+        }
+        if( tax_code == '' || tax_code == null || tax_code == 'undefined' ){
+            alertMsg("{:lang('Tax Code Require')}");
+            return false;
+        }
+        if( sms_tel == '' || sms_tel == null || sms_tel == 'undefined' ){
+            alertMsg("{:lang('SMS Tel Require')}");
+            return false;
+        }
+        if( secret_key_url == '' || secret_key_url == null || secret_key_url == 'undefined' ){
+            alertMsg("{:lang('Secret Key URL Require')}");
+            return false;
+        }if( secret_key == '' || secret_key == null || secret_key == 'undefined' ){
+            alertMsg("{:lang('Secret Key Require')}");
+            return false;
+        }
+        if( charge_status == '' || charge_status == null || charge_status == 'undefined' ){
+            alertMsg("{:lang('Charge Status Require')}");
+            return false;
+        }
+        if( charge_date == '' || charge_date == null || charge_date == 'undefined' ){
+            alertMsg("{:lang('Charge Date Require')}");
+            return false;
+        }
+        if( limit_times == '' || limit_times == null || limit_times == 'undefined' ){
+            alertMsg("{:lang('Limit Times Require')}");
+            return false;
+        }
+        if( left_times == '' || left_times == null || left_times == 'undefined' ){
+            alertMsg("{:lang('Left Times Require')}");
+            return false;
+        }
+        if( desc == '' || desc == null || desc == 'undefined' ){
+            alertMsg("{:lang('Desc Require')}");
+            return false;
+        }
+        if( alarm_tel == '' || alarm_tel == null || alarm_tel == 'undefined' ){
+            alertMsg("{:lang('Alarm Tel Require')}");
+            return false;
+        }
+
+        var data = {id: id,company_name: company_name, OPT_ID: OPT_ID, address: address, quality: quality, contacts_tel: contacts_tel, contacts_name: contacts_name, fax: fax, legal_person: legal_person, bank_name: bank_name, bank_card: bank_card, tax_code: tax_code, sms_tel: sms_tel, secret_key_url:secret_key_url, secret_key: secret_key, charge_status: charge_status, charge_date: charge_date, limit_times: limit_times, left_times: left_times, desc: desc,alarm_tel: alarm_tel};
+        $.ajax({
+            url:"{:url('manage/manage/saveCompany')}",
+            method:'post',
+            dataType:'json',
+            data: data,
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    alertMsg(res.msg);
+                    window.location.href = '';
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+    function showAddModal(){
+        clearModal();
+        $('#addModal').modal('show')
+    }
+
+    function editCompany(id){
+        $.ajax({
+            url:"{:url('manage/manage/getCompanyInfoById')}",
+            method:'post',
+            dataType:'json',
+            data: {id: id},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    clearModal();
+                    $('#OPT_ID').prop('disabled',true);
+                    fillModal(res.data);
+                    $('#addModal').modal('show')
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+    function fillModal(data){
+        for(key in data){
+            $('#'+key).val(data[key]);
+        }
+    }
+
+    function clearModal(){
+        $('#OPT_ID').prop('disabled',false);
+        $('.modal-body input').each(function(){
+            $(this).val('');
+        })
+    }
+
+    function delCompany(OPT_ID,name){
+        alertConfirm("{:lang('Confirm Delete Company')}" + ' ' + name + '?',function(){
+            $.ajax({
+                url:"{:url('manage/manage/delCompany')}",
+                method:'post',
+                dataType:'json',
+                data: {OPT_ID: OPT_ID},
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    if(res.code != 200){
+                        alertMsg(res.msg);
+                    }else{
+                        window.location.href = '';
+                    }
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
+                }
+            })
+        })
+    }
+
+    function editAdmin(OPT_ID){
+        window.location.href = "{:url('manage/manage/manageCompany')}" + '?OPT_ID=' + OPT_ID;
+    }
 </script>

@@ -359,6 +359,7 @@ return [
     'UKEY Require'                      => 'UKEY必须',
     'Status Require'                    => '账号状态必须',
     'Role Require'                      => '账号角色必须',
+    'Login Name Exists'                 => '账号已存在',
     'Password and Confirm Password inconsistent'    => '密码与确认密码不一致',
 
 ];

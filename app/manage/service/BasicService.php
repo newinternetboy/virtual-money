@@ -64,10 +64,20 @@ class BasicService
         return $this->dbModel->getLastSql();
     }
 
-    public function upsert($data,$scene = true){
+    /**
+     * 插入/更新
+     * @param $data
+     * @param bool|true $scene
+     * @return mixed
+     */
+    public function upsert($data, $scene = true){
         return $this->dbModel->upsert($data,$scene);
     }
 
+    /**
+     * 获取错误信息
+     * @return mixed
+     */
     public function getError(){
         return $this->dbModel->getError();
     }

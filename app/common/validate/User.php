@@ -25,7 +25,9 @@ class User extends Validate
         'add'       =>      ['login_name','password', 'role_id','company_id'],
         'login'     =>      ['login_name','password'],
         'edit'      =>      ['login_name', 'password', 'role_id'],
-        'updatepasswd' =>   ['password']
+        'updatepasswd' =>   ['password'],
+        'manageAdd' =>      ['login_name','password','company_id'],
+        'manageEdit' =>     ['password'],
     ];
 
 }

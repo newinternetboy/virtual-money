@@ -34,6 +34,7 @@ class Company extends Validate
         'left_times'        => 'require',
         'desc'              => 'require',
         'alarm_tel'         => 'require',
+        'status'            => 'require',
     ];
 
     protected $message  =   [
@@ -58,9 +59,12 @@ class Company extends Validate
         'left_times.require'       => '{%Left Times Require}',
         'desc.require'             => '{%Desc Require}',
         'alarm_tel.require'        => '{%Alarm Tel Require}',
+        'status.require'           => '{%Status Require}',
     ];
 
     protected $scene = [
-
+        'add'   => ['company_name','OPT_ID','address','quality','contacts_tel','contacts_name','fax','legal_person','bank_name','bank_card','tax_code','sms_tel','secret_key_url','secret_key','charge_status','charge_date','limit_times','left_times','desc','alarm_tel','status'],
+        'edit'  => ['company_name','address','quality','contacts_tel','contacts_name','fax','legal_person','bank_name','bank_card','tax_code','sms_tel','secret_key_url','secret_key','charge_status','charge_date','limit_times','left_times','desc','alarm_tel'],
+        'del'   => ['status'],
     ];
 }
