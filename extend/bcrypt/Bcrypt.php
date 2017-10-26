@@ -25,7 +25,7 @@ class Bcrypt {
      *
      * @var string
      */
-    private static $_identifier = '2y';
+    private static $_identifier = '2a';
     /**
      * All valid hash identifiers
      *
