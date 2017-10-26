@@ -85,6 +85,9 @@ define('MONEY_COMPANY',3); //企业电商中消费
 define('MONEY_DELI',4); //得力专供中消费
 
 /***************运营商表***************/
-//charge_status
+//收费状态
 define('UNCHARGE',1); //未收费
 define('CHARGED',2); //已收费
+//状态
+define('COMPANY_STATUS_NORMAL',1); //正常
+define('COMPANY_STATUS_DEL',2);    //已删除

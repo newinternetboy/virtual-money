@@ -14,4 +14,18 @@ class CompanyModel extends BasicModel
     // 当前模型名称
     protected $name = 'company';
 
+    //设置主键名
+    protected $pk  = 'id';
+
+    public function setLimitTimesAttr($value){
+        return intval($value);
+    }
+
+    public function setLeftTimesAttr($value){
+        return intval($value);
+    }
+
+    public function setChargeStatusAttr($value){
+        return intval($value);
+    }
 }
