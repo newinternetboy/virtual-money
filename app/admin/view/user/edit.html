@@ -19,21 +19,28 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{:lang('Login Name')}</label>
                             <div class="col-sm-7"> 
-                                <input type="tel" class="form-control mobile" name="login_name"  placeholder="{:lang('Up_characters',['langth' =>11])}" required value="{$data.login_name ?? ''}"  >
+                                <input type="text" class="form-control mobile" name="login_name"  placeholder="{:lang('Up to 16 characters')}" required value="{$data.login_name ?? ''}"  >
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{:lang('Password')}</label>
                             <div class="col-sm-7">
-                                <input type="password" class="form-control" name="password" id="password"  rangelength="[6,16]" placeholder="{:lang('Range_characters',['minLangth' =>6,'maxLangth' => 16])}" required>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="{:lang('Range_characters',['minLangth' =>6,'maxLangth' => 16])}" >
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{:lang('Confirm Password')}</label>
                             <div class="col-sm-7">
-                                <input type="password" class="form-control equalto" name="password2" rangelength="[6,16]" placeholder="{:lang('Range_characters',['minLangth' =>6,'maxLangth' => 16])}" required data-rule-equalto="#password" data-msg-equalto="{:lang('The password is not the same twice')}">
+                                <input type="password" class="form-control equalto" name="password2"  placeholder="{:lang('Range_characters',['minLangth' =>6,'maxLangth' => 16])}"  data-rule-equalto="#password" data-msg-equalto="{:lang('The password is not the same twice')}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{:lang('Mobile')}</label>
+                            <div class="col-sm-7">
+                                <input type="tel" class="form-control mobile" name="tel"  placeholder="{:lang('Up_characters',['langth' =>11])}" required value="{$data.tel ?? ''}"  >
                             </div>
                         </div>
 

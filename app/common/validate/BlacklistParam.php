@@ -15,7 +15,7 @@ class BlacklistParam extends Validate
 
     protected $message  =   [
         'param_name.require'            => '{%Param_name Require}',
-        'desc.require'                   => '{%Param Desc Require}',
+        'desc.require'                  => '{%Param Desc Require}',
         'param_type.require'            => '{%Param Type Require}',
         'opt_id.require'                => '{%Param Require}',
     ];

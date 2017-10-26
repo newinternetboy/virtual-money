@@ -41,7 +41,7 @@ return [
     'Please Search Year' => '请选择年份',
     'Execution time can not be earlier than current time'    => '执行时间不能早于当前时间',
     "Please enter the user's table number, use ；separation" => "请输入用户表号,用;号分隔",
-    'Please enter a correct login_name'                      => '登录名的长度必须是6~16位',
+    'The maximum length is 16 characters'                    => '最大长度为16个字符',
     'Please enter a correct password'                        => '请输入正确的密码',
     'Please enter M_Code'     => '请输入表号...',
     'Please enter old M_Code' => '请输入原表号...',
@@ -65,6 +65,7 @@ return [
     'Delete'    => '删除',
     'Delete without authorization'  => '无权限删除',
     'Edit without authorization'    => '无权限编辑',
+    'Up to 16 characters'           => '最多16个字符',
     'Access_menu'      => '用户授权',
     'Account List'     => '账号列表',
     'Account'          => '帐号',
@@ -351,6 +352,7 @@ return [
     /******************************清分系统**************************/
     'Manage'                            => '管理',
     'Require'                           => '必须',
+    'Search company'                    => '选择运营商:',
     //运营管理
     'Operation Management'              => '运营管理',
     'Company Name'                      => '名称',

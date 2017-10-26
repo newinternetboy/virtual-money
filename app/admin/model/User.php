@@ -12,7 +12,7 @@ class User extends Admin
 	use SoftDelete;
     protected $deleteTime = 'delete_time';
 	// 新增自动完成列表
-	protected $insert     = ['administrator']; 
+	protected $insert     = ['administrator'];
 
 	/**
 	 *  用户登录
@@ -85,6 +85,7 @@ class User extends Admin
 
 	public function add(array $data = [])
 	{
+        $data['type'] = PLATFORM_ADMIN;
 		$userValidate = validate('User');
 		if(!$userValidate->scene('add')->check($data)) {
 			return info(lang($userValidate->getError()), 4001);
@@ -113,8 +114,8 @@ class User extends Admin
 		if(!$userValidate->scene('edit')->check($data)) {
 			return info(lang($userValidate->getError()), 4001);
 		}
-		$moblie = $this->where(['login_name'=>$data['login_name']])->where('id', '<>', $data['id'])->value('login_name');
-		if (!empty($moblie)) {
+		$login_name = $this->where(['login_name'=>$data['login_name']])->where('id', '<>', $data['id'])->value('login_name');
+		if (!empty($login_name)) {
 			return info(lang('login_name already exists'), 0);
 		}
 

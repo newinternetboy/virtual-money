@@ -24,15 +24,8 @@ class Report extends Admin
      */
     public function monthReport(){
         $year = input('year') ? input('year') : date('Y');
-        $table = MONTH_FLOW_TABLE_NAME.$year;
         $where['company_id'] = $this->company_id;
-        $monthAbbrs = getMonthAbbreviation();
-        foreach($monthAbbrs as $index => $month){
-            $tmp['consumers'] = Db::table($table)->where(['company_id' => $this->company_id,$month => ['neq',null]])->count();
-            $tmp['cube'] = Db::table($table)->where($where)->sum($month);
-            $tmp['cost'] = Db::table($table)->where($where)->sum($month.'_cost');
-            $report[$index] = $tmp;
-        }
+        $report =getMonthReport($year,$where);
         $this->assign('report',$report);
         $this->assign('year',$year);
         return view();
@@ -47,24 +40,10 @@ class Report extends Admin
         $endYear = input('endYear') ? input('endYear/d') : date('Y');
         $this->assign('startYear',$startYear);
         $this->assign('endYear',$endYear);
-        $report = [];
-        $years = [];
-        while( $endYear >= $startYear ){
-            $years[] = $startYear;
-            $table = MONTH_FLOW_TABLE_NAME.$startYear;
-            $where['company_id'] = $this->company_id;
-            $monthAbbrs = getMonthAbbreviation();
-            foreach($monthAbbrs as $index => $month){
-                $tmp['cube'][$index] = Db::table($table)->where($where)->sum($month);
-                $tmp['cost'][$index] = Db::table($table)->where($where)->sum($month.'_cost');
-            }
-            $report[$startYear]['cube'] = array_sum($tmp['cube']);
-            $report[$startYear]['cost'] = array_sum($tmp['cost']);
-            $report[$startYear]['consumers'] = Db::table($table)->where($where)->count();
-            $startYear += 1;
-        }
-        $this->assign('report',$report);
-        $this->assign('years',$years);
+        $where['company_id'] = $this->company_id;
+        $res = getYearReport($startYear,$endYear,$where);
+        $this->assign('report',$res['report']);
+        $this->assign('years',$res['years']);
         return view();
     }
 

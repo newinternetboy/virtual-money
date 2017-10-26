@@ -116,3 +116,36 @@ function bcryptHash($str){
     $bcrypt = new \bcrypt\Bcrypt();
     return $bcrypt->hashPassword($str);
 }
+
+function getMonthReport($year,$where){
+    $table = MONTH_FLOW_TABLE_NAME.$year;
+    $monthAbbrs = getMonthAbbreviation();
+    foreach($monthAbbrs as $index => $month){
+        $tmp['consumers'] = Db($table)->where(['company_id' => $where['company_id'],$month => ['neq',null]])->count();
+        $tmp['cube'] = Db($table)->where($where)->sum($month);
+        $tmp['cost'] = Db($table)->where($where)->sum($month.'_cost');
+        $report[$index] = $tmp;
+    }
+    return $report;
+}
+
+function getYearReport($startYear,$endYear,$where){
+    $report = [];
+    $years = [];
+    while( $endYear >= $startYear ){
+        $years[] = $startYear;
+        $table = MONTH_FLOW_TABLE_NAME.$startYear;
+        $monthAbbrs = getMonthAbbreviation();
+        foreach($monthAbbrs as $index => $month){
+            $tmp['cube'][$index] = Db($table)->where($where)->sum($month);
+            $tmp['cost'][$index] = Db($table)->where($where)->sum($month.'_cost');
+        }
+        $report[$startYear]['cube'] = array_sum($tmp['cube']);
+        $report[$startYear]['cost'] = array_sum($tmp['cost']);
+        $report[$startYear]['consumers'] = Db($table)->where($where)->count();
+        $startYear += 1;
+    }
+    $res['years'] = $years;
+    $res['report'] = $report;
+    return $res;
+}
