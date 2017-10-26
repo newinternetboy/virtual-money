@@ -44,7 +44,7 @@
 	#side-menu li a {
 		color: #ffffff;
 	}
-	
+
 	.form-group.has-error em {
 		color: #b94a48;
 	}
@@ -57,7 +57,6 @@
 	var HREF = window.location.href;
 	var i = HREF.indexOf("#");
 	var STR = HREF.substring(i+1);
-	console.log(STR);
 
 	var content ={};
 	{foreach $menus as $menu}
@@ -94,48 +93,13 @@
 
 
 			{foreach $menus as $menu}
-			<!--<li>-->
 				{if condition="$menu.display eq 1"}
 				<div class="menu-cell" onclick="checkActive(this)">
 					<span>{$menu.title}</span>
 				</div>
 			<div class="menu-line"></div>
-				<!--<a href="#">-->
-					<!--<span class="nav-label">{$menu.title}</span><span class="fa arrow"></span></a>-->
-				<!--<ul class="nav nav-second-level collapse">-->
-					<!--{if condition="isset($menu.children)"}-->
-					<!--{foreach $menu.children as $children}-->
-					<!--{if condition="$children.display eq 1"}-->
-					<!--<li class=""><a href="/{$children['rule_val']}">{$children.title}</a></li>-->
-					<!--{/if}-->
-					<!--{/foreach}-->
-					<!--{/if}-->
-				<!--</ul>-->
 				{/if}
-			<!--</li>-->
 			{/foreach}
-
-
-
-			<!--<div class="menu-cell" onclick="checkActive(this)">-->
-				<!--<span>业务</span>-->
-			<!--</div>-->
-			<!--<div class="menu-line"></div>-->
-			<!--<div class="menu-cell" onclick="checkActive(this)">-->
-				<!--<span>管理</span>-->
-			<!--</div>-->
-			<!--<div class="menu-line"></div>-->
-			<!--<div class="menu-cell" onclick="checkActive(this)">-->
-				<!--<span>报表</span>-->
-			<!--</div>-->
-			<!--<div class="menu-line"></div>-->
-			<!--<div class="menu-cell" onclick="checkActive(this)">-->
-				<!--<span>查询</span>-->
-			<!--</div>-->
-			<!--<div class="menu-line"></div>-->
-			<!--<div class="menu-cell" onclick="checkActive(this)">-->
-				<!--<span>职能权限</span>-->
-			<!--</div>-->
 			<div style="clear: both"></div>
 		</div>
 
@@ -191,9 +155,8 @@
 		}
 
 		function ShowSubmenu () {
-			var Index = $("#main_menu").children(".active").index();
-			switch (Index) {
-				case 0:
+			switch (STR) {
+				case "m1":
 					$(content.业务).each(function(index) {
 						subtitle =  subtitle +
 								"<li>" +
@@ -202,7 +165,7 @@
 					});
 					break;
 
-				case 2:
+				case "m2":
 					$(content.管理).each(function(index) {
 						subtitle =  subtitle +
 								"<li>" +
@@ -211,7 +174,7 @@
 					});
 					break;
 
-				case 4:
+				case "m3":
 					$(content.报表).each(function(index) {
 						subtitle =  subtitle +
 								"<li>" +
@@ -220,7 +183,7 @@
 					});
 					break;
 
-				case 6:
+				case "m4":
 					$(content.查询).each(function(index) {
 						subtitle =  subtitle +
 								"<li>" +
@@ -229,7 +192,7 @@
 					});
 					break;
 
-				case 8:
+				case "m5":
 					$(content.职能权限).each(function(index) {
 						subtitle =  subtitle +
 								"<li>" +
@@ -238,7 +201,7 @@
 					});
 					break;
 
-				case 10:
+				case "m6":
 					$(content.系统管理).each(function(index) {
 						subtitle =  subtitle +
 								"<li>" +
@@ -263,65 +226,6 @@
 				$(e).siblings().removeClass('active');
 				$("#side-menu").empty();
 				ShowSubmenu();
-
-
-//				switch($(e).children("span").html()) {
-//					case "业务":
-//							$(content.业务).each(function(index) {
-//								subtitle =  subtitle +
-//										"<li>" +
-//										"<a href='/" + content.业务[index].url + "#m1'>" + content.业务[index].title + "</a>" +
-//										"</li>";
-//							});
-//						break;
-//
-//					case "管理":
-//						$(content.管理).each(function(index) {
-//							subtitle =  subtitle +
-//									"<li>" +
-//									"<a href='/" + content.管理[index].url + "#m2'>" + content.管理[index].title + "</a>" +
-//									"</li>";
-//						});
-//						break;
-//
-//					case "报表":
-//						$(content.报表).each(function(index) {
-//							subtitle =  subtitle +
-//									"<li>" +
-//									"<a href='/" + content.报表[index].url + "#m3'>" + content.报表[index].title + "</a>" +
-//									"</li>";
-//						});
-//						break;
-//
-//					case "查询":
-//						$(content.查询).each(function(index) {
-//							subtitle =  subtitle +
-//									"<li>" +
-//									"<a href='/" + content.查询[index].url + "#m4'>" + content.查询[index].title + "</a>" +
-//									"</li>";
-//						});
-//						break;
-//
-//					case "职能权限":
-//						$(content.职能权限).each(function(index) {
-//							subtitle =  subtitle +
-//									"<li>" +
-//									"<a href='/" + content.职能权限[index].url + "#m5'>" + content.职能权限[index].title + "</a>" +
-//									"</li>";
-//						});
-//						break;
-//
-//					case "系统管理":
-//						$(content.系统管理).each(function(index) {
-//							subtitle =  subtitle +
-//									"<li>" +
-//									"<a href='/" + content.系统管理[index].url + "#m6'>" + content.系统管理[index].title + "</a>" +
-//									"</li>";
-//						});
-//						break;
-//				}
-
-//				$("#side-menu").append(subtitle);
 			}
 		}
 
