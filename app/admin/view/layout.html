@@ -94,7 +94,7 @@
 
 			{foreach $menus as $menu}
 				{if condition="$menu.display eq 1"}
-				<div class="menu-cell" onclick="checkActive(this)">
+				<div class="menu-cell" id="{$menu.rule_val}" onclick="checkActive(this)">
 					<span>{$menu.title}</span>
 				</div>
 			<div class="menu-line"></div>
@@ -125,38 +125,39 @@
 		switch (STR) {
 			case "m1" :
 				$("#main_menu").children().removeClass("active");
-				$("#main_menu").children(".menu-cell").eq(0).addClass("active");
+				$("#business").addClass("active");
 				break;
 
 			case "m2" :
 				$("#main_menu").children().removeClass("active");
-				$("#main_menu").children(".menu-cell").eq(1).addClass("active");
+                $("#manage").addClass("active");
 				break;
 
 			case "m3" :
 				$("#main_menu").children().removeClass("active");
-				$("#main_menu").children(".menu-cell").eq(2).addClass("active");
+                $("#report").addClass("active");
 				break;
 
 			case "m4" :
 				$("#main_menu").children().removeClass("active");
-				$("#main_menu").children(".menu-cell").eq(3).addClass("active");
+                $("#search").addClass("active");
 				break;
 
 			case "m5" :
 				$("#main_menu").children().removeClass("active");
-				$("#main_menu").children(".menu-cell").eq(4).addClass("active");
+                $("#operate").addClass("active");
 				break;
 
 			case "m6" :
 				$("#main_menu").children().removeClass("active");
-				$("#main_menu").children(".menu-cell").eq(5).addClass("active");
+                $("#system").addClass("active");
 				break;
 		}
 
 		function ShowSubmenu () {
-			switch (STR) {
-				case "m1":
+			var Index = $("#main_menu").children(".active").children("span").html();
+			switch (Index) {
+				case "业务":
 					$(content.业务).each(function(index) {
 						subtitle =  subtitle +
 								"<li>" +
@@ -165,7 +166,7 @@
 					});
 					break;
 
-				case "m2":
+				case "管理":
 					$(content.管理).each(function(index) {
 						subtitle =  subtitle +
 								"<li>" +
@@ -174,7 +175,7 @@
 					});
 					break;
 
-				case "m3":
+				case "报表":
 					$(content.报表).each(function(index) {
 						subtitle =  subtitle +
 								"<li>" +
@@ -183,7 +184,7 @@
 					});
 					break;
 
-				case "m4":
+				case "查询":
 					$(content.查询).each(function(index) {
 						subtitle =  subtitle +
 								"<li>" +
@@ -192,7 +193,7 @@
 					});
 					break;
 
-				case "m5":
+				case "职能权限":
 					$(content.职能权限).each(function(index) {
 						subtitle =  subtitle +
 								"<li>" +
@@ -201,7 +202,7 @@
 					});
 					break;
 
-				case "m6":
+				case "系统管理":
 					$(content.系统管理).each(function(index) {
 						subtitle =  subtitle +
 								"<li>" +
@@ -213,6 +214,7 @@
 			$("#side-menu").append(subtitle);
 		};
 
+        var Title = "";
 		var subtitle = "";
 
 		function checkActive (e) {
@@ -224,6 +226,7 @@
 			} else {
 				$(e).addClass('active');
 				$(e).siblings().removeClass('active');
+                Title = $(e).children("span").html();
 				$("#side-menu").empty();
 				ShowSubmenu();
 			}
