@@ -13,6 +13,8 @@ use think\Model;
 
 class MoneyLog extends Model
 {
+    protected $pk = 'id';
+
     public function setMoneyTypeAttr($value){
         return intval($value);
     }
@@ -27,7 +29,7 @@ class MoneyLog extends Model
 
     public function add($data){
         if( $this->isUpdate(false)->save($data) ){
-            return $this->_id;
+            return $this->id;
         }
         return false;
     }

@@ -77,6 +77,7 @@ class Rest extends LanFilter
         }catch (\Exception $e){
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
+            Log::record(['moneyBusinessApi执行失败' => $e->getMessage(),'post' => $data,'ret' => $ret ],'error');
         }
         return json($ret);
     }
