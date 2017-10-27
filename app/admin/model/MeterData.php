@@ -18,7 +18,7 @@ class MeterData extends Admin
     //根据表号获取分表名
     //暂时未分表,只有一个表meterData
     private function setTableName($M_Code){
-        $this->table = 'MeterData';
+        $this->table = getMeterdataTablename($M_Code);
     }
 
     public function upsert($M_Code,$data,$scene = true){
