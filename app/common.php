@@ -108,28 +108,64 @@ function getAutoIncId($table, $query, $autoField, $step){
     return $result[0]->value->$autoField;
 }
 
-function initAuthoIncId($table,$data){
+/**
+ * 初始化自增id
+ * @param $table
+ * @param $data
+ * @return int|string
+ */
+function initAuthoIncId($table, $data){
     return Db($table)->insert($data);
 }
 
+/**
+ * consumer用户密码加密
+ * @param $str
+ * @return string
+ * @throws \bcrypt\Exception
+ */
 function bcryptHash($str){
     $bcrypt = new \bcrypt\Bcrypt();
     return $bcrypt->hashPassword($str);
 }
 
-function getMonthReport($year,$where){
-    $table = MONTH_FLOW_TABLE_NAME.$year;
+/**
+ * 月用量统计
+ * @param $year
+ * @param $where
+ * @return mixed
+ */
+function getMonthReport($year, $where){
     $monthAbbrs = getMonthAbbreviation();
     foreach($monthAbbrs as $index => $month){
-        $tmp['consumers'] = Db($table)->where(['company_id' => $where['company_id'],$month => ['neq',null]])->count();
-        $tmp['cube'] = Db($table)->where($where)->sum($month);
-        $tmp['cost'] = Db($table)->where($where)->sum($month.'_cost');
-        $report[$index] = $tmp;
+        $report[$index] = getNamedMonthReport($year,$month,$where);
     }
     return $report;
 }
 
-function getYearReport($startYear,$endYear,$where){
+/**
+ * 指定月份用量统计
+ * @param $year
+ * @param $month
+ * @param $where
+ * @return mixed
+ */
+function getNamedMonthReport($year, $month, $where){
+    $table =  MONTH_FLOW_TABLE_NAME.$year;
+    $tmp['consumers'] = Db($table)->where($where)->where([$month => ['neq',null]])->count();
+    $tmp['cube'] = Db($table)->where($where)->sum($month);
+    $tmp['cost'] = Db($table)->where($where)->sum($month.'_cost');
+    return $tmp;
+}
+
+/**
+ * 年用量统计
+ * @param $startYear
+ * @param $endYear
+ * @param $where
+ * @return mixed
+ */
+function getYearReport($startYear, $endYear, $where){
     $report = [];
     $years = [];
     while( $endYear >= $startYear ){
@@ -137,8 +173,9 @@ function getYearReport($startYear,$endYear,$where){
         $table = MONTH_FLOW_TABLE_NAME.$startYear;
         $monthAbbrs = getMonthAbbreviation();
         foreach($monthAbbrs as $index => $month){
-            $tmp['cube'][$index] = Db($table)->where($where)->sum($month);
-            $tmp['cost'][$index] = Db($table)->where($where)->sum($month.'_cost');
+            $monthFlow = getNamedMonthReport($startYear,$month,$where);
+            $tmp['cube'][$index] = $monthFlow['cube'];
+            $tmp['cost'][$index] = $monthFlow['cost'];
         }
         $report[$startYear]['cube'] = array_sum($tmp['cube']);
         $report[$startYear]['cost'] = array_sum($tmp['cost']);

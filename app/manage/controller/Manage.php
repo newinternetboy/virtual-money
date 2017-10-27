@@ -31,8 +31,8 @@ class Manage extends Admin
         if( $company ){
             $where['id'] = $company;
         }
-        $companys = $companyService->getInfoPaginate($where);
-        $companysAll = $companyService->selectInfo($where);
+        $companys = $companyService->getInfoPaginate($where,'OPT_ID,company_name');
+        $companysAll = $companyService->selectInfo($where,'company_name');
         $this->assign('companys',$companys);
         $this->assign('companysAll',$companysAll);
         $this->assign('company',$company);
