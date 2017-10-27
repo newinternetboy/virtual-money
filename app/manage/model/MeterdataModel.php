@@ -1,18 +1,18 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: hawk2fly
- * Date: 2017/10/24
- * Time: 上午11:57
+ * User: ducongshu
+ * Date: 2017/10/26
+ * Time: 下午12:37
  */
 
 namespace app\manage\model;
 
 
-use think\Model;
-
-class BasicModel extends Model
+class MeterdataModel extends BasicModel
 {
+    // 当前模型名称
+    protected $name;
 
     /**
      * 查询单条记录
@@ -20,7 +20,8 @@ class BasicModel extends Model
      * @param string $field
      * @return array|false|\PDOStatement|string|Model
      */
-    public function findInfo($where = [], $field = ''){
+    public function findInfo($where = [], $field = '',$M_Code){
+        $this->name = getMeterdataTablename($M_Code);
         if( $field ){
             return $this->where($where)->field($field)->find();
         }
@@ -33,7 +34,8 @@ class BasicModel extends Model
      * @param string $field
      * @return false|\PDOStatement|string|\think\Collection
      */
-    public function selectInfo($where = [], $field = ''){
+    public function selectInfo($where = [], $field = '',$M_Code){
+        $this->name = getMeterdataTablename($M_Code);
         if( $field ){
             return $this->where($where)->field($field)->select();
         }
@@ -47,7 +49,8 @@ class BasicModel extends Model
      * @param string $field
      * @return $this
      */
-    public function getInfoPaginate($where = [], $param = [], $field = []){
+    public function getInfoPaginate($where = [], $param = [], $field = '',$M_Code){
+        $this->name = getMeterdataTablename($M_Code);
         if( $field ){
             return $this->where($where)->field($field)->paginate()->appends($param);
         }
@@ -60,7 +63,8 @@ class BasicModel extends Model
      * @param bool|true $scene
      * @return bool|string
      */
-    public function upsert($data, $scene = true){
+    public function upsert($data, $scene = true,$M_Code){
+        $this->name = getMeterdataTablename($M_Code);
         if( isset($data['id']) && !empty($data['id']) ){
             $result =  $this->validate($scene)->isUpdate(true)->save($data);
             if($result === false){
@@ -76,4 +80,5 @@ class BasicModel extends Model
             return $this->getLastInsID();
         }
     }
+
 }

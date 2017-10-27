@@ -186,3 +186,7 @@ function getYearReport($startYear, $endYear, $where){
     $res['report'] = $report;
     return $res;
 }
+function getMeterdataTablename($M_Code){
+    return 'MeterData';
+}
+

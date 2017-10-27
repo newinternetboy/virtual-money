@@ -161,6 +161,7 @@ return [
     'Installation Address'    => '安装地址',
     'Detail Address'          => '安装位置',
     'Change Code Information' => '换表信息',
+    'Meter Balance'           => '表具余额',
     'Old M_Code'              => '原表号',
     'New M_Code'              => '新表号',
     'Change Code People'      => '换表人',

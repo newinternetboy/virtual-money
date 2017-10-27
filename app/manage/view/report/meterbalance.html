@@ -1,0 +1,83 @@
+{js href="__JS__/jquery.jqprint-0.3.js" /}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <!-- 搜索条件 -->
+                    <form action="" method="post" class="form-horizontal" onsubmit="return check();">
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: right">
+                                <div class="form-group">
+                                    <label for="company_id" class="col-sm-2 control-label">{:lang('Search company')}</label>
+                                    <div class="col-sm-6">
+                                        <select name="company_id" class="form-control" id="company_id">
+                                            {foreach name="companys" item="company"}
+                                            <option value="{$company.id}" {if condition="$company.id eq $company_id"}selected{/if} >{$company.company_name}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="M_Code" class="col-sm-2 control-label">{:lang('M_Code')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="M_Code" name="M_Code" value="{$M_Code ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--报表-->
+                    <div id="table">
+                        <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>{:lang('M_Code')}</th>
+                                <th>{:lang('User Name')}</th>
+                                <th>{:lang('Address')}</th>
+                                <th>{:lang('Dosage Of Meter')}</th>
+                                <th>{:lang('Meter Balance')}</th>
+                            </tr>
+                            </thead>
+                            {foreach name="meter" item="vo"}
+                                <tr>
+                                    <td>{$vo.M_Code}</td>
+                                    <td>{$vo.consumer.username}</td>
+                                    <td>{$vo.area.address}{$vo.detail_address}</td>
+                                    <td>{$vo.totalCube}</td>
+                                    <td>{$vo.balance}</td>
+                                </tr>
+                            {/foreach}
+                            <tr>
+                                <td></td>
+                                <td>累计余额：{$totalbalance}元</td>
+                                <td>累计用户：{$number}户</td>
+                                <td>平均每户￥{$savbalance}元</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <div>{$meter->render()}</div>
+                    </div>
+                    <button id="print" style="float: right;margin-left: 1vw" class="btn btn-success" type="button" >{:lang('Print')}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $('#print').click(function(){
+            $('#table').jqprint();
+    })
+</script>
