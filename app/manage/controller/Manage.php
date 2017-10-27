@@ -145,7 +145,7 @@ class Manage extends Admin
         $address = input('address');
         $OPT_ID = input('OPT_ID');
         if($company_name){
-            $where['company_name'] = $company_name;
+            $where['company_name'] = ['like',$company_name];
         }
         if($address){
             $where['address'] = ['like',$address];
