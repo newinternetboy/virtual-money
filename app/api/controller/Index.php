@@ -307,8 +307,10 @@ class Index extends Controller
                     //moneylog插入失败task记录
                     $new_money_log_data = $money_log_info->toArray();
                     $new_money_log_data['fail_meter_log_id'] = $new_money_log_data['id'];
-                    $new_money_log_data['task_fail_flag'] = 1;
+                    $new_money_log_data['fail_task_id'] = $task['id'];
+                    $new_money_log_data['dealStatus'] = MONEYLOG_FAIL_DEAL_STATUS_WAITING;
                     $new_money_log_data['create_time'] = time();
+                    $new_money_log_data['update_time'] = time();
                     unset($new_money_log_data['id']);
                     if( !$moneyLogId = model('MoneyLog')->add($new_money_log_data) ){
                         Log::record('moneyLog添加失败: '.$new_money_log_data,'error');
