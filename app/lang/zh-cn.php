@@ -361,6 +361,7 @@ return [
     //运营管理
     'Operation Management'              => '运营管理',
     'Company Name'                      => '名称',
+    'Company Type'                      => '经营类型',
     'Admin'                             => '管理员',
     'Company'                           => '运营商',
     'Please Choose Company'             => '请选择运营商',
@@ -386,6 +387,7 @@ return [
     'Desc'                              => '备注',
     'Alarm Tel'                         => '报警电话',
     'Company Name Require'                     => '名称必须',
+    'Company Type Require'                     => '经营类型必须',
     'Admin Require'                            => '管理员必须',
     'Company Require'                          => '运营商必须',
     'Please Choose Company Require'            => '请选择运营商必须',
