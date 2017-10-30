@@ -39,6 +39,10 @@
                     <hr style="height:1px;border:none;border-top:1px solid #555555;" />
                     <!--报表-->
                     <div id="table">
+                        <div>
+                            <h5 style="float: left">月份:{$searchDate|strtotime|date='Y-m',###}</h5>
+                            <h5 style="float: left;margin-left: 2vw">表号:{$M_Code}</h5>
+                        </div>
                         <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
                             <thead>
                             <tr>
@@ -159,7 +163,9 @@
                 $(img).jqprint();
             }
         }else{
-            $('#table').jqprint();
+            $('#table').jqprint({
+                operaSupport: false
+            });
         }
     })
 </script>
