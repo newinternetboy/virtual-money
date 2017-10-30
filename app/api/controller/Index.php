@@ -151,8 +151,6 @@ class Index extends Controller
             case METER_INIT:
                 $data['source_type'] = METER;
                 $data['action_type'] = $action_type;
-                $data['diffCost'] = 0;
-                $data['diffCube'] = 0;
                 break;
             case METER_REPORT:
                 $data['source_type'] = METER;
@@ -302,23 +300,37 @@ class Index extends Controller
             //task执行失败恢复交易金额
             if( $updateCur['status'] === TASK_FAIL ){
                 $task = db($this->taskTableName)->where(['meter_id' => $meter_id, 'seq_id' => $lastSeq])->field('money_log_id')->find();
-                $money_log_info = model('MoneyLog')->getMoneyLog(['id' => $task['money_log_id']],'find');
-                if( isset($money_log_info['from']) && !empty($money_log_info['from']) && isset($money_log_info['to']) && !empty($money_log_info['to']) ){ //人对人
-                    if( $money_log_info['money_type'] == MONEY_PERSON ){
-                        model('app\admin\model\Meter')->updateMoney($money_log_info['from'],'inc','balance_deli',$money_log_info['money']);
-                        model('app\admin\model\Meter')->updateMoney($money_log_info['to'],'dec','balance_deli',$money_log_info['money']);
+                if( isset($task['money_log_id']) ){ //如果是消费task,则恢复消费金额数据
+                    $money_log_info = model('MoneyLog')->getMoneyLog(['id' => $task['money_log_id']],'find');
+                    //moneylog插入失败task记录
+                    $new_money_log_data = $money_log_info->toArray();
+                    $new_money_log_data['fail_meter_log_id'] = $new_money_log_data['id'];
+                    $new_money_log_data['fail_task_id'] = $task['id'];
+                    $new_money_log_data['dealStatus'] = MONEYLOG_FAIL_DEAL_STATUS_WAITING;
+                    $new_money_log_data['create_time'] = time();
+                    $new_money_log_data['update_time'] = time();
+                    unset($new_money_log_data['id']);
+                    if( !$moneyLogId = model('MoneyLog')->add($new_money_log_data) ){
+                        Log::record('moneyLog添加失败: '.$new_money_log_data,'error');
+                        exception('moneyLog添加失败',ERROR_CODE_DATA_ILLEGAL);
                     }
-                }elseif( isset($money_log_info['from']) && !empty($money_log_info['from']) ){
-                    if( $money_log_info['money_type'] == MONEY_PAY ){
-                        model('app\admin\model\Meter')->updateMoney($money_log_info['from'],'inc','balance_rmb',$money_log_info['money']);
-                    }elseif($money_log_info['money_type'] == MONEY_PERSON ){
-                        model('app\admin\model\Meter')->updateMoney($money_log_info['from'],'inc','balance_deli',$money_log_info['money']);
-                    }
-                }elseif( isset($money_log_info['to']) && !empty($money_log_info['to']) ){
-                    if( $money_log_info['money_type'] == MONEY_PAY ){
-                        model('app\admin\model\Meter')->updateMoney($money_log_info['to'],'dec','balance_rmb',$money_log_info['money']);
-                    }elseif($money_log_info['money_type'] == MONEY_PERSON ){
-                        model('app\admin\model\Meter')->updateMoney($money_log_info['to'],'dec','balance_deli',$money_log_info['money']);
+                    if( isset($money_log_info['from']) && !empty($money_log_info['from']) && isset($money_log_info['to']) && !empty($money_log_info['to']) ){ //人对人
+                        if( $money_log_info['money_type'] == MONEY_PERSON ){
+                            model('app\admin\model\Meter')->updateMoney($money_log_info['from'],'inc','balance_deli',$money_log_info['money']);
+                            model('app\admin\model\Meter')->updateMoney($money_log_info['to'],'dec','balance_deli',$money_log_info['money']);
+                        }
+                    }elseif( isset($money_log_info['from']) && !empty($money_log_info['from']) ){
+                        if( $money_log_info['money_type'] == MONEY_PAY ){
+                            model('app\admin\model\Meter')->updateMoney($money_log_info['from'],'inc','balance_rmb',$money_log_info['money']);
+                        }elseif($money_log_info['money_type'] == MONEY_PERSON ){
+                            model('app\admin\model\Meter')->updateMoney($money_log_info['from'],'inc','balance_deli',$money_log_info['money']);
+                        }
+                    }elseif( isset($money_log_info['to']) && !empty($money_log_info['to']) ){
+                        if( $money_log_info['money_type'] == MONEY_PAY ){
+                            model('app\admin\model\Meter')->updateMoney($money_log_info['to'],'dec','balance_rmb',$money_log_info['money']);
+                        }elseif($money_log_info['money_type'] == MONEY_PERSON ){
+                            model('app\admin\model\Meter')->updateMoney($money_log_info['to'],'dec','balance_deli',$money_log_info['money']);
+                        }
                     }
                 }
             }

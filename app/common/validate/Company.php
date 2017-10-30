@@ -15,6 +15,7 @@ class Company extends Validate
 {
     protected $rule =   [
         'company_name'      => 'require',
+        'company_type'      => 'require',
         'OPT_ID'            => 'require|unique:company' ,
         'address'           => 'require',
         'quality'           => 'require',
@@ -27,18 +28,19 @@ class Company extends Validate
         'tax_code'          => 'require',
         'sms_tel'           => 'require',
         'secret_key_url'    => 'require',
-        'secret_key'        => 'require',
+//        'secret_key'        => 'require',
         'charge_status'     => 'require',
         'charge_date'       => 'require',
         'limit_times'       => 'require',
         'left_times'        => 'require',
         'desc'              => 'require',
-        'alarm_tel'         => 'require',
-        'status'            => 'require',
+//        'alarm_tel'         => 'require',
+//        'status'            => 'require',
     ];
 
     protected $message  =   [
         'company_name.require'     => '{%Company Name Require}',
+        'company_type.require'     => '{%Company Type Require}',
         'OPT_ID.require'           => '{%OPT_ID Require}',
         'OPT_ID.unique'            => '{%OPT_ID MULTI}',
         'address.require'          => '{%Address Require}',
@@ -52,19 +54,19 @@ class Company extends Validate
         'tax_code.require'         => '{%Tax Code Require}',
         'sms_tel.require'          => '{%SMS Tel Require}',
         'secret_key_url.require'   => '{%Secret Key URL Require}',
-        'secret_key.require'       => '{%Secret Key Require}',
+//        'secret_key.require'       => '{%Secret Key Require}',
         'charge_status.require'    => '{%Charge Status Require}',
         'charge_date.require'      => '{%Charge Date Require}',
         'limit_times.require'      => '{%Limit Times Require}',
         'left_times.require'       => '{%Left Times Require}',
         'desc.require'             => '{%Desc Require}',
-        'alarm_tel.require'        => '{%Alarm Tel Require}',
-        'status.require'           => '{%Status Require}',
+//        'alarm_tel.require'        => '{%Alarm Tel Require}',
+//        'status.require'           => '{%Status Require}',
     ];
 
     protected $scene = [
-        'add'   => ['company_name','OPT_ID','address','quality','contacts_tel','contacts_name','fax','legal_person','bank_name','bank_card','tax_code','sms_tel','secret_key_url','secret_key','charge_status','charge_date','limit_times','left_times','desc','alarm_tel','status'],
-        'edit'  => ['company_name','address','quality','contacts_tel','contacts_name','fax','legal_person','bank_name','bank_card','tax_code','sms_tel','secret_key_url','secret_key','charge_status','charge_date','limit_times','left_times','desc','alarm_tel'],
+        'add'   => ['company_name','company_type','OPT_ID','address','quality','contacts_tel','contacts_name','fax','legal_person','bank_name','bank_card','tax_code','sms_tel','secret_key_url','charge_status','charge_date','limit_times','left_times','status'],
+        'edit'  => ['company_name','company_type','address','quality','contacts_tel','contacts_name','fax','legal_person','bank_name','bank_card','tax_code','sms_tel','secret_key_url','charge_status','charge_date','limit_times','left_times'],
         'del'   => ['status'],
     ];
 }

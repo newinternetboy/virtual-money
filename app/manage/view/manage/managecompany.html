@@ -145,7 +145,7 @@
                 <div class="form-group">
                     <label for="role" class="col-md-2 control-label">{:lang('Login Name')}{:lang('Role')}</label>
                     <div>
-                        <label>
+                        <label class="radio-inline">
                             <input type="radio" name="role" id="role" value=1 checked>{:lang('Administrator')}
                         </label>
                         {foreach $roles as $role}
@@ -199,14 +199,14 @@
             alertMsg("{:lang('Login Name Require')}");
             return false;
         }
-        if( password == '' || password == 'undefined' || password == null ){
-            alertMsg("{:lang('Password Require')}");
-            return false;
-        }
-        if( confirm_password == '' || confirm_password == 'undefined' || confirm_password == null ){
-            alertMsg("{:lang('Confirm Password Require')}");
-            return false;
-        }
+//        if( password == '' || password == 'undefined' || password == null ){
+//            alertMsg("{:lang('Password Require')}");
+//            return false;
+//        }
+//        if( confirm_password == '' || confirm_password == 'undefined' || confirm_password == null ){
+//            alertMsg("{:lang('Confirm Password Require')}");
+//            return false;
+//        }
         if( password != confirm_password ){
             alertMsg("{:lang('Password and Confirm Password inconsistent')}");
             return false;

@@ -44,27 +44,8 @@ class Manage extends Admin
      * @return \think\response\Json
      */
     public function saveCompany(){
-        $data['id'] = input('id');
-        $data['company_name'] = input('company_name');
-        $data['OPT_ID'] = input('OPT_ID');
-        $data['address'] = input('address');
-        $data['quality'] = input('quality');
-        $data['contacts_tel'] = input('contacts_tel');
-        $data['contacts_name'] = input('contacts_name');
-        $data['fax'] = input('fax');
-        $data['legal_person'] = input('legal_person');
-        $data['bank_name'] = input('bank_name');
-        $data['bank_card'] = input('bank_card');
-        $data['tax_code'] = input('tax_code');
-        $data['sms_tel'] = input('sms_tel');
-        $data['secret_key_url'] = input('secret_key_url');
-        $data['secret_key'] = input('secret_key');
-        $data['charge_status'] = input('charge_status/d');
-        $data['charge_date'] = input('charge_date');
-        $data['limit_times'] = input('limit_times');
-        $data['left_times'] = input('left_times');
-        $data['desc'] = input('desc');
-        $data['alarm_tel'] = input('alarm_tel');
+        $data = input('data');
+        $data = json_decode($data,true);
         $ret['code'] = 200;
         $ret['msg'] = lang('Operation Success');
         try{
@@ -145,7 +126,7 @@ class Manage extends Admin
         $address = input('address');
         $OPT_ID = input('OPT_ID');
         if($company_name){
-            $where['company_name'] = $company_name;
+            $where['company_name'] = ['like',$company_name];
         }
         if($address){
             $where['address'] = ['like',$address];
@@ -178,6 +159,9 @@ class Manage extends Admin
             $userService = new UserService();
             if(isset($data['id']) && !empty($data['id'])){
                 unset($data['login_name']);
+                if(!$data['password']){
+                    unset($data['password']);
+                }
                 $scene = 'User.manageEdit';
             }else{
                 if( $userService->findInfo(['login_name' => $data['login_name']]) ){

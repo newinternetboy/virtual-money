@@ -186,7 +186,17 @@ function getYearReport($startYear, $endYear, $where){
     $res['report'] = $report;
     return $res;
 }
+
+/**
+ * meter_data 表分表方法,根据表号返回不同表名
+ * @param $M_Code
+ * @return string
+ */
 function getMeterdataTablename($M_Code){
-    return 'MeterData';
+    return 'meter_data';
+}
+
+function parseDate($timestamp){
+    return date('d',$timestamp);
 }
 

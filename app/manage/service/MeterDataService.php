@@ -10,11 +10,11 @@ namespace app\manage\service;
 
 use app\manage\model\MeterdataModel;
 
-class MeterdataService extends BasicService
+class MeterDataService extends BasicService
 {
 
     public function __construct(){
-        $this->dbModel = new MeterdataModel();
+        $this->dbModel = new MeterDataModel();
     }
 
     /**
@@ -24,7 +24,7 @@ class MeterdataService extends BasicService
      * @param $field
      * @return mixed
      */
-    public function findInfo($where,  $field = '',$M_Code){
+    public function findInfo($where,  $field = '',$M_Code = ''){
         return $this->dbModel->findInfo($where, $field,$M_Code);
     }
 
@@ -35,7 +35,7 @@ class MeterdataService extends BasicService
      * @param $field
      * @return mixed
      */
-    public function selectInfo($where = [],  $field = '',$M_Code){
+    public function selectInfo($where = [],  $field = '',$M_Code = ''){
         return $this->dbModel->selectInfo($where, $field,$M_Code);
     }
 
@@ -46,16 +46,8 @@ class MeterdataService extends BasicService
      * @param $field
      * @return mixed
      */
-    public function getInfoPaginate($where = [], $param = [], $field = '',$M_Code){
+    public function getInfoPaginate($where = [], $param = [], $field = '',$M_Code = ''){
         return $this->dbModel->getInfoPaginate($where, $param, $field,$M_Code);
-    }
-
-    /**
-     * 获取上次执行的sql
-     * @return mixed
-     */
-    public function getLastSql(){
-        return $this->dbModel->getLastSql();
     }
 
     /**
@@ -64,15 +56,8 @@ class MeterdataService extends BasicService
      * @param bool|true $scene
      * @return mixed
      */
-    public function upsert($data, $scene = true,$M_Code){
+    public function upsert($data, $scene = true,$M_Code = ''){
         return $this->dbModel->upsert($data,$scene,$M_Code);
     }
 
-    /**
-     * 获取错误信息
-     * @return mixed
-     */
-    public function getError(){
-        return $this->dbModel->getError();
-    }
 }
