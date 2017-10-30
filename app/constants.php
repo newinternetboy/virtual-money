@@ -86,6 +86,9 @@ define('MONEY_DELI',4); //得力专供中消费
 //task执行失败的记录处理状态
 define('MONEYLOG_FAIL_DEAL_STATUS_WAITING',1); //待处理
 define('MONEYLOG_FAIL_DEAL_STATUS_DONE',2); //已处理
+//operator字段
+define('MONEYLOG_OPERATOR_WEIXIN',1); //微信充值
+define('MONEYLOG_OPERATOR_MANAGE',2); //清分充值
 
 /***************运营商表***************/
 //收费状态

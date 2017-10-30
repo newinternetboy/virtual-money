@@ -52,29 +52,41 @@ class Rest extends LanFilter
         try{
             $data['create_time'] = time();
             $data['money'] = floatval($data['money']);
-            if( !$moneyLogId = model('MoneyLog')->add($data) ){
-                Log::record('moneyLog添加失败: '.$data,'error');
-                exception('moneyLog添加失败',ERROR_CODE_DATA_ILLEGAL);
-            }
-            $ret['moneyLogId'] = $moneyLogId;
+
             if( isset($data['from']) && !empty($data['from']) && isset($data['to']) && !empty($data['to']) ){ //人对人
                 if( $data['money_type'] == MONEY_PERSON ){
-                    model('app\admin\model\Meter')->updateMoney($data['from'],'dec','balance_deli',$data['money']);
-                    model('app\admin\model\Meter')->updateMoney($data['to'],'inc','balance_deli',$data['money']);
+                    if(!model('app\admin\model\Meter')->updateMoney($data['from'],'dec','balance_deli',$data['money'])){
+                        exception('dec得力币余额失败',ERROR_CODE_DATA_ILLEGAL);
+                    }
+                    if(!model('app\admin\model\Meter')->updateMoney($data['to'],'inc','balance_deli',$data['money'])){
+                        exception('inc得力币余额失败',ERROR_CODE_DATA_ILLEGAL);
+                    }
                 }
             }elseif( isset($data['from']) && !empty($data['from']) ){
                 if( $data['money_type'] == MONEY_PAY ){
-                    model('app\admin\model\Meter')->updateMoney($data['from'],'dec','balance_rmb',$data['money']);
+                    if(!model('app\admin\model\Meter')->updateMoney($data['from'],'dec','balance_rmb',$data['money'])){
+                        exception('dec人民币余额失败',ERROR_CODE_DATA_ILLEGAL);
+                    }
                 }elseif($data['money_type'] == MONEY_PERSON ){
-                    model('app\admin\model\Meter')->updateMoney($data['from'],'dec','balance_deli',$data['money']);
+                    if(!model('app\admin\model\Meter')->updateMoney($data['from'],'dec','balance_deli',$data['money'])){
+                        exception('dec得力币余额失败',ERROR_CODE_DATA_ILLEGAL);
+                    }
                 }
             }elseif( isset($data['to']) && !empty($data['to']) ){
                 if( $data['money_type'] == MONEY_PAY ){
-                    model('app\admin\model\Meter')->updateMoney($data['to'],'inc','balance_rmb',$data['money']);
+                    if(!model('app\admin\model\Meter')->updateMoney($data['to'],'inc','balance_rmb',$data['money'])){
+                        exception('inc人民币余额失败',ERROR_CODE_DATA_ILLEGAL);
+                    }
                 }elseif($data['money_type'] == MONEY_PERSON ){
-                    model('app\admin\model\Meter')->updateMoney($data['to'],'inc','balance_deli',$data['money']);
+                    if(!model('app\admin\model\Meter')->updateMoney($data['to'],'inc','balance_deli',$data['money'])){
+                        exception('inc得力币余额失败',ERROR_CODE_DATA_ILLEGAL);
+                    }
                 }
             }
+            if( !$moneyLogId = model('MoneyLog')->add($data) ){
+                exception('moneyLog添加失败',ERROR_CODE_DATA_ILLEGAL);
+            }
+            $ret['moneyLogId'] = $moneyLogId;
         }catch (\Exception $e){
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
