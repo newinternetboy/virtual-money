@@ -122,7 +122,6 @@ class logRecord extends Admin
     }
     //解析表具修改
     public function MeterUpdate($data){
-        $data = json_decode($data,true);
         return "修改后的表号是：".$data['meter']['M_Code']."；地址是：".$data['meter']['detail_address']."；用户是：".$data['consumer']['username'];
     }
     //解析表具报装
@@ -135,7 +134,6 @@ class logRecord extends Admin
     }
     //解析修改/添加权限
     public function UpdateandAddauth($data){
-        $data = json_decode($data,true);
         return "修改或添加的标题为：".$data['title']."；路径是：".$data['rule_val'];
     }
     //解析添加/修改价格
@@ -149,8 +147,7 @@ class logRecord extends Admin
     }
     //解析修改/添加用户
     public function UpdateandAdduser($data){
-        $data = json_decode($data,true);
-        return "用户名为：".$data['username']."；号码是：".$data['mobile'];
+        return "用户名为：".$data['username']."；号码是：".$data['login_name'];
     }
     //解析添加/修改区域
     public function UpdateandAddarea($data){

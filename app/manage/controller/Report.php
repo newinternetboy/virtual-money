@@ -81,4 +81,21 @@ class Report extends Admin
         return $this->fetch();
     }
 
+    //余额统计
+    public function balanceStatistics(){
+        $companyService = new CompanyService();
+        $company = $companyService->selectInfo([],'id,company_name,OPT_ID');
+        $meterService = new MeterService();
+        $where['meter_status'] = METER_STATUS_BIND;
+        $where['meter_life'] = METER_LIFE_ACTIVE;
+        foreach($company as & $value){
+            $where['company_id'] = $value['id'];
+            $value['count'] = $meterService->counts($where);
+            $value['meterbalance'] = $meterService->sums($where,'balance');
+        }
+        var_dump(array_column($company,'meterbalance'));die;
+        $this->assign('company',$company);
+        return $this->fetch();
+    }
+
 }

@@ -431,4 +431,7 @@ return [
     'Login Name Exists'                 => '账号已存在',
     'Password and Confirm Password inconsistent'    => '密码与确认密码不一致',
 
+    //报表；
+    'Number'   => '序号',
+
 ];

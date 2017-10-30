@@ -50,7 +50,7 @@ class MeterdataModel extends BasicModel
      * @return $this
      */
     public function getInfoPaginate($where = [], $param = [], $field = '',$M_Code){
-        $this->name = getMeterdataTablename($M_Code);
+
         if( $field ){
             return $this->where($where)->field($field)->paginate()->appends($param);
         }
@@ -64,7 +64,6 @@ class MeterdataModel extends BasicModel
      * @return bool|string
      */
     public function upsert($data, $scene = true,$M_Code){
-        $this->name = getMeterdataTablename($M_Code);
         if( isset($data['id']) && !empty($data['id']) ){
             $result =  $this->validate($scene)->isUpdate(true)->save($data);
             if($result === false){

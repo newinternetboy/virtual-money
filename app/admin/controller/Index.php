@@ -26,7 +26,4 @@ class Index extends Admin
 		return view();
 	}
 
-	public function test(){
-
-	}
 }

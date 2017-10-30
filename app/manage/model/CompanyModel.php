@@ -28,4 +28,5 @@ class CompanyModel extends BasicModel
     public function setChargeStatusAttr($value){
         return intval($value);
     }
+
 }

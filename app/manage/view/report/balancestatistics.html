@@ -1,0 +1,48 @@
+{js href="__JS__/jquery.jqprint-0.3.js" /}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--报表-->
+                    <div id="table">
+                        <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>{:lang('Number')}</th>
+                                <th>{:lang('Company')}</th>
+                                <th>{:lang('User Number')}</th>
+                                <th>{:lang('Meter Balance')}</th>
+                            </tr>
+                            </thead>
+                            {foreach name="company" item="vo"}
+                                <tr>
+                                    <td>{$vo.OPT_ID}</td>
+                                    <td>{$vo.company_name}</td>
+                                    <td>{$vo.count}</td>
+                                    <td>{$vo.meterbalance}</td>
+                                </tr>
+                            {/foreach}
+                            <tr>
+                                <td></td>
+                                <td>累计用户：{$company|array_column=###,'count'|array_sum=###}户</td>
+                                <td>累计余额：{$company|array_column=###,'meterbalance'|array_sum=###}元</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <button id="print" style="float: right;margin-left: 1vw" class="btn btn-success" type="button" >{:lang('Print')}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $('#print').click(function(){
+            $('#table').jqprint();
+    })
+</script>
