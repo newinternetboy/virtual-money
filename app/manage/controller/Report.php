@@ -83,19 +83,21 @@ class Report extends Admin
     }
 
     //余额统计
-    public function balanceStatistics(){
+    public function balanceStatistics()
+    {
         $companyService = new CompanyService();
-        $company = $companyService->selectInfo([],'id,company_name,OPT_ID');
+        $company = $companyService->selectInfo([], 'id,company_name,OPT_ID');
         $meterService = new MeterService();
         $where['meter_status'] = METER_STATUS_BIND;
         $where['meter_life'] = METER_LIFE_ACTIVE;
-        foreach($company as & $value){
+        foreach ($company as & $value) {
             $where['company_id'] = $value['id'];
             $value['count'] = $meterService->counts($where);
-            $value['meterbalance'] = $meterService->sums($where,'balance');
+            $value['meterbalance'] = $meterService->sums($where, 'balance');
         }
-        var_dump(array_column($company,'meterbalance'));die;
-        $this->assign('company',$company);
+        var_dump(array_column($company, 'meterbalance'));
+        die;
+        $this->assign('company', $company);
         return $this->fetch();
 
     public function meterMonthReport(){
@@ -108,7 +110,7 @@ class Report extends Admin
                 $searchDate .= '-01';
                 $startDate = $searchDate.' 00:00:00';
                 $endDate = date('Y-m-d H:i:s',strtotime('+1 month',strtotime($searchDate))-1);
-                $reportLogs = $meterService->ReportLogs($meterInfo['id'],$M_Code,$startDate,$endDate);
+                $reportLogs = $meterService->ReportLogs($meterInfo['id'],$M_Code,$startDate,$endDate,'diffCube,diffCost');
             }
         }
         $this->assign('searchDate',date('Y-m',strtotime($searchDate)));

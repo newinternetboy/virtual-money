@@ -10,6 +10,7 @@ namespace app\api\controller;
 
 use think\Log;
 use think\Db;
+use app\manage\service\MeterService;
 
 class Rest extends LanFilter
 {
@@ -78,6 +79,33 @@ class Rest extends LanFilter
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
             Log::record(['moneyBusinessApi执行失败' => $e->getMessage(),'post' => $data,'ret' => $ret ],'error');
+        }
+        return json($ret);
+    }
+
+    public function meterUsageDetail(){
+        $searchDate = input('searchDate',date('Y-m'));
+        $meter_id = input('meter_id');
+        $ret['code'] = 200;
+        $ret['msg'] = '操作成功';
+        try{
+            if(!$meter_id){
+                exception("请先提供表id",ERROR_CODE_DATA_ILLEGAL);
+            }
+            $where['id'] = $meter_id;
+            $where['meter_life'] = METER_LIFE_ACTIVE;
+            $meterService = new MeterService();
+            if( !$meterInfo = $meterService->findInfo($where,'M_Code') ){
+                exception('表id不存在',ERROR_CODE_DATA_ILLEGAL);
+            }
+            $searchDate .= '-01';
+            $startDate = $searchDate.' 00:00:00';
+            $endDate = date('Y-m-d H:i:s',strtotime('+1 month',strtotime($searchDate))-1);
+            $reportLogs = $meterService->ReportLogs($meterInfo['id'],$meterInfo['M_Code'],$startDate,$endDate,'diffCube,diffCost');
+            $ret['data'] = $reportLogs;
+        }catch (\Exception $e){
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
         }
         return json($ret);
     }
