@@ -9,6 +9,7 @@
 namespace app\manage\controller;
 
 use app\manage\service\CompanyService;
+use app\manage\service\MeterdataService;
 use app\manage\service\MeterService;
 
 
@@ -79,6 +80,25 @@ class Report extends Admin
         $this->assign('companys',$companys);
         $this->assign('company_id',$company_id);
         return $this->fetch();
+    }
+
+    public function meterMonthReport(){
+        $searchDate = input('searchDate',date('Y-m'));
+        $M_Code = input('M_Code');
+        if($M_Code){
+            $meterService = new MeterService();
+            $meterInfo = $meterService->findInfo(['M_Code' => $M_Code,'meter_life' => METER_LIFE_ACTIVE]);
+            if( $meterInfo ){
+                $searchDate .= '-01';
+                $startDate = $searchDate.' 00:00:00';
+                $endDate = date('Y-m-d H:i:s',strtotime('+1 month',strtotime($searchDate))-1);
+                $reportLogs = $meterService->ReportLogs($meterInfo['id'],$M_Code,$startDate,$endDate);
+            }
+        }
+        $this->assign('searchDate',date('Y-m',strtotime($searchDate)));
+        $this->assign('M_Code',$M_Code);
+        $this->assign('reportLogs',isset($reportLogs) ? $reportLogs : []);
+        return view();
     }
 
 }

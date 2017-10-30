@@ -433,4 +433,10 @@ return [
     'Login Name Exists'                 => '账号已存在',
     'Password and Confirm Password inconsistent'    => '密码与确认密码不一致',
 
+    //表具月报
+    'Meter Month Report'                => '表具用量月报表',
+    'Choose Date'                       => '选择月份',
+    'Input Meter Code'                  => '输入表号',
+    'Meter Usage'                       => '用量',
+    'Meter Cost'                        => '金额',
 ];

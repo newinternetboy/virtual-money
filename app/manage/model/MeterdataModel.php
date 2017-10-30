@@ -9,7 +9,7 @@
 namespace app\manage\model;
 
 
-class MeterdataModel extends BasicModel
+class MeterDataModel extends BasicModel
 {
     // 当前模型名称
     protected $name;
@@ -20,12 +20,12 @@ class MeterdataModel extends BasicModel
      * @param string $field
      * @return array|false|\PDOStatement|string|Model
      */
-    public function findInfo($where = [], $field = '',$M_Code){
+    public function findInfo($where = [], $field = '',$M_Code = ''){
         $this->name = getMeterdataTablename($M_Code);
         if( $field ){
-            return $this->where($where)->field($field)->find();
+            return db($this->name)->where($where)->field($field)->find();
         }
-        return $this->where($where)->find();
+        return db($this->name)->where($where)->find();
     }
 
     /**
@@ -34,12 +34,12 @@ class MeterdataModel extends BasicModel
      * @param string $field
      * @return false|\PDOStatement|string|\think\Collection
      */
-    public function selectInfo($where = [], $field = '',$M_Code){
+    public function selectInfo($where = [], $field = '',$M_Code = ''){
         $this->name = getMeterdataTablename($M_Code);
         if( $field ){
-            return $this->where($where)->field($field)->select();
+            return db($this->name)->where($where)->field($field)->select();
         }
-        return $this->where($where)->select();
+        return db($this->name)->where($where)->select();
     }
 
     /**
@@ -49,12 +49,12 @@ class MeterdataModel extends BasicModel
      * @param string $field
      * @return $this
      */
-    public function getInfoPaginate($where = [], $param = [], $field = '',$M_Code){
+    public function getInfoPaginate($where = [], $param = [], $field = '',$M_Code = ''){
         $this->name = getMeterdataTablename($M_Code);
         if( $field ){
-            return $this->where($where)->field($field)->paginate()->appends($param);
+            return db($this->name)->where($where)->field($field)->paginate()->appends($param);
         }
-        return $this->where($where)->paginate()->appends($param);
+        return db($this->name)->where($where)->paginate()->appends($param);
     }
 
     /**
@@ -63,21 +63,21 @@ class MeterdataModel extends BasicModel
      * @param bool|true $scene
      * @return bool|string
      */
-    public function upsert($data, $scene = true,$M_Code){
+    public function upsert($data, $scene = true,$M_Code = ''){
         $this->name = getMeterdataTablename($M_Code);
         if( isset($data['id']) && !empty($data['id']) ){
-            $result =  $this->validate($scene)->isUpdate(true)->save($data);
+            $result =  db($this->name)->validate($scene)->isUpdate(true)->save($data);
             if($result === false){
                 return false;
             }
             return true;
         }else{
             unset($data['id']);
-            $result = $this->validate($scene)->isUpdate(false)->save($data);
+            $result = db($this->name)->validate($scene)->isUpdate(false)->save($data);
             if($result === false){
                 return false;
             }
-            return $this->getLastInsID();
+            return db($this->name)->getLastInsID();
         }
     }
 

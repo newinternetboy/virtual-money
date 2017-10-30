@@ -28,9 +28,10 @@ class BasicService
      * @param $where
      * @param $method
      * @param $field
+     * @param $M_Code 分表预留字段
      * @return mixed
      */
-    public function findInfo($where,  $field = ''){
+    public function findInfo($where,  $field = '',$M_Code = ''){
         return $this->dbModel->findInfo($where, $field);
     }
 
@@ -39,9 +40,10 @@ class BasicService
      * @param $where
      * @param $method
      * @param $field
+     * @param $M_Code 分表预留字段
      * @return mixed
      */
-    public function selectInfo($where = [],  $field = ''){
+    public function selectInfo($where = [],  $field = '',$M_Code = ''){
         return $this->dbModel->selectInfo($where, $field);
     }
 
@@ -50,9 +52,10 @@ class BasicService
      * @param $where
      * @param $method
      * @param $field
+     * @param $M_Code 分表预留字段
      * @return mixed
      */
-    public function getInfoPaginate($where = [], $param = [], $field = ''){
+    public function getInfoPaginate($where = [], $param = [], $field = '',$M_Code = ''){
         return $this->dbModel->getInfoPaginate($where, $param, $field);
     }
 
@@ -68,9 +71,10 @@ class BasicService
      * 插入/更新
      * @param $data
      * @param bool|true $scene
+      * @param $M_Code 分表预留字段
      * @return mixed
      */
-    public function upsert($data, $scene = true){
+    public function upsert($data, $scene = true,$M_Code = ''){
         return $this->dbModel->upsert($data,$scene);
     }
 

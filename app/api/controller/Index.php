@@ -151,8 +151,6 @@ class Index extends Controller
             case METER_INIT:
                 $data['source_type'] = METER;
                 $data['action_type'] = $action_type;
-                $data['diffCost'] = 0;
-                $data['diffCube'] = 0;
                 break;
             case METER_REPORT:
                 $data['source_type'] = METER;
