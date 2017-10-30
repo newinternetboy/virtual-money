@@ -159,6 +159,9 @@ class Manage extends Admin
             $userService = new UserService();
             if(isset($data['id']) && !empty($data['id'])){
                 unset($data['login_name']);
+                if(!$data['password']){
+                    unset($data['password']);
+                }
                 $scene = 'User.manageEdit';
             }else{
                 if( $userService->findInfo(['login_name' => $data['login_name']]) ){
