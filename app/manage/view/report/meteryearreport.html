@@ -9,7 +9,7 @@
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
                 <!-- 表单标题概要 -->
                 <div class="ibox-title">
-                    <h5>{:lang('Meter Month Report')}</h5>
+                    <h5>{:lang('Meter Year Report')}</h5>
                 </div>
                 <!-- 表单内容 -->
                 <div class="ibox-content">
@@ -18,9 +18,9 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="searchDate" class="col-sm-2 control-label">{:lang('Choose Date')}</label>
+                                    <label for="year" class="col-sm-2 control-label">{:lang('Choose Year')}</label>
                                     <div class="col-sm-6">
-                                        <input id="searchDate" name="searchDate" value="{$searchDate ?? ''}" type="text" class="form-control">
+                                        <input id="year" name="year" value="{$year ?? ''}" type="text" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -44,7 +44,7 @@
                     <!--报表-->
                     <div id="table">
                         <div>
-                            <h5 style="float: left">{:lang('Month')}:{$searchDate|strtotime|date='Y-m',###}</h5>
+                            <h5 style="float: left">{:lang('Year')}:{$year}</h5>
                             <h5 style="float: left;margin-left: 2vw">{:lang('M_Code')}:{$M_Code}</h5>
                         </div>
                         <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
@@ -55,17 +55,17 @@
                                 <th>{:lang('Meter Cost')}</th>
                             </tr>
                             </thead>
-                            {foreach $reportLogs as $log}
+                            {foreach $reportLogs as $index => $log}
                             <tr>
-                                <td>{$log.create_time|date='Y-m-d',###}</td>
-                                <td>{$log.diffCube}</td>
-                                <td>{$log.diffCost}</td>
+                                <td>{$year}{:lang('Year')}{$index}{:lang('Month')}</td>
+                                <td>{$log.cube}</td>
+                                <td>{$log.cost}</td>
                             </tr>
                             {/foreach}
                             <tr>
                                 <td>{:lang('Total')}</td>
-                                <td>{$reportLogs|array_column=###,'diffCube'|array_sum}</td>
-                                <td>{$reportLogs|array_column=###,'diffCost'|array_sum}</td>
+                                <td>{$reportLogs|array_column=###,'cube'|array_sum}</td>
+                                <td>{$reportLogs|array_column=###,'cost'|array_sum}</td>
                             </tr>
                         </table>
                     </div>
@@ -78,15 +78,15 @@
     </div>
 </div>
 <script>
-    $("#searchDate").datetimepicker({
+    $("#year").datetimepicker({
         language:"zh-CN",
-        format: "yyyy-mm",
+        format: "yyyy",
         autoclose: true,
         todayBtn: false,
         pickerPosition: "bottom-left",
         startView: 4,
         bootcssVer:3,
-        minView: 3,
+        minView: 4,
     });
 </script>
 <script >
@@ -96,8 +96,8 @@
     // 指定图表的配置项和数据
     var option = {
                 title: {
-                    text: '表号{$M_Code} 用量月报表',
-                    subtext: "时间:{$searchDate|strtotime|date='Y',###}年{$searchDate|strtotime|date='m',###}月",
+                    text: '表号{$M_Code} 用量年报表',
+                    subtext: "时间:{$year}",
                     left: 'center'
                 },
                 tooltip: {
@@ -105,7 +105,7 @@
                     axisPointer: {
                         type: 'cross'
                     },
-                    formatter: '日期 {b0}:<br /> 累计用量:{c0} 方'
+                    formatter: '{b0} 月:<br /> 累计用量:{c0} 方'
                 },
                 toolbox: {
                     show: true,
@@ -115,10 +115,10 @@
                 },
                 xAxis:  {
                     type: 'category',
-                    name: '日期',
+                    name: '月份',
                     nameLocation: 'end',
                     boundaryGap: false,
-                    data: {$reportLogs|array_column=###,'create_time'|array_map='parseDate',###|json_encode}
+                    data: {$reportLogs|array_keys|json_encode}
             },
             yAxis: {
         type: 'value',
@@ -137,7 +137,7 @@
             name:'用量',
             type:'line',
             smooth: true,
-            data: {$reportLogs|array_column=###,"diffCube"|json_encode}
+            data: {$reportLogs|array_column=###,"cube"|json_encode}
 
     }
     ]

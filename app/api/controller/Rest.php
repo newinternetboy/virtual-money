@@ -83,6 +83,10 @@ class Rest extends LanFilter
         return json($ret);
     }
 
+    /**
+     * 表具月用量详情api
+     * @return \think\response\Json
+     */
     public function meterUsageDetail(){
         $searchDate = input('searchDate',date('Y-m'));
         $meter_id = input('meter_id');

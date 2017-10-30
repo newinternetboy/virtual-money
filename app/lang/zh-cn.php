@@ -442,5 +442,11 @@ return [
     'Input Meter Code'                  => '输入表号',
     'Meter Usage'                       => '用量',
     'Meter Cost'                        => '金额',
+    //表具年报
+    'Meter Year Report'                 => '表具用量年报表',
+    'Choose Year'                       => '选择年份',
+    'Year'                              => '年',
+    'Month'                             => '月',
+    'Total'                             => '总计',
 
 ];
