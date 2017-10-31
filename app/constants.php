@@ -12,6 +12,9 @@ define('ERROR_CODE_DEFAULT',9999);      //未定义错误代码 5000以上是系
 define('ERROR_CODE_DATA_ILLEGAL',5000); //数据不合法导致的错误
 define('ERROR_CODE_SYS',5001);          //系统错误导致
 
+//双得利集团ID
+define('SHUANGDELI_ID',100);
+
 //操作的执行状态
 define('ACTION_SUCCESS',1); //操作成功
 define('ACTION_FAIL',5);    //操作失败

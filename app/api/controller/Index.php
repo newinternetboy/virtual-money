@@ -132,6 +132,7 @@ class Index extends Controller
         $newMeterData['meter_life'] = METER_LIFE_ACTIVE;
         $newMeterData['balance_deli'] = 0;
         $newMeterData['balance_rmb'] = 0;
+        $newMeterData['company_id'] = SHUANGDELI_ID;
         if( !$newMeterId = model('app\admin\model\meter')->InitMeter($newMeterData,'Meter.init_new') ){
             $error = model('app\admin\model\meter')->getError();
             Log::record(['新表初始化失败' => $error,'data' => $newMeterData]);
