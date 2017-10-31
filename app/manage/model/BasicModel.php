@@ -23,9 +23,9 @@ class BasicModel extends Model
      */
     public function findInfo($where = [], $field = '',$M_Code = ''){
         if( $field ){
-            return $this->where($where)->field($field)->find();
+            return $this->where($where)->field($field)->order('create_time','desc')->find();
         }
-        return $this->where($where)->find();
+        return $this->where($where)->order('create_time','desc')->find();
     }
 
     /**
@@ -37,9 +37,9 @@ class BasicModel extends Model
      */
     public function selectInfo($where = [], $field = '',$M_Code = ''){
         if( $field ){
-            return $this->where($where)->field($field)->select();
+            return $this->where($where)->field($field)->order('create_time','desc')->select();
         }
-        return $this->where($where)->select();
+        return $this->where($where)->order('create_time','desc')->select();
     }
 
     /**
@@ -52,9 +52,9 @@ class BasicModel extends Model
      */
     public function getInfoPaginate($where = [], $param = [], $field = '',$M_Code = ''){
         if( $field ){
-            return $this->where($where)->field($field)->paginate()->appends($param);
+            return $this->where($where)->field($field)->order('create_time','desc')->paginate()->appends($param);
         }
-        return $this->where($where)->paginate()->appends($param);
+        return $this->where($where)->order('create_time','desc')->paginate()->appends($param);
     }
 
     /**

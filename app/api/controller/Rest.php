@@ -173,8 +173,42 @@ class Rest extends LanFilter
             $searchDate .= '-01';
             $startDate = $searchDate.' 00:00:00';
             $endDate = date('Y-m-d H:i:s',strtotime('+1 month',strtotime($searchDate))-1);
-            $reportLogs = $meterService->ReportLogs($meterInfo['id'],$meterInfo['M_Code'],$startDate,$endDate,'diffCube,diffCost,create_time');
+            $reportLogs = $meterService->reportLogs($meterInfo['id'],$meterInfo['M_Code'],$startDate,$endDate,'diffCube,diffCost,create_time');
             $ret['data'] = $reportLogs;
+        }catch (\Exception $e){
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    public function meterChargeDetail(){
+        $searchData = input('searchData');
+        $searchData = json_decode($searchData,true);
+
+        $ret['code'] = 200;
+        $ret['msg'] = '操作成功';
+        try{
+            if(!$searchData){
+                exception('请求数据格式错误',ERROR_CODE_DATA_ILLEGAL);
+            }
+            $searchDate = $searchData['searchDate'];
+            $meter_id = $searchData['meter_id'];
+            $type = $searchData['type'];
+            if(!$meter_id){
+                exception("请先提供表id",ERROR_CODE_DATA_ILLEGAL);
+            }
+            $where['id'] = $meter_id;
+            $where['meter_life'] = METER_LIFE_ACTIVE;
+            $meterService = new MeterService();
+            if( !$meterInfo = $meterService->findInfo($where,'M_Code') ){
+                exception('表id不存在',ERROR_CODE_DATA_ILLEGAL);
+            }
+            $searchDate .= '-01';
+            $startDate = $searchDate.' 00:00:00';
+            $endDate = date('Y-m-d H:i:s',strtotime('+1 month',strtotime($searchDate))-1);
+            $chargeLogs = $meterService->moneyLogs($meterInfo['id'],$startDate,$endDate,$type);
+            $ret['data'] = $chargeLogs;
         }catch (\Exception $e){
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
