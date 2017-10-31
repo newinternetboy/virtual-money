@@ -34,6 +34,10 @@ class MoneyLog extends Model
         return false;
     }
 
+    public function setOperatorAttr($value){
+        return intval($value);
+    }
+
     public function getMoneyLog($where,$method,$field = ''){
         if($field){
             return $this->where($where)->field($field)->$method();

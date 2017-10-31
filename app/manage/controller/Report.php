@@ -83,13 +83,14 @@ class Report extends Admin
     }
 
     //余额统计
-    public function balanceStatistics(){
+    public function balanceStatistics()
+    {
         $companyService = new CompanyService();
-        $company = $companyService->selectInfo([],'id,company_name,OPT_ID');
+        $company = $companyService->selectInfo([], 'id,company_name,OPT_ID');
         $meterService = new MeterService();
         $where['meter_status'] = METER_STATUS_BIND;
         $where['meter_life'] = METER_LIFE_ACTIVE;
-        foreach($company as & $value){
+        foreach ($company as & $value) {
             $where['company_id'] = $value['id'];
             $value['count'] = $meterService->counts($where);
             $value['meterbalance'] = $meterService->sums($where,'balance');
@@ -99,6 +100,10 @@ class Report extends Admin
         return $this->fetch();
     }
 
+    /**
+     * 表具月报
+     * @return \think\response\View
+     */
     public function meterMonthReport(){
         $searchDate = input('searchDate',date('Y-m'));
         $M_Code = input('M_Code');
@@ -109,7 +114,7 @@ class Report extends Admin
                 $searchDate .= '-01';
                 $startDate = $searchDate.' 00:00:00';
                 $endDate = date('Y-m-d H:i:s',strtotime('+1 month',strtotime($searchDate))-1);
-                $reportLogs = $meterService->ReportLogs($meterInfo['id'],$M_Code,$startDate,$endDate);
+                $reportLogs = $meterService->ReportLogs($meterInfo['id'],$M_Code,$startDate,$endDate,'diffCube,diffCost,create_time');
             }
         }
         $this->assign('searchDate',date('Y-m',strtotime($searchDate)));
@@ -118,4 +123,23 @@ class Report extends Admin
         return view();
     }
 
+    /**
+     * 表具年报
+     * @return \think\response\View
+     */
+    public function meterYearReport(){
+        $year = input('year',date('Y'));
+        $M_Code = input('M_Code');
+        if($M_Code){
+            $meterService = new MeterService();
+            $meterInfo = $meterService->findInfo(['M_Code' => $M_Code,'meter_life' => METER_LIFE_ACTIVE]);
+            if( $meterInfo ){
+                $reportLogs = getMonthReport($year,['meter_id' => $meterInfo['id']]);
+            }
+        }
+        $this->assign('year',$year);
+        $this->assign('M_Code',$M_Code);
+        $this->assign('reportLogs',isset($reportLogs) ? $reportLogs : []);
+        return view();
+    }
 }
