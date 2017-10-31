@@ -93,10 +93,11 @@ class Report extends Admin
             $where['company_id'] = $value['id'];
             $value['count'] = $meterService->counts($where);
             $value['meterbalance'] = $meterService->sums($where,'balance');
+            $value = $value->toArray();
         }
-        var_dump(array_column($company,'meterbalance'));die;
         $this->assign('company',$company);
         return $this->fetch();
+    }
 
     public function meterMonthReport(){
         $searchDate = input('searchDate',date('Y-m'));

@@ -85,4 +85,21 @@ class BasicService
     public function getError(){
         return $this->dbModel->getError();
     }
+
+    /**
+     * 获取数组总个数；
+     * @return mixed
+     */
+    public function counts($where){
+        return $this->dbModel->counts($where);
+    }
+
+    /**
+     * 获取总和；
+     * @return mixed
+     */
+    public function sums($where,$field){
+        return $this->dbModel->sums($where,$field);
+    }
+
 }

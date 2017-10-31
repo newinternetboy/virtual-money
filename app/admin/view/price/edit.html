@@ -34,7 +34,7 @@
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Price Period')}</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" name="period" required value="{$data.period ?? ''}">
+                                <input type="number" class="form-control" name="period" required value="{$data.period ?? ''}">
                             </div>
                         </div>
 
@@ -43,7 +43,7 @@
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Price First Price')}</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" name="first_price" required value="{$data.first_price ?? ''}">
+                                <input type="number" class="form-control" name="first_price" required value="{$data.first_price ?? ''}">
                             </div>
                         </div>
 
@@ -52,7 +52,7 @@
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Price First Value')}</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" name="first_val"  required value="{$data.first_val ?? ''}">
+                                <input type="number" class="form-control" name="first_val"  required value="{$data.first_val ?? ''}">
                             </div>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Price Second Price')}</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" name="second_price"  required value="{$data.second_price ?? ''}">
+                                <input type="number" class="form-control" name="second_price"  required value="{$data.second_price ?? ''}">
                             </div>
                         </div>
 
@@ -69,7 +69,7 @@
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Price Second Value')}</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" name="second_val"  required value="{$data.second_val ?? ''}">
+                                <input type="number" class="form-control" name="second_val"  required value="{$data.second_val ?? ''}">
                             </div>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Price Third Price')}</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" name="third_price" required value="{$data.third_price ?? ''}">
+                                <input type="number" class="form-control" name="third_price" required value="{$data.third_price ?? ''}">
                             </div>
                         </div>
 
@@ -86,7 +86,7 @@
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Price Third Value')}</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" name="third_val" required value="{$data.third_val ?? ''}">
+                                <input type="number" class="form-control" name="third_val" required value="{$data.third_val ?? ''}">
                             </div>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Price Fourth Price')}</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" name="fourth_price"  required value="{$data.fourth_price ?? ''}">
+                                <input type="number" class="form-control" name="fourth_price"  required value="{$data.fourth_price ?? ''}">
                             </div>
                         </div>
                     </div>
@@ -128,7 +128,7 @@
         todayBtn: true,
         pickerPosition: "top-right",
         minuteStep: 1,
-        bootcssVer:3,
+        bootcssVer:3
     }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
         event.preventDefault();
         event.stopPropagation();

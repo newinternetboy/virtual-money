@@ -57,7 +57,7 @@ class Meter extends Admin
             $where['M_Code'] = $M_Code;
             $where['company_id'] = ['in',[null,$this->company_id]];
             if( !$meter = model('Meter')->getMeterInfo($where,'find') ){
-                exception("表具不存在,请检查表号",ERROR_CODE_DATA_ILLEGAL);
+                exception("表具不存在或已报装,请检查表号",ERROR_CODE_DATA_ILLEGAL);
             }
             $ret['meter'] = $meter->toArray();
             //如果表具已绑定,返回绑定用户信息
@@ -114,7 +114,7 @@ class Meter extends Admin
             $data['meter']['meter_status'] = METER_STATUS_BIND;
             $data['meter']['setup_time'] = time();
             if( !model('Meter')->updateMeter($data['meter'],'Meter.setup') ){
-                $error = model('Consumer')->getError();
+                $error = model('Meter')->getError();
                 Log::record(['报装表具失败' => $error,'data' => $data],'error');
                 exception('更新表具失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }

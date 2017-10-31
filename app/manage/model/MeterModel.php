@@ -22,13 +22,5 @@ class MeterModel extends BasicModel
     public function area(){
         return $this->belongsTo('AreaModel','M_Address');
     }
-    //查总个数；
-    public function counts($where){
-        return $this->where($where)->count();
-    }
-    //获取总和；
-    public function sums($where,$field){
-        return $this->where($where)->sum($field);
-    }
 
 }

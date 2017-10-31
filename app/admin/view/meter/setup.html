@@ -28,7 +28,7 @@
                                 <div class="form-group">
                                     <label for="M_Type" class="col-md-2 control-label">{:lang('Meter Type')}</label>
                                     <div class="col-md-10">
-                                        {foreach $company_type as $type}
+                                        {volist name="company_type" id="type"}
                                         <label class="radio radio-inline">
                                             <input type="radio" class="radiobox" id="M_Type" name="M_Type" value="{$type}" required {if condition="(count($company_type) == 1) or ((isset($meter.M_Type)) and ($type eq $meter.M_Type))"}checked{/if}>
                                         <span>
@@ -40,7 +40,7 @@
                                         {/switch}
                                         </span>
                                         </label>
-                                        {/foreach}
+                                        {/volist}
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -52,7 +52,9 @@
                                             <i class="fa fa-warning"></i>
                                         </span>
                                         </div>
+                                        <div id="warning" style="color: red;"></div>
                                     </div>
+
                                 </div>
                                 <div class="form-group">
                                     <label for="P_ID" class="col-md-2 control-label">{:lang('Price')}{:lang('Price Type')}</label>
@@ -86,10 +88,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="tel" class="col-md-2 control-label">{:lang('Contact Number')}</label>
+                                    <label for="tel" class="col-md-2 control-label">{:lang('Mobile Number')}</label>
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="{:lang('Please enter mobile')}" name="tel" value="{$consumer.tel ?? ''}" id="tel">
+                                            <input class="form-control" type="text" placeholder="{:lang('Please enter mobile')}" maxlength="11" name="tel" value="{$consumer.tel ?? ''}" id="tel">
                                         <span class="input-group-addon">
                                             <i class="fa fa-phone fa-fw"></i>
                                         </span>
@@ -127,7 +129,7 @@
                                     <label for="detail_address" style="display: none"></label>
                                     <div class="col-md-12" style="padding-left: 0">
                                         <div class="input-group">
-                                            <input class="form-control" style="float: right" type="text" placeholder="{:lang('Please enter')}{:lang('detail address')}" value="{$meter.detail_address ?? ''}" name="detail_address" id="detail_address" required>
+                                            <input class="form-control" style="float: right" type="text" placeholder="{:lang('Please enter')}{:lang('detail address')}" value="{$meter.detail_address ?? ''}" name="detail_address" id="detail_address" >
                                             <span class="input-group-addon">
                                                 <i class="fa fa-map-marker fa-fw"></i>
                                             </span>
@@ -170,14 +172,15 @@
                                     </div>
                                 </div>
                             </fieldset>
-                            <div class="form-group">
-                                <label  class="col-sm-2 control-label"></label>
-                                <div class="col-sm-10">
-                                    <button class="btn btn-primary col-sm-1" id="jqprint" type="button" >{:lang('Print')}</button>
-                                    <button style="float: right" class="btn btn-primary col-sm-1" onclick="saveData()" type="submit" id="submitBtn" >{:lang('Button')}</button>
-                                </div>
-                            </div>
+
                         </form>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10">
+                            <button class="btn btn-primary col-sm-1" style="display:none;" id="jqprint" type="button" >{:lang('Print')}</button>
+                            <button style="float: right" class="btn btn-primary col-sm-1" onclick="saveData()" type="submit" id="submitBtn" >{:lang('Button')}</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -189,7 +192,11 @@
 <script>
 
     $('#M_Code').change(function(){
-        var M_Code = $('#M_Code').val();
+
+            $('#jqprint').hide();
+
+        $('#warning').html('');
+        var M_Code = $('#M_Code').val().trim('');
         if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
             $.ajax({
                 url:"{:url('admin/meter/getMeterData')}",
@@ -200,15 +207,16 @@
                 success: function(res){
                     fillInput(res);
                     if(res.code != 200){
-                        alertMsg(res.msg);
+                        alertMsg(res.msg,5);
+                        $('#warning').html(res.msg);
                     }
                 },
                 error:function(){
-                    alertMsg("操作失败！");
+                    alertMsg("操作失败！",5);
                 }
             })
         }else{
-            alertMsg("请先填写表号");
+            alertMsg("请先填写表号",5);
         }
     });
 
@@ -221,7 +229,21 @@
             label.text('').addClass('valid');
             label.parent().parent().removeClass('has-error');
         }
+
+
     });
+
+    // 手机号码验证
+    jQuery.validator.addMethod("isMobile", function(value, element) {
+        var length = value.length;
+        var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+        return this.optional(element) || (length == 11 && mobile.test(value));
+    }, "请正确填写您的手机号码");
+
+    // 身份证号码验证
+    jQuery.validator.addMethod("isIdCardNo", function(value, element) {
+        return this.optional(element) || checkCard(value);
+    }, "请正确输入您的身份证号码");
 
     $("#save").validate({
         errorPlacement: function(error, element) {
@@ -237,7 +259,19 @@
                     .parent().addClass("has-error");
         },
 
+
+
+
         rules: {
+            tel:{
+                required:true,
+                minlength:11,
+                isMobile:true
+            },
+            identity:{
+                required:true,
+                isIdCardNo:true
+            },
             M_Type: "required",
             M_Code: "required",
             P_ID: "required",
@@ -245,6 +279,15 @@
             detail_address : "required"
         },
         messages: {
+            tel:{
+                required:'请输入手机号',
+                minlength:'请输入11位手机号',
+                isMobile:'输入一个正确的手机号码'
+            },
+            identity:{
+                required:'身份证号不能为空',
+                isIdCardNo:'请输入一个正确的身份证号'
+            },
             M_Type: "请选择表具类型",
             M_Code: "请输入您的表号",
             P_ID: "请选择价格类型",
@@ -315,20 +358,21 @@
             data:{data: JSON.stringify({meter: meter,consumer: consumer})},
             beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
             success: function(res){
-                alertMsg(res.msg);
+                alertMsg(res.msg,5);
                 if( res.code == 200 ){
 //                    setTimeout(function(){window.location.href = ''},1500);
-                    window.location.href="{:url('admin/meter/setup')}?M_Code="+res.meter;
+                    setTimeout(function(){window.location.href="{:url('admin/meter/setup')}?M_Code="+res.meter},2000);
                 }
 
                 $("#submitBtn").removeAttrs("disabled");
             },
             error:function(){
-                alertMsg("操作失败！");
+                alertMsg("操作失败！",5);
                 $("#submitBtn").removeAttrs("disabled");
             }
         })
     }
+
     $('#jqprint').click(function(){
         $(".ibox-content").jqprint();
     })
@@ -375,4 +419,9 @@
 //        return true;
 //    }
 
+</script>
+<script>
+    if({$consumer ?? ''}){
+        $('#jqprint').show();
+    }
 </script>

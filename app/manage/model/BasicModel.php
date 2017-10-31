@@ -80,4 +80,14 @@ class BasicModel extends Model
             return $this->getLastInsID();
         }
     }
+
+    //查总个数；
+    public function counts($where){
+        return $this->where($where)->count();
+    }
+    //获取总和；
+    public function sums($where,$field){
+        return $this->where($where)->sum($field);
+    }
+
 }

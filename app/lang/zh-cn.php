@@ -19,6 +19,7 @@ return [
     'login_name already'  => '登录名已存在',
     'Without the permissions page' => '对不起,您无该操作权限',
     'Please login first'  => '请先登录',
+    'Log out'             => '退出登录',
     'Save success'        => '保存成功',
     'Save fail'           => '保存失败',
     'Data ID exception'   => '数据ID异常',

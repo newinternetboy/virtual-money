@@ -17,14 +17,6 @@ class MeterService extends BasicService
         $this->dbModel = new MeterModel();
     }
 
-    public function counts($where){
-        return $this->dbModel->counts($where);
-    }
-
-    //获取总和；
-    public function sums($where,$field){
-        return $this->dbModel->sums($where,$field);
-    }
 
     public function ReportLogs($meter_id,$M_Code,$startDate,$endDate){
         $where['meter_id'] = $meter_id;
