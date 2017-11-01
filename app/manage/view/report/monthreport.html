@@ -1,4 +1,5 @@
 {js href="__JS__/bootstrap-datetimepicker.min.js" /}
+{js href="__JS__/bootstrap-typeahead.js" /}
 {js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
 {js href="__JS__/echarts.js" /}
 {js href="__JS__/jquery.jqprint-0.3.js" /}
@@ -14,17 +15,13 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="company_id" class="col-sm-2 control-label">{:lang('Search company')}</label>
+                                    <label for="company_name" class="col-sm-2 control-label">{:lang('Company')}</label>
                                     <div class="col-sm-6">
-                                        <select name="company_id" class="form-control" id="company_id">
-                                            {foreach name="companys" item="company"}
-                                            <option value="{$company.id}" {if condition="$company.id eq $company_id"}selected{/if} >{$company.company_name}</option>
-                                            {/foreach}
-                                        </select>
+                                        <input id="company_name" name="company_name" value="{$company_name ?? ''}" type="text" autocomplete="off" data-provide="typeahead"  class="form-control">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6" style="float: right">
+                            <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
                                     <label for="year" class="col-sm-2 control-label">{:lang('Search Year')}</label>
                                     <div class="col-sm-6">
@@ -176,5 +173,34 @@
             alertMsg("{:lang('Please Search Year')}");
             return false;
         }
-    }
+    };
+</script>
+<script>
+    $.fn.typeahead.Constructor.prototype.blur = function() {
+        var that = this;
+        setTimeout(function () { that.hide() }, 250);
+    };
+    $('#company_name').typeahead({
+        minLength: 0,
+        source: function (query, process) {
+            var company_name = $('#company_name').val();
+            var parameter = {company_name: company_name};
+            $.ajax({
+                url:"{:url('manage/report/getCompanyByName')}",
+                method:'post',
+                dataType:'json',
+                data: parameter,
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    var results = res.map(function (product) {
+                        return product.company_name;
+                    });
+                    process(results);
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
+                }
+            })
+        },
+    });
 </script>
