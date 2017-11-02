@@ -33,7 +33,9 @@ class User extends Validate
         'edit'      =>      ['login_name', 'password', 'role_id'],
         'updatepasswd' =>   ['password'],
         'manageAdd' =>      ['username','login_name','password','tel','ukey','company_id'],
+        'systemAdd' =>      ['username','login_name','password','tel','role_id'],
         'manageEdit' =>     ['username','tel','ukey'],
+        'systemEdit' =>     ['username','tel','role_id'],
     ];
 
 }

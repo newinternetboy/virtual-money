@@ -450,4 +450,18 @@ return [
     'Month'                             => '月',
     'Total'                             => '总计',
 
+    //系统管理
+    //权限管理
+    'AuthRule'                          => '权限列表',
+    'Title Require'                     => '权限名称必须',
+    'Pid Require'                       => '上级菜单必须',
+    'Rule Val Require'                  => '默认路径必须',
+    'Display Require'                   => '菜单显示必须',
+    'Glyphicon Require'                 => '图标必须',
+    'SortNum Require'                   => '排序必须',
+    //角色管理
+    'Role Name Require'                      => '角色名必须',
+    'Role Status Require'                    => '状态必须',
+    'Auth'                                   => '授权',
+
 ];

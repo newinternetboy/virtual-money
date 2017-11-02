@@ -1,0 +1,231 @@
+<!-- Data Tables -->
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单标题概要 -->
+                <div class="ibox-title">
+                    <h5>{:lang('AuthRule')}</h5>
+                </div>
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <!-- 表格数据 -->
+                    <button class="btn btn-success" onclick="add()">{:lang('Add')}</button>
+                    <table id="table" class="table" >
+                        <thead>
+                        <tr>
+                            <th data-field="title">{:lang('Auth Name')}</th>
+                            <th data-field="rule_val">{:lang('RULE_VAL')}</th>
+                            <th data-field="display" data-formatter="display_status">{:lang('Menu Show')}</th>
+                            <th data-field="sortnum">{:lang('Ordering Rule')}</th>
+                            <th data-width="80"    data-align="center" data-formatter="operateFormatter" data-events="operateEvents">{:lang('Operate')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $authrules as $authrule}
+                        <tr>
+                            <td>{$authrule.title}</td>
+                            <td>{$authrule.rule_val}</td>
+                            <td>{if condition="$authrule.display"}
+                                {:lang('Yes')}
+                                {else /}
+                                {:lang('No')}
+                                {/if}
+                            </td>
+                            <td>{$authrule.sortnum}</td>
+                            <td><button class="btn btn-success" onclick="edit('{$authrule.id}')">{:lang('Edit')}</button><button class="btn btn-danger" onclick="del('{$authrule.id}','{$authrule.title}')">{:lang('Delete')}</button></td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{:lang('Save AuthRule')}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body-content">
+                    <input name="id" id="id" style="display: none"/>
+                    <div class="form-group must">
+                        <label class="col-sm-3 control-label">{:lang('Auth Name')}</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" name="title" id="title" maxlength="8" required >
+                        </div>
+                    </div>
+                    <div class="form-group must">
+                        <label class="col-sm-3 control-label">{:lang('Parent Name')}</label>
+                        <div class="col-sm-7">
+                            <select class="form-control" name="pid" id="pid">
+                                <option class="form-control" value="0">{:lang('Base Directories')}</option>
+                                {foreach $authrules as $authRule}
+                                    <option  class="form-control" value="{$authRule.id}"><?php echo $authRule['prefix'].$authRule['title'];?></option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group must">
+                        <label class="col-sm-3 control-label">{:lang('RULE_VAL')}</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" name="rule_val" id="rule_val" maxlength="255" placeholder="{:lang('Auth Val')}（module/controller/action）" required>
+                        </div>
+                    </div>
+                    <div class="form-group must">
+                        <label class="col-sm-3 control-label">{:lang('Display')}</label>
+                        <div class="col-sm-7">
+                            <select class="form-control" name="display" id="display">
+                                <option class="form-control" value="1">{:lang('Yes')}</option>
+                                <option class="form-control" value="0">{:lang('No')}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group must">
+                        <label class="col-sm-3 control-label">{:lang('Glyphicon')}</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" name="glyphicon" id="glyphicon" maxlength="255" placeholder="{:lang('Glyphicon Placeholder')}" required>
+                        </div>
+                    </div>
+                    <div class="form-group must">
+                        <label class="col-sm-3 control-label">{:lang('Sort Rule')}</label>
+                        <div class="col-sm-7">
+                            <input type="number" class="form-control" name="sortnum" id="sortnum" maxlength="255" placeholder="{:lang('Sort Num')}" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function add(){
+        emptyModal();
+        $('#myModal').modal('show');
+    }
+
+    function sub(){
+        var id = $('#id').val();
+        var title = $('#title').val();
+        var pid = $('#pid').val();
+        var rule_val = $('#rule_val').val();
+        var display = $('#display').val();
+        var glyphicon = $('#glyphicon').val();
+        var sortnum = $('#sortnum').val();
+        if( title == '' || title == 'undefined' || title == null ){
+            alertMsg('Title Require');
+            return false;
+        }
+        if( pid == '' || pid == 'undefined' || pid == null ){
+            alertMsg('Pid Require');
+            return false;
+        }
+        if( rule_val == '' || rule_val == 'undefined' || rule_val == null ){
+            alertMsg('Rule Val Require');
+            return false;
+        }
+        if( display == '' || display == 'undefined' || display == null ){
+            alertMsg('Display Require');
+            return false;
+        }
+        if( glyphicon == '' || glyphicon == 'undefined' || glyphicon == null ){
+            alertMsg('Glyphicon Require');
+            return false;
+        }
+        if( sortnum == '' || sortnum == 'undefined' || sortnum == null ){
+            alertMsg('Sortnum Require');
+            return false;
+        }
+        var data = {id: id,title: title, pid: pid, rule_val: rule_val, display: display, glyphicon: glyphicon, sortnum: sortnum};
+        $.ajax({
+            url:"{:url('manage/system/saveAuthRule')}",
+            method:'post',
+            dataType:'json',
+            data: {data: JSON.stringify(data)},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    alertMsg(res.msg);
+                    setTimeout(function(){window.location.href = '';},3000);
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+    function edit(id){
+        $.ajax({
+            url:"{:url('manage/system/getAuthRule')}",
+            method:'post',
+            dataType:'json',
+            data: {id: id},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                   fillModal(res.data);
+                    $('#myModal').modal('show');
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+    function del(id,title){
+        alertConfirm('确定删除权限'+title+'?',function(){
+            $.ajax({
+                url:"{:url('manage/system/delAuthRule')}",
+                method:'post',
+                dataType:'json',
+                data: {id: id},
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    if(res.code != 200){
+                        alertMsg(res.msg);
+                    }else{
+                        alertMsg(res.msg);
+                        setTimeout(function(){window.location.href = '';},3000);
+                    }
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
+                }
+            })
+        })
+    }
+
+    function fillModal(data){
+        $('#id').val(data.id);
+        $('#title').val(data.title);
+        $('#rule_val').val(data.rule_val);
+        $('#glyphicon').val(data.glyphicon);
+        $('#sortnum').val(data.sortnum);
+        $('#pid').val(data.pid);
+        $('#display').val(data.display);
+    }
+
+    function emptyModal(){
+        $('#pid option:selected').prop("selected",false);
+        $('#display option:selected').prop("selected",false);
+        $('.modal-body input').each(function(){
+            $(this).val('');
+        })
+    }
+</script>

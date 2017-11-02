@@ -14,6 +14,9 @@ use think\Model;
 class BasicModel extends Model
 {
 
+    //设置主键名
+    protected $pk  = 'id';
+
     /**
      * 查询单条记录
      * @param array $where
@@ -88,6 +91,10 @@ class BasicModel extends Model
     //获取总和；
     public function sums($where,$field){
         return $this->where($where)->sum($field);
+    }
+
+    public function del($id){
+        return $this->where(['id' => $id])->delete();
     }
 
 }

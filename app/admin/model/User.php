@@ -64,9 +64,9 @@ class User extends Admin
 		$request = $this->fmtRequest( $request );
 
 		if( $request['offset'] == 0 && $request['limit'] == 0 ){
-			$data = $this->order('create_time desc')->where(['delete_time'=> null])->where( $request['map'] )->select();
+			$data = $this->where('type',PLATFORM_ADMIN)->order('create_time desc')->where(['delete_time'=> null])->where( $request['map'] )->select();
 		}else{
-			$data = $this->order('create_time desc')->where(['delete_time' => null])->where( $request['map'] )->limit($request['offset'], $request['limit'])->select();
+			$data = $this->where('type',PLATFORM_ADMIN)->order('create_time desc')->where(['delete_time' => null])->where( $request['map'] )->limit($request['offset'], $request['limit'])->select();
 		}
 
 		return $data;
@@ -141,7 +141,7 @@ class User extends Admin
 
 	public function getTotalUserNumber($where){
 
-		$data = $this->order('create_time desc')->where(['delete_time'=> null])->where($where)->count();
+		$data = $this->where('type',PLATFORM_ADMIN)->order('create_time desc')->where(['delete_time'=> null])->where($where)->count();
 
 		return $data;
 	}
@@ -155,9 +155,9 @@ class User extends Admin
      */
 	public function getUserInfo($where, $method, $field = ''){
 		if( !$field ){
-			return $this->where($where)->$method();
+			return $this->where('type',PLATFORM_ADMIN)->where($where)->$method();
 		}
-		return $this->where($where)->field($field)->$method();
+		return $this->where('type',PLATFORM_ADMIN)->where($where)->field($field)->$method();
 	}
 
     public function checkPasswd($data,$scene){
@@ -181,7 +181,7 @@ class User extends Admin
 	public function getUsersById($id, $company_id)
 	{
 		$ids = explode(',', $id);
-		return $this->where('id', 'in', $ids)->where('company_id', $company_id)->select();
+		return $this->where('type',PLATFORM_ADMIN)->where('id', 'in', $ids)->where('company_id', $company_id)->select();
 	}
 
 }

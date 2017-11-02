@@ -14,7 +14,24 @@
             <!--<a href="/admin/meter/edit">表具修改</a>-->
         <!--</li>-->
 
-
+        <!-- 二级菜单 -->
+        <!--{foreach $menus as $menu}-->
+        <!--&lt;!&ndash;<?php var_dump($menu) ?>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>&ndash;&gt;-->
+            <!--{if condition="$menu.display eq 1"}-->
+                <!--&lt;!&ndash;<a href="#"><i class="{$menu.glyphicon}"></i> <span class="nav-label">{$menu.title}</span><span class="fa arrow"></span></a>&ndash;&gt;-->
+                <!--&lt;!&ndash;<ul class="nav nav-second-level collapse">&ndash;&gt;-->
+                    <!--{if condition="isset($menu.children)"}-->
+                        <!--{foreach $menu.children as $children}-->
+                            <!--{if condition="$children.display eq 1"}-->
+                                <!--<li class=""><a href="/{$children['rule_val']}">{$children.title}</a></li>-->
+                            <!--{/if}-->
+                        <!--{/foreach}-->
+                    <!--{/if}-->
+                <!--&lt;!&ndash;</ul>&ndash;&gt;-->
+            <!--{/if}-->
+        <!--&lt;!&ndash;</li>&ndash;&gt;-->
+        <!--{/foreach}-->
 
 
     </ul>

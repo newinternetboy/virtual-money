@@ -14,6 +14,7 @@ define('ERROR_CODE_SYS',5001);          //系统错误导致
 
 //双得利集团ID
 define('SHUANGDELI_ID',100);
+define('SHUANGDELI_NAME','双得利集团');
 
 //操作的执行状态
 define('ACTION_SUCCESS',1); //操作成功

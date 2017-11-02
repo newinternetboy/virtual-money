@@ -44,7 +44,7 @@ class Admin extends Common
 		$this->username = $userRow['username'];
 		$this->company_id = $userRow['company_id'];
 		$this->company = model('Company')->getCompany(['id' => $this->company_id],'company_name');
-		$this->administrator = $userRow['administrator'];
+		$this->administrator = isset($userRow['administrator']) ? $userRow['administrator'] : 0 ;
 		$this->role_id = !$this->administrator ? $userRow['role_id'] : '';
 		if($userRow['administrator']!=1 && !$this->checkRule($this->uid, $rule_val)) {
 			$this->error(lang('Without the permissions page'));
