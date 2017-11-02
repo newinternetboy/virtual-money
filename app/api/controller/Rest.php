@@ -182,6 +182,10 @@ class Rest extends LanFilter
         return json($ret);
     }
 
+    /**
+     * 获取表具时间段内充值记录
+     * @return \think\response\Json
+     */
     public function meterChargeDetail(){
         $searchData = input('searchData');
         $searchData = json_decode($searchData,true);
@@ -209,6 +213,37 @@ class Rest extends LanFilter
             $endDate = date('Y-m-d H:i:s',strtotime('+1 month',strtotime($searchDate))-1);
             $chargeLogs = $meterService->moneyLogs($meterInfo['id'],$startDate,$endDate,$type);
             $ret['data'] = $chargeLogs;
+        }catch (\Exception $e){
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    /**
+     * 获取表具月使用量
+     * @return \think\response\Json
+     */
+    public function meterMonthUsage(){
+        $searchDate = input('searchDate',date('Y-m'));
+        $meter_id = input('meter_id');
+        $ret['code'] = 200;
+        $ret['msg'] = '操作成功';
+        try{
+            if(!$meter_id){
+                exception("请先提供表id",ERROR_CODE_DATA_ILLEGAL);
+            }
+            $where['id'] = $meter_id;
+            $where['meter_life'] = METER_LIFE_ACTIVE;
+            $meterService = new MeterService();
+            if( !$meterInfo = $meterService->findInfo($where,'M_Code') ){
+                exception('表id不存在',ERROR_CODE_DATA_ILLEGAL);
+            }
+            $searchDate .= '-01';
+            $year = date('Y',strtotime($searchDate));
+            $month = date('M',strtotime($searchDate));
+            $condition['meter_id'] = $meter_id;
+            $ret['data'] = getNamedMonthReport($year,$month,$condition);
         }catch (\Exception $e){
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
