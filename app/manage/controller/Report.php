@@ -14,7 +14,7 @@ use app\manage\service\MeterService;
 use think\Controller;
 
 
-class Report
+class Report extends Admin
 {
     //清分月报
     public function monthReport(){

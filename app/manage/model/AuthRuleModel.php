@@ -43,6 +43,7 @@ class AuthRuleModel extends BasicModel
      * @return array|false|\PDOStatement|string|Model
      */
     public function findInfo($where = [], $field = '',$M_Code = ''){
+        $where['type'] = PLATFORM_MANAGE;
         if( $field ){
             return $this->where($where)->field($field)->order('sortnum','asc')->find();
         }
@@ -57,6 +58,7 @@ class AuthRuleModel extends BasicModel
      * @return false|\PDOStatement|string|\think\Collection
      */
     public function selectInfo($where = [], $field = '',$M_Code = ''){
+        $where['type'] = PLATFORM_MANAGE;
         if( $field ){
             return $this->where($where)->field($field)->order('sortnum','asc')->select();
         }
