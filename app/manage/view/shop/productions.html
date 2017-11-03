@@ -1,0 +1,304 @@
+{js href="__JS__/bootstrap-datetimepicker.min.js" /}
+{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
+{js href="__JS__/layer/layer.js" /}
+{css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-title">
+                    <h5>商品列表</h5>
+                </div>
+                <div class="ibox-content">
+                    <!-- 表格数据 -->
+                    <form  method="" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="name" class="col-sm-2 control-label">{:lang('Production Name')}:</label>
+                                    <div class="col-sm-6">
+                                        <input name="name" id="name" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('Production Name')}" value="{$name ?? ''}">
+                                        <input type="hidden" name="id" value="{$id ?? ''}" />
+                                    </div>
+                                </div><!-- /form-group -->
+                            </div><!-- /.col-lg-6 -->
+                            <div class="col-lg-6" style="float: right">
+                                <div class="form-group">
+                                    <label for="status" class="col-sm-2 control-label">{:lang('Production Status')}:</label>
+                                    <div class="col-sm-6">
+                                        <select name="status" id="status" class="form-control">
+                                            <option value="" {if conditon="isset($status)"}selected>查所有</option>
+                                            <option value="1" {if condition="(isset($status)) and ($status eq 1)"}selected{/if}>上架</option>
+                                            <option value="2" {if condition="(isset($status)) and ($status eq 2)"}selected{/if}>下架</option>
+                                        </select>
+                                    </div>
+                                </div><!-- /form-group -->
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Create time')}{:lang('From')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="start_datetimepicker" name="start_time" value="{$start_time ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div><!-- /.col-lg-6 -->
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="end_datetimepicker" class="col-sm-2 control-label">{:lang('To')}:</label>
+                                    <div class="col-sm-6">
+                                        <input id="end_datetimepicker" name="end_time" value="{$end_time ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
+                                <button style="float:right;margin-right: 1vw;" onclick="javascript:history.back(-1);" type="button" class="btn btn-primary">返回</button>
+
+                            </div>
+                        </div>
+                    </form>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <!--原表信息-->
+                        <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                   <th>{:lang('Shop Name')}</th>
+                                   <th>{:lang('Production Name')}</th>
+                                   <th>{:lang('DeLi Price')}</th>
+                                   <th>{:lang('RMB Price')}</th>
+                                   <th>{:lang('Production Status')}</th>
+                                   <th>{:lang('Create Time')}</th>
+                                   <th>{:lang('Operate')}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {volist name='productions' id='vo'}
+                                <tr>
+                                   <td>{$vo.shop.name}</td>
+                                   <td>{$vo.name}</td>
+                                   <td>{$vo.sdlenable?$vo.sdlprice:'不支持'}</td>
+                                   <td>{$vo.rmbenable?$vo.rmbprice:'不支持'}</td>
+                                   <td>{$vo.status}</td>
+                                   <td>{$vo.create_time}</td>
+                                   <td><button class="btn btn-primary" onclick="production_eidt('{$vo.id}')">{:lang('Edit')}</button></td>
+                                </tr>
+                            {/volist}
+                            </tbody>
+                        </table></div>
+                        <div>
+                            {$productions->render()}
+                        </div>
+                        <!--换表信息-->
+                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+                        <div class="form-group" style="color:red">
+                            <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
+                            <div class="col-sm-10">
+                                <p class="form-control" style="border: none">{:lang('Please in the search box enter the query query, return the result')}</p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{:lang('Save Production')}</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <input style="display: none" name="id" value="" id="id" />
+                <div class="form-group">
+                    <label for="edit_productionname" class="col-md-2 control-label">{:lang('Production Name')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="productionname" id="edit_productionname">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sdlenable" class="col-md-2 control-label">{:lang('Support DeLi Money')}</label>
+                    <div class="col-md-10">
+                        <select name="sdlenable" id="sdlenable" class="form-control">
+                            <option value='1'>支持</option>
+                            <option value='0'>不支持</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sdlprice" class="col-md-2 control-label">{:lang('DeLi Price')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="number" name="sdlprice" id="sdlprice">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="rmbenable" class="col-md-2 control-label">{:lang('Support RMB Money')}</label>
+                    <div class="col-md-10">
+                        <select name="rmbenable" id="rmbenable" class="form-control">
+                            <option value='1'>支持</option>
+                            <option value='0'>不支持</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="rmbprice" class="col-md-2 control-label">{:lang('RMB Price')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="number" name="rmbprice" id="rmbprice">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_status" class="col-md-2 control-label">{:lang('Production Status')}</label>
+                    <div class="col-md-10">
+                        <select name="edit_status" id="edit_status" class="form-control">
+                            <option value="1">上架</option>
+                            <option value="0">下架</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_create_time" class="col-md-2 control-label">{:lang('Create Time')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" readonly="readonly" name="create_time" id="edit_create_time">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_update_time" class="col-md-2 control-label">{:lang('Update Time')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" readonly="readonly" name="update_time" id="edit_update_time">
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#start_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: "month",
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+        event.preventDefault();
+        event.stopPropagation();
+    });
+    $("#end_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: "month"
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+        event.preventDefault();
+        event.stopPropagation();
+    });
+    function production_eidt(production_id){
+        $.ajax({
+            url:"{:url('manage/shop/getProductionInfoById')}",
+            method:'post',
+            dataType:'json',
+            data: {id: production_id},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+//                    clearModal();
+                    fillModal(res.data);
+                    $('#myModal').modal('show')
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+    function fillModal(data){
+        $('#id').val(data.id);
+        $('#sdlprice').val(data.sdlprice);
+        $('#rmbprice').val(data.rmbprice);
+        $('#edit_productionname').val(data.name);
+        $('#edit_create_time').val(data.create_time);
+        $('#edit_update_time').val(data.update_time);
+        if(data.status == 1){
+            $('#edit_status').find('option[value="1"]').prop("selected",true);
+        }else{
+            $('#edit_status').find('option[value="0"]').prop("selected",true);
+        }
+        if(data.sdlenable == true){
+            $('#sdlenable').find('option[value="1"]').prop("selected",true);
+        }else{
+            $('#sdlenable').find('option[value="0"]').prop("selected",true);
+        }
+        if(data.rmbenable == true){
+            $('#rmbenable').find('option[value="1"]').prop("selected",true);
+        }else{
+            $('#rmbenable').find('option[value="0"]').prop("selected",true);
+        }
+    }
+
+    function sub(){
+        var id = $('#id').val();
+        var sdlprice = $('#sdlprice').val();
+        var rmbprice = $('#rmbprice').val();
+        var name = $('#edit_productionname').val();
+        var status = $('#edit_status').val();
+        var sdlenable = $('#sdlenable').val();
+        if(sdlenable == 1){
+            sdlenable = true;
+        }else{
+            sdlenable = false;
+        }
+        var rmbenable = $('#rmbenable').val();
+        if(rmbenable == 1){
+            rmbenable = true;
+        }else{
+            rmbenable = false;
+        }
+        if( name == '' || name == 'undefined' || name == null ){
+            alertMsg("{:lang('Production Name Require')}");
+            return false;
+        }
+        var data = {id: id,sdlprice: sdlprice, rmbprice: rmbprice, name: name, status: status,sdlenable: sdlenable, rmbenable: rmbenable};
+        $.ajax({
+            url:"{:url('manage/shop/saveProduction')}",
+            method:'post',
+            dataType:'json',
+            data: {data: JSON.stringify(data)},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    alertMsg(res.msg);
+                    window.location.href = '';
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+</script>
+
+                   

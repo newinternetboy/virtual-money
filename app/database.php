@@ -13,17 +13,17 @@ return [
     // 数据库类型
     'type'           => '\think\mongo\Connection',
     // 服务器地址
-    'hostname'       => '127.0.0.1',
-//    'hostname'       => '123.56.242.66',
+//    'hostname'       => '127.0.0.1',
+    'hostname'       => '123.56.242.66',
     // 数据库名
-    'database'       => 'shuangdeli',
-//    'database'       => 'sdl',
+//    'database'       => 'shuangdeli',
+    'database'       => 'sdl',
     // 用户名
-    'username'       => '',
-//    'username'       => 'sdl',
+//    'username'       => '',
+    'username'       => 'sdl',
     // 密码
-    'password'       => '',
-//    'password'       => '2017sdl',
+//    'password'       => '',
+    'password'       => '2017sdl',
     // 端口
     'hostport'       => '',
     // 连接dsn
