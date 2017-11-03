@@ -15,7 +15,7 @@ class MeterDataModel extends BasicModel
     protected $name;
 
     /**
-     * 查询单条记录
+     * 查询单条记录 降序
      * @param array $where
      * @param string $field
      * @return array|false|\PDOStatement|string|Model
@@ -23,9 +23,23 @@ class MeterDataModel extends BasicModel
     public function findInfo($where = [], $field = '',$M_Code = ''){
         $this->name = getMeterdataTablename($M_Code);
         if( $field ){
-            return db($this->name)->where($where)->field($field)->find();
+            return db($this->name)->where($where)->field($field)->order('create_time','desc')->find();
         }
-        return db($this->name)->where($where)->find();
+        return db($this->name)->where($where)->order('create_time','desc')->find();
+    }
+
+    /**
+     * 查询单条记录 升序
+     * @param array $where
+     * @param string $field
+     * @return array|false|\PDOStatement|string|Model
+     */
+    public function findInfoAsc($where = [], $field = '',$M_Code = ''){
+        $this->name = getMeterdataTablename($M_Code);
+        if( $field ){
+            return db($this->name)->where($where)->field($field)->order('create_time','asc')->find();
+        }
+        return db($this->name)->where($where)->order('create_time','asc')->find();
     }
 
     /**
@@ -37,9 +51,9 @@ class MeterDataModel extends BasicModel
     public function selectInfo($where = [], $field = '',$M_Code = ''){
         $this->name = getMeterdataTablename($M_Code);
         if( $field ){
-            return db($this->name)->where($where)->field($field)->select();
+            return db($this->name)->where($where)->field($field)->order('create_time','desc')->select();
         }
-        return db($this->name)->where($where)->select();
+        return db($this->name)->where($where)->order('create_time','desc')->select();
     }
 
     /**
@@ -53,9 +67,9 @@ class MeterDataModel extends BasicModel
     public function getInfoPaginate($where = [], $param = [], $field = '',$M_Code = ''){
         $this->name = getMeterdataTablename($M_Code);
         if( $field ){
-            return db($this->name)->where($where)->field($field)->paginate()->appends($param);
+            return db($this->name)->where($where)->field($field)->order('create_time','desc')->paginate()->appends($param);
         }
-        return db($this->name)->where($where)->paginate()->appends($param);
+        return db($this->name)->where($where)->order('create_time','desc')->paginate()->appends($param);
     }
 
     /**

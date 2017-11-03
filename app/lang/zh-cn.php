@@ -449,6 +449,10 @@ return [
     'Year'                              => '年',
     'Month'                             => '月',
     'Total'                             => '总计',
+    //表具用量
+    'Total Usage'                       => '表具用量',
+    'Setup Time'                        => '安装时间',
+    'Download'                          => '导出',
 
     //系统管理
     //权限管理

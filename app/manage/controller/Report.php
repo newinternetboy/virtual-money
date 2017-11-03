@@ -11,11 +11,12 @@ namespace app\manage\controller;
 use app\manage\service\CompanyService;
 use app\manage\service\MeterdataService;
 use app\manage\service\MeterService;
+use think\Controller;
 
 
-class Report extends Admin
+class Report
 {
-    //月用量报表；
+    //清分月报
     public function monthReport(){
         $year       = input('year',date('Y'));
         $company_name       = input('company_name');
@@ -33,7 +34,7 @@ class Report extends Admin
         $this->assign('company_name',$company_name);
         return view();
     }
-    //年用量报表；
+    //清分年报
     public function yearReport(){
         $startYear = input('startYear') ? input('startYear/d') : date('Y',strtotime('-5 years'));
         $endYear = input('endYear') ? input('endYear/d') : date('Y');
@@ -158,5 +159,77 @@ class Report extends Admin
         }
         $companys = (new CompanyService())->selectInfo($where,'company_name');
         return json($companys);
+    }
+
+    /**
+     * 表具用量
+     * @return \think\response\View
+     */
+    public function meterUsage(){
+        $company_name = input('company_name');
+        $M_Code = input('M_Code');
+        $startDate = input('startDate',date('Y-m-d',strtotime('-1 day')));
+        $endDate = input('endDate',date('Y-m-d'));
+        $where = [
+            'meter_status' => ['neq',METER_STATUS_NEW]
+        ];
+        if($company_name){
+            $where['company_id'] = '';
+            $companyService = new CompanyService();
+            if( $company = $companyService->findInfo(['company_name' => $company_name]) ){
+                $where['company_id'] = $company['id'];
+            }
+        }
+        if($M_Code){
+            $where['M_Code'] = $M_Code;
+        }
+        $usage = [];
+        $meters = (new MeterService())->getInfoPaginate($where,['company_name' => $company_name,'M_Code' => $M_Code,'startDate' => $startDate,'endDate' => $endDate]);
+        foreach( $meters as $meter ){
+            $meterDataUsage = new MeterDataService();
+            $maxUsage = $meterDataUsage->findInfo(['meter_id' => $meter['id'],'source_type' => METER,'create_time' => ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]]],'',$meter['M_Code']);
+            $minUsage = $meterDataUsage->findInfoAsc(['meter_id' => $meter['id'],'source_type' => METER,'create_time' => ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]]],'',$meter['M_Code']);
+            $diffUsage = ($maxUsage ? $maxUsage['totalCube'] : 0) - ($minUsage ? $minUsage['totalCube'] : 0);
+            $usage[] = [
+                'M_Code' => $meter['M_Code'],
+                'consumer_name' => $meter->consumer->username,
+                'consumer_tel' => $meter->consumer->tel,
+                'detail_address' => $meter['detail_address'],
+                'diffUsage' => $diffUsage,
+                'setup_time' => isset($meter['setup_time']) ? $meter['setup_time'] : $meter['change_time'],
+            ];
+        }
+        $this->assign('usage',$usage);
+        $this->assign('company_name',$company_name);
+        $this->assign('M_Code',$M_Code);
+        $this->assign('startDate',$startDate);
+        $this->assign('endDate',$endDate);
+        $this->assign('meters',$meters);
+        return view();
+    }
+
+    public function downloadMeterUsage(){
+        $company_name = input('company_name');
+        $M_Code = input('M_Code');
+        $startDate = input('startDate',date('Y-m-d',strtotime('-1 day')));
+        $endDate = input('endDate',date('Y-m-d'));
+        $where['source_type'] = METER;
+        $where['create_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
+        if($company_name){
+            $where['company_id'] = '';
+            $meter_where['company_id'] = '';
+            $companyService = new CompanyService();
+            if( $company = $companyService->findInfo(['company_name' => $company_name]) ){
+                $where['company_id'] = $company['id'];
+                $meter_where['company_id'] = $company['id'];
+            }
+        }
+        if($M_Code){
+            $meter_where['M_Code'] = $M_Code;
+            $meters = (new MeterService())->selectInfo($meter_where,'id');
+            $where['meter_id'] = ['in',array_map(function($item){return $item['id'];},$meters)];
+        }
+        $usages = (new MeterDataService())->getAllMeterUsageData('meter_data',$where);
+        return json($usages);
     }
 }

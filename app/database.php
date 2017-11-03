@@ -25,7 +25,7 @@ return [
     'password'       => '',
 //    'password'       => '2017sdl',
     // 端口
-    'hostport'       => '',
+    'hostport'       => '27017',
     // 连接dsn
     'dsn'            => '',
     // 数据库连接参数
