@@ -95,7 +95,7 @@ class BasicModel extends Model
         return $this->where($where)->sum($field);
     }
 
-<<<<<<< HEAD
+
     /*
     *处理Excel导出
     *@param $datas array 设置表格数据
@@ -140,10 +140,10 @@ class BasicModel extends Model
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $PHPWriter->save("php://output"); //表示在$path路径下面生成demo.xlsx文件件
     }
-=======
+
     public function del($id){
         return $this->where(['id' => $id])->delete();
     }
 
->>>>>>> 37ad5af85ca91aaa4b67af14ad72bb87f1956348
+
 }
