@@ -14,6 +14,8 @@ use \think\Session;
 class AuthRule extends Admin
 {
 
+    protected $insert = ['type'];
+
     //是否菜单显示的状态,存储前转为整数
     public function setDisplayAttr($value){
         return intval($value);
@@ -24,16 +26,20 @@ class AuthRule extends Admin
         return intval($value);
     }
 
+    public function setTypeAttr(){
+        return PLATFORM_ADMIN;
+    }
+
     public function getList($request = [])
     {
         $request = $this->fmtRequest( $request );
         if( empty($request) ){
-            return $this->order('sortnum','asc')->select();
+            return $this->where('type',PLATFORM_ADMIN)->order('sortnum','asc')->select();
         }
         if( $request['offset'] == 0 && $request['limit'] == 0 ){
-            return $this->where($request['map'])->order('sortnum','asc')->select();
+            return $this->where('type',PLATFORM_ADMIN)->where($request['map'])->order('sortnum','asc')->select();
         }
-        return $this->where($request['map'])->limit($request['offset'], $request['limit'])->order('sortnum','asc')->select();
+        return $this->where('type',PLATFORM_ADMIN)->where($request['map'])->limit($request['offset'], $request['limit'])->order('sortnum','asc')->select();
     }
 
     public function saveData($data)
@@ -53,7 +59,7 @@ class AuthRule extends Admin
     {
         $rule_val = strtolower($rule_val);
         $map = ['rule_val'=>$rule_val];
-        if($this->where($map)->count()){
+        if($this->where('type',PLATFORM_ADMIN)->where($map)->count()){
             return true;
         }
         return false;
@@ -70,7 +76,7 @@ class AuthRule extends Admin
      */
     public function getLevelData()
     {
-        $data = $this->order('pid asc')->order('sortnum','asc')->select();
+        $data = $this->where('type',PLATFORM_ADMIN)->order('pid asc')->order('sortnum','asc')->select();
         if( empty($data) ) {
             return $data;
         }

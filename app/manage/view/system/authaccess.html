@@ -1,0 +1,124 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" style="background: white;padding: 12px">
+                <!-- 表单标题概要 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Access_menu')}</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- 表单内容 -->
+                <form method="post" action="{:url('manage/system/saveAuthAccess')}" >
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input name="role_id" id="role_id" value="{$role_id}" style="display: none" />
+                                {notempty name="data"}
+                                {volist name="data" id="vo"}
+                                <div>
+                                    <div class="checkbox second-level-hooks">
+                                        <input type="checkbox" id="{$vo['id']}" name="authrule[]" <?php if(in_array($vo['id'], $rule_ids)) {echo 'checked';}; ?> value="{$vo['id']}">
+                                        <label for="{$vo['id']}">{$vo.title}</label>
+                                    </div>
+                                    {notempty name="vo['children']"}
+                                    {volist name="vo['children']" id="sub"}
+                                    <div class="checkbox checkbox-inline" style="margin-left: auto">
+                                        <input type="checkbox" id="authrule{$sub.id}" name="authrule[]" <?php if(in_array($sub['id'], $rule_ids)) {echo 'checked';}; ?> value="{$sub.id}">
+                                        <label for="authrule{$sub.id}">{$sub.title}</label>
+                                    </div>
+                                    {/volist}
+                                    {/notempty}
+                                </div>
+                                {/volist}
+                                {/notempty}
+                            </div>
+                            <div class="col-md-12 btn-group-footer">
+                                <button type="button" class="btn btn-default">{:lang('Cancel')}</button>
+                                <button type="button" class="btn btn-primary" onclick="sub()">{:lang('Save')}</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .row .checkbox{
+        padding-left: 20px;
+    }
+    .row .checkbox label {
+        padding-left: 0;
+    }
+    .row .checkbox-inline{
+        padding-left: 40px;
+    }
+
+    .row .checkbox label.first-level {
+        font-weight: 700;
+        font-size: 14px;
+    }
+    .row .btn-group-footer{
+        margin-top: 10px;
+    }
+</style>
+
+
+<script>
+
+    $(".second-level-hooks").find("input").on('click',function(){
+        $this = $(this);
+        var checkboxF = $this.is(':checked');
+        if (checkboxF) {
+            $this.parent().siblings("div").find(':checkbox').prop('checked',true)
+        }else{
+            $this.parent().siblings("div").find(':checkbox').prop("checked", false);
+        }
+    })
+
+    $(".checkbox-inline").find("input").on('click',function(){
+        $this = $(this);
+        var checkboxF = $this.is(':checked');
+        if (checkboxF) {
+            var parentbox = $this.parent().siblings(".second-level-hooks").find(':checkbox');
+            if( !parentbox.is(':checked') ){
+                parentbox.prop("checked", true);
+            }
+        }
+    })
+
+    function sub(){
+        var role_id = $('#role_id').val();
+        var authrule = new Array();
+        $('input:checkbox:checked').each(function(){
+           authrule.push( $(this).val() );
+        })
+        $.ajax({
+            url:"{:url('manage/system/saveAuthAccess')}",
+            method:'post',
+            dataType:'json',
+            data: {role_id: role_id,authrule: authrule},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    alertMsg(res.msg);
+                    setTimeout(function(){window.location.href = "{:url('manage/system/role')}";},3000);
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+</script>

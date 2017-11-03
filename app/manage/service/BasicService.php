@@ -102,5 +102,9 @@ class BasicService
         return $this->dbModel->sums($where,$field);
     }
 
+    public function del($id){
+        return $this->dbModel->del($id);
+    }
+
 
 }

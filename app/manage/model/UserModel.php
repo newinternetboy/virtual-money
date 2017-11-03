@@ -28,4 +28,8 @@ class UserModel extends BasicModel
     public function setAdministratorAttr($value){
         return intval($value);
     }
+
+    public function role(){
+        return $this->belongsTo('RoleModel','role_id','id');
+    }
 }

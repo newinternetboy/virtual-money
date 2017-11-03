@@ -40,7 +40,7 @@ class User extends Admin
         $request['company_id'] = $this->company_id;
         $data = model('User')->getList( $request );
         foreach( $data as & $user ){
-            if( !$user['administrator'] ){
+            if( !isset($user['administrator']) || !$user['administrator'] ){
                $user['role_name'] = array_values(model('Role')->where(['id' => $user['role_id']])->column('name'))[0];
             }
         }

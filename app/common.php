@@ -11,6 +11,7 @@
 
 // 应用公共文件
 
+use think\Model;
 
 /**
  * 调试输出
@@ -198,5 +199,40 @@ function getMeterdataTablename($M_Code){
 
 function parseDate($timestamp){
     return date('d',$timestamp);
+}
+
+/**
+ * 权限排序
+ * @param $authRules
+ * @return array
+ */
+function sortAuthRules($authRules){
+    $ret = [];
+    foreach( $authRules as $authRule ){
+        $authRule = ($authRule instanceof Model) ? $authRule->toArray() : $authRule;
+        if( $authRule['pid'] == 0 ){
+            sortChildren($authRule,$authRules);
+            $ret[] = $authRule;
+        }
+    }
+    return $ret;
+}
+
+function sortChildren(& $authRule,$authRules){
+    foreach( $authRules as $item ) {
+        $item = ($item instanceof Model ) ? $item->toArray() : $item;
+        if( $item['pid'] == $authRule['id'] ){
+            $authRule['children'][] = $item;
+        }
+    }
+    if( isset($authRule['children']) ){
+        foreach( $authRule['children'] as & $authChild ){
+            sortChildren($authChild,$authRules);
+        }
+    }
+}
+
+function getRuleVals($x){
+    return $x['rule_val'];
 }
 

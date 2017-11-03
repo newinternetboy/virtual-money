@@ -132,6 +132,7 @@ class Index extends Controller
         $newMeterData['meter_life'] = METER_LIFE_ACTIVE;
         $newMeterData['balance_deli'] = 0;
         $newMeterData['balance_rmb'] = 0;
+        $newMeterData['company_id'] = SHUANGDELI_ID;
         if( !$newMeterId = model('app\admin\model\meter')->InitMeter($newMeterData,'Meter.init_new') ){
             $error = model('app\admin\model\meter')->getError();
             Log::record(['新表初始化失败' => $error,'data' => $newMeterData]);
@@ -198,7 +199,7 @@ class Index extends Controller
         $where['meter_life'] = METER_LIFE_ACTIVE;
         $field = 'M_Code,U_ID,company_id,totalCube,totalCost';
         if( !$meterInfo = model('app\admin\model\meter')->getMeterInfo($where,'find',$field) ){
-            Log::record(['没有符合上报数据表号的数据' => 0,'data' => $M_Code],'error');
+            Log::record(['没有符合上报数据表号的数据' => $M_Code],'error');
             exception('没有符合上报数据表号的数据',ERROR_CODE_DATA_ILLEGAL);
         }
         return $meterInfo;
@@ -288,7 +289,12 @@ class Index extends Controller
             $where['seq_id'] = ['<',$lastSeq];
             $updatePre['status'] = TASK_SUCCESS;
             $updatePre['update_time'] = time();
-            db($this->taskTableName)->where(['meter_id' => $meter_id, 'seq_id' => ['<',$lastSeq], 'status' => TASK_WAITING])->update($updatePre);
+            if( db($this->taskTableName)->where(['meter_id' => $meter_id, 'seq_id' => ['<',$lastSeq], 'status' => ['in',[TASK_WAITING,TASK_SENT]]])->find() ){
+                if(!db($this->taskTableName)->where(['meter_id' => $meter_id, 'seq_id' => ['<',$lastSeq], 'status' => ['in',[TASK_WAITING,TASK_SENT]]])->update($updatePre) ){
+                    Log::record(["更新Seq: $lastSeq 以前的task失败,meter_id" => $meter_id],'error');
+                    exception("更新Seq: $lastSeq 以前的task失败",ERROR_CODE_DATA_ILLEGAL);
+                }
+            }
             //更新$lastSeq的task状态
             if( $lastSeqStatus ) {
                 $updateCur['status'] = TASK_SUCCESS;
@@ -296,12 +302,51 @@ class Index extends Controller
                 $updateCur['status'] = TASK_FAIL;
             }
             $updateCur['update_time'] = time();
-            db($this->taskTableName)->where(['meter_id' => $meter_id, 'seq_id' => $lastSeq])->update($updateCur);
+            if( !db($this->taskTableName)->where(['meter_id' => $meter_id, 'seq_id' => $lastSeq])->update($updateCur) ){
+                Log::record(["更新Seq: $lastSeq 的task失败,meter_id" => $meter_id],'error');
+                exception("更新Seq: $lastSeq 的task失败",ERROR_CODE_DATA_ILLEGAL);
+            }
             //task执行失败恢复交易金额
             if( $updateCur['status'] === TASK_FAIL ){
                 $task = db($this->taskTableName)->where(['meter_id' => $meter_id, 'seq_id' => $lastSeq])->field('money_log_id')->find();
                 if( isset($task['money_log_id']) ){ //如果是消费task,则恢复消费金额数据
                     $money_log_info = model('MoneyLog')->getMoneyLog(['id' => $task['money_log_id']],'find');
+                    if( isset($money_log_info['from']) && !empty($money_log_info['from']) && isset($money_log_info['to']) && !empty($money_log_info['to']) ){ //人对人
+                        if( $money_log_info['money_type'] == MONEY_PERSON ){
+                            if(!model('app\admin\model\Meter')->updateMoney($money_log_info['from'],'inc','balance_deli',$money_log_info['money'])){
+                                Log::record(['task失败,inc得力币失败' => model('app\admin\model\Meter')->getError(),'task' => $task,'money_log' => $money_log_info],'error');
+                                exception('task失败,inc得力币失败',ERROR_CODE_DATA_ILLEGAL);
+                            }
+                            if(!model('app\admin\model\Meter')->updateMoney($money_log_info['to'],'dec','balance_deli',$money_log_info['money'])){
+                                Log::record(['task失败,dec得力币失败' => model('app\admin\model\Meter')->getError(),'task' => $task,'money_log' => $money_log_info],'error');
+                                exception('task失败,inc得力币失败',ERROR_CODE_DATA_ILLEGAL);
+                            }
+                        }
+                    }elseif( isset($money_log_info['from']) && !empty($money_log_info['from']) ){
+                        if( $money_log_info['money_type'] == MONEY_PAY ){
+                            if(!model('app\admin\model\Meter')->updateMoney($money_log_info['from'],'inc','balance_rmb',$money_log_info['money'])){
+                                Log::record(['task失败,inc人民币失败' => model('app\admin\model\Meter')->getError(),'task' => $task,'money_log' => $money_log_info],'error');
+                                exception('task失败,inc人民币失败',ERROR_CODE_DATA_ILLEGAL);
+                            }
+                        }elseif($money_log_info['money_type'] == MONEY_PERSON ){
+                            if(!model('app\admin\model\Meter')->updateMoney($money_log_info['from'],'inc','balance_deli',$money_log_info['money'])){
+                                Log::record(['task失败,inc得力币失败' => model('app\admin\model\Meter')->getError(),'task' => $task,'money_log' => $money_log_info],'error');
+                                exception('task失败,inc得力币失败',ERROR_CODE_DATA_ILLEGAL);
+                            }
+                        }
+                    }elseif( isset($money_log_info['to']) && !empty($money_log_info['to']) ){
+                        if( $money_log_info['money_type'] == MONEY_PAY ){
+                            if(!model('app\admin\model\Meter')->updateMoney($money_log_info['to'],'dec','balance_rmb',$money_log_info['money'])){
+                                Log::record(['task失败,dec人民币失败' => model('app\admin\model\Meter')->getError(),'task' => $task,'money_log' => $money_log_info],'error');
+                                exception('task失败,dec人民币失败',ERROR_CODE_DATA_ILLEGAL);
+                            }
+                        }elseif($money_log_info['money_type'] == MONEY_PERSON ){
+                            if(!model('app\admin\model\Meter')->updateMoney($money_log_info['to'],'dec','balance_deli',$money_log_info['money'])){
+                                Log::record(['task失败,dec得力币失败' => model('app\admin\model\Meter')->getError(),'task' => $task,'money_log' => $money_log_info],'error');
+                                exception('task失败,dec得力币失败',ERROR_CODE_DATA_ILLEGAL);
+                            }
+                        }
+                    }
                     //moneylog插入失败task记录
                     $new_money_log_data = $money_log_info->toArray();
                     $new_money_log_data['fail_meter_log_id'] = $new_money_log_data['id'];
@@ -311,26 +356,8 @@ class Index extends Controller
                     $new_money_log_data['update_time'] = time();
                     unset($new_money_log_data['id']);
                     if( !$moneyLogId = model('MoneyLog')->add($new_money_log_data) ){
-                        Log::record('moneyLog添加失败: '.$new_money_log_data,'error');
-                        exception('moneyLog添加失败',ERROR_CODE_DATA_ILLEGAL);
-                    }
-                    if( isset($money_log_info['from']) && !empty($money_log_info['from']) && isset($money_log_info['to']) && !empty($money_log_info['to']) ){ //人对人
-                        if( $money_log_info['money_type'] == MONEY_PERSON ){
-                            model('app\admin\model\Meter')->updateMoney($money_log_info['from'],'inc','balance_deli',$money_log_info['money']);
-                            model('app\admin\model\Meter')->updateMoney($money_log_info['to'],'dec','balance_deli',$money_log_info['money']);
-                        }
-                    }elseif( isset($money_log_info['from']) && !empty($money_log_info['from']) ){
-                        if( $money_log_info['money_type'] == MONEY_PAY ){
-                            model('app\admin\model\Meter')->updateMoney($money_log_info['from'],'inc','balance_rmb',$money_log_info['money']);
-                        }elseif($money_log_info['money_type'] == MONEY_PERSON ){
-                            model('app\admin\model\Meter')->updateMoney($money_log_info['from'],'inc','balance_deli',$money_log_info['money']);
-                        }
-                    }elseif( isset($money_log_info['to']) && !empty($money_log_info['to']) ){
-                        if( $money_log_info['money_type'] == MONEY_PAY ){
-                            model('app\admin\model\Meter')->updateMoney($money_log_info['to'],'dec','balance_rmb',$money_log_info['money']);
-                        }elseif($money_log_info['money_type'] == MONEY_PERSON ){
-                            model('app\admin\model\Meter')->updateMoney($money_log_info['to'],'dec','balance_deli',$money_log_info['money']);
-                        }
+                        Log::record(['task失败,moneyLog添加失败' => model('MoneyLog')->getError(),'data' => $new_money_log_data],'error');
+                        exception('task失败,moneyLog添加失败',ERROR_CODE_DATA_ILLEGAL);
                     }
                 }
             }
@@ -341,7 +368,14 @@ class Index extends Controller
             initAuthoIncId('autoinc',$autoIncData);
         }
         //获取下派新任务
-        $newTask = db($this->taskTableName)->where(['meter_id' => $meter_id,'status' => TASK_WAITING,'seq_id' => ['>',$lastSeq ? $lastSeq : 0]])->order('seq','asc')->find();
+        $newTask = db($this->taskTableName)->where(['meter_id' => $meter_id,'status' => ['in',[TASK_WAITING,TASK_SENT]],'seq_id' => ['>',$lastSeq ? $lastSeq : 0]])->order('seq_id','asc')->field('seq_id')->find();
+        //更新下派任务状态
+        if($newTask){
+            if(!db($this->taskTableName)->where(['id' => $newTask['id']])->update(['status' => TASK_SENT,'update_time' => time()])){
+                Log::record(['更新task状态失败task_id' => $newTask['id']],'error');
+                exception('更新task状态失败',ERROR_CODE_DATA_ILLEGAL);
+            }
+        }
 
         //$newTask = $this->parseTask($newTask);
         return $newTask;

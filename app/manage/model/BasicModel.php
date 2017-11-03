@@ -15,7 +15,10 @@ use think\Model;
 
 class BasicModel extends Model
 {
-//    public $pk = 'id';
+
+    //设置主键名
+    protected $pk  = 'id';
+
     /**
      * 查询单条记录
      * @param array $where
@@ -25,9 +28,9 @@ class BasicModel extends Model
      */
     public function findInfo($where = [], $field = '',$M_Code = ''){
         if( $field ){
-            return $this->where($where)->field($field)->find();
+            return $this->where($where)->field($field)->order('create_time','desc')->find();
         }
-        return $this->where($where)->find();
+        return $this->where($where)->order('create_time','desc')->find();
     }
 
     /**
@@ -39,9 +42,9 @@ class BasicModel extends Model
      */
     public function selectInfo($where = [], $field = '',$M_Code = ''){
         if( $field ){
-            return $this->where($where)->field($field)->select();
+            return $this->where($where)->field($field)->order('create_time','desc')->select();
         }
-        return $this->where($where)->select();
+        return $this->where($where)->order('create_time','desc')->select();
     }
 
     /**
@@ -54,9 +57,9 @@ class BasicModel extends Model
      */
     public function getInfoPaginate($where = [], $param = [], $field = '',$M_Code = ''){
         if( $field ){
-            return $this->where($where)->field($field)->paginate()->appends($param);
+            return $this->where($where)->field($field)->order('create_time','desc')->paginate()->appends($param);
         }
-        return $this->where($where)->paginate()->appends($param);
+        return $this->where($where)->order('create_time','desc')->paginate()->appends($param);
     }
 
     /**
@@ -92,6 +95,7 @@ class BasicModel extends Model
         return $this->where($where)->sum($field);
     }
 
+<<<<<<< HEAD
     /*
     *处理Excel导出
     *@param $datas array 设置表格数据
@@ -136,4 +140,10 @@ class BasicModel extends Model
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $PHPWriter->save("php://output"); //表示在$path路径下面生成demo.xlsx文件件
     }
+=======
+    public function del($id){
+        return $this->where(['id' => $id])->delete();
+    }
+
+>>>>>>> 37ad5af85ca91aaa4b67af14ad72bb87f1956348
 }

@@ -12,6 +12,10 @@ define('ERROR_CODE_DEFAULT',9999);      //未定义错误代码 5000以上是系
 define('ERROR_CODE_DATA_ILLEGAL',5000); //数据不合法导致的错误
 define('ERROR_CODE_SYS',5001);          //系统错误导致
 
+//双得利集团ID
+define('SHUANGDELI_ID',100);
+define('SHUANGDELI_NAME','双得利集团');
+
 //操作的执行状态
 define('ACTION_SUCCESS',1); //操作成功
 define('ACTION_FAIL',5);    //操作失败
@@ -66,7 +70,7 @@ define('MONTH_FLOW_TABLE_NAME','month_flow_');
 /***************task表***************/
 //task状态
 define('TASK_WAITING',1);  //待处理任务
-//define('TASK_SENT',2);     //已下发任务
+define('TASK_SENT',2);     //已下发任务
 define('TASK_SUCCESS',3);  //执行成功
 define('TASK_FAIL',4);     //执行失败
 

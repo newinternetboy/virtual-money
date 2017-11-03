@@ -17,18 +17,20 @@ class Report extends Admin
 {
     //月用量报表；
     public function monthReport(){
-        $year       = input('year') ? input('year') : date('Y');
-        $companyService = new CompanyService();
-        $companys   = $companyService->selectInfo([],'id,company_name');
-        $company_id = input('company_id') ? input('company_id') : $companys[0]['id'];
-        $company = $companyService->findInfo(['id'=>$company_id],'company_name');
-        $where['company_id'] = $company_id;
-        $report =getMonthReport($year,$where);
+        $year       = input('year',date('Y'));
+        $company_name       = input('company_name');
+
+        $report = [];
+        if($company_name){
+            $companyService = new CompanyService();
+            $where['company_name'] = $company_name;
+            $company = $companyService->findInfo($where,'company_name');
+            $condition['company_id'] = $company['id'];
+            $report =getMonthReport($year,$condition);
+        }
         $this->assign('report',$report);
-        $this->assign('companys',$companys);
         $this->assign('year',$year);
-        $this->assign('company_id',$company_id);
-        $this->assign('company_name',$company['company_name']);
+        $this->assign('company_name',$company_name);
         return view();
     }
     //年用量报表；
@@ -167,6 +169,22 @@ class Report extends Admin
         $this->assign('M_Code',$M_Code);
         $this->assign('reportLogs',isset($reportLogs) ? $reportLogs : []);
         return view();
+    }
+
+
+    /**
+     * 根据运营商名称进行模糊查找,返回匹配数组
+     * @return \think\response\Json
+     */
+    public function getCompanyByName(){
+        $company_name = input('company_name');
+        if($company_name){
+            $where['company_name'] = ['like',$company_name];
+        }else{
+            $where = [];
+        }
+        $companys = (new CompanyService())->selectInfo($where,'company_name');
+        return json($companys);
     }
 
 }

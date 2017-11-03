@@ -8,6 +8,11 @@ use think\Model;
 
 class Role extends Admin
 {
+    protected $insert = ['type'];
+
+    public function setTypeAttr(){
+        return PLATFORM_ADMIN;
+    }
 
     //启用的状态,存储前转为整数
     public function setStatusAttr($value){
@@ -16,16 +21,16 @@ class Role extends Admin
 
     public function getKvData($company_id)
     {
-        return $this->where('status',1)->where('company_id',$company_id)->field('name,id')->select();
+        return $this->where('type',PLATFORM_ADMIN)->where('status',1)->where('company_id',$company_id)->field('name,id')->select();
     }
 
     public function getList( $request )
     {
         $request = $this->fmtRequest( $request );
         if( $request['offset'] == 0 && $request['limit'] == 0 ){
-            return $this->order('create_time desc')->where( $request['map'] )->select();
+            return $this->where('type',PLATFORM_ADMIN)->order('create_time desc')->where( $request['map'] )->select();
         }
-        return $this->order('create_time desc')->where( $request['map'] )->limit($request['offset'], $request['limit'])->select();
+        return $this->where('type',PLATFORM_ADMIN)->order('create_time desc')->where( $request['map'] )->limit($request['offset'], $request['limit'])->select();
     }
 
     public function saveData( $data )
@@ -45,11 +50,11 @@ class Role extends Admin
     }
 
     public function getTotalRoleNumber($where){
-        return $this->where($where)->count();
+        return $this->where('type',PLATFORM_ADMIN)->where($where)->count();
     }
 
     public function getRolesById($id,$company_id){
         $ids = explode(',',$id);
-        return $this->where('id','in',$ids)->where('company_id',$company_id)->select();
+        return $this->where('type',PLATFORM_ADMIN)->where('id','in',$ids)->where('company_id',$company_id)->select();
     }
 }
