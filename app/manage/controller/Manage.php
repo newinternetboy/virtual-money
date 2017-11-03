@@ -9,8 +9,10 @@
 namespace app\manage\controller;
 
 use app\manage\service\CompanyService;
+use app\manage\service\ConsumerService;
 use app\manage\service\UserService;
 use think\Log;
+use MongoDB\BSON\ObjectId;
 
 /**
  * 管理
@@ -202,4 +204,6 @@ class Manage extends Admin
         }
         return json($ret);
     }
+
+
 }

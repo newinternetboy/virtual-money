@@ -85,6 +85,32 @@ class Report
         return $this->fetch();
     }
 
+    /**
+     * @return mixed
+     * excel导出；
+     */
+    public function balanceStatistics_excel(){
+        $companyService = new CompanyService();
+        $company = $companyService->selectInfo([],'id,company_name,OPT_ID');
+        $meterService = new MeterService();
+        $where['meter_status'] = METER_STATUS_BIND;
+        $where['meter_life'] = METER_LIFE_ACTIVE;
+        foreach ($company as & $value) {
+            $where['company_id'] = $value['id'];
+            $value['count'] = $meterService->counts($where);
+            $value['meterbalance'] = $meterService->sums($where,'balance');
+            unset($value['id']);
+            $value = $value->toArray();
+        }
+        $count = array_sum(array_column($company,'count'));
+        $meterbalance = array_sum(array_column($company,'meterbalance'));
+        $filename = "balanceStatistics";
+        $title = '表具余额明细';
+        $total = '累计用户:'.$count.'元；累计余额:'.$meterbalance.'元';
+        $companyService->create_xls($company,$filename,$title,$total);
+    }
+
+
     //余额统计
     public function balanceStatistics()
     {
@@ -145,6 +171,7 @@ class Report
         $this->assign('reportLogs',isset($reportLogs) ? $reportLogs : []);
         return view();
     }
+
 
     /**
      * 根据运营商名称进行模糊查找,返回匹配数组
@@ -232,4 +259,5 @@ class Report
         $usages = (new MeterDataService())->getAllMeterUsageData('meter_data',$where);
         return json($usages);
     }
+
 }

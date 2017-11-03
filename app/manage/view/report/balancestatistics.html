@@ -33,7 +33,7 @@
                             </tr>
                         </table>
                     </div>
-                    <button id="print" style="float: right;margin-left: 1vw" class="btn btn-success" type="button" >{:lang('Print')}</button>
+                    <button id="print" style="float: right;margin-left: 1vw" class="btn btn-success" type="button" >{:lang('Upload')}</button>
                 </div>
             </div>
         </div>
@@ -43,6 +43,6 @@
 
 <script>
     $('#print').click(function(){
-            $('#table').jqprint();
+            location.href="{:url('manage/report/balanceStatistics_excel')}"
     })
 </script>

@@ -8,6 +8,8 @@
 
 namespace app\manage\model;
 
+use PHPExcel_IOFactory;
+use PHPExcel;
 
 use think\Model;
 
@@ -93,8 +95,55 @@ class BasicModel extends Model
         return $this->where($where)->sum($field);
     }
 
+
+    /*
+    *处理Excel导出
+    *@param $datas array 设置表格数据
+    *@param $filename str 设置文件名
+    */
+    public function create_xls($data,$filename,$title){
+        $filename=$filename.".xlsx";
+        $path = dirname(__FILE__);
+        vendor("PHPExcel.PHPExcel");
+        vendor("PHPExcel.PHPExcel.Writer.Excel5");
+        vendor("PHPExcel.PHPExcel.Writer.Excel2007");
+        vendor("PHPExcel.PHPExcel.IOFactory");
+        $objPHPExcel = new \PHPExcel();
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:D2');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1',$title);
+        $objPHPExcel->getActiveSheet()->getDefaultStyle()->getFont()->setSize(18);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setName('宋体') //字体
+            ->setSize(20) //字体大小
+            ->setBold(true); //字体加粗
+        $objPHPExcel->getActiveSheet()->getStyle('A2')->getFont()->setName('宋体') //字体
+            ->setSize(14) //字体大小
+            ->setBold(true); //字体加粗
+        $objPHPExcel->getActiveSheet()->getStyle('A1:A2')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $objPHPExcel->getActiveSheet()->setCellValue('A2', '(导出日期：'.date('Y-m-d',time()).')');
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A3', 'ID编号')
+            ->setCellValue('B3', '用户名')
+            ->setCellValue('C3', '手机号')
+            ->setCellValue('D3', '手机');
+        $count = count($data);
+        for ($i = 4; $i <= $count+3; $i++) {
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $i, $data[$i-4]['company_name']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $i, $data[$i-4]['OPT_ID']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $data[$i-4]['count']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]['meterbalance']);
+        }
+        $objPHPExcel->getActiveSheet()->setTitle('user');      //设置sheet的名称
+        $objPHPExcel->setActiveSheetIndex(0);                   //设置sheet的起始位置
+        $PHPWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+        header('Content-Disposition: attachment;filename='.$filename);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $PHPWriter->save("php://output"); //表示在$path路径下面生成demo.xlsx文件件
+    }
+
     public function del($id){
         return $this->where(['id' => $id])->delete();
     }
+
 
 }

@@ -94,7 +94,7 @@ class Meter extends Admin
             $where['company_id'] = ['eq',null];
             $where['meter_status'] = ['eq',METER_STATUS_NEW];
             if( !$meter = model('Meter')->getMeterInfo($where,'find') ){
-                exception("报装失败,表具不能报装",ERROR_CODE_DATA_ILLEGAL);
+                exception("表具不存在或已报装,请检查表号",ERROR_CODE_DATA_ILLEGAL);
             }
             //插入报装用户信息
             $data['consumer']['M_Code'] = $data['meter']['M_Code'];

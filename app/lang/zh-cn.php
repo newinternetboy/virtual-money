@@ -433,6 +433,7 @@ return [
     'Role Require'                      => '账号角色必须',
     'Login Name Exists'                 => '账号已存在',
     'Password and Confirm Password inconsistent'    => '密码与确认密码不一致',
+    'Production Name Require'           =>'商品名称必须',
 
 
     //报表；
@@ -449,10 +450,34 @@ return [
     'Year'                              => '年',
     'Month'                             => '月',
     'Total'                             => '总计',
+
     //表具用量
     'Total Usage'                       => '表具用量',
     'Setup Time'                        => '安装时间',
     'Download'                          => '导出',
+
+    //商铺
+    'Upload'                            => '下载',
+    'Shop Name'                         =>'商铺名称',
+    'Username'                          =>'用户名称',
+    'Shop Status'                       =>'店铺状态',
+    'Create time'                       =>'创建时间',
+    'From'                              =>' 从:',
+    'Save Shop'                         =>'修改/编辑店铺',
+    'Update Time'                       =>'修改时间',
+    'Shop Number'                       =>'商铺数量',
+    'Production Name'                   =>'商品名称',
+    'Production Status'                 =>'商品状态',
+    'DeLi Price'                        =>'得利币价格',
+    'RMB Price'                         =>'人民币价格',
+    'Save Production'                   =>'编辑/修改商品',
+    'Support DeLi Money'                =>'是否支持得利币',
+    'Support RMB Money'                 =>'是否支持人民币',
+    'Production Name Reuqire'           =>'商品名称必须',
+    'Deli Preference'                   =>'得利优选',
+    'Health Authentication'             =>'健康认证',
+    'Deli Authentication'               =>'得利认证',
+
 
     //系统管理
     //权限管理

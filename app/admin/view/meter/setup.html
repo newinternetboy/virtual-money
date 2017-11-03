@@ -178,7 +178,7 @@
                     <div class="form-group">
                         <label  class="col-sm-2 control-label"></label>
                         <div class="col-sm-10">
-                            <button class="btn btn-primary col-sm-1" style="display:none;" id="jqprint" type="button" >{:lang('Print')}</button>
+                            <button style="float: right;margin-left: 1vw;display: none;"  class="btn btn-primary col-sm-1" id="jqprint" type="button" >{:lang('Print')}</button>
                             <button style="float: right" class="btn btn-primary col-sm-1" onclick="saveData()" type="submit" id="submitBtn" >{:lang('Button')}</button>
                         </div>
                     </div>
@@ -192,9 +192,7 @@
 <script>
 
     $('#M_Code').change(function(){
-
-            $('#jqprint').hide();
-
+        $('#jqprint').hide();
         $('#warning').html('');
         var M_Code = $('#M_Code').val().trim('');
         if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
