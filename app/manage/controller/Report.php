@@ -212,19 +212,22 @@ class Report extends Admin
         }
         $usage = [];
         $meters = (new MeterService())->getInfoPaginate($where,['company_name' => $company_name,'M_Code' => $M_Code,'startDate' => $startDate,'endDate' => $endDate]);
-        foreach( $meters as $meter ){
-            $meterDataUsage = new MeterDataService();
-            $maxUsage = $meterDataUsage->findInfo(['meter_id' => $meter['id'],'source_type' => METER,'create_time' => ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]]],'',$meter['M_Code']);
-            $minUsage = $meterDataUsage->findInfoAsc(['meter_id' => $meter['id'],'source_type' => METER,'create_time' => ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]]],'',$meter['M_Code']);
-            $diffUsage = ($maxUsage ? $maxUsage['totalCube'] : 0) - ($minUsage ? $minUsage['totalCube'] : 0);
-            $usage[] = [
-                'M_Code' => $meter['M_Code'],
-                'consumer_name' => $meter->consumer->username,
-                'consumer_tel' => $meter->consumer->tel,
-                'detail_address' => $meter['detail_address'],
-                'diffUsage' => $diffUsage,
-                'setup_time' => isset($meter['setup_time']) ? $meter['setup_time'] : $meter['change_time'],
-            ];
+        foreach( $meters as $meter ) {
+            $usage[] = (new MeterDataService())->getMeterUsage($meter,$startDate,$endDate);
+//            $condition['create_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
+//            $condition['meter_id'] = $meter['id'];
+//            $condition['source_type'] = METER;
+//            $table = getMeterdataTablename($meter['M_Code']);
+//            $result  = (new MeterDataService())->getAllMeterUsageData($table,$condition);
+//            $usage[] = [
+//                'M_Code' => $meter['M_Code'],
+//                'consumer_name' => $meter->consumer->username,
+//                'consumer_tel' => $meter->consumer->tel,
+//                'detail_address' => $meter['detail_address'],
+//                'diffUsage' => !empty($result[0]->result) ? $result[0]->result[0]->sum : 0,
+//                'setup_time' => isset($meter['setup_time']) ? $meter['setup_time'] : $meter['change_time'],
+//            ];
+//        }
         }
         $this->assign('usage',$usage);
         $this->assign('company_name',$company_name);
@@ -235,29 +238,74 @@ class Report extends Admin
         return view();
     }
 
+    /**
+     *下载表具用量excel
+     */
     public function downloadMeterUsage(){
         $company_name = input('company_name');
         $M_Code = input('M_Code');
         $startDate = input('startDate',date('Y-m-d',strtotime('-1 day')));
         $endDate = input('endDate',date('Y-m-d'));
-        $where['source_type'] = METER;
-        $where['create_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
+        $where = [
+            'meter_status' => ['neq',METER_STATUS_NEW]
+        ];
         if($company_name){
             $where['company_id'] = '';
-            $meter_where['company_id'] = '';
             $companyService = new CompanyService();
-            if( $company = $companyService->findInfo(['company_name' => $company_name]) ){
+            if( $company = $companyService->findInfo(['company_name' => $company_name],'U_ID,detail_address,setup_time,change_time,meter_status') ){
                 $where['company_id'] = $company['id'];
-                $meter_where['company_id'] = $company['id'];
             }
         }
         if($M_Code){
-            $meter_where['M_Code'] = $M_Code;
-            $meters = (new MeterService())->selectInfo($meter_where,'id');
-            $where['meter_id'] = ['in',array_map(function($item){return $item['id'];},$meters)];
+            $where['M_Code'] = $M_Code;
         }
-        $usages = (new MeterDataService())->getAllMeterUsageData('meter_data',$where);
-        return json($usages);
+        $meters = (new MeterService())->selectInfo($where);
+        $usages = [];
+        foreach( $meters as $meter ) {
+            $usages[] = (new MeterDataService())->getMeterUsage($meter,$startDate,$endDate);
+        }
+
+//        $company_name = input('company_name');
+//        $M_Code = input('M_Code');
+//        $startDate = input('startDate',date('Y-m-d',strtotime('-1 day')));
+//        $endDate = input('endDate',date('Y-m-d'));
+//        $meter_where = [];
+//        $where['source_type'] = METER;
+//        $where['create_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
+//        if($company_name){
+//            $where['company_id'] = '';
+//            $meter_where['company_id'] = '';
+//            $companyService = new CompanyService();
+//            if( $company = $companyService->findInfo(['company_name' => $company_name]) ){
+//                $where['company_id'] = $company['id'];
+//                $meter_where['company_id'] = $company['id'];
+//            }
+//        }
+//        if($M_Code){
+//            $meter_where['M_Code'] = $M_Code;
+//            $meters = (new MeterService())->selectInfo($meter_where,'id');
+//            $where['meter_id'] = ['$in' => array_map(function($item){return $item['id'];},$meters)];
+//        }
+//        $meterDataTables = config('meterDataTables');
+//        $usages = [];
+//        foreach($meterDataTables as $table){
+//            $result = (new MeterDataService())->getAllMeterUsageData($table,$where);
+//            if( !empty($result[0]->result) ){
+//                $usages = array_merge($usages,$result[0]->result);
+//            }
+//        }
+//        foreach($usages as & $usage){
+//            $meterInfo = (new MeterService())->findInfo(['id' => $usage->_id->meter_id],'U_ID,detail_address,setup_time,change_time,meter_status');
+//            $usage->M_Code = $usage->_id->M_Code;
+//            if($meterInfo['meter_status'] != METER_STATUS_NEW){
+//                $usage->consumer_name = $meterInfo->consumer->username;
+//                $usage->consumer_tel = $meterInfo->consumer->tel;
+//                $usage->detail_address = $meterInfo->detail_address;
+//                $usage->setup_time = isset($meterInfo->setup_time) ? $meterInfo->setup_time : $meterInfo->change_time;
+//            }
+//        }
+
+        (new MeterDataService())->downloadMeterUsageExcel($usages,$company_name.$M_Code.'表具用量',$company_name.$M_Code.'表具用量');
     }
 
 }
