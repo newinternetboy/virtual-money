@@ -457,6 +457,13 @@ return [
     'Year'                              => '年',
     'Month'                             => '月',
     'Total'                             => '总计',
+
+    //表具用量
+    'Total Usage'                       => '表具用量',
+    'Setup Time'                        => '安装时间',
+    'Download'                          => '导出',
+
+    //商铺
     'Upload'                            => '下载',
     'Shop Name'                         =>'商铺名称',
     'Username'                          =>'用户名称',
@@ -483,6 +490,7 @@ return [
     'Meter Balance'                     =>'表具余额明细表',
     'Month Report'                      =>'用量月报',
     'Year Report'                       =>'用量年报',
+
 
     //系统管理
     //权限管理

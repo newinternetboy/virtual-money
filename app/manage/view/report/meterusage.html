@@ -1,0 +1,170 @@
+{js href="__JS__/bootstrap-datetimepicker.min.js" /}
+{js href="__JS__/bootstrap-typeahead.js" /}
+{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
+{js href="__JS__/echarts.js" /}
+{js href="__JS__/jquery.jqprint-0.3.js" /}
+{css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <!-- 搜索条件 -->
+                    <form action="" method="get" class="form-horizontal" onsubmit="return check();">
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="company_name" class="col-sm-2 control-label">{:lang('Company')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="company_name" name="company_name" value="{$company_name ?? ''}" type="text" autocomplete="off" data-provide="typeahead"  class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="M_Code" class="col-sm-2 control-label">{:lang('Input Meter Code')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="M_Code" name="M_Code" value="{$M_Code ?? ''}" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="startDate" class="col-sm-2 control-label">{:lang('Start Year')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="startDate" name="startDate" value="{$startDate ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div><!-- /.col-lg-6 -->
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="endDate" class="col-sm-2 control-label">{:lang('End Year')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="endDate" name="endDate" value="{$endDate ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                        <input name="page" value="1" style="display: none" />
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
+                                <button style="float: right" class="btn btn-danger" type="button" onclick="download()" >{:lang('Download')}</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--报表-->
+                    <div id="table">
+                        <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>{:lang('M_Code')}</th>
+                                <th>{:lang('Name')}</th>
+                                <th>{:lang('Installation Address')}</th>
+                                <th>{:lang('Contacts Tel')}</th>
+                                <th>{:lang('Total Usage')}</th>
+                                <th>{:lang('Setup Time')}</th>
+                            </tr>
+                            </thead>
+                            {foreach $usage as $item}
+                            <tr>
+                                <td>{$item.M_Code}</td>
+                                <td>{$item.consumer_name}</td>
+                                <td>{$item.detail_address}</td>
+                                <td>{$item.consumer_tel}</td>
+                                <td>{$item.diffUsage}</td>
+                                <td>{$item.setup_time ? date('Y-m-d',$item.setup_time) : '-'}</td>
+                            </tr>
+                            {/foreach}
+                        </table>
+                    </div>
+                    <div>
+                        {$meters->render()}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#startDate").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: false,
+        pickerPosition: "bottom-left",
+        startView: 4,
+        bootcssVer:3,
+        minView: 2,
+    });
+    $("#endDate").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: false,
+        pickerPosition: "bottom-left",
+        startView: 4,
+        bootcssVer:3,
+        minView: 2,
+    });
+</script>
+
+<script>
+    function check() {
+        var start = $('#startDate').val();
+        if( start == '' || start == 'undefined' || start == null ){
+            alertMsg("{:lang('Please Search')}{:lang('Start Year')}");
+            return false;
+        }
+        var end = $('#endDate').val();
+        if( end == '' || end == 'undefined' || end == null ){
+            alertMsg("{:lang('Please Search')}{:lang('End Year')}");
+            return false;
+        }
+        var regEx = new RegExp("\\-","gi");
+        var d1 = start.replace(regEx,"/");
+        var d2 = end.replace(regEx,"/");
+        if( d1 > d2 ){
+            alertMsg("{:lang('Start Year')}{:lang('not than')}{:lang('End Year')}");
+            return false;
+        }
+    };
+</script>
+<script>
+    $.fn.typeahead.Constructor.prototype.blur = function() {
+        var that = this;
+        setTimeout(function () { that.hide() }, 250);
+    };
+    $('#company_name').typeahead({
+        minLength: 0,
+        source: function (query, process) {
+            var company_name = $('#company_name').val();
+            var parameter = {company_name: company_name};
+            $.ajax({
+                url:"{:url('manage/report/getCompanyByName')}",
+                method:'post',
+                dataType:'json',
+                data: parameter,
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    var results = res.map(function (product) {
+                        return product.company_name;
+                    });
+                    process(results);
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
+                }
+            })
+        },
+    });
+
+    function download(){
+
+    }
+</script>

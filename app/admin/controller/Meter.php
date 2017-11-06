@@ -107,6 +107,9 @@ class Meter extends Admin
                 Log::record(['报装用户失败' => $error,'data' => $data],'error');
                 exception('添加用户失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
+
+            //TODO:更新同表号其他用户状态为废弃状态
+
             //更新表具信息
             $data['meter']['U_ID'] = $consumer_id;
             $data['meter']['id'] = $meter['id'];

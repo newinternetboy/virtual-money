@@ -94,8 +94,12 @@ function getAutoIncId($table, $query, $autoField, $step){
                     $autoField => $step
             ]
     ];
-
-    $mongodb = new MongoDB\Driver\Manager();
+    $connectString = 'mongodb://';
+    if(config('database.username') && config('database.password')){
+        $connectString .= config('database.username') . ':' .config('database.password') . '@';
+    }
+    $connectString .= config('database.hostname') . ':' . config('database.hostport') . '/' . config('database.database');
+    $mongodb = new \MongoDB\Driver\Manager($connectString);
     $command = new MongoDB\Driver\Command([
         'findandmodify'=> $table,
         'update'=>$update,

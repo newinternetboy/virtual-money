@@ -18,7 +18,7 @@ class MeterDataService extends BasicService
     }
 
     /**
-     * 获取信息 单条记录
+     * 获取信息 单条记录 降序
      * @param $where
      * @param $method
      * @param $field
@@ -26,6 +26,17 @@ class MeterDataService extends BasicService
      */
     public function findInfo($where,  $field = '',$M_Code = ''){
         return $this->dbModel->findInfo($where, $field,$M_Code);
+    }
+
+    /**
+     * 获取信息 单条记录 升序
+     * @param $where
+     * @param $method
+     * @param $field
+     * @return mixed
+     */
+    public function findInfoAsc($where,  $field = '',$M_Code = ''){
+        return $this->dbModel->findInfoAsc($where, $field,$M_Code);
     }
 
     /**
@@ -58,6 +69,26 @@ class MeterDataService extends BasicService
      */
     public function upsert($data, $scene = true,$M_Code = ''){
         return $this->dbModel->upsert($data,$scene,$M_Code);
+    }
+
+    public function getAllMeterUsageData($table,$where){
+        $connectString = 'mongodb://';
+        if(config('database.username') && config('database.password')){
+            $connectString .= config('database.username') . ':' .config('database.password') . '@';
+        }
+        $connectString .= config('database.hostname') . ':' . config('database.hostport') . '/' . config('database.database');
+        $mongodb = new \MongoDB\Driver\Manager($connectString);
+        $database = config('database.database');
+        $command = new \MongoDB\Driver\Command([
+            'aggregate' => $table,
+            'pipeline' => [
+                ['$match' => $where],
+                ['$group' => ['_id' => ['company_id' => '$company_id','meter_id' => '$meter_id','M_Code' => '$M_Code'],'sum' => ['$sum' => '$diffCube']]],
+
+            ],
+        ]);
+        $result = $mongodb->executeCommand($database,$command);
+        return $result->toArray();
     }
 
 }
