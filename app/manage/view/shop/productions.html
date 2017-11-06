@@ -8,7 +8,7 @@
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
                 <!-- 表单内容 -->
                 <div class="ibox-title">
-                    <h5>商品列表</h5>
+                    <h5>{:lang('Production List')}</h5>
                 </div>
                 <div class="ibox-content">
                     <!-- 表格数据 -->
@@ -28,9 +28,9 @@
                                     <label for="status" class="col-sm-2 control-label">{:lang('Production Status')}:</label>
                                     <div class="col-sm-6">
                                         <select name="status" id="status" class="form-control">
-                                            <option value="" {if conditon="isset($status)"}selected>查所有</option>
-                                            <option value="1" {if condition="(isset($status)) and ($status eq 1)"}selected{/if}>上架</option>
-                                            <option value="2" {if condition="(isset($status)) and ($status eq 2)"}selected{/if}>下架</option>
+                                            <option value="" {if conditon="isset($status)"}selected>{:lang('Search All')}</option>
+                                            <option value="1" {if condition="(isset($status)) and ($status eq 1)"}selected{/if}>{:lang('put on sale')}</option>
+                                            <option value="2" {if condition="(isset($status)) and ($status eq 2)"}selected{/if}>{:lang('pull off shelves')}</option>
                                         </select>
                                     </div>
                                 </div><!-- /form-group -->
@@ -58,7 +58,7 @@
                             <label  class="col-sm-2 control-label"></label>
                             <div class="col-sm-10">
                                 <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
-                                <button style="float:right;margin-right: 1vw;" onclick="javascript:history.back(-1);" type="button" class="btn btn-primary">返回</button>
+                                <button style="float:right;margin-right: 1vw;" onclick="javascript:history.back(-1);" type="button" class="btn btn-primary">{:lang('Back')}</button>
 
                             </div>
                         </div>
@@ -126,8 +126,8 @@
                     <label for="sdlenable" class="col-md-2 control-label">{:lang('Support DeLi Money')}</label>
                     <div class="col-md-10">
                         <select name="sdlenable" id="sdlenable" class="form-control">
-                            <option value='1'>支持</option>
-                            <option value='0'>不支持</option>
+                            <option value='1'>{:lang('Support')}</option>
+                            <option value='0'>{:lang('Not Support')}</option>
                         </select>
                     </div>
                 </div>
@@ -141,8 +141,8 @@
                     <label for="rmbenable" class="col-md-2 control-label">{:lang('Support RMB Money')}</label>
                     <div class="col-md-10">
                         <select name="rmbenable" id="rmbenable" class="form-control">
-                            <option value='1'>支持</option>
-                            <option value='0'>不支持</option>
+                            <option value='1'>{:lang('Support')}</option>
+                            <option value='0'>{:lang('Not Support')}</option>
                         </select>
                     </div>
                 </div>
@@ -156,8 +156,8 @@
                     <label for="edit_status" class="col-md-2 control-label">{:lang('Production Status')}</label>
                     <div class="col-md-10">
                         <select name="edit_status" id="edit_status" class="form-control">
-                            <option value="1">上架</option>
-                            <option value="0">下架</option>
+                            <option value="1">{:lang('put on sale')}</option>
+                            <option value="0">{:lang('pull off shelves')}</option>
                         </select>
                     </div>
                 </div>

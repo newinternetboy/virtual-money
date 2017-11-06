@@ -8,7 +8,7 @@
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
                 <!-- 表单内容 -->
                 <div class="ibox-title">
-                    <h5>商铺列表</h5>
+                    <h5>{:lang('Shop List')}</h5>
                 </div>
                 <div class="ibox-content">
                     <!-- 表格数据 -->
@@ -27,9 +27,9 @@
                                     <label for="status" class="col-sm-2 control-label">{:lang('Shop Status')}:</label>
                                     <div class="col-sm-6">
                                         <select name="status" id="status" class="form-control">
-                                            <option value="" {if conditon="isset($status)"}selected>查所有</option>
-                                            <option value="1" {if condition="(isset($status)) and ($status eq 1)"}selected{/if}>打开</option>
-                                            <option value="2" {if condition="(isset($status)) and ($status eq 2)"}selected{/if}>关闭</option>
+                                            <option value="" {if conditon="isset($status)"}selected>{:lang('Search All')}</option>
+                                            <option value="1" {if condition="(isset($status)) and ($status eq 1)"}selected{/if}>{:lang('Open')}</option>
+                                            <option value="2" {if condition="(isset($status)) and ($status eq 2)"}selected{/if}>{:lang(Close)}</option>
                                         </select>
                                     </div>
                                 </div><!-- /form-group -->
@@ -141,8 +141,8 @@
                     <label for="edit_status" class="col-md-2 control-label">{:lang('Shop Status')}</label>
                     <div class="col-md-10">
                         <select name="edit_status" id="edit_status" class="form-control">
-                            <option value="1">打开</option>
-                            <option value="0">关闭</option>
+                            <option value="1">{:lang('Open')}</option>
+                            <option value="0">{:lang('Close')}</option>
                         </select>
                     </div>
                 </div>
@@ -150,8 +150,8 @@
                     <label for="sdl_preference" class="col-md-2 control-label">{:lang('Deli Preference')}</label>
                     <div class="col-md-10">
                         <select name="sdl_preference" id="sdl_preference" class="form-control">
-                            <option value="1">开启</option>
-                            <option value="0">关闭</option>
+                            <option value="1">{:lang('Open')}</option>
+                            <option value="0">{:lang('Close')}</option>
                         </select>
                     </div>
                 </div>
@@ -159,8 +159,8 @@
                     <label for="health_auth" class="col-md-2 control-label">{:lang('Health Authentication')}</label>
                     <div class="col-md-10">
                         <select name="health_auth" id="health_auth" class="form-control">
-                            <option value="1">开启</option>
-                            <option value="0">关闭</option>
+                            <option value="1">{:lang('Open')}</option>
+                            <option value="0">{:lang('Close')}</option>
                         </select>
                     </div>
                 </div>
@@ -168,8 +168,8 @@
                     <label for="sdl_auth" class="col-md-2 control-label">{:lang('Deli Authentication')}</label>
                     <div class="col-md-10">
                         <select name="sdl_auth" id="sdl_auth" class="form-control">
-                            <option value="1">开启</option>
-                            <option value="0">关闭</option>
+                            <option value="1">{:lang('Open')}</option>
+                            <option value="0">{:lang('Close')}</option>
                         </select>
                     </div>
                 </div>

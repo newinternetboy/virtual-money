@@ -434,6 +434,13 @@ return [
     'Login Name Exists'                 => '账号已存在',
     'Password and Confirm Password inconsistent'    => '密码与确认密码不一致',
     'Production Name Require'           =>'商品名称必须',
+    'Production List'                   =>'商品列表',
+    'Shop List'                         =>'商铺列表',
+    'Search All'                        =>'查所有',
+    'put on sale'                       =>'上架',
+    'pull off shelves'                  =>'下架',
+    'Open'                              =>'打开',
+    'Close'                             =>'关闭',
 
 
     //报表；
@@ -473,10 +480,16 @@ return [
     'Save Production'                   =>'编辑/修改商品',
     'Support DeLi Money'                =>'是否支持得利币',
     'Support RMB Money'                 =>'是否支持人民币',
+    'Support'                           =>'支持',
+    'Not Support'                       =>'不支持',
     'Production Name Reuqire'           =>'商品名称必须',
     'Deli Preference'                   =>'得利优选',
     'Health Authentication'             =>'健康认证',
     'Deli Authentication'               =>'得利认证',
+    'Balance Statistics'                =>'表具余额统计表',
+    'Meter Balance'                     =>'表具余额明细表',
+    'Month Report'                      =>'用量月报',
+    'Year Report'                       =>'用量年报',
 
 
     //系统管理
