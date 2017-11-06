@@ -11,6 +11,7 @@ namespace app\manage\service;
 use app\manage\model\MeterdataModel;
 use PHPExcel;
 use PHPExcel_IOFactory;
+use PHPExcel_Style_Alignment;
 
 class MeterDataService extends BasicService
 {
@@ -130,7 +131,7 @@ class MeterDataService extends BasicService
      * @param $filename
      * @param $title
      */
-    public function downloadMeterUsageExcel($data, $filename, $title){
+    public function downloadMeterUsageExcel($data, $filename, $title,$startDate,$endDate){
         $filename=$filename.".xlsx";
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
@@ -143,8 +144,8 @@ class MeterDataService extends BasicService
         $objPHPExcel->getActiveSheet()->getStyle('A2')->getFont()->setName('宋体') //字体
         ->setSize(14) //字体大小
         ->setBold(true); //字体加粗
-        $objPHPExcel->getActiveSheet()->getStyle('A1:A2')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
-        $objPHPExcel->getActiveSheet()->setCellValue('A2', '(导出日期：'.date('Y-m-d',time()).')');
+        $objPHPExcel->getActiveSheet()->getStyle('A1:A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $objPHPExcel->getActiveSheet()->setCellValue('A2', "开始日期: $startDate  结束日期: $endDate");
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A3', '表号')
             ->setCellValue('B3', '姓名')

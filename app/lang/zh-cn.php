@@ -506,4 +506,12 @@ return [
     'Role Status Require'                    => '状态必须',
     'Auth'                                   => '授权',
 
+    //对账
+    //充值日报
+    'Day Report'                        => '充值日报',
+    'RMB Charge Times'                  => '人民币充值次数',
+    'DELI Charge Times'                 => '得力币充值次数',
+    'RMB Charge Money'                  => '人民币充值金额',
+    'DELI Charge Money'                 => '得力币充值金额',
+
 ];

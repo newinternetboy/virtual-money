@@ -305,7 +305,7 @@ class Report extends Admin
 //            }
 //        }
 
-        (new MeterDataService())->downloadMeterUsageExcel($usages,$company_name.$M_Code.'表具用量',$company_name.$M_Code.'表具用量');
+        (new MeterDataService())->downloadMeterUsageExcel($usages,$company_name.$M_Code.'表具用量',$company_name.$M_Code.'表具用量',$startDate,$endDate);
     }
 
 }

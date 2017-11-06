@@ -66,7 +66,7 @@ class Rest extends LanFilter
 
             if( isset($data['from']) && !empty($data['from']) && isset($data['to']) && !empty($data['to']) ){ //人对人
                 if( $data['money_type'] == MONEY_PERSON ){
-                    if( !model('app\admin\model\Meter')->getMeterInfo(['id' => $data['from']],'find') ){
+                    if( !$meter = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['from']],'find') ){
                         Log::record(['from表具不存在' => $data],'error');
                         $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
                         $ret['msg'] = '付款方不存在';
@@ -92,7 +92,7 @@ class Rest extends LanFilter
                     }
                 }
             }elseif( isset($data['from']) && !empty($data['from']) ){
-                if( !model('app\admin\model\Meter')->getMeterInfo(['id' => $data['from']],'find') ){
+                if( !$meter = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['from']],'find') ){
                     Log::record(['from表具不存在' => $data],'error');
                     $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
                     $ret['msg'] = '付款方不存在';
@@ -114,7 +114,7 @@ class Rest extends LanFilter
                     }
                 }
             }elseif( isset($data['to']) && !empty($data['to']) ){
-                if( !model('app\admin\model\Meter')->getMeterInfo(['id' => $data['to']],'find') ){
+                if( !$meter = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['to']],'find') ){
                     Log::record(['to表具不存在' => $data],'error');
                     $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
                     $ret['msg'] = '收款方不存在';
@@ -135,7 +135,13 @@ class Rest extends LanFilter
                         return json($ret);
                     }
                 }
+            }else{
+                Log::record(['充值信息不符合要求' => '','data' => $data],'error');
+                $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                $ret['msg'] = '充值信息不符合要求';
+                return json($ret);
             }
+            $data['company_id'] = $meter['company_id'];
             if( !$moneyLogId = model('MoneyLog')->add($data) ){
                 Log::record(['moneyLog添加失败' => model('MoneyLog')->getError(),'data' => $data],'error');
                 $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
