@@ -185,6 +185,7 @@
     };
     $('#company_name').typeahead({
         minLength: 0,
+        items: 20,
         source: function (query, process) {
             var company_name = $('#company_name').val();
             var parameter = {company_name: company_name};

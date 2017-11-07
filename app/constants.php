@@ -87,6 +87,10 @@ define('MONEY_PAY',1); //消费
 define('MONEY_PERSON',2); //个人电商中消费
 define('MONEY_COMPANY',3); //企业电商中消费
 define('MONEY_DELI',4); //得力专供中消费
+//付费方式
+define('MONEY_CHANNEL_WEIXIN',1); //微信
+define('MONEY_CHANNEL_MANAGE',2); //清分后台
+
 //task执行失败的记录处理状态
 define('MONEYLOG_FAIL_DEAL_STATUS_WAITING',1); //待处理
 define('MONEYLOG_FAIL_DEAL_STATUS_DONE',2); //已处理

@@ -198,7 +198,7 @@ function getYearReport($startYear, $endYear, $where){
  * @return string
  */
 function getMeterdataTablename($M_Code){
-    return 'meterData';
+    return 'meter_data';
 }
 
 function parseDate($timestamp){

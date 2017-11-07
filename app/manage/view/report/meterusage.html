@@ -33,7 +33,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="startDate" class="col-sm-2 control-label">{:lang('Start Year')}</label>
+                                    <label for="startDate" class="col-sm-2 control-label">{:lang('Start Time')}</label>
                                     <div class="col-sm-6">
                                         <input id="startDate" name="startDate" value="{$startDate ?? ''}" type="text" class="form-control">
                                     </div>
@@ -41,14 +41,13 @@
                             </div><!-- /.col-lg-6 -->
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="endDate" class="col-sm-2 control-label">{:lang('End Year')}</label>
+                                    <label for="endDate" class="col-sm-2 control-label">{:lang('End Time')}</label>
                                     <div class="col-sm-6">
                                         <input id="endDate" name="endDate" value="{$endDate ?? ''}" type="text" class="form-control">
                                     </div>
                                 </div>
                             </div><!-- /.col-lg-6 -->
                         </div>
-                        <input name="page" value="1" style="display: none" />
                         <div class="form-group">
                             <label  class="col-sm-2 control-label"></label>
                             <div class="col-sm-10">
@@ -78,7 +77,7 @@
                                 <td>{$item.detail_address}</td>
                                 <td>{$item.consumer_tel}</td>
                                 <td>{$item.diffUsage}</td>
-                                <td>{$item.setup_time ? date('Y-m-d',$item.setup_time) : '-'}</td>
+                                <td>{$item.setup_time}</td>
                             </tr>
                             {/foreach}
                         </table>
@@ -165,6 +164,6 @@
     });
 
     function download(){
-
+        window.location.href="{:url('manage/report/downloadMeterUsage',['company_name' => $company_name,'M_Code' => $M_Code,'startDate' => $startDate,'endDate' => $endDate])}"
     }
 </script>
