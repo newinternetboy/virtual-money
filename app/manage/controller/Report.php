@@ -181,9 +181,8 @@ class Report extends Admin
         $company_name = input('company_name');
         if($company_name){
             $where['company_name'] = ['like',$company_name];
-        }else{
-            $where = [];
         }
+        $where['status'] = COMPANY_STATUS_NORMAL;
         $companys = (new CompanyService())->selectInfo($where,'company_name');
         return json($companys);
     }
@@ -198,12 +197,13 @@ class Report extends Admin
         $startDate = input('startDate',date('Y-m-d',strtotime('-1 day')));
         $endDate = input('endDate',date('Y-m-d'));
         $where = [
-            'meter_status' => ['neq',METER_STATUS_NEW]
+            'meter_status' => ['neq',METER_STATUS_NEW],
+            'meter_life'   => METER_LIFE_ACTIVE
         ];
         if($company_name){
             $where['company_id'] = '';
             $companyService = new CompanyService();
-            if( $company = $companyService->findInfo(['company_name' => $company_name]) ){
+            if( $company = $companyService->findInfo(['company_name' => $company_name,'status' => COMPANY_STATUS_NORMAL]) ){
                 $where['company_id'] = $company['id'];
             }
         }
@@ -247,12 +247,13 @@ class Report extends Admin
         $startDate = input('startDate',date('Y-m-d',strtotime('-1 day')));
         $endDate = input('endDate',date('Y-m-d'));
         $where = [
-            'meter_status' => ['neq',METER_STATUS_NEW]
+            'meter_status' => ['neq',METER_STATUS_NEW],
+            'meter_life'    => METER_LIFE_ACTIVE
         ];
         if($company_name){
             $where['company_id'] = '';
             $companyService = new CompanyService();
-            if( $company = $companyService->findInfo(['company_name' => $company_name],'U_ID,detail_address,setup_time,change_time,meter_status') ){
+            if( $company = $companyService->findInfo(['company_name' => $company_name,'status' => COMPANY_STATUS_NORMAL],'U_ID,detail_address,setup_time,change_time,meter_status') ){
                 $where['company_id'] = $company['id'];
             }
         }

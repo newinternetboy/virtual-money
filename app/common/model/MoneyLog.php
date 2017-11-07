@@ -34,7 +34,7 @@ class MoneyLog extends Model
         return false;
     }
 
-    public function setOperatorAttr($value){
+    public function setChannelAttr($value){
         return intval($value);
     }
 
