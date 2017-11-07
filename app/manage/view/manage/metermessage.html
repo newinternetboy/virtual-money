@@ -1,0 +1,127 @@
+{js href="__JS__/bootstrap-typeahead.js" /}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Meter Message')}</h5>
+                </div>
+                <div class="ibox-content">
+                    <!-- 搜索条件 -->
+                    <form action="" method="get" class="form-horizontal" onsubmit="return check();">
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="company_name" class="col-sm-2 control-label">{:lang('Company')}:</label>
+                                    <div class="col-sm-6">
+                                        <input id="company_name" name="company_name" value="{$company_name ?? ''}" type="text" autocomplete="off" data-provide="typeahead"  class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="detail_address" class="col-sm-2 control-label">{:lang('Installation Address')}:</label>
+                                    <div class="col-sm-6">
+                                        <input id="detail_address" name="detail_address" value="{$detail_address ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="M_Code" class="col-sm-2 control-label">{:lang('M_Code')}:</label>
+                                    <div class="col-sm-6">
+                                        <input id="M_Code" name="M_Code" value="{$M_Code ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="username" class="col-sm-2 control-label">{:lang('Name')}:</label>
+                                    <div class="col-sm-6">
+                                        <input id="username" name="username" value="{$username ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--报表-->
+                    <div id="table">
+                        <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>{:lang('M_Code')}</th>
+                                <th>{:lang('Meter Type')}</th>
+                                <th>{:lang('User Name')}</th>
+                                <th>{:lang('Contact Number')}</th>
+                                <th>{:lang('Installation Address')}</th>
+                                <th>{:lang('Operate')}</th>
+                            </tr>
+                            </thead>
+                            {volist name="meter" id="vo"}
+                                <tr>
+                                    <td>{$vo.M_Code}</td>
+                                    <td>{$vo.M_Type ?? "未报装"}</td>
+                                    <td>{$vo.U_ID?$vo.consumer.username : ''}</td>
+                                    <td>{$vo.U_ID?$vo.consumer.tel : ''}</td>
+                                    <td>{$vo.detail_address?? ''}</td>
+                                    <td><button class="btn btn-primary" onclick="meterInfo('{$vo.id}')">{:lang('Edit')}</button></td>
+                                </tr>
+                            {/volist}
+                        </table>
+                    </div>
+                    <div>{$meter->render()}</div>
+                    <div id="chart" style="width: 800px;height:400px;display:none"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $.fn.typeahead.Constructor.prototype.blur = function() {
+        var that = this;
+        setTimeout(function () { that.hide() }, 250);
+    };
+    $('#company_name').typeahead({
+        minLength: 0,
+        source: function (query, process) {
+            var company_name = $('#company_name').val();
+            var parameter = {company_name: company_name};
+            $.ajax({
+                url:"{:url('manage/report/getCompanyByName')}",
+                method:'post',
+                dataType:'json',
+                data: parameter,
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    var results = res.map(function (product) {
+                        return product.company_name;
+                    });
+                    process(results);
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
+                }
+            })
+        }
+    });
+</script>
+<script>
+    function meterInfo(id){
+        var company_name = $('#company_name').val();
+        var detail_address = $('#detail_address').val();
+        var M_Code = $('#M_Code').val();
+        var username = $('#username').val();
+        window.location.href="{:url('manage/manage/meterInfo')}?id="+id+"&company_name="+company_name+"&detail_address="+detail_address+"&M_Code="+M_Code+"&username="+username;
+    }
+</script>

@@ -137,6 +137,7 @@ return [
     'User Name'         => '用户姓名',
     'Contact Number'    => '联系电话',
     "Charge Balance"    => '剩余金额',
+    'Recharge times'    => '充值次数',
     'Used Amount'       => '使用金额',
     'Acquisition Time'  => '采集时间',
     'Initial Dosage'    => '初始用量',
@@ -156,6 +157,7 @@ return [
     'Delete Meter'      => '表具删除',
     'Meter Type'        => '表具类型',
     'M_Code'            => '表号',
+    'M_Code Number'     => '表具号',
     'Please fill in the form M_Code first'         => '请先填写表号',
     'Please select the installation address first' => '请先选择安装地址',
     'Dosage Of Meter'         => '表具用量',
@@ -317,6 +319,7 @@ return [
     'Initial Cube Require'            => '初始用量必须',
     'Total Cube Require'              => '累计用量必须',
     'Total Cost Require'              => '累计金额必须',
+    'Total Cost'                      => '累计金额',
     'Meter Id Require'                => '表具id必须',
     'User Id Require'                 => '用户id必须',
     'Data Sources Require'            => '数据来源必须',
@@ -490,6 +493,8 @@ return [
     'Meter Balance'                     =>'表具余额明细表',
     'Month Report'                      =>'用量月报',
     'Year Report'                       =>'用量年报',
+    'Meter Message'                     =>'表具信息',
+    'Detail Message'                    =>'详细信息',
 
 
     //系统管理
