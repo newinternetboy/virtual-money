@@ -513,5 +513,9 @@ return [
     'DELI Charge Times'                 => '得力币充值次数',
     'RMB Charge Money'                  => '人民币充值金额',
     'DELI Charge Money'                 => '得力币充值金额',
+    //充值月报
+    'Reconcile Month Report'            => '充值月报',
+    //充值年报
+    'Reconcile Year Report'             => '充值年报'
 
 ];

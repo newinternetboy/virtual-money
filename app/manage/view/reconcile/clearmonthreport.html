@@ -7,7 +7,7 @@
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
                 <!-- 表单内容 -->
                 <div class="ibox-title">
-                    <h5>{:lang('Day Report')}</h5>
+                    <h5>{:lang('Reconcile Month Report')}</h5>
                 </div>
                 <div class="ibox-content">
                     <!-- 搜索条件 -->
@@ -75,16 +75,16 @@
 <script>
     $("#date").datetimepicker({
         language:"zh-CN",
-        format: "yyyy-mm-dd",
+        format: "yyyy-mm",
         autoclose: true,
         todayBtn: true,
         pickerPosition: "bottom-left",
         startView: 4,
         bootcssVer:3,
-        minView: 2,
+        minView: 3,
     });
 
     function download(){
-        window.location.href="{:url('manage/reconcile/downloaddayreport',['date' => $date])}"
+        window.location.href="{:url('manage/reconcile/downloadmonthreport',['date' => $date])}"
     }
 </script>

@@ -21,7 +21,7 @@ class MoneyLogService extends BasicService
     }
 
     /**
-     * 导出充值日报
+     * 导出充值报表
      * @param $data
      * @param $filename
      * @param $title
@@ -30,13 +30,13 @@ class MoneyLogService extends BasicService
      * @param $totalChargeTimes_deli
      * @param $totalChargeMoney_deli
      */
-    public function downloadDayReport($data, $filename, $title,$date, $totalChargeTimes_rmb, $totalChargeMoney_rmb, $totalChargeTimes_deli, $totalChargeMoney_deli){
+    public function downloadClearReport($data, $filename, $title,$date, $totalChargeTimes_rmb, $totalChargeMoney_rmb, $totalChargeTimes_deli, $totalChargeMoney_deli){
         $filename=$filename.".xlsx";
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
         $objPHPExcel->getActiveSheet()->mergeCells('A2:F2');
         $objPHPExcel->getActiveSheet()->setCellValue('A1',$title);
-        $objPHPExcel->getActiveSheet()->getDefaultStyle()->getFont()->setSize(18);
+//        $objPHPExcel->getActiveSheet()->getDefaultStyle()->getFont()->setSize(18);
         $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setName('宋体') //字体
         ->setSize(20) //字体大小
         ->setBold(true); //字体加粗
@@ -59,6 +59,7 @@ class MoneyLogService extends BasicService
             $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $data[$i-4]['chargeMoney_rmb']);
             $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]['chargeTimes_deli']);
             $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $data[$i-4]['chargeMoney_deli']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . $i, $data[$i-4]['desc']);
         }
         $last = $count + 4;
         $objPHPExcel->getActiveSheet()->setCellValue('A'.$last,'总计');
@@ -67,7 +68,7 @@ class MoneyLogService extends BasicService
         $objPHPExcel->getActiveSheet()->setCellValue('D'.$last,$totalChargeTimes_deli);
         $objPHPExcel->getActiveSheet()->setCellValue('E'.$last,$totalChargeMoney_deli);
         $objPHPExcel->getActiveSheet()->getStyle('A'.$last)->getFont()->setName('宋体') //字体
-        ->setSize(20) //字体大小
+//        ->setSize(20) //字体大小
         ->setBold(true); //字体加粗
         $objPHPExcel->getActiveSheet()->setTitle($title);      //设置sheet的名称
         $objPHPExcel->setActiveSheetIndex(0);                   //设置sheet的起始位置
