@@ -78,4 +78,13 @@ return [
         // 日志记录级别
         'level' => ['error'],
     ],
+    //对账-充值明细 类型下拉菜单
+    'channels'  => [
+        MONEY_CHANNEL_WEIXIN => lang('Wei Xin'),
+        MONEY_CHANNEL_MANAGE => lang('Manage Platform'),
+    ],
+    'moneytypes' => [
+        MONEY_TYPE_RMB => lang('Rmb'),
+        MONEY_TYPE_DELI => lang('Deli'),
+    ],
 ];
