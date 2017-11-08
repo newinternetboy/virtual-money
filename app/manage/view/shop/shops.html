@@ -29,7 +29,7 @@
                                         <select name="status" id="status" class="form-control">
                                             <option value="" {if conditon="isset($status)"}selected>{:lang('Search All')}</option>
                                             <option value="1" {if condition="(isset($status)) and ($status eq 1)"}selected{/if}>{:lang('Open')}</option>
-                                            <option value="2" {if condition="(isset($status)) and ($status eq 2)"}selected{/if}>{:lang(Close)}</option>
+                                            <option value="2" {if condition="(isset($status)) and ($status eq 2)"}selected{/if}>{:lang('Close')}</option>
                                         </select>
                                     </div>
                                 </div><!-- /form-group -->

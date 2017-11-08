@@ -1,0 +1,195 @@
+{js href="__JS__/bootstrap-typeahead.js" /}
+{js href="__JS__/jquery.jqprint-0.3.js" /}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Meter Message')}</h5>
+                </div>
+                <div class="ibox-content">
+                    <!-- 搜索条件 -->
+                    <form action="{:url('manage/manage/meterMessage')}" method="get" class="form-horizontal" onsubmit="return check();">
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="company_name" class="col-sm-2 control-label">{:lang('Company')}:</label>
+                                    <div class="col-sm-6">
+                                        <input id="company_name" name="company_name" value="{$company_name ?? ''}" type="text" autocomplete="off" data-provide="typeahead"  class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="detail_address" class="col-sm-2 control-label">{:lang('Installation Address')}:</label>
+                                    <div class="col-sm-6">
+                                        <input id="detail_address" name="detail_address" value="{$detail_address ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="M_Code" class="col-sm-2 control-label">{:lang('M_Code')}:</label>
+                                    <div class="col-sm-6">
+                                        <input id="M_Code" name="M_Code" value="{$M_Code ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="username" class="col-sm-2 control-label">{:lang('Name')}:</label>
+                                    <div class="col-sm-6">
+                                        <input id="username" name="username" value="{$name ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--报表-->
+                    <div id="print" class="form-horizontal">
+                        <fieldset>
+                            <legend>{:lang('Detail Message')}</legend>
+                            <div id="meterInfo" class="form-group">
+                                <label for="M_Code_P" class="col-sm-2 control-label">{:lang('M_Code')}</label>
+
+                                <div class="col-sm-4">
+                                    <p id="M_Code_P" class="form-control" style="border: none">{$meter.M_Code}</p>
+                                </div>
+
+                                <label for="M_Type" class="col-sm-2 control-label">{:lang('Meter Type')}</label>
+
+                                <div class="col-sm-4">
+                                    <p id="M_Type" class="form-control" style="border: none">
+                                        {$meter.M_Type ?? ''}
+                                    </p>
+                                </div>
+
+                                <label for="username_c" class="col-sm-2 control-label">{:lang('User Name')}</label>
+
+                                <div class="col-sm-4">
+                                    <p id="username_c" class="form-control" style="border: none">{$consumer.username ?? ''}</p>
+                                </div>
+
+                                <label for="tel" class="col-sm-2 control-label">{:lang('Contact Number')}</label>
+
+                                <div class="col-sm-4">
+                                    <p id="tel" class="form-control" style="border: none">{$consumer.tel ?? ''}</p>
+                                </div>
+
+                                <label for="identity" class="col-sm-2 control-label">{:lang('PIN-codes')}</label>
+
+                                <div class="col-sm-4">
+                                    <p id="identity" class="form-control" style="border: none">{$consumer.identity ?? ''}</p>
+                                </div>
+
+                                <label for="codenumber" class="col-sm-2 control-label">{:lang('M_Code Number')}</label>
+
+                                <div class="col-sm-4">
+                                    <p id="codenumber" class="form-control" style="border: none"></p>
+                                </div>
+
+                                <label for="company" class="col-sm-2 control-label">{:lang('Company')}</label>
+
+                                <div class="col-sm-4">
+                                    <p id="company" class="form-control" style="border: none">{$company.company_name ?? ''}</p>
+                                </div>
+
+                                <label for="status" class="col-sm-2 control-label">{:lang('Status')}</label>
+
+                                <div class="col-sm-4">
+                                    <p id="status" class="form-control" style="border: none">{$meter.meter_status}</p>
+                                </div>
+
+                                <label for="totalcost" class="col-sm-2 control-label">{:lang('Total Cost')}</label>
+
+                                <div class="col-sm-4">
+                                    <p id="totalcost" class="form-control" style="border: none">{$meter.totalCost ?? ''}</p>
+                                </div>
+
+                                <label for="totalCube" class="col-sm-2 control-label">{:lang('Cumulative Amount')}</label>
+
+                                <div class="col-sm-4">
+                                    <p id="totalCube" class="form-control" style="border: none">{$meter.totalCost}</p>
+                                </div>
+
+                                <label for="address" class="col-sm-2 control-label">{:lang('Installation Address')}</label>
+
+                                <div class="col-sm-4">
+                                    <p id="address" class="form-control" style="border: none">{$meter.detail_address ?? ''}</p>
+                                </div>
+
+                                <label for="setup_time" class="col-sm-2 control-label">{:lang('Setup Time')}</label>
+
+                                <div class="col-sm-4">
+                                    <p id="setup_time" class="form-control" style="border: none">{if condition="isset($meter.setup_time)"}{$meter.setup_time|date="Y-m-d H:i:s",###}{/if}</p>
+                                </div>
+
+                                <label for="balance" class="col-sm-2 control-label">{:lang("Charge Balance")}</label>
+
+                                <div class="col-sm-4">
+                                    <p id="balance" class="form-control" style="border: none">{$meter.balance}</p>
+                                </div>
+
+                                <label for="building_area_P" class="col-sm-2 control-label">{:lang('Recharge times')}(㎡)</label>
+
+                                <div class="col-sm-4">
+                                    <p id="building_area_P" class="form-control" style="border: none"></p>
+                                </div>
+
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div id="chart" style="width: 800px;height:400px;display:none"></div>
+                    <button style="float: right;margin-left: 1vw" onclick="javascript:history.back(-1)" class="btn btn-success" type="button" >{:lang('Back')}</button>
+                    <button id="jqprint" style="float: right" class="btn btn-success" type="button" >{:lang('Print')}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $.fn.typeahead.Constructor.prototype.blur = function() {
+        var that = this;
+        setTimeout(function () { that.hide() }, 250);
+    };
+    $('#company_name').typeahead({
+        minLength: 0,
+        source: function (query, process) {
+            var company_name = $('#company_name').val();
+            var parameter = {company_name: company_name};
+            $.ajax({
+                url:"{:url('manage/report/getCompanyByName')}",
+                method:'post',
+                dataType:'json',
+                data: parameter,
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    var results = res.map(function (product) {
+                        return product.company_name;
+                    });
+                    process(results);
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
+                }
+            })
+        }
+    });
+</script>
+<script>
+    $('#jqprint').click(function(){
+        $('#print').jqprint();
+    })
+
+</script>

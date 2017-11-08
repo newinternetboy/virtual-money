@@ -10,6 +10,7 @@ namespace app\manage\controller;
 
 use app\manage\service\CompanyService;
 use app\manage\service\ConsumerService;
+use app\manage\service\MeterService;
 use app\manage\service\UserService;
 use think\Log;
 use MongoDB\BSON\ObjectId;
@@ -204,6 +205,130 @@ class Manage extends Admin
         }
         return json($ret);
     }
+
+    /*
+     * @表具信息；
+     * 接收company_id,deatail_address,M_Code,name字段；
+     */
+    public function meterMessage(){
+        $company_name = input('company_name');
+        $detail_address = input('detail_address');
+        $M_Code= input('M_Code');
+        $username = input('username');
+        $where = [];
+        $con_where = [];
+        if($company_name){
+            $companyService = new CompanyService();
+            $company_id = $companyService->findInfo(['company_name'=>$company_name],'id')['id'];
+            $where['company_id'] = $company_id;
+        }
+        if($detail_address){
+            $where['detail_address'] = ['like',$detail_address];
+        }
+        if($M_Code){
+            $where['M_Code'] = $M_Code;
+        }
+        if($username){
+            $con_where['username'] = $username;
+        }
+        $param['company_name'] = $company_name;
+        $param['detail_address'] = $detail_address;
+        $param['M_Code'] = $M_Code;
+        $param['username'] = $username;
+        $meterService = new MeterService();
+        $consumerService = new ConsumerService();
+        $meter = $meterService->getInfoPaginate($where,$param);
+        if($con_where){
+            foreach($meter as $key => $value){
+                if(isset($value['M_Type'])&&$value['M_Type']==1){
+                    $value['M_Type']="水表";
+                }
+                if(isset($value['M_Type'])&&$value['M_Type']==2){
+                    $value['M_Type']="电表";
+                }
+                if(isset($value['M_Type'])&&$value['M_Type']==3){
+                    $value['M_Type']="气表";
+                }
+                if(!isset($value['U_ID'])){
+                    unset($meter[$key]);
+                    continue;
+                }else{
+                    $con_where['id'] = new ObjectId($value['U_ID']);
+                    if(!$consumerService->findInfo($con_where)){
+                        unset($meter[$key]);
+                    }
+                }
+            }
+        }else{
+            foreach($meter as & $value){
+                if(isset($value['M_Type'])&&$value['M_Type']==1){
+                    $value['M_Type']="水表";
+                }
+                if(isset($value['M_Type'])&&$value['M_Type']==2){
+                    $value['M_Type']="电表";
+                }
+                if(isset($value['M_Type'])&&$value['M_Type']==3){
+                    $value['M_Type']="气表";
+                }
+            }
+        }
+
+        $this->assign('meter',$meter);
+        $this->assign('company_name',$company_name);
+        $this->assign('detail_address',$detail_address);
+        $this->assign('M_Code',$M_Code);
+        $this->assign('username',$username);
+        return $this->fetch();
+    }
+
+    //获取单条商铺信息；
+    public function meterInfo(){
+        $company_name = input('company_name');
+        $detail_address = input('detail_address');
+        $M_Code = input('M_Code');
+        $name = input('username');
+        $id = input('id');
+        $meterService = new MeterService();
+        $consumerService = new ConsumerService();
+        $companyService = new CompanyService();
+        $meter = $meterService->findInfo(['id'=>$id,'meter_life'=>METER_LIFE_ACTIVE]);
+        switch($meter['meter_status']){
+            case METER_STATUS_CHANGED:
+                $meter['meter_status'] = '被更换的旧表';
+                break;
+            case METER_STATUS_BIND:
+                $meter['meter_status'] = '已绑定';
+                break;
+            case METER_STATUS_DELETE:
+                $meter['meter_status'] = '已删除';
+                creak;
+            default:
+                $meter['meter_status'] = '新表';
+        }
+        if(isset($meter['M_Type'])&&$meter['M_Type']==METER_TYPE_WATER){
+            $meter['M_Type']="水表";
+        }
+        if(isset($meter['M_Type'])&&$meter['M_Type']==METER_TYPE_ELECTRICITY){
+            $meter['M_Type']="电表";
+        }
+        if(isset($meter['M_Type'])&&$meter['M_Type']==METER_TYPE_GAS){
+            $meter['M_Type']="气表";
+        }
+        $consumer = $consumerService->findInfo(['meter_id'=>$id]);
+        $company=[];
+        if(isset($meter['company_id'])){
+            $company = $companyService->findInfo(['id'=>$meter['company_id']]);
+        }
+        $this->assign('meter',$meter);
+        $this->assign('consumer',$consumer);
+        $this->assign('company',$company);
+        $this->assign('company_name',$company_name);
+        $this->assign('detail_address',$detail_address);
+        $this->assign('M_Code',$M_Code);
+        $this->assign('name',$name);
+        return view();
+    }
+
 
 
 }
