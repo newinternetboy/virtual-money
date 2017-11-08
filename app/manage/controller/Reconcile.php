@@ -108,18 +108,18 @@ class Reconcile extends Admin
                 'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
                 'create_time' => ['between',[$startTime,$endTime]]
             ];
-            $deli_where = [
-                'company_id' => $company['id'],
-                'to'    => null, //to字段不存在是充值记录
-                'type' => MONEY_PAY,
-                'money_type' => MONEY_TYPE_DELI,
-                'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
-                'create_time' => ['between',[$startTime,$endTime]]
-            ];
+//            $deli_where = [
+//                'company_id' => $company['id'],
+//                'to'    => null, //to字段不存在是充值记录
+//                'type' => MONEY_PAY,
+//                'money_type' => MONEY_TYPE_DELI,
+//                'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
+//                'create_time' => ['between',[$startTime,$endTime]]
+//            ];
             $company['chargeTimes_rmb'] = $moneyLogService->counts($rmb_where);
-            $company['chargeTimes_deli'] = $moneyLogService->counts($deli_where);
+//            $company['chargeTimes_deli'] = $moneyLogService->counts($deli_where);
             $company['chargeMoney_rmb'] = $moneyLogService->sums($rmb_where,'money');
-            $company['chargeMoney_deli'] = $moneyLogService->sums($deli_where,'money');
+//            $company['chargeMoney_deli'] = $moneyLogService->sums($deli_where,'money');
         }
         $this->assign('date',$date);
         $this->assign('companys',$companys);
@@ -134,18 +134,18 @@ class Reconcile extends Admin
             'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
             'create_time' => ['between',[$startTime,$endTime]]
         ];
-        $deli_where_all = [
-            'company_id' => ['in',array_column(array_map(function($item){return $item->toArray();},$companysAll),'id')],
-            'to'    => null, //to字段不存在是充值记录
-            'type' => MONEY_PAY,
-            'money_type' => MONEY_TYPE_DELI,
-            'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
-            'create_time' => ['between',[$startTime,$endTime]]
-        ];
+//        $deli_where_all = [
+//            'company_id' => ['in',array_column(array_map(function($item){return $item->toArray();},$companysAll),'id')],
+//            'to'    => null, //to字段不存在是充值记录
+//            'type' => MONEY_PAY,
+//            'money_type' => MONEY_TYPE_DELI,
+//            'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
+//            'create_time' => ['between',[$startTime,$endTime]]
+//        ];
         $all['chargeTimes_rmb'] = $moneyLogService->counts($rmb_where_all);
-        $all['chargeTimes_deli'] = $moneyLogService->counts($deli_where_all);
+//        $all['chargeTimes_deli'] = $moneyLogService->counts($deli_where_all);
         $all['chargeMoney_rmb'] = $moneyLogService->sums($rmb_where_all,'money');
-        $all['chargeMoney_deli'] = $moneyLogService->sums($deli_where_all,'money');
+//        $all['chargeMoney_deli'] = $moneyLogService->sums($deli_where_all,'money');
         $this->assign('all',$all);
     }
 
@@ -172,22 +172,22 @@ class Reconcile extends Admin
                 'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
                 'create_time' => ['between',[$startTime,$endTime]]
             ];
-            $deli_where = [
-                'company_id' => $company['id'],
-                'to'    => null, //to字段不存在是充值记录
-                'type' => MONEY_PAY,
-                'money_type' => MONEY_TYPE_DELI,
-                'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
-                'create_time' => ['between',[$startTime,$endTime]]
-            ];
+//            $deli_where = [
+//                'company_id' => $company['id'],
+//                'to'    => null, //to字段不存在是充值记录
+//                'type' => MONEY_PAY,
+//                'money_type' => MONEY_TYPE_DELI,
+//                'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
+//                'create_time' => ['between',[$startTime,$endTime]]
+//            ];
             $company['chargeTimes_rmb'] = $moneyLogService->counts($rmb_where);
-            $company['chargeTimes_deli'] = $moneyLogService->counts($deli_where);
+//            $company['chargeTimes_deli'] = $moneyLogService->counts($deli_where);
             $company['chargeMoney_rmb'] = $moneyLogService->sums($rmb_where,'money');
-            $company['chargeMoney_deli'] = $moneyLogService->sums($deli_where,'money');
+//            $company['chargeMoney_deli'] = $moneyLogService->sums($deli_where,'money');
 
             $totalChargeTimes_rmb += $company['chargeTimes_rmb'];
-            $totalChargeMoney_deli += $company['chargeMoney_deli'];
-            $totalChargeTimes_deli += $company['chargeTimes_deli'];
+//            $totalChargeMoney_deli += $company['chargeMoney_deli'];
+//            $totalChargeTimes_deli += $company['chargeTimes_deli'];
             $totalChargeMoney_rmb += $company['chargeMoney_rmb'];
         }
         return [
@@ -229,13 +229,9 @@ class Reconcile extends Admin
         $moneylog_where['to'] = null;
         if($channel){
             $moneylog_where['channel'] = $channel;
-        }else{
-            $moneylog_where['channel'] = ['in',[MONEY_CHANNEL_WEIXIN,MONEY_CHANNEL_MANAGE]];
         }
         if($money_type){
             $moneylog_where['money_type'] = $money_type;
-        }else{
-            $moneylog_where['money_type'] = ['in',[MONEY_TYPE_RMB,MONEY_TYPE_DELI]];
         }
         $moneylog_where['create_time'] = ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
         $moneylogs = $moneyLogService->getInfoPaginate($moneylog_where,['company_name' => $company_name,'M_Code' => $M_Code,'channel' => $channel,'startDate' => $startDate,'endDate' => $endDate]);
@@ -312,13 +308,9 @@ class Reconcile extends Admin
         $moneylog_where['to'] = null;
         if($channel){
             $moneylog_where['channel'] = $channel;
-        }else{
-            $moneylog_where['channel'] = ['in',[MONEY_CHANNEL_WEIXIN,MONEY_CHANNEL_MANAGE]];
         }
         if($money_type){
             $moneylog_where['money_type'] = $money_type;
-        }else{
-            $moneylog_where['money_type'] = ['in',[MONEY_TYPE_RMB,MONEY_TYPE_DELI]];
         }
         $moneylog_where['create_time'] = ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
         $moneylogs = $moneyLogService->selectInfo($moneylog_where,'from,money_type,type,money,create_time');

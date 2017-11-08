@@ -49,24 +49,24 @@ class MoneyLogService extends BasicService
             ->setCellValue('A3', '名称')
             ->setCellValue('B3', '人民币充值次数')
             ->setCellValue('C3', '人民币充值金额')
-            ->setCellValue('D3', '得力币充值次数')
-            ->setCellValue('E3', '得力币充值金额')
+//            ->setCellValue('D3', '得力币充值次数')
+//            ->setCellValue('E3', '得力币充值金额')
             ->setCellValue('F3', '备注');
         $count = count($data);
         for ($i = 4; $i <= $count+3; $i++) {
             $objPHPExcel->getActiveSheet()->setCellValue('A' . $i, $data[$i-4]['company_name']);
             $objPHPExcel->getActiveSheet()->setCellValue('B' . $i, $data[$i-4]['chargeTimes_rmb']);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $data[$i-4]['chargeMoney_rmb']);
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]['chargeTimes_deli']);
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $data[$i-4]['chargeMoney_deli']);
+//            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]['chargeTimes_deli']);
+//            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $data[$i-4]['chargeMoney_deli']);
             $objPHPExcel->getActiveSheet()->setCellValue('F' . $i, $data[$i-4]['desc']);
         }
         $last = $count + 4;
         $objPHPExcel->getActiveSheet()->setCellValue('A'.$last,'总计');
         $objPHPExcel->getActiveSheet()->setCellValue('B'.$last,$totalChargeTimes_rmb);
         $objPHPExcel->getActiveSheet()->setCellValue('C'.$last,$totalChargeMoney_rmb);
-        $objPHPExcel->getActiveSheet()->setCellValue('D'.$last,$totalChargeTimes_deli);
-        $objPHPExcel->getActiveSheet()->setCellValue('E'.$last,$totalChargeMoney_deli);
+//        $objPHPExcel->getActiveSheet()->setCellValue('D'.$last,$totalChargeTimes_deli);
+//        $objPHPExcel->getActiveSheet()->setCellValue('E'.$last,$totalChargeMoney_deli);
         $objPHPExcel->getActiveSheet()->getStyle('A'.$last)->getFont()->setName('宋体') //字体
 //        ->setSize(20) //字体大小
         ->setBold(true); //字体加粗
