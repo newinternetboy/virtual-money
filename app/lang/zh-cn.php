@@ -533,5 +533,10 @@ return [
     'Deli'                              => '得力币',
     'Rmb'                               => '人民币',
     'Choose Money Type'                 => '请选择币种',
-
+    //充值类型
+    'Charge Type'                       => '充值类型',
+    'Charge Times'                      => '充值次数',
+    'Charge Money'                      => '充值金额',
+    'Charge Type Report'                => '运营商充值类型统计表',
+    'Please Input The Company Name'     => '请输入运营商名称'
 ];

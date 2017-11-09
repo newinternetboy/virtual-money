@@ -345,4 +345,37 @@ class Reconcile extends Admin
         }
        (new MoneyLogService())->downloadChargeDetail($moneylogs,$company_name.$M_Code.'充值明细'.date('Y-m-d'),$company_name.$M_Code.'充值明细',$startDate,$endDate,$total);
     }
+
+    /**
+     * 充值类型统计
+     * @return \think\response\View
+     */
+    public function chargeTypeReport(){
+        $company_name = input('company_name');
+        $startDate = input('startDate',date('Y-m-d',strtotime('-1 day')));
+        $endDate = input('endDate',date('Y-m-d'));
+        if( $company_name ){
+            $company = (new CompanyService())->findInfo(['status' => COMPANY_STATUS_NORMAL,'company_name' => $company_name],'id');
+            $where['company_id'] = $company['id'];
+        }
+        $where['create_time'] = ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
+        $moneyLogService = new MoneyLogService();
+        foreach(config('chargeTypes') as $channel){
+            $where['channel'] = $channel['channel'];
+            $where['money_type'] = $channel['money_type'];
+            $where['type'] = $channel['type'];
+            $chargeTimes = $moneyLogService->counts($where);
+            $chargeMoney = $moneyLogService->sums($where,'money');
+            $reports[] = [
+                'typeName'  => $channel['channelName'],
+                'times' => $chargeTimes,
+                'money' => $chargeMoney,
+            ];
+        }
+        $this->assign('company_name',$company_name);
+        $this->assign('startDate',$startDate);
+        $this->assign('endDate',$endDate);
+        $this->assign('reports',$reports);
+        return view();
+    }
 }

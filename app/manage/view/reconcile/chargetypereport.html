@@ -1,5 +1,6 @@
 {js href="__JS__/bootstrap-datetimepicker.min.js" /}
 {js href="__JS__/bootstrap-typeahead.js" /}
+{js href="__JS__/jquery.jqprint-0.3.js" /}
 {js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
 {css href="__CSS__/bootstrap-datetimepicker.min.css" /}
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -8,7 +9,7 @@
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
                 <!-- 表单内容 -->
                 <div class="ibox-title">
-                    <h5>{:lang('Charge Detail')}</h5>
+                    <h5>{:lang('Charge Type')}</h5>
                 </div>
                 <div class="ibox-content">
                     <!-- 搜索条件 -->
@@ -22,40 +23,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="M_Code" class="col-sm-2 control-label">{:lang('M_Code')}</label>
-                                    <div class="col-sm-6">
-                                        <input id="M_Code" name="M_Code" value="{$M_Code ?? ''}" type="text" autocomplete="off" data-provide="typeahead"  class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="channel" class="col-sm-2 control-label">{:lang('Channel Type')}</label>
-                                    <div class="col-sm-6">
-                                        <select class="form-control" id="channel" name="channel">
-                                            <option value="">--{:lang('Choose Channel Type')}--</option>
-                                            {foreach $channels as $index => $item}
-                                                <option value="{$index}" {if condition="$index eq $channel"}selected{/if}>{$item}</option>
-                                            {/foreach}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--<div class="col-lg-6" style="float: left">-->
-                                <!--<div class="form-group">-->
-                                    <!--<label for="money_type" class="col-sm-2 control-label">{:lang('Money Type')}</label>-->
-                                    <!--<div class="col-sm-6">-->
-                                        <!--<select class="form-control" id="money_type" name="money_type">-->
-                                            <!--<option value="">&#45;&#45;{:lang('Choose Money Type')}&#45;&#45;</option>-->
-                                            <!--{foreach $moneytypes as $index => $item}-->
-                                            <!--<option value="{$index}" {if condition="$index eq $money_type"}selected{/if}>{$item}</option>-->
-                                            <!--{/foreach}-->
-                                        <!--</select>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
                         </div>
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
@@ -79,68 +46,40 @@
                             <label  class="col-sm-2 control-label"></label>
                             <div class="col-sm-10">
                                 <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
-                                <button style="float: right" class="btn btn-danger" type="button" onclick="download()" >{:lang('Download')}</button>
                             </div>
                         </div>
                     </form>
                     <hr style="height:1px;border:none;border-top:1px solid #555555;" />
                     <!--报表-->
                     <div id="table">
+                        <h5>{:lang('Charge Type Report')}<span style="float: right">{:lang('Start Time')}{$startDate}{:lang('End Time')}{$endDate}</span></h5>
                         <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
                             <thead>
                             <tr>
-                                <th>{:lang('M_Code')}</th>
-                                <th>{:lang('Name')}</th>
-                                <th>{:lang('Money')}</th>
-                                <!--<th>{:lang('Money Type')}</th>-->
-                                <th>{:lang('Channel Type')}</th>
-                                <th>{:lang('Date')}</th>
+                                <th>{:lang('Charge Type')}</th>
+                                <th>{:lang('Charge Times')}</th>
+                                <th>{:lang('Charge Money')}</th>
                             </tr>
                             </thead>
-                            {foreach $moneylogs as $moneylog }
+                            {foreach $reports as $report }
                             <tr>
-                                <td>{$moneylog.meter.M_Code}</td>
-                                <td>{$moneylog.meter.consumer.username}</td>
-                                <td>{$moneylog.money}</td>
-                                <!--<td>-->
-                                    <!--{if condition="$moneylog.money_type eq $Think.const.MONEY_TYPE_RMB"}-->
-                                    <!--{:lang('Rmb')}-->
-                                    <!--{else /}-->
-                                    <!--{:lang('Deli')}-->
-                                    <!--{/if}-->
-                                <!--</td>-->
-                                <td>{if condition="$moneylog.channel eq $Think.const.MONEY_CHANNEL_WEIXIN"}
-                                        {:lang('Wei Xin')}
-                                    {else /}
-                                        {:lang('Manage Platform')}
-                                    {/if}
-                                </td>
-                                <td>{$moneylog.create_time}</td>
+                                <td>{$report.typeName}</td>
+                                <td>{$report.times}</td>
+                                <td>{$report.money}</td>
                             </tr>
                             {/foreach}
                             <tr>
                                 <td>{:lang('total')}</td>
-                                <td>{foreach $total as $item}
-                                    <div>
-                                        {if condition="$item.money_type eq $Think.const.MONEY_TYPE_RMB"}
-                                            {:lang('Rmb')}:
-                                        {else/}
-                                            {:lang('Deli')}:
-                                        {/if}
-                                        {$item.total}
-                                    </div>
-                                    {/foreach}
-                                </td>
+                                <td>{$reports|array_column=###,'times'|array_sum}</td>
+                                <td>{$reports|array_column=###,'money'|array_sum}</td>
                             </tr>
                         </table>
                     </div>
+                    <button id="print" style="float: right;margin-left: 1vw" class="btn btn-info" type="button" >{:lang('Print')}</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div>
-    {$moneylogs->render()}
 </div>
 <script>
     $("#startDate").datetimepicker({
@@ -164,10 +103,6 @@
         bootcssVer:3,
         minView: 2,
     });
-
-    function download(){
-        window.location.href="{:url('manage/reconcile/downloadChargeDetail',['company_name' => $company_name,'M_Code' => $M_Code,'money_type' => $money_type,'channel' => $channel,'startDate' => $startDate,'endDate' => $endDate])}"
-    }
 </script>
 <script>
     $.fn.typeahead.Constructor.prototype.blur = function() {
@@ -198,4 +133,7 @@
             })
         },
     });
+    $('#print').click(function(){
+        $('#table').jqprint();
+    })
 </script>
