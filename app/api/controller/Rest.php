@@ -38,6 +38,14 @@ class Rest extends LanFilter
             $data['meter_id'] = $meterInfo['id'];
             $data['status'] = TASK_WAITING;
             $data['seq_id'] = getAutoIncId('autoinc',['name' => 'task','meter_id' => $meterInfo['id']],'seq_id',1);
+            //改变表具余额的task,都需要此字段,值就是待下发给表具的金额,可以为负数,用于report api处理task
+            if(isset($data['money_log_id'])){
+                if(isset($data['balance_rmb'])){
+                    $data['balance_rmb'] = floatval($data['balance_rmb']);
+                }else{
+                    $data['balance_rmb'] = 0;
+                }
+            }
             $data['create_time'] = time();
             if(!Db::name('task')->insert($data)){
                 Log::record(['添加task失败' => $data],'error');
@@ -61,6 +69,7 @@ class Rest extends LanFilter
         $ret['code'] = 200;
         $ret['msg'] = '操作成功';
         try{
+            $data['money'] = floatval($data['money']);
             if($data['type'] == MONEY_PAY){
                 if( isset($data['from']) && !empty($data['from']) && isset($data['to']) && !empty($data['to']) ){ //人对人
                     if( !$meter = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['from']],'find') ){
@@ -155,7 +164,6 @@ class Rest extends LanFilter
                 }
             }
             $data['create_time'] = time();
-            $data['money'] = floatval($data['money']);
             $data['company_id'] = $meter['company_id'];
             if( !$moneyLogId = model('MoneyLog')->add($data) ){
                 Log::record(['moneyLog添加失败' => model('MoneyLog')->getError(),'data' => $data],'error');
