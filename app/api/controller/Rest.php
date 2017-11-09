@@ -61,11 +61,8 @@ class Rest extends LanFilter
         $ret['code'] = 200;
         $ret['msg'] = '操作成功';
         try{
-            $data['create_time'] = time();
-            $data['money'] = floatval($data['money']);
-
-            if( isset($data['from']) && !empty($data['from']) && isset($data['to']) && !empty($data['to']) ){ //人对人
-                if( $data['money_type'] == MONEY_PERSON ){
+            if($data['type'] == MONEY_PAY){
+                if( isset($data['from']) && !empty($data['from']) && isset($data['to']) && !empty($data['to']) ){ //人对人
                     if( !$meter = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['from']],'find') ){
                         Log::record(['from表具不存在' => $data],'error');
                         $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
@@ -78,69 +75,87 @@ class Rest extends LanFilter
                         $ret['msg'] = '收款方不存在';
                         return json($ret);
                     }
-                    if(!model('app\admin\model\Meter')->updateMoney($data['from'],'dec','balance_deli',$data['money'])){
-                        Log::record(['dec得力币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                    if( $data['money_type'] == MONEY_TYPE_RMB ){
+                        if(!model('app\admin\model\Meter')->updateMoney($data['from'],'inc','balance_rmb',$data['money'])){
+                            Log::record(['inc人民币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                            $ret['msg'] = '更新余额失败';
+                            return json($ret);
+                        }
+                        if(!model('app\admin\model\Meter')->updateMoney($data['to'],'dec','balance_rmb',$data['money'])){
+                            Log::record(['dec人民币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                            $ret['msg'] = '更新余额失败';
+                            return json($ret);
+                        }
+                    }
+                    if( $data['money_type'] == MONEY_TYPE_DELI ){
+                        if(!model('app\admin\model\Meter')->updateMoney($data['from'],'dec','balance_deli',$data['money'])){
+                            Log::record(['dec得力币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                            $ret['msg'] = '更新余额失败';
+                            return json($ret);
+                        }
+                        if(!model('app\admin\model\Meter')->updateMoney($data['to'],'inc','balance_deli',$data['money'])){
+                            Log::record(['inc得力币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                            $ret['msg'] = '更新余额失败';
+                            return json($ret);
+                        }
+                    }
+                }elseif( isset($data['from']) && !empty($data['from']) ){
+                    if( !$meter = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['from']],'find') ){
+                        Log::record(['from表具不存在' => $data],'error');
                         $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
-                        $ret['msg'] = '更新余额失败';
+                        $ret['msg'] = '付款方不存在';
                         return json($ret);
                     }
-                    if(!model('app\admin\model\Meter')->updateMoney($data['to'],'inc','balance_deli',$data['money'])){
-                        Log::record(['inc得力币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
-                        $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
-                        $ret['msg'] = '更新余额失败';
-                        return json($ret);
+                    if( $data['money_type'] == MONEY_TYPE_RMB ){
+                        if(!model('app\admin\model\Meter')->updateMoney($data['from'],'inc','balance_rmb',$data['money'])){
+                            Log::record(['inc人民币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                            $ret['msg'] = '更新余额失败';
+                            return json($ret);
+                        }
+                    }elseif($data['money_type'] == MONEY_TYPE_DELI ){
+                        if(!model('app\admin\model\Meter')->updateMoney($data['from'],'dec','balance_deli',$data['money'])){
+                            Log::record(['dec得力币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                            $ret['msg'] = '更新余额失败';
+                            return json($ret);
+                        }
                     }
-                }
-            }elseif( isset($data['from']) && !empty($data['from']) ){
-                if( !$meter = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['from']],'find') ){
-                    Log::record(['from表具不存在' => $data],'error');
+                }else{
+                    Log::record(['充值信息不符合要求' => '','data' => $data],'error');
                     $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
-                    $ret['msg'] = '付款方不存在';
+                    $ret['msg'] = '充值信息不符合要求';
                     return json($ret);
                 }
-                if( $data['money_type'] == MONEY_PAY ){
-                    if(!model('app\admin\model\Meter')->updateMoney($data['from'],'dec','balance_rmb',$data['money'])){
-                        Log::record(['dec人民币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+            }elseif($data['type'] == MONEY_SYSTEM_DELI){
+                if( isset($data['to']) && !empty($data['to']) ){
+                    if( !$meter = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['to']],'find') ){
+                        Log::record(['to表具不存在' => $data],'error');
                         $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
-                        $ret['msg'] = '更新余额失败';
+                        $ret['msg'] = '收款方不存在';
                         return json($ret);
                     }
-                }elseif($data['money_type'] == MONEY_PERSON ){
-                    if(!model('app\admin\model\Meter')->updateMoney($data['from'],'dec','balance_deli',$data['money'])){
-                        Log::record(['dec得力币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
-                        $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
-                        $ret['msg'] = '更新余额失败';
-                        return json($ret);
+                    if($data['money_type'] == MONEY_TYPE_DELI ){
+                        if(!model('app\admin\model\Meter')->updateMoney($data['to'],'inc','balance_deli',$data['money'])){
+                            Log::record(['赠送得力币失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                            $ret['msg'] = '更新余额失败';
+                            return json($ret);
+                        }
                     }
-                }
-            }elseif( isset($data['to']) && !empty($data['to']) ){
-                if( !$meter = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['to']],'find') ){
-                    Log::record(['to表具不存在' => $data],'error');
+                }else{
+                    Log::record(['赠送得力币信息不符合要求' => '','data' => $data],'error');
                     $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
-                    $ret['msg'] = '收款方不存在';
+                    $ret['msg'] = '赠送得力币信息不符合要求';
                     return json($ret);
                 }
-                if( $data['money_type'] == MONEY_PAY ){
-                    if(!model('app\admin\model\Meter')->updateMoney($data['to'],'inc','balance_rmb',$data['money'])){
-                        Log::record(['inc人民币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
-                        $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
-                        $ret['msg'] = '更新余额失败';
-                        return json($ret);
-                    }
-                }elseif($data['money_type'] == MONEY_PERSON ){
-                    if(!model('app\admin\model\Meter')->updateMoney($data['to'],'inc','balance_deli',$data['money'])){
-                        Log::record(['inc得力币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
-                        $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
-                        $ret['msg'] = '更新余额失败';
-                        return json($ret);
-                    }
-                }
-            }else{
-                Log::record(['充值信息不符合要求' => '','data' => $data],'error');
-                $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
-                $ret['msg'] = '充值信息不符合要求';
-                return json($ret);
             }
+            $data['create_time'] = time();
+            $data['money'] = floatval($data['money']);
             $data['company_id'] = $meter['company_id'];
             if( !$moneyLogId = model('MoneyLog')->add($data) ){
                 Log::record(['moneyLog添加失败' => model('MoneyLog')->getError(),'data' => $data],'error');
@@ -205,6 +220,7 @@ class Rest extends LanFilter
             $searchDate = $searchData['searchDate'];
             $meter_id = $searchData['meter_id'];
             $type = $searchData['type'];
+            $channel = $searchData['channel'];
             if(!$meter_id){
                 exception("请先提供表id",ERROR_CODE_DATA_ILLEGAL);
             }
@@ -217,7 +233,7 @@ class Rest extends LanFilter
             $searchDate .= '-01';
             $startDate = $searchDate.' 00:00:00';
             $endDate = date('Y-m-d H:i:s',strtotime('+1 month',strtotime($searchDate))-1);
-            $chargeLogs = $meterService->moneyLogs($meterInfo['id'],$startDate,$endDate,$type);
+            $chargeLogs = $meterService->moneyLogs($meterInfo['id'],$startDate,$endDate,$type,$channel);
             $ret['data'] = $chargeLogs;
         }catch (\Exception $e){
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
