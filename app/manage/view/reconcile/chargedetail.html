@@ -43,19 +43,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="money_type" class="col-sm-2 control-label">{:lang('Money Type')}</label>
-                                    <div class="col-sm-6">
-                                        <select class="form-control" id="money_type" name="money_type">
-                                            <option value="">--{:lang('Choose Money Type')}--</option>
-                                            {foreach $moneytypes as $index => $item}
-                                            <option value="{$index}" {if condition="$index eq $money_type"}selected{/if}>{$item}</option>
-                                            {/foreach}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                            <!--<div class="col-lg-6" style="float: left">-->
+                                <!--<div class="form-group">-->
+                                    <!--<label for="money_type" class="col-sm-2 control-label">{:lang('Money Type')}</label>-->
+                                    <!--<div class="col-sm-6">-->
+                                        <!--<select class="form-control" id="money_type" name="money_type">-->
+                                            <!--<option value="">&#45;&#45;{:lang('Choose Money Type')}&#45;&#45;</option>-->
+                                            <!--{foreach $moneytypes as $index => $item}-->
+                                            <!--<option value="{$index}" {if condition="$index eq $money_type"}selected{/if}>{$item}</option>-->
+                                            <!--{/foreach}-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
                         </div>
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
@@ -92,7 +92,7 @@
                                 <th>{:lang('M_Code')}</th>
                                 <th>{:lang('Name')}</th>
                                 <th>{:lang('Money')}</th>
-                                <th>{:lang('Money Type')}</th>
+                                <!--<th>{:lang('Money Type')}</th>-->
                                 <th>{:lang('Channel Type')}</th>
                                 <th>{:lang('Date')}</th>
                             </tr>
@@ -102,13 +102,13 @@
                                 <td>{$moneylog.meter.M_Code}</td>
                                 <td>{$moneylog.meter.consumer.username}</td>
                                 <td>{$moneylog.money}</td>
-                                <td>
-                                    {if condition="$moneylog.money_type eq $Think.const.MONEY_TYPE_RMB"}
-                                    {:lang('Rmb')}
-                                    {else /}
-                                    {:lang('Deli')}
-                                    {/if}
-                                </td>
+                                <!--<td>-->
+                                    <!--{if condition="$moneylog.money_type eq $Think.const.MONEY_TYPE_RMB"}-->
+                                    <!--{:lang('Rmb')}-->
+                                    <!--{else /}-->
+                                    <!--{:lang('Deli')}-->
+                                    <!--{/if}-->
+                                <!--</td>-->
                                 <td>{if condition="$moneylog.channel eq $Think.const.MONEY_CHANNEL_WEIXIN"}
                                         {:lang('Wei Xin')}
                                     {else /}
@@ -128,8 +128,8 @@
                                             {:lang('Deli')}:
                                         {/if}
                                         {$item.total}
-                                    {/foreach}
                                     </div>
+                                    {/foreach}
                                 </td>
                             </tr>
                         </table>

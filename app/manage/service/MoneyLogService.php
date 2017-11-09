@@ -106,7 +106,7 @@ class MoneyLogService extends BasicService
             ->setCellValue('A3', '表号')
             ->setCellValue('B3', '姓名')
             ->setCellValue('C3', '金额')
-            ->setCellValue('D3', '币种')
+//            ->setCellValue('D3', '币种')
             ->setCellValue('E3', '类型')
             ->setCellValue('F3', '日期');
         $count = count($data);
@@ -114,8 +114,8 @@ class MoneyLogService extends BasicService
             $objPHPExcel->getActiveSheet()->setCellValue('A' . $i, $data[$i-4]->meter['M_Code']);
             $objPHPExcel->getActiveSheet()->setCellValue('B' . $i, $data[$i-4]->meter->consumer['username']);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $data[$i-4]['money']);
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]['money_type'] == MONEY_TYPE_RMB ? '人民币' : '得力币');
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, 'as');
+//            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]['money_type'] == MONEY_TYPE_RMB ? '人民币' : '得力币');
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $data[$i-4]['channel'] == MONEY_CHANNEL_WEIXIN ? '微信' : '清分');
             $objPHPExcel->getActiveSheet()->setCellValue('F' . $i, $data[$i-4]['create_time']);
         }
         $last = $count + 4;

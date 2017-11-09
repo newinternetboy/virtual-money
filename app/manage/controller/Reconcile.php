@@ -207,7 +207,8 @@ class Reconcile extends Admin
         $company_name = input('company_name');
         $M_Code = input('M_Code');
         $channel = input('channel/d');
-        $money_type = input('money_type/d');
+        //$money_type = input('money_type/d');
+        $money_type = MONEY_TYPE_RMB; //现在只能查人民币
         $endDate = input('endDate',date('Y-m-d'));
         $startDate = input('startDate',date('Y-m-d'));
         if( $company_name ){
@@ -286,7 +287,8 @@ class Reconcile extends Admin
         $company_name = input('company_name');
         $M_Code = input('M_Code');
         $channel = input('channel/d');
-        $money_type = input('money_type/d');
+        //$money_type = input('money_type/d');
+        $money_type = MONEY_TYPE_RMB; //现在只能查人民币
         $endDate = input('endDate',date('Y-m-d'));
         $startDate = input('startDate',date('Y-m-d'));
         if( $company_name ){
@@ -313,7 +315,7 @@ class Reconcile extends Admin
             $moneylog_where['money_type'] = $money_type;
         }
         $moneylog_where['create_time'] = ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
-        $moneylogs = $moneyLogService->selectInfo($moneylog_where,'from,money_type,type,money,create_time');
+        $moneylogs = $moneyLogService->selectInfo($moneylog_where,'from,money_type,channel,type,money,create_time');
         //汇总数据
         if($money_type){
             $moneyall = $moneyLogService->sums($moneylog_where,'money');
