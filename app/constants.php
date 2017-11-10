@@ -63,6 +63,7 @@ define('VALVE_DONE',5);    //已执行
 //客户状态
 define('CONSUMER_STATE_NORMAL',10); //正常(绑定了表具)
 define('CONSUMER_STATE_OLD',15);    //过户(过户前的用户信息)
+define('CONSUMER_STATE_DISABLE',20);    //曾经报装过该表号的用户,表具重复利用后这个状态的用户属于失效状态
 
 //按月统计流量表名
 define('MONTH_FLOW_TABLE_NAME','month_flow_');
