@@ -315,32 +315,32 @@ class Index extends Controller
                 }
                 //如果是消费task成功,则需要扣除消费金额数据
                 if($updateCur['status'] == TASK_SUCCESS){
-                    if( isset($task['money_log_id']) ){//如果是缴费task,抵扣meter表的balance_rmb字段金额
+                    if( isset($task['money_log_id']) && $task['balance_rmb'] != 0 ){//如果是缴费task,抵扣meter表的balance_rmb字段金额
                         if(!model('app\admin\model\Meter')->updateMoney($meter_id,'dec','balance_rmb',$task['balance_rmb'])){
                             Log::record(['task失败,更新balance_rmb失败' => model('app\admin\model\Meter')->getError(),'meter_id' => $meter_id,'balance_rmb' => $task['balance_rmb']],'error');
                             exception('task失败,更新balance_rmb失败',ERROR_CODE_DATA_ILLEGAL);
                         }
                     }
                 }
-                //task执行失败,如果是充值则插入失败记录
-                if( $updateCur['status'] === TASK_FAIL ){
-                    if( isset($task['money_log_id']) ){ //如果是消费task,则恢复消费金额数据
-                        $money_log_info = model('MoneyLog')->getMoneyLog(['id' => $task['money_log_id']],'find');
-                        //moneylog插入失败task记录
-                        $new_money_log_data = $money_log_info->toArray();
-                        $new_money_log_data['channel'] = MONEY_CHANNEL_MANAGE;
-                        $new_money_log_data['fail_meter_log_id'] = $money_log_info['id'];
-                        $new_money_log_data['fail_task_id'] = $task['id'];
-                        $new_money_log_data['dealStatus'] = MONEYLOG_FAIL_DEAL_STATUS_WAITING;
-                        $new_money_log_data['create_time'] = time();
-                        $new_money_log_data['update_time'] = time();
-                        unset($new_money_log_data['id']);
-                        if( !$moneyLogId = model('MoneyLog')->add($new_money_log_data) ){
-                            Log::record(['task失败,moneyLog添加失败' => model('MoneyLog')->getError(),'data' => $new_money_log_data],'error');
-                            exception('task失败,moneyLog添加失败',ERROR_CODE_DATA_ILLEGAL);
-                        }
-                    }
-                }
+//                //task执行失败,如果是充值则插入失败记录
+//                if( $updateCur['status'] === TASK_FAIL ){
+//                    if( isset($task['money_log_id']) ){ //如果是消费task,则恢复消费金额数据
+//                        $money_log_info = model('MoneyLog')->getMoneyLog(['id' => $task['money_log_id']],'find');
+//                        //moneylog插入失败task记录
+//                        $new_money_log_data = $money_log_info->toArray();
+//                        $new_money_log_data['channel'] = MONEY_CHANNEL_MANAGE;
+//                        $new_money_log_data['fail_meter_log_id'] = $money_log_info['id'];
+//                        $new_money_log_data['fail_task_id'] = $task['id'];
+//                        $new_money_log_data['dealStatus'] = MONEYLOG_FAIL_DEAL_STATUS_WAITING;
+//                        $new_money_log_data['create_time'] = time();
+//                        $new_money_log_data['update_time'] = time();
+//                        unset($new_money_log_data['id']);
+//                        if( !$moneyLogId = model('MoneyLog')->add($new_money_log_data) ){
+//                            Log::record(['task失败,moneyLog添加失败' => model('MoneyLog')->getError(),'data' => $new_money_log_data],'error');
+//                            exception('task失败,moneyLog添加失败',ERROR_CODE_DATA_ILLEGAL);
+//                        }
+//                    }
+//                }
                 //更新$lastSeq的task状态
                 $updateCur['update_time'] = time();
                 if( !db($this->taskTableName)->where(['meter_id' => $meter_id, 'seq_id' => $lastSeq])->update($updateCur) ){

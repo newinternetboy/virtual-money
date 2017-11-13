@@ -11,6 +11,7 @@ namespace app\manage\controller;
 use app\manage\service\CompanyService;
 use app\manage\service\ConsumerService;
 use app\manage\service\MeterService;
+use app\manage\service\MoneyLogService;
 use app\manage\service\UserService;
 use think\Log;
 use MongoDB\BSON\ObjectId;
@@ -329,6 +330,81 @@ class Manage extends Admin
         return view();
     }
 
+    /**
+     * 订单管理
+     * @return \think\response\View
+     */
+    public function manageOrder(){
+        $M_Code = input('M_Code');
+        $order_id = input('order_id');
+        $channel = input('channel/d');
+        $type = input('type/d');
+        //$money_type = input('money_type/d');
+        $money_type = MONEY_TYPE_RMB; //现在只能查人民币
+        $where = [
+            'money_type' => $money_type
+        ];
+        $whereor = [];
+        if($M_Code){
+            $meter_id = (new MeterService())->findInfo(['M_Code' => $M_Code,'meter_life' => METER_LIFE_ACTIVE])['id'];
+            $whereor = [
+                'from' => $meter_id,
+                'to'   => $meter_id
+            ];
+        }
+        if($type){
+            $where['type'] = $type;
+        }
+        if($channel){
+            $where['channel'] = $channel;
+        }
+        if($order_id){
+            $where['order_id'] = $order_id;
+        }
+        $moneylogs = (new MoneyLogService())->getInfoPaginateWhereOr($where,$whereor,['M_Code' => $M_Code,'channel' => $channel,'type' => $type,'order_id' => $order_id]);
+        $this->assign('M_Code',$M_Code);
+        $this->assign('order_id',$order_id);
+        $this->assign('channel',$channel);
+        $this->assign('type',$type);
+        $this->assign('moneylogs',$moneylogs);
+        $channels = config('channels');
+        $this->assign('channels',$channels);
+        $ordertypes = config('ordertypes');
+        $this->assign('ordertypes',$ordertypes);
+        return view();
+    }
 
-
+    /**
+     *下载订单列表
+     */
+    public function downloadOrder(){
+        $M_Code = input('M_Code');
+        $order_id = input('order_id');
+        $channel = input('channel/d');
+        $type = input('type/d');
+        //$money_type = input('money_type/d');
+        $money_type = MONEY_TYPE_RMB; //现在只能查人民币
+        $where = [
+            'money_type' => $money_type
+        ];
+        $whereor = [];
+        if($M_Code){
+            $meter_id = (new MeterService())->findInfo(['M_Code' => $M_Code,'meter_life' => METER_LIFE_ACTIVE])['id'];
+            $whereor = [
+                'from' => $meter_id,
+                'to'   => $meter_id
+            ];
+        }
+        if($type){
+            $where['type'] = $type;
+        }
+        if($channel){
+            $where['channel'] = $channel;
+        }
+        if($order_id){
+            $where['order_id'] = $order_id;
+        }
+        $moneylogs = (new MoneyLogService())->getInfoPaginateWhereOr($where,$whereor,['M_Code' => $M_Code,'channel' => $channel,'type' => $type,'order_id' => $order_id]);
+        (new MoneyLogService())->downloadOrder($moneylogs,'订单详情'.date('Y-m-d'),'订单详情'.date('Y-m-d'));
+    }
 }

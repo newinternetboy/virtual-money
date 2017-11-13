@@ -1,0 +1,134 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Manage Order')}</h5>
+                </div>
+                <div class="ibox-content">
+                    <!-- 搜索条件 -->
+                    <form action="" method="get" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="type" class="col-sm-2 control-label">{:lang('Order Type')}</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="type" name="type">
+                                            <option value="">--{:lang('Choose Order Type')}--</option>
+                                            {foreach $ordertypes as $index => $item}
+                                            <option value="{$index}" {if condition="$index eq $type"}selected{/if}>{$item}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="channel" class="col-sm-2 control-label">{:lang('Order Channel')}</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="channel" name="channel">
+                                            <option value="">--{:lang('Choose Order Channel')}--</option>
+                                            {foreach $channels as $index => $item}
+                                            <option value="{$index}" {if condition="$index eq $channel"}selected{/if}>{$item}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="M_Code" class="col-sm-2 control-label">{:lang('M_Code')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="M_Code" name="M_Code" value="{$M_Code ?? ''}"  class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="order_id" class="col-sm-2 control-label">{:lang('Order Id')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="order_id" name="order_id" value="{$order_id ?? ''}"  class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
+                                <button style="float: right" class="btn btn-danger" type="button" onclick="download()" >{:lang('Download')}</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--报表-->
+                    <div id="table">
+                        <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>{:lang('From M_Code')}</th>
+                                <th>{:lang('To M_Code')}</th>
+                                <th width="20%">{:lang('Order Id')}</th>
+                                <th>{:lang('Order Money')}</th>
+                                <th>{:lang('Money Type')}</th>
+                                <th>{:lang('Order Type')}</th>
+                                <th>{:lang('Order Channel')}</th>
+                                <th>{:lang('Date')}</th>
+                            </tr>
+                            </thead>
+                            {foreach $moneylogs as $moneylog }
+                            <tr>
+                                <td>{if condition="isset($moneylog.from)"}
+                                        {$moneylog.meter.M_Code}
+                                    {else /}
+                                        -
+                                    {/if}
+                                </td>
+                                <td>
+                                    {if condition="isset($moneylog.to)"}
+                                    {$moneylog.tometer.M_Code}
+                                    {else /}
+                                    -
+                                    {/if}
+                                </td>
+                                <td>{$moneylog.order_id ?? '-'}</td>
+                                <td>{$moneylog.money}</td>
+                                <td>{if condition="$moneylog.money_type eq $Think.const.MONEY_TYPE_RMB"}
+                                        {:lang('Rmb')}
+                                    {else /}
+                                        {:lang('Deli')}
+                                    {/if}
+                                </td>
+                                <td>{foreach $ordertypes as $index => $item}
+                                        {if condition="$moneylog.type eq $index"}
+                                            {$item}
+                                        {/if}
+                                    {/foreach}
+                                </td>
+                                <td>{if condition="$moneylog.channel eq $Think.const.MONEY_CHANNEL_WEIXIN"}
+                                    {:lang('Wei Xin')}
+                                    {else /}
+                                    {:lang('Manage Platform')}
+                                    {/if}
+                                </td>
+                                <td>{$moneylog.create_time}</td>
+                            </tr>
+                            {/foreach}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    {$moneylogs->render()}
+</div>
+<script>
+    function download(){
+        window.location.href="{:url('manage/manage/downloadorder',['M_Code' => $M_Code,'channel' => $channel,'type' => $type,'order_id' => $order_id])}"
+    }
+</script>

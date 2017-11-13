@@ -445,6 +445,22 @@ return [
     'Open'                              =>'打开',
     'Close'                             =>'关闭',
 
+    //订单管理
+    'Manage Order'                      => '订单管理',
+    'Order Id'                          => '订单号',
+    'Order Money'                       => '订单金额',
+    'Order Time'                        => '订单时间',
+    'Order Type'                        => '订单类型',
+    'Order Channel'                     => '订单渠道',
+    'Order Pay'                         => '充值',
+    'Order Person'                      => '个人电商',
+    'Order Company'                     => '企业电商',
+    'Order Deli'                        => '得力专供',
+    'Order System Deli'                 => '赠送得力币',
+    'Choose Order Type'                 => '选择类型',
+    'Choose Order Channel'              => '选择渠道',
+    'From M_Code'                       => '付款方',
+    'To M_Code'                         => '收款方',
 
     //报表；
     'Number'   => '序号',

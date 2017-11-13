@@ -96,4 +96,12 @@ return [
             'money_type' => MONEY_TYPE_RMB,
         ],
     ],
+    //订单类型
+    'ordertypes' => [
+        MONEY_PAY => lang('Order Pay'),
+        MONEY_PERSON => lang('Order Person'),
+        MONEY_COMPANY => lang('Order Company'),
+        MONEY_DELI => lang('Order Deli'),
+        MONEY_SYSTEM_DELI => lang('Order System Deli'),
+    ]
 ];
