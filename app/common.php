@@ -12,6 +12,8 @@
 // 应用公共文件
 
 use think\Model;
+use think\Log;
+use think\Db;
 
 /**
  * 调试输出
@@ -240,3 +242,151 @@ function getRuleVals($x){
     return $x['rule_val'];
 }
 
+/**
+ * 插入moneyLog
+ * @param $data
+ * @return mixed
+ */
+function insertMoneyLog($data){
+    $data['money'] = floatval($data['money']);
+
+    if( isset($data['from']) && !empty($data['from']) && isset($data['to']) && !empty($data['to']) ){ //人对人
+        if( !$meter = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['from']],'find') ){
+            Log::record(['from表具不存在' => $data],'error');
+            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+            $ret['msg'] = '付款方不存在';
+            return $ret;
+        }
+        if( !model('app\admin\model\Meter')->getMeterInfo(['id' => $data['to']],'find') ){
+            Log::record(['to表具不存在' => $data],'error');
+            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+            $ret['msg'] = '收款方不存在';
+            return $ret;
+        }
+        if( $data['money_type'] == MONEY_TYPE_RMB ){
+            if(!model('app\admin\model\Meter')->updateMoney($data['from'],'inc','balance_rmb',$data['money'])){
+                Log::record(['inc人民币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                $ret['msg'] = '更新余额失败';
+                return $ret;
+            }
+            if(!model('app\admin\model\Meter')->updateMoney($data['to'],'dec','balance_rmb',$data['money'])){
+                Log::record(['dec人民币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                $ret['msg'] = '更新余额失败';
+                return $ret;
+            }
+        }
+        if( $data['money_type'] == MONEY_TYPE_DELI ){
+            if(!model('app\admin\model\Meter')->updateMoney($data['from'],'dec','balance_deli',$data['money'])){
+                Log::record(['dec得力币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                $ret['msg'] = '更新余额失败';
+                return $ret;
+            }
+            if(!model('app\admin\model\Meter')->updateMoney($data['to'],'inc','balance_deli',$data['money'])){
+                Log::record(['inc得力币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                $ret['msg'] = '更新余额失败';
+                return $ret;
+            }
+        }
+    }elseif( isset($data['from']) && !empty($data['from']) ){
+        if( !$meter = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['from']],'find') ){
+            Log::record(['from表具不存在' => $data],'error');
+            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+            $ret['msg'] = '付款方不存在';
+            return $ret;
+        }
+        if( $data['money_type'] == MONEY_TYPE_RMB ){
+            if(!model('app\admin\model\Meter')->updateMoney($data['from'],'inc','balance_rmb',$data['money'])){
+                Log::record(['inc人民币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                $ret['msg'] = '更新余额失败';
+                return $ret;
+            }
+        }elseif($data['money_type'] == MONEY_TYPE_DELI ){
+            if(!model('app\admin\model\Meter')->updateMoney($data['from'],'dec','balance_deli',$data['money'])){
+                Log::record(['dec得力币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                $ret['msg'] = '更新余额失败';
+                return $ret;
+            }
+        }
+    }elseif( isset($data['to']) && !empty($data['to']) ){
+        if( !$meter = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['to']],'find') ){
+            Log::record(['to表具不存在' => $data],'error');
+            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+            $ret['msg'] = '收款方不存在';
+            return $ret;
+        }
+        if( $data['money_type'] == MONEY_TYPE_RMB ){
+            if(!model('app\admin\model\Meter')->updateMoney($data['to'],'dec','balance_rmb',$data['money'])){
+                Log::record(['dec人民币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                $ret['msg'] = '更新余额失败';
+                return $ret;
+            }
+        }elseif($data['money_type'] == MONEY_TYPE_DELI ){
+            if(!model('app\admin\model\Meter')->updateMoney($data['to'],'inc','balance_deli',$data['money'])){
+                Log::record(['inc得力币余额失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
+                $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+                $ret['msg'] = '更新余额失败';
+                return $ret;
+            }
+        }
+    }else{
+        Log::record(['信息不符合要求' => '','data' => $data],'error');
+        $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+        $ret['msg'] = '信息不符合要求';
+        return $ret;
+    }
+    $data['create_time'] = time();
+    $data['company_id'] = $meter['company_id'];
+    if( !$moneyLogId = model('MoneyLog')->add($data) ){
+        Log::record(['moneyLog添加失败' => model('MoneyLog')->getError(),'data' => $data],'error');
+        $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+        $ret['msg'] = '添加消费记录失败';
+        return $ret;
+    }
+    return $moneyLogId;
+}
+
+/**
+ * 插入task
+ * @param $data
+ * @return \think\response\Json
+ */
+function insertTask($data){
+    if( !isset($data['meter_id']) ){
+        Log::record(['添加task失败,meter_id为空' => $data],'error');
+        $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+        $ret['msg'] = '请先提供表id';
+        return $ret;
+    }
+    if( !$meterInfo = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['meter_id'],'meter_life' => METER_LIFE_ACTIVE],'find','id') ){
+        Log::record(['添加task失败,表id不存在' => $data],'error');
+        $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+        $ret['msg'] = '表id不存在';
+        return $ret;
+    }
+    $data['meter_id'] = $meterInfo['id'];
+    $data['status'] = TASK_WAITING;
+    $data['seq_id'] = getAutoIncId('autoinc',['name' => 'task','meter_id' => $meterInfo['id']],'seq_id',1);
+    //改变表具余额的task,都需要此字段,值就是待下发给表具的金额,可以为负数,用于report api处理task
+    if(isset($data['money_log_id'])){
+        if(isset($data['balance_rmb'])){
+            $data['balance_rmb'] = floatval($data['balance_rmb']);
+        }else{
+            $data['balance_rmb'] = 0;
+        }
+    }
+    $data['create_time'] = time();
+    if(!Db::name('task')->insert($data)){
+        Log::record(['添加task失败' => $data],'error');
+        $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+        $ret['msg'] = '添加task失败';
+        return $ret;
+    }
+    return false;
+}
