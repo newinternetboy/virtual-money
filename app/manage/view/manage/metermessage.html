@@ -70,7 +70,16 @@
                             {volist name="meter" id="vo"}
                                 <tr>
                                     <td>{$vo.M_Code}</td>
-                                    <td>{$vo.M_Type ?? "未报装"}</td>
+                                    <td>
+                                        {if condition="isset($vo.M_Type)"}
+                                        {switch name="vo.M_Type" }
+                                        {case $Think.METER_TYPE_WATER}{:lang('Water Code')}{/case}
+                                        {case $Think.METER_TYPE_ELECTRICITY}{:lang('Electric Code')}{/case}
+                                        {case $Think.METER_TYPE_GAS}{:lang('Gas Code')}{/case}
+                                        {default /}{:lang('None')}
+                                        {/switch}
+                                        {/if}
+                                    </td>
                                     <td>{$vo.U_ID?$vo.consumer.username : ''}</td>
                                     <td>{$vo.U_ID?$vo.consumer.tel : ''}</td>
                                     <td>{$vo.detail_address?? ''}</td>

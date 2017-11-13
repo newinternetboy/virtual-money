@@ -70,26 +70,33 @@
 
                                 <div class="col-sm-4">
                                     <p id="M_Type" class="form-control" style="border: none">
-                                        {$meter.M_Type ?? ''}
+                                        {if condition="isset($meter.M_Type)"}
+                                        {switch name="meter.M_Type" }
+                                        {case $Think.METER_TYPE_WATER}{:lang('Water Code')}{/case}
+                                        {case $Think.METER_TYPE_ELECTRICITY}{:lang('Electric Code')}{/case}
+                                        {case $Think.METER_TYPE_GAS}{:lang('Gas Code')}{/case}
+                                        {default /}{:lang('None')}
+                                        {/switch}
+                                        {/if}
                                     </p>
                                 </div>
 
                                 <label for="username_c" class="col-sm-2 control-label">{:lang('User Name')}</label>
 
                                 <div class="col-sm-4">
-                                    <p id="username_c" class="form-control" style="border: none">{$consumer.username ?? ''}</p>
+                                    <p id="username_c" class="form-control" style="border: none">{$meter.U_ID ?$meter.consumer.username : ''}</p>
                                 </div>
 
                                 <label for="tel" class="col-sm-2 control-label">{:lang('Contact Number')}</label>
 
                                 <div class="col-sm-4">
-                                    <p id="tel" class="form-control" style="border: none">{$consumer.tel ?? ''}</p>
+                                    <p id="tel" class="form-control" style="border: none">{$meter.U_ID?$meter.consumer.tel : ''}</p>
                                 </div>
 
                                 <label for="identity" class="col-sm-2 control-label">{:lang('PIN-codes')}</label>
 
                                 <div class="col-sm-4">
-                                    <p id="identity" class="form-control" style="border: none">{$consumer.identity ?? ''}</p>
+                                    <p id="identity" class="form-control" style="border: none">{$meter.U_ID?$meter.consumer.identity : ''}</p>
                                 </div>
 
                                 <label for="codenumber" class="col-sm-2 control-label">{:lang('M_Code Number')}</label>
@@ -101,13 +108,22 @@
                                 <label for="company" class="col-sm-2 control-label">{:lang('Company')}</label>
 
                                 <div class="col-sm-4">
-                                    <p id="company" class="form-control" style="border: none">{$company.company_name ?? ''}</p>
+                                    <p id="company" class="form-control" style="border: none">{$meter.company_id?$meter.company.company_name : ''}</p>
                                 </div>
 
                                 <label for="status" class="col-sm-2 control-label">{:lang('Status')}</label>
 
                                 <div class="col-sm-4">
-                                    <p id="status" class="form-control" style="border: none">{$meter.meter_status}</p>
+                                    <p id="status" class="form-control" style="border: none">
+
+                                        {switch name="meter.meter_status" }
+                                        {case $Think.METER_STATUS_CHANGED}{:lang('Replaced old M_Code')}{/case}
+                                        {case $Think.METER_STATUS_BIND}{:lang('Bound')}{/case}
+                                        {case $Think.METER_STATUS_DELETE}{:lang('Deleted')}{/case}
+                                        {case $Think.METER_STATUS_NEW}{:lang('New Meter')}{/case}
+                                        {default /}{:lang('None')}
+                                        {/switch}
+                                    </p>
                                 </div>
 
                                 <label for="totalcost" class="col-sm-2 control-label">{:lang('Total Cost')}</label>

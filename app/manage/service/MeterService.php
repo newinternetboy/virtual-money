@@ -53,6 +53,46 @@ class MeterService extends BasicService
         return $moneyLogService->selectInfo($where);
     }
 
+    public function createExample_xls($filename,$title){
+        $filename=$filename.".xlsx";
+        $path = dirname(__FILE__);
+        vendor("phpoffice.phpexcel.Classes.PHPExcel");
+        vendor("phpoffice.phpexcel.Classes.PHPExcel.Writer.Excel5");
+        vendor("phpoffice.phpexcel.Classes.PHPExcel.Writer.Excel2007");
+        vendor("phpoffice.phpexcel.Classes.PHPExcel.IOFactory");
+        $objPHPExcel = new \PHPExcel();
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:C1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:C2');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->setCellValue('A1',$title);
+        $objPHPExcel->getActiveSheet()->setCellValue('A2', '注：从第四行开始填入数据——'.date('Y-m-d',time()));
+        $objPHPExcel->getActiveSheet()->getDefaultStyle()->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setName('宋体') //字体
+            ->setSize(20) //字体大小
+            ->setBold(true); //字体加粗
+        $objPHPExcel->getActiveSheet()->getStyle('A2')->getFont()->setName('宋体') //字体
+            ->setSize(12) //字体大小
+            ->setBold(true); //字体加粗
+        $objPHPExcel->getActiveSheet()->getStyle('A1:A2')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $objPHPExcel->getActiveSheet()->freezePane('A1');
+        $objPHPExcel->getActiveSheet()->freezePane('A2');
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objPHPExcel->getActiveSheet()->freezePane('A4');
+        $objPHPExcel->setActiveSheetIndex()
+            ->setCellValue('A3', '表号')
+            ->setCellValue('B3', '扣除金额(元)')
+            ->setCellValue('C3', '备注');
+        $objPHPExcel->getActiveSheet()->setTitle('balanceStatistics');      //设置sheet的名称
+        $objPHPExcel->setActiveSheetIndex(0);                   //设置sheet的起始位置
+        $PHPWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+        header('Content-Disposition: attachment;filename='.$filename);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $PHPWriter->save("php://output");
+    }
 
-
+    public function columnInfo($where,$field){
+        return $this->dbModel->columnInfo($where,$field);
+    }
 }

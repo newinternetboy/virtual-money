@@ -12,7 +12,10 @@ use app\manage\service\CompanyService;
 use app\manage\service\ConsumerService;
 use app\manage\service\MeterService;
 use app\manage\service\UserService;
+use app\manage\service\TaskService;
+use app\manage\service\Money_logService;
 use think\Log;
+use think\Loader;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -215,8 +218,7 @@ class Manage extends Admin
         $detail_address = input('detail_address');
         $M_Code= input('M_Code');
         $username = input('username');
-        $where = [];
-        $con_where = [];
+        $where['meter_life'] = METER_LIFE_ACTIVE ;
         if($company_name){
             $companyService = new CompanyService();
             $company_id = $companyService->findInfo(['company_name'=>$company_name],'id')['id'];
@@ -229,50 +231,20 @@ class Manage extends Admin
             $where['M_Code'] = $M_Code;
         }
         if($username){
-            $con_where['username'] = $username;
+            $consumerService = new ConsumerService();
+            $consumers = $consumerService->selectInfo(['username'=>$username],'id');
+            $arrs=[];
+            foreach($consumers as $value){
+                $arrs[]=$value['id'];
+            }
+            $where['U_ID'] = ['in',$arrs];
         }
         $param['company_name'] = $company_name;
         $param['detail_address'] = $detail_address;
         $param['M_Code'] = $M_Code;
         $param['username'] = $username;
         $meterService = new MeterService();
-        $consumerService = new ConsumerService();
         $meter = $meterService->getInfoPaginate($where,$param);
-        if($con_where){
-            foreach($meter as $key => $value){
-                if(isset($value['M_Type'])&&$value['M_Type']==1){
-                    $value['M_Type']="水表";
-                }
-                if(isset($value['M_Type'])&&$value['M_Type']==2){
-                    $value['M_Type']="电表";
-                }
-                if(isset($value['M_Type'])&&$value['M_Type']==3){
-                    $value['M_Type']="气表";
-                }
-                if(!isset($value['U_ID'])){
-                    unset($meter[$key]);
-                    continue;
-                }else{
-                    $con_where['id'] = new ObjectId($value['U_ID']);
-                    if(!$consumerService->findInfo($con_where)){
-                        unset($meter[$key]);
-                    }
-                }
-            }
-        }else{
-            foreach($meter as & $value){
-                if(isset($value['M_Type'])&&$value['M_Type']==1){
-                    $value['M_Type']="水表";
-                }
-                if(isset($value['M_Type'])&&$value['M_Type']==2){
-                    $value['M_Type']="电表";
-                }
-                if(isset($value['M_Type'])&&$value['M_Type']==3){
-                    $value['M_Type']="气表";
-                }
-            }
-        }
-
         $this->assign('meter',$meter);
         $this->assign('company_name',$company_name);
         $this->assign('detail_address',$detail_address);
@@ -283,52 +255,199 @@ class Manage extends Admin
 
     //获取单条商铺信息；
     public function meterInfo(){
-        $company_name = input('company_name');
-        $detail_address = input('detail_address');
-        $M_Code = input('M_Code');
-        $name = input('username');
         $id = input('id');
         $meterService = new MeterService();
-        $consumerService = new ConsumerService();
-        $companyService = new CompanyService();
         $meter = $meterService->findInfo(['id'=>$id,'meter_life'=>METER_LIFE_ACTIVE]);
-        switch($meter['meter_status']){
-            case METER_STATUS_CHANGED:
-                $meter['meter_status'] = '被更换的旧表';
-                break;
-            case METER_STATUS_BIND:
-                $meter['meter_status'] = '已绑定';
-                break;
-            case METER_STATUS_DELETE:
-                $meter['meter_status'] = '已删除';
-                creak;
-            default:
-                $meter['meter_status'] = '新表';
-        }
-        if(isset($meter['M_Type'])&&$meter['M_Type']==METER_TYPE_WATER){
-            $meter['M_Type']="水表";
-        }
-        if(isset($meter['M_Type'])&&$meter['M_Type']==METER_TYPE_ELECTRICITY){
-            $meter['M_Type']="电表";
-        }
-        if(isset($meter['M_Type'])&&$meter['M_Type']==METER_TYPE_GAS){
-            $meter['M_Type']="气表";
-        }
-        $consumer = $consumerService->findInfo(['meter_id'=>$id]);
-        $company=[];
-        if(isset($meter['company_id'])){
-            $company = $companyService->findInfo(['id'=>$meter['company_id']]);
-        }
         $this->assign('meter',$meter);
-        $this->assign('consumer',$consumer);
-        $this->assign('company',$company);
-        $this->assign('company_name',$company_name);
-        $this->assign('detail_address',$detail_address);
-        $this->assign('M_Code',$M_Code);
-        $this->assign('name',$name);
         return view();
     }
 
+    public function deductBalance(){
+        return view();
+    }
 
+    public function exampleExcel(){
+        $meterService = new MeterService();
+        $filename = "扣除金额模板";
+        $title = '扣除金额Excel';
+        $meterService->createExample_xls($filename,$title);
+    }
+
+    public function uploadexcel(){
+        // 获取表单上传文件
+        $file = request()->file('excel');
+        if(!$file){
+            $ajaxReturn['status'] = 401;
+            $ajaxReturn['msg'] = '请先上传文件！';
+        }else{
+            // 移动到框架应用根目录/public/uploads/ 目录下
+            $info = $file->validate(['size'=>10*1024*1024,'ext'=>'xls,xlsx'])->move(ROOT_PATH . 'public' . DS . 'uploads');
+            if($info){
+                $localfile = ROOT_PATH . 'public' . DS . 'uploads'. DS .$info->getSaveName();
+                if($filedata=$this->getFileData($localfile)){
+                    $ajaxReturn = $this->importToDb($filedata);
+                }else{
+                    $ajaxReturn['status'] = 402;
+                    $ajaxReturn['msg'] = '上传excel数据为空，请重试！';
+                }
+
+            }else{
+                $ajaxReturn['status'] = 400;
+                $ajaxReturn['msg'] = $file->getError();
+            }
+        }
+        return json($ajaxReturn);
+    }
+
+    /**
+     * 获取文件中的数据
+     * @param $path
+     * @return array
+     */
+    private function getFileData($path){
+        $data = [];
+        $PHPReader = new \PHPExcel_Reader_Excel2007();
+        if(!$PHPReader->canRead($path)){
+            $PHPReader = new \PHPExcel_Reader_Excel5();
+        }
+        $PHPExcel = $PHPReader->load($path);
+        /**读取excel文件中的第一个工作表*/
+        $sheet = $PHPExcel->getSheet(0);
+        /**取得一共有多少行*/
+        $highestRow = $sheet->getHighestRow();
+        /**从第二行开始输出，因为excel表中第一行为列名*/
+        if($highestRow >= 4 ){
+            for ($row = 4; $row <= $highestRow; $row++){//行数是以第2行开始
+                $M_Code = $sheet->getCellByColumnAndRow(0,$row)->getValue();
+                $M_Code = is_object($M_Code) ? $M_Code->__toString() : $M_Code; //避免导入的value是object
+                $number = $sheet->getCellByColumnAndRow(1,$row)->getValue();
+                $number = is_object($number) ? $number->__toString() : $number; //避免导入的value是object
+                $remark = $sheet->getCellByColumnAndRow(2,$row)->getValue();
+                $remark = is_object($remark) ? $remark->__toString() : $remark; //避免导入的value是object
+                $data[] = ['M_Code' => $M_Code,'number'=> $number,'remark' => $remark];
+            }
+        }
+        return $data;
+    }
+
+    public function importToDb($filedata){
+        $ajaxReturn['status'] = 200;
+        $ajaxReturn['msg'] = '扣除余额成功';
+        $taskService = new TaskService();
+        $meterService = new MeterService();
+        $metercodes ='';
+        foreach($filedata as $key=>$value){
+            $metercodes.=$value['M_Code'].',';
+        }
+        $metercodes = trim($metercodes,',');
+        $codes = explode(',',$metercodes);
+        $where['M_Code'] = ['in',$metercodes];
+        $where['meter_life'] = METER_LIFE_ACTIVE;
+        $where['meter_status'] = METER_STATUS_BIND;
+        $meters = $meterService->columnInfo($where,'M_Code');
+        $diff = array_diff($codes,$meters);
+        if(!empty($meters)&&isset($meters)&&empty($diff)){
+            $result =$this->addAllTask($filedata);
+            if($result['status'] == 2000){
+                $ajaxReturn['status'] = 200;
+                $ajaxReturn['msg'] = $result['msg'];
+                return $ajaxReturn;
+            }
+            $ajaxReturn['status'] = 201;
+            $ajaxReturn['msg'] = $result['msg'];
+            return $ajaxReturn;
+
+        }else{
+            $arr=[];
+            foreach($diff as $key=>$value){
+                $arr[$key]['code']=$value;
+                $arr[$key]['reson'] = '表号不存在';
+            }
+            $ajaxReturn['status'] = 202;
+            $ajaxReturn['msg'] = $arr;
+            return $ajaxReturn;
+        }
+
+    }
+
+    public function addAllTask($datas){
+        $result['status'] = 2000;
+        $result['msg'] = '扣除余额成功';
+        $arrs=array();
+        foreach($datas as $key=> $value){
+            $meterService = new MeterService();
+            $money_logService = new Money_logService();
+            $taskService = new TaskService();
+            $where['M_Code'] = strval($value['M_Code']);
+            if(!$meter=$meterService->findInfo($where,'id,company_id')){
+                $arrs[$key]['code']=$value['M_Code'];
+                $arrs[$key]['reson']=$meterService->getError();
+                Log::record(['表号不存在' => $value['M_Code']],'error');
+                continue;
+            }
+            $money_log['money_type'] = MONEY_TYPE_RMB;
+            $money_log['money'] = $value['number'];
+            $money_log['type'] = MONEY_DEDUCT;
+            $money_log['to'] = $meter['id'];
+            $money_log['reson'] = $value['remark'];
+            $money_log['channel'] = MONEY_CHANNEL_MANAGE;
+            $money_log['create_time'] = time();
+            $money_log['company_id'] = $meter['company_id'];
+            if(!$money_log_id=$money_logService->upsert($money_log)){
+                $arrs[$key]['code']=$value['M_Code'];
+                $arrs[$key]['reson']=$money_logService->getError();
+                Log::record(['添加money_log失败' => $money_log],'error');
+                continue;
+            }
+
+            $task['meter_id'] = $meter['id'];
+            $task['cmd'] = 'deduct';
+            $task['param'] = -$value['number'];
+            $task['money_log_id'] = $money_log_id;
+            $task['balance_rmb'] = 0;
+            $task['status'] = TASK_WAITING;
+            $task['seq_id'] = getAutoIncId('autoinc',['name' => 'task','meter_id' => $meter['id']],'seq_id',1);
+            $task['create_time'] = time();
+            if(!$taskService->upsert($task)){
+                $arrs[$key]['code']=$value['M_Code'];
+                $arrs[$key]['reson']=$taskService->getError();
+                Log::record(['存入task失败' => $task],'error');
+                continue;
+            }
+        }
+
+        if(!empty($arrs)&&isset($arrs)){
+            $result['status'] = 2001;
+            $result['msg'] = $arrs;
+            return $result;
+        }
+        return $result;
+
+    }
+
+    public function uploaddata(){
+        $M_Code = trim(input('M_Code'),';');
+        $money = input('money');
+        $message = input('message');
+        $code = explode(';',$M_Code);
+        if(!isset($M_Code)||empty($M_Code)){
+            $ajaxReturn['status'] = 401;
+            $ajaxReturn['msg'] = '表号不能为空！';
+            return $ajaxReturn;
+        }
+        if(!isset($money)||empty($money)){
+            $ajaxReturn['status'] = 402;
+            $ajaxReturn['msg'] = '扣款金额不能为空！';
+            return $ajaxReturn;
+        }
+        $arr=[];
+        foreach($code as $key=>$value){
+            $arr[$key]['M_Code']=$value;
+            $arr[$key]['number'] = $money;
+            $arr[$key]['remark'] = $message;
+        }
+        $ajaxReturn = $this->importToDb($arr);
+        return json($ajaxReturn);
+    }
 
 }

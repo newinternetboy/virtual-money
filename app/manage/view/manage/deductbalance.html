@@ -1,0 +1,201 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单标题概要 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Deduct Balance')}(单条扣款)</h5>
+                </div>
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <form id="companySelect" action=""  method="post" class="form-horizontal">
+                        <div class="col-lg-8" >
+                            <div class="form-group">
+                                <label for="M_Code" class="col-md-2 control-label">{:lang('M_Code')}:</label>
+                                <div class="col-md-10">
+                                    <input id="M_Code" placeholder="表号之间用英文下分号隔开,如:12364579;66633344;99666952" type="text" class="form-control" />
+                                </div>
+                            </div><!-- /form-group -->
+                        </div><!-- /.col-lg-6 -->
+                        <div class="col-lg-8" >
+                            <div class="form-group">
+                                <label for="money" class="col-md-2 control-label">{:lang('Deduct Balance')}:</label>
+                                <div class="col-md-10">
+                                    <input id="money" placeholder="请输入扣除的钱数" type="number" class="form-control" />
+                                </div>
+                            </div><!-- /form-group -->
+                        </div><!-- /.col-lg-6 -->
+                        <div class="col-lg-8" >
+                            <div class="form-group">
+                                <label for="message" class="col-md-2 control-label">{:lang('Delete Reson')}:</label>
+                                <div class="col-md-10">
+                                    <input id="message" type="text" class="form-control" />
+                                </div>
+                            </div><!-- /form-group -->
+                        </div><!-- /.col-lg-6 -->
+                    </form>
+                    <div class="col-lg-4" >
+                        <div style="float: right">
+                            <button style="margin-right: 1vw" id="tijiao" class="btn btn-success">{:lang('Sure')}</button>
+                        </div>
+                    </div>
+                    <div style="clear: both"></div>
+                    <div id="sure" class="form-group" style="display: none;">
+                        <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
+                        <div id="s_data" class="col-sm-10">
+
+                        </div>
+                    </div>
+                    <div style="clear: both"></div>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+
+                </div>
+                <!-- 表单标题概要 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Deduct Balance')}(上传Excel表扣款)</h5>
+                </div>
+                <div class="ibox-content">
+                    <form action=""  method="post" class="form-horizontal">
+                        <div class="col-lg-8" >
+                            <div class="form-group">
+
+                                <div class="col-md-4">
+                                    <input id="uploadexcel" name="uploadexcel" type="file" class="form-control" />
+                                </div>
+                                <div class="col-md-8">
+                                    <button  class="btn btn-success" id="excelupload" type="button" onclick="ajaxFileUploadForType()">{:lang('Sure')}</button>
+                                </div>
+                            </div><!-- /form-group -->
+                        </div><!-- /.col-lg-6 -->
+                    </form>
+                    <div class="col-lg-4" >
+                        <div style="float: right">
+                            <button style="margin-right: 1vw" class="btn btn-primary" id="download">下载模板</button>
+                        </div>
+                    </div>
+                    <div style="clear: both"></div>
+                </div>
+                <!--换表信息-->
+                <div id="prompt" class="form-group" style="display: none;">
+                    <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
+                    <div id="p_data" class="col-sm-10">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+   $('#tijiao').click(function(){
+       $('#s_data').html('');
+       $('#sure').hide();
+       var M_Code=$('#M_Code').val();
+       var money = $('#money').val();
+       var message = $('#message').val();
+       data = {M_Code:M_Code,money:money,message:message}
+       if( !checks(M_Code,money) ){
+            return false;
+       }
+       $.post("{:url('manage/manage/uploaddata')}",data,function(res){
+                   if(res.status==200){
+                       alertMsg(res.msg,3)
+                       setTimeout(function(){ window.location.href = ''},2000)
+                   }else if(res.status==201||res.status==202){
+
+                       if(res.status==201){
+                           alertMsg('下列表号未提交成功，其余已提交完成',3)
+                           var strs="<p class='form-control' style='border: none;color:red;'>下列表号未提交成功，其余已提交完成</p>";
+                       }else{
+                           alertMsg('下列表号不存在或者未报装，请重新提交！',3)
+                           var strs="<p class='form-control' style='border: none;color:red;'>下列表号不存在或者未报装，请重新提交！</p>";
+                       }
+
+
+                       $.each(res.msg,function(i,n){
+                           strs+="<p class='form-control' style='border: none;color:red;'>出错行数"+(Number(i)+1)+"； 出错表号"+ n.code+"； 出错原因:"+ n.reson+"</p>"
+                       })
+                       $('#s_data').html(strs);
+                       $('#sure').show();
+                   }else{
+                       alertMsg(res.msg,3)
+                   }
+
+                 },'json');
+
+       })
+   function checks(M_Code,money){
+       if(M_Code == "" || M_Code == null || M_Code == "undefined"){
+           alertMsg('表具不能为空',2)
+           return false
+       }
+
+       if(money == "" || money == null || money == "undefined"){
+           alertMsg('扣款金额不能为空',2)
+           return false
+       }
+       return true;
+   }
+</script>
+<script>
+    //下载模板
+    $('#download').click(function(){
+        location.href="{:url('manage/manage/exampleExcel')}"
+    })
+    function ajaxFileUploadForType(){
+        $('#excelupload').disabled="disabled";
+        $('#p_data').html('');
+        $('#prompt').hide();
+        if($('#uploadexcel').val()==""){
+            alertMsg("请选excel文件！");
+            return false;
+        }
+        var extend=$('#uploadexcel').val().substr($('#uploadexcel').val().lastIndexOf(".")+1);
+        if("xls|xlsx".indexOf(extend) == -1){
+            alertMsg("请输入excel文件!");
+            return false;
+        }
+        var formData = new FormData();
+        formData.append("excel", document.getElementById("uploadexcel").files[0]);
+            $.ajax({
+            url: "{:url('manage/manage/uploadexcel')}",
+            type: "POST",
+            dataType:"json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success:function (res) {
+                if(res.status==200){
+                    alertMsg(res.msg,3)
+                    setTimeout(function(){ window.location.href = ''},2000)
+                }else if(res.status==201||res.status==202){
+
+                    if(res.status==201){
+                        alertMsg('下列表号未提交成功，其余已提交完成',3)
+                        var str="<p class='form-control' style='border: none;color:red;'>下列表号未提交成功，其余已提交完成</p>";
+                    }else{
+                        alertMsg('下列表号不存在或者未报装，请重新提交！',3)
+                        var str="<p class='form-control' style='border: none;color:red;'>下列表号不存在或者未报装，请重新提交！</p>";
+                    }
+
+
+                   $.each(res.msg,function(i,n){
+                       str+="<p class='form-control' style='border: none;color:red;'>出错行数"+(Number(i)+4)+"； 出错表号"+ n.code+"； 出错原因:"+ n.reson+"</p>"
+                   })
+                    $('#p_data').html(str);
+                    $('#prompt').show();
+                }else{
+                    alertMsg(res.msg,3)
+                }
+
+            },
+            error: function () {
+                alert("上传失败！");
+            }
+        });
+        $('#excelupload').disabled="";
+    }
+</script>
