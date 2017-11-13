@@ -25,10 +25,10 @@ class CompanyService extends BasicService
     public function create_xls($data,$filename,$title,$total){
         $filename=$filename.".xlsx";
         $path = dirname(__FILE__);
-        vendor("PHPExcel.PHPExcel");
-        vendor("PHPExcel.PHPExcel.Writer.Excel5");
-        vendor("PHPExcel.PHPExcel.Writer.Excel2007");
-        vendor("PHPExcel.PHPExcel.IOFactory");
+        vendor("phpoffice.phpexcel.Classes.PHPExcel");
+        vendor("phpoffice.phpexcel.Classes.PHPExcel.Writer.Excel5");
+        vendor("phpoffice.phpexcel.Classes.PHPExcel.Writer.Excel2007");
+        vendor("phpoffice.phpexcel.Classes.PHPExcel.IOFactory");
         $objPHPExcel = new \PHPExcel();
         $objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
         $objPHPExcel->getActiveSheet()->mergeCells('A2:D2');

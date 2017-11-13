@@ -30,6 +30,7 @@ return [
     'Old Password'        =>  '旧密码',
     'New Password'        =>  '新密码',
     'Sure Password'       =>  '确认新密码',
+    'Sure'                =>  '确认',
     'The password is not the same twice'	=> '两次密码不一致',
     'login_name already exists'                 =>  '登录名已经存在，请重新输入',
     'You entered the account or password is incorrect, please again' => '你输入的账号或密码不正确，请重新输入',
@@ -511,6 +512,13 @@ return [
     'Year Report'                       =>'用量年报',
     'Meter Message'                     =>'表具信息',
     'Detail Message'                    =>'详细信息',
+    'Deduct Balance'                    =>'扣除金额',
+    'Execution Time'                    =>'执行时间',
+    'Delete Reson'                      =>'扣款原因',
+    'Replaced old M_Code'               =>'被更换的旧表',
+    'Bound'                             =>'已绑定',
+    'Deleted'                           =>'已删除',
+    'New Meter'                         =>'新表',
 
 
     //系统管理

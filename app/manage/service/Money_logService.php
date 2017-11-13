@@ -8,13 +8,12 @@
 
 namespace app\manage\service;
 
-use app\manage\model\ConsumerModel;
+use app\manage\model\Money_logModel;
 
-class ConsumerService extends BasicService
+class Money_logService extends BasicService
 {
 
     public function __construct(){
-        $this->dbModel = new ConsumerModel();
+        $this->dbModel = new Money_logModel();
     }
-
 }

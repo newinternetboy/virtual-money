@@ -23,4 +23,14 @@ class MeterModel extends BasicModel
         return $this->belongsTo('AreaModel','M_Address');
     }
 
+    //关联company表；
+    public function company(){
+        return $this->belongsTo('CompanyModel','company_id');
+    }
+
+    public function columnInfo($where,$field){
+        return $this->where($where)->column($field);
+    }
+
+
 }

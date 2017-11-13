@@ -88,6 +88,7 @@ define('MONEY_PAY',1); //缴费
 define('MONEY_PERSON',2); //个人电商中消费
 define('MONEY_COMPANY',3); //企业电商中消费
 define('MONEY_DELI',4); //得力专供中消费
+define('MONEY_DEDUCT',10);
 define('MONEY_SYSTEM_DELI',5); //系统赠送得力币
 //付费方式
 define('MONEY_CHANNEL_WEIXIN',1); //微信
