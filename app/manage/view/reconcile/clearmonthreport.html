@@ -39,8 +39,8 @@
                                 <th>{:lang('Company Name')}</th>
                                 <th>{:lang('RMB Charge Times')}</th>
                                 <th>{:lang('RMB Charge Money')}</th>
-                                <th>{:lang('DELI Charge Times')}</th>
-                                <th>{:lang('DELI Charge Money')}</th>
+                                <!--<th>{:lang('DELI Charge Times')}</th>-->
+                                <!--<th>{:lang('DELI Charge Money')}</th>-->
                                 <th>{:lang('Desc')}</th>
                             </tr>
                             </thead>
@@ -49,8 +49,8 @@
                                 <td>{$company.company_name}</td>
                                 <td>{$company.chargeTimes_rmb}</td>
                                 <td>{$company.chargeMoney_rmb}</td>
-                                <td>{$company.chargeTimes_deli}</td>
-                                <td>{$company.chargeMoney_deli}</td>
+                                <!--<td>{$company.chargeTimes_deli ?? '0'}</td>-->
+                                <!--<td>{$company.chargeMoney_deli ?? '0'}</td>-->
                                 <td>{$company.desc}</td>
                             </tr>
                             {/foreach}
@@ -58,8 +58,8 @@
                                 <td>{:lang('total')}</td>
                                 <td>{$all.chargeTimes_rmb}</td>
                                 <td>{$all.chargeMoney_rmb}</td>
-                                <td>{$all.chargeTimes_deli}</td>
-                                <td>{$all.chargeMoney_deli}</td>
+                                <!--<td>{$all.chargeTimes_deli ?? '0'}</td>-->
+                                <!--<td>{$all.chargeMoney_deli ?? '0'}</td>-->
                                 <td></td>
                             </tr>
                         </table>

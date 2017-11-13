@@ -27,7 +27,7 @@ class Meter extends Admin
         $M_Code = input('M_Code');
         if($M_Code){
             $where['M_Code'] = $M_Code;
-            $where['company_id'] = ['in',[null,$this->company_id]];
+            $where['company_id'] = ['in',[SHUANGDELI_ID,$this->company_id]];
             $meter = model('Meter')->getMeterInfo($where,'find');
             $consumer = model('Consumer')->getConsumerById($meter['U_ID']);
             $this->assign('meter',$meter);
@@ -55,7 +55,8 @@ class Meter extends Admin
             }
             //检查用户能否查看该表具
             $where['M_Code'] = $M_Code;
-            $where['company_id'] = ['in',[null,$this->company_id]];
+            $where['meter_life'] = METER_LIFE_ACTIVE;
+            $where['company_id'] = ['in',[SHUANGDELI_ID,$this->company_id]];
             if( !$meter = model('Meter')->getMeterInfo($where,'find') ){
                 exception("表具不存在或已报装,请检查表号",ERROR_CODE_DATA_ILLEGAL);
             }
@@ -91,7 +92,7 @@ class Meter extends Admin
             }
             //检查表具状态是否允许报装
             $where['M_Code'] = $data['meter']['M_Code'];
-            $where['company_id'] = ['eq',null];
+            $where['company_id'] = ['eq',SHUANGDELI_ID];
             $where['meter_status'] = ['eq',METER_STATUS_NEW];
             if( !$meter = model('Meter')->getMeterInfo($where,'find') ){
                 exception("表具不存在或已报装,请检查表号",ERROR_CODE_DATA_ILLEGAL);
@@ -107,8 +108,14 @@ class Meter extends Admin
                 Log::record(['报装用户失败' => $error,'data' => $data],'error');
                 exception('添加用户失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
-
-            //TODO:更新同表号其他用户状态为废弃状态
+            //报装新用户,将旧用户标记为废弃状态
+            if(model('Consumer')->where(['M_Code' => $data['meter']['M_Code'],'consumer_state' => CONSUMER_STATE_NORMAL])->find()){
+                if( !model('Consumer')->where(['M_Code' => $data['meter']['M_Code'],'consumer_state' => CONSUMER_STATE_NORMAL])->update(['consumer_state' => CONSUMER_STATE_DISABLE,'update_time' => time()]) ){
+                    $error = model('Consumer')->getError();
+                    Log::record(['报装修改旧用户状态失败' => $error,'data' => $data],'error');
+                    exception('报装修改旧用户状态失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
+                }
+            }
 
             //更新表具信息
             $data['meter']['U_ID'] = $consumer_id;

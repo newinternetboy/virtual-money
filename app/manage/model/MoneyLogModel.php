@@ -13,4 +13,8 @@ class MoneyLogModel extends BasicModel
 {
     // 当前模型名称
     protected $name = 'MoneyLog';
+
+    public function meter(){
+        return $this->belongsTo('MeterModel','from','id');
+    }
 }

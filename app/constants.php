@@ -63,6 +63,7 @@ define('VALVE_DONE',5);    //已执行
 //客户状态
 define('CONSUMER_STATE_NORMAL',10); //正常(绑定了表具)
 define('CONSUMER_STATE_OLD',15);    //过户(过户前的用户信息)
+define('CONSUMER_STATE_DISABLE',20);    //曾经报装过该表号的用户,表具重复利用后这个状态的用户属于失效状态
 
 //按月统计流量表名
 define('MONTH_FLOW_TABLE_NAME','month_flow_');
@@ -79,15 +80,16 @@ define('PLATFORM_ADMIN',1);  //运营商后台用户
 define('PLATFORM_MANAGE',2); //清分平台用户
 
 /***************moneyLog表***************/
-//钱类型
+//钱类型 money_type
 define('MONEY_TYPE_RMB',1); //人民币
 define('MONEY_TYPE_DELI',2); //得力币
-//消费类型
-define('MONEY_PAY',1); //消费
+//消费类型 type
+define('MONEY_PAY',1); //缴费
 define('MONEY_PERSON',2); //个人电商中消费
 define('MONEY_COMPANY',3); //企业电商中消费
 define('MONEY_DELI',4); //得力专供中消费
 define('MONEY_DEDUCT',10);
+define('MONEY_SYSTEM_DELI',5); //系统赠送得力币
 //付费方式
 define('MONEY_CHANNEL_WEIXIN',1); //微信
 define('MONEY_CHANNEL_MANAGE',2); //清分后台

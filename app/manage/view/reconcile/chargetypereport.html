@@ -1,31 +1,25 @@
 {js href="__JS__/bootstrap-datetimepicker.min.js" /}
 {js href="__JS__/bootstrap-typeahead.js" /}
-{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
-{js href="__JS__/echarts.js" /}
 {js href="__JS__/jquery.jqprint-0.3.js" /}
+{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
 {css href="__CSS__/bootstrap-datetimepicker.min.css" /}
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class=" table-responsive">
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
                 <!-- 表单内容 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Charge Type')}</h5>
+                </div>
                 <div class="ibox-content">
                     <!-- 搜索条件 -->
-                    <form action="" method="get" class="form-horizontal" onsubmit="return check();">
+                    <form action="" method="get" class="form-horizontal">
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
                                     <label for="company_name" class="col-sm-2 control-label">{:lang('Company')}</label>
                                     <div class="col-sm-6">
                                         <input id="company_name" name="company_name" value="{$company_name ?? ''}" type="text" placeholder="{:lang('Please Input The Company Name')}" autocomplete="off" data-provide="typeahead"  class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="M_Code" class="col-sm-2 control-label">{:lang('Input Meter Code')}</label>
-                                    <div class="col-sm-6">
-                                        <input id="M_Code" name="M_Code" value="{$M_Code ?? ''}" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -52,39 +46,36 @@
                             <label  class="col-sm-2 control-label"></label>
                             <div class="col-sm-10">
                                 <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
-                                <button style="float: right" class="btn btn-danger" type="button" onclick="download()" >{:lang('Download')}</button>
                             </div>
                         </div>
                     </form>
                     <hr style="height:1px;border:none;border-top:1px solid #555555;" />
                     <!--报表-->
                     <div id="table">
+                        <h5>{:lang('Charge Type Report')}<span style="float: right">{:lang('Start Time')}{$startDate}{:lang('End Time')}{$endDate}</span></h5>
                         <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
                             <thead>
                             <tr>
-                                <th>{:lang('M_Code')}</th>
-                                <th>{:lang('Name')}</th>
-                                <th>{:lang('Installation Address')}</th>
-                                <th>{:lang('Contacts Tel')}</th>
-                                <th>{:lang('Total Usage')}</th>
-                                <th>{:lang('Setup Time')}</th>
+                                <th>{:lang('Charge Type')}</th>
+                                <th>{:lang('Charge Times')}</th>
+                                <th>{:lang('Charge Money')}</th>
                             </tr>
                             </thead>
-                            {foreach $usage as $item}
+                            {foreach $reports as $report }
                             <tr>
-                                <td>{$item.M_Code}</td>
-                                <td>{$item.consumer_name}</td>
-                                <td>{$item.detail_address}</td>
-                                <td>{$item.consumer_tel}</td>
-                                <td>{$item.diffUsage}</td>
-                                <td>{$item.setup_time}</td>
+                                <td>{$report.typeName}</td>
+                                <td>{$report.times}</td>
+                                <td>{$report.money}</td>
                             </tr>
                             {/foreach}
+                            <tr>
+                                <td>{:lang('total')}</td>
+                                <td>{$reports|array_column=###,'times'|array_sum}</td>
+                                <td>{$reports|array_column=###,'money'|array_sum}</td>
+                            </tr>
                         </table>
                     </div>
-                    <div>
-                        {$meters->render()}
-                    </div>
+                    <button id="print" style="float: right;margin-left: 1vw" class="btn btn-info" type="button" >{:lang('Print')}</button>
                 </div>
             </div>
         </div>
@@ -95,44 +86,23 @@
         language:"zh-CN",
         format: "yyyy-mm-dd",
         autoclose: true,
-        todayBtn: false,
+        todayBtn: true,
         pickerPosition: "bottom-left",
         startView: 4,
         bootcssVer:3,
         minView: 2,
     });
+
     $("#endDate").datetimepicker({
         language:"zh-CN",
         format: "yyyy-mm-dd",
         autoclose: true,
-        todayBtn: false,
+        todayBtn: true,
         pickerPosition: "bottom-left",
         startView: 4,
         bootcssVer:3,
         minView: 2,
     });
-</script>
-
-<script>
-    function check() {
-        var start = $('#startDate').val();
-        if( start == '' || start == 'undefined' || start == null ){
-            alertMsg("{:lang('Please Search')}{:lang('Start Year')}");
-            return false;
-        }
-        var end = $('#endDate').val();
-        if( end == '' || end == 'undefined' || end == null ){
-            alertMsg("{:lang('Please Search')}{:lang('End Year')}");
-            return false;
-        }
-        var regEx = new RegExp("\\-","gi");
-        var d1 = start.replace(regEx,"/");
-        var d2 = end.replace(regEx,"/");
-        if( d1 > d2 ){
-            alertMsg("{:lang('Start Year')}{:lang('not than')}{:lang('End Year')}");
-            return false;
-        }
-    };
 </script>
 <script>
     $.fn.typeahead.Constructor.prototype.blur = function() {
@@ -141,6 +111,7 @@
     };
     $('#company_name').typeahead({
         minLength: 0,
+        items: 20,
         source: function (query, process) {
             var company_name = $('#company_name').val();
             var parameter = {company_name: company_name};
@@ -162,8 +133,7 @@
             })
         },
     });
-
-    function download(){
-        window.location.href="{:url('manage/report/downloadMeterUsage',['company_name' => $company_name,'M_Code' => $M_Code,'startDate' => $startDate,'endDate' => $endDate])}"
-    }
+    $('#print').click(function(){
+        $('#table').jqprint();
+    })
 </script>

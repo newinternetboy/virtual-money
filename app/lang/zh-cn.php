@@ -529,6 +529,22 @@ return [
     //充值月报
     'Reconcile Month Report'            => '充值月报',
     //充值年报
-    'Reconcile Year Report'             => '充值年报'
-
+    'Reconcile Year Report'             => '充值年报',
+    //充值明细
+    'Charge Detail'                     => '充值明细',
+    'Money'                             => '金额',
+    'Channel Type'                      => '类型',
+    'Choose Channel Type'               => '请选择类型',
+    'Wei Xin'                           => '微信',
+    'Manage Platform'                   => '清分',
+    'Money Type'                        => '币种',
+    'Deli'                              => '得力币',
+    'Rmb'                               => '人民币',
+    'Choose Money Type'                 => '请选择币种',
+    //充值类型
+    'Charge Type'                       => '充值类型',
+    'Charge Times'                      => '充值次数',
+    'Charge Money'                      => '充值金额',
+    'Charge Type Report'                => '运营商充值类型统计表',
+    'Please Input The Company Name'     => '请输入运营商名称'
 ];
