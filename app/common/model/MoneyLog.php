@@ -28,10 +28,7 @@ class MoneyLog extends Model
     }
 
     public function add($data){
-        if( $this->isUpdate(false)->save($data) ){
-            return $this->id;
-        }
-        return false;
+        return $this->insert($data,false,true);
     }
 
     public function setChannelAttr($value){

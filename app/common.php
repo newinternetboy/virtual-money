@@ -354,7 +354,7 @@ function insertMoneyLog($data){
 
 /**
  * 插入task
- * @param $data
+ * @param $data 必须字段{meter_id,cmd,param}  非必须字段{money_log_id,balance_rmb}
  * @return \think\response\Json
  */
 function insertTask($data){
@@ -388,5 +388,5 @@ function insertTask($data){
         $ret['msg'] = '添加task失败';
         return $ret;
     }
-    return false;
+    return true;
 }

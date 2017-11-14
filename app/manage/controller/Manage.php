@@ -254,7 +254,7 @@ class Manage extends Admin
         return $this->fetch();
     }
 
-    //获取单条商铺信息；
+    //获取单条表具信息；
     public function meterInfo(){
         $id = input('id');
         $meterService = new MeterService();
@@ -274,9 +274,11 @@ class Manage extends Admin
         $meterService->createExample_xls($filename,$title);
     }
 
-    public function uploadexcel(){
+    public function uploadExcel(){
         // 获取表单上传文件
         $file = request()->file('excel');
+        $ajaxReturn['status'] = 200;
+        $ajaxReturn['msg'] = lang('Operation Success');
         if(!$file){
             $ajaxReturn['status'] = 401;
             $ajaxReturn['msg'] = '请先上传文件！';
@@ -286,7 +288,21 @@ class Manage extends Admin
             if($info){
                 $localfile = ROOT_PATH . 'public' . DS . 'uploads'. DS .$info->getSaveName();
                 if($filedata=$this->getFileData($localfile)){
-                    $ajaxReturn = $this->importToDb($filedata);
+                    $diff = $this->checkFileData($filedata);
+                    if(!empty($diff)){
+                        foreach($diff as $key=>$value){
+                            $arr[$key]['code']=$value;
+                            $arr[$key]['reson'] = '表号不存在';
+                        }
+                        $ajaxReturn['status'] = 202;
+                        $ajaxReturn['msg'] = $arr;
+                    }else{
+                        $result = $this->addAllTask($filedata);
+                        if(!empty($result)){
+                            $ajaxReturn['status'] = 201;
+                            $ajaxReturn['msg'] = $result;
+                        }
+                    }
                 }else{
                     $ajaxReturn['status'] = 402;
                     $ajaxReturn['msg'] = '上传excel数据为空，请重试！';
@@ -325,50 +341,27 @@ class Manage extends Admin
                 $number = is_object($number) ? $number->__toString() : $number; //避免导入的value是object
                 $remark = $sheet->getCellByColumnAndRow(2,$row)->getValue();
                 $remark = is_object($remark) ? $remark->__toString() : $remark; //避免导入的value是object
-                $data[] = ['M_Code' => $M_Code,'number'=> $number,'remark' => $remark];
+                $data[] = ['M_Code' => $M_Code,'number'=> floatval($number),'remark' => $remark];
             }
         }
         return $data;
     }
 
-    public function importToDb($filedata){
-        $ajaxReturn['status'] = 200;
-        $ajaxReturn['msg'] = '扣除余额成功';
-        $taskService = new TaskService();
-        $meterService = new MeterService();
-        $metercodes ='';
-        foreach($filedata as $key=>$value){
-            $metercodes.=$value['M_Code'].',';
+    /**
+     * 检查表号是否全部存在
+     * @param $filedata
+     * @return array
+     */
+    public function checkFileData($filedata){
+        foreach($filedata as $item){
+            $codes[] = trim($item['M_Code']);
         }
-        $metercodes = trim($metercodes,',');
-        $codes = explode(',',$metercodes);
-        $where['M_Code'] = ['in',$metercodes];
+        $where['M_Code'] = ['in',$codes];
         $where['meter_life'] = METER_LIFE_ACTIVE;
         $where['meter_status'] = METER_STATUS_BIND;
+        $meterService = new MeterService();
         $meters = $meterService->columnInfo($where,'M_Code');
-        $diff = array_diff($codes,$meters);
-        if(!empty($meters)&&isset($meters)&&empty($diff)){
-            $result =$this->addAllTask($filedata);
-            if($result['status'] == 2000){
-                $ajaxReturn['status'] = 200;
-                $ajaxReturn['msg'] = $result['msg'];
-                return $ajaxReturn;
-            }
-            $ajaxReturn['status'] = 201;
-            $ajaxReturn['msg'] = $result['msg'];
-            return $ajaxReturn;
-
-        }else{
-            $arr=[];
-            foreach($diff as $key=>$value){
-                $arr[$key]['code']=$value;
-                $arr[$key]['reson'] = '表号不存在';
-            }
-            $ajaxReturn['status'] = 202;
-            $ajaxReturn['msg'] = $arr;
-            return $ajaxReturn;
-        }
-
+        return array_diff($codes,$meters);
     }
 
     /**
@@ -449,84 +442,90 @@ class Manage extends Admin
         (new MoneyLogService())->downloadOrder($moneylogs,'订单详情'.date('Y-m-d'),'订单详情'.date('Y-m-d'));
     }
 
-    public function addAllTask($datas){
-        $result['status'] = 2000;
-        $result['msg'] = '扣除余额成功';
-        $arrs=array();
+    private function addAllTask($datas){
+        $arrs=[];
         foreach($datas as $key=> $value){
+            //检查表具信息
             $meterService = new MeterService();
-            $money_logService = new Money_logService();
-            $taskService = new TaskService();
-            $where['M_Code'] = strval($value['M_Code']);
+            $where['M_Code'] = $value['M_Code'];
+            $where['meter_life'] = METER_LIFE_ACTIVE;
+            $where['meter_status'] = METER_STATUS_BIND;
             if(!$meter=$meterService->findInfo($where,'id,company_id')){
-                $arrs[$key]['code']=$value['M_Code'];
-                $arrs[$key]['reson']=$meterService->getError();
-                Log::record(['表号不存在' => $value['M_Code']],'error');
+                $arrs[$key]['code'] = $value['M_Code'];
+                $arrs[$key]['reson'] = '表号不存在或不符合操作条件';
                 continue;
             }
+            //插入moneylog
             $money_log['money_type'] = MONEY_TYPE_RMB;
             $money_log['money'] = $value['number'];
             $money_log['type'] = MONEY_DEDUCT;
             $money_log['to'] = $meter['id'];
-            $money_log['reson'] = $value['remark'];
+            $money_log['deduct_reason'] = $value['remark'];
             $money_log['channel'] = MONEY_CHANNEL_MANAGE;
-            $money_log['create_time'] = time();
-            $money_log['company_id'] = $meter['company_id'];
-            if(!$money_log_id=$money_logService->upsert($money_log)){
+            $result = insertMoneyLog($money_log);
+            if(is_array($result)){
                 $arrs[$key]['code']=$value['M_Code'];
-                $arrs[$key]['reson']=$money_logService->getError();
-                Log::record(['添加money_log失败' => $money_log],'error');
+                $arrs[$key]['reson']=$result['msg'];
                 continue;
             }
-
+            //插入task
             $task['meter_id'] = $meter['id'];
             $task['cmd'] = 'deduct';
-            $task['param'] = -$value['number'];
-            $task['money_log_id'] = $money_log_id;
-            $task['balance_rmb'] = 0;
-            $task['status'] = TASK_WAITING;
-            $task['seq_id'] = getAutoIncId('autoinc',['name' => 'task','meter_id' => $meter['id']],'seq_id',1);
-            $task['create_time'] = time();
-            if(!$taskService->upsert($task)){
+            $task['param'] = $value['number'];
+            $task['money_log_id'] = $result;
+            $task['balance_rmb'] = -$value['number'];
+            $ret = insertTask($task);
+            if(is_array($ret)){
                 $arrs[$key]['code']=$value['M_Code'];
-                $arrs[$key]['reson']=$taskService->getError();
-                Log::record(['存入task失败' => $task],'error');
+                $arrs[$key]['reson']=$ret['msg'];
                 continue;
             }
         }
-
-        if(!empty($arrs)&&isset($arrs)){
-            $result['status'] = 2001;
-            $result['msg'] = $arrs;
-            return $result;
-        }
-        return $result;
+        return $arrs;
 
     }
 
-    public function uploaddata(){
+    /**
+     * @return \think\response\Json
+     */
+    public function uploadData(){
         $M_Code = trim(input('M_Code'),';');
         $money = input('money');
         $message = input('message');
-        $code = explode(';',$M_Code);
-        if(!isset($M_Code)||empty($M_Code)){
+        $ajaxReturn['status'] = 200;
+        $ajaxReturn['msg'] = lang('Operation Success');
+        if(!$M_Code){
             $ajaxReturn['status'] = 401;
             $ajaxReturn['msg'] = '表号不能为空！';
             return $ajaxReturn;
         }
-        if(!isset($money)||empty($money)){
+        if(!$money){
             $ajaxReturn['status'] = 402;
             $ajaxReturn['msg'] = '扣款金额不能为空！';
             return $ajaxReturn;
         }
         $arr=[];
+        $code = explode(';',$M_Code);
         foreach($code as $key=>$value){
             $arr[$key]['M_Code']=$value;
-            $arr[$key]['number'] = $money;
+            $arr[$key]['number'] = floatval($money);
             $arr[$key]['remark'] = $message;
         }
-        $ajaxReturn = $this->importToDb($arr);
+        $diff = $this->checkFileData($arr);
+        if(!empty($diff)){
+            foreach($diff as $key=>$value){
+                $tmp[$key]['code']=$value;
+                $tmp[$key]['reson'] = '表号不存在';
+            }
+            $ajaxReturn['status'] = 202;
+            $ajaxReturn['msg'] = $tmp;
+        }else{
+            $result = $this->addAllTask($arr);
+            if(!empty($result)){
+                $ajaxReturn['status'] = 201;
+                $ajaxReturn['msg'] = $result;
+            }
+        }
         return json($ajaxReturn);
     }
-    
 }
