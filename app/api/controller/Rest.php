@@ -23,7 +23,7 @@ class Rest extends LanFilter
         $ret['code'] = 200;
         $ret['msg'] = '操作成功';
         try{
-            $result = insertTask($data);
+            $result = upsertTask($data);
             if(is_array($result)){
                 return json($result);
             }

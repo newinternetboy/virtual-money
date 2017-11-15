@@ -353,40 +353,51 @@ function insertMoneyLog($data){
 }
 
 /**
- * 插入task
- * @param $data 必须字段{meter_id,cmd,param}  非必须字段{money_log_id,balance_rmb}
+ * 修改/添加task
+ * @param $data
  * @return \think\response\Json
  */
-function insertTask($data){
-    if( !isset($data['meter_id']) ){
-        Log::record(['添加task失败,meter_id为空' => $data],'error');
-        $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
-        $ret['msg'] = '请先提供表id';
-        return $ret;
-    }
-    if( !$meterInfo = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['meter_id'],'meter_life' => METER_LIFE_ACTIVE],'find','id') ){
-        Log::record(['添加task失败,表id不存在' => $data],'error');
-        $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
-        $ret['msg'] = '表id不存在';
-        return $ret;
-    }
-    $data['meter_id'] = $meterInfo['id'];
-    $data['status'] = TASK_WAITING;
-    $data['seq_id'] = getAutoIncId('autoinc',['name' => 'task','meter_id' => $meterInfo['id']],'seq_id',1);
-    //改变表具余额的task,都需要此字段,值就是待下发给表具的金额,可以为负数,用于report api处理task
-    if(isset($data['money_log_id'])){
-        if(isset($data['balance_rmb'])){
-            $data['balance_rmb'] = floatval($data['balance_rmb']);
-        }else{
-            $data['balance_rmb'] = 0;
+function upsertTask($data){
+    if(isset($data['id'])){
+        $data['update_time'] = time();
+        if(!Db::name('task')->update($data)){
+            Log::record(['修改task失败' => $data],'error');
+            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+            $ret['msg'] = '修改task失败';
+            return $ret;
         }
-    }
-    $data['create_time'] = time();
-    if(!Db::name('task')->insert($data)){
-        Log::record(['添加task失败' => $data],'error');
-        $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
-        $ret['msg'] = '添加task失败';
-        return $ret;
+    }else{
+        if( !isset($data['meter_id']) ){
+            Log::record(['添加task失败,meter_id为空' => $data],'error');
+            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+            $ret['msg'] = '请先提供表id';
+            return $ret;
+        }
+        if( !$meterInfo = model('app\admin\model\Meter')->getMeterInfo(['id' => $data['meter_id'],'meter_life' => METER_LIFE_ACTIVE],'find','id') ){
+            Log::record(['添加task失败,表id不存在' => $data],'error');
+            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+            $ret['msg'] = '表id不存在';
+            return $ret;
+        }
+        $data['meter_id'] = $meterInfo['id'];
+        $data['exec_times'] = isset($data['exec_times']) ? $data['exec_times'] : 1; //执行次数,默认为1
+        $data['status'] = TASK_WAITING;
+        $data['seq_id'] = getAutoIncId('autoinc',['name' => 'task','meter_id' => $meterInfo['id']],'seq_id',1);
+        //改变表具余额的task,都需要此字段,值就是待下发给表具的金额,可以为负数,用于report api处理task
+        if(isset($data['money_log_id'])){
+            if(isset($data['balance_rmb'])){
+                $data['balance_rmb'] = floatval($data['balance_rmb']);
+            }else{
+                $data['balance_rmb'] = 0;
+            }
+        }
+        $data['create_time'] = time();
+        if(!Db::name('task')->insert($data)){
+            Log::record(['添加task失败' => $data],'error');
+            $ret['code'] = ERROR_CODE_DATA_ILLEGAL;
+            $ret['msg'] = '添加task失败';
+            return $ret;
+        }
     }
     return true;
 }

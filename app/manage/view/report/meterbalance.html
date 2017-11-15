@@ -5,7 +5,7 @@
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
                 <!-- 表单内容 -->
                 <div class="ibox-title">
-                    <h5>{:lang('Meter Balance')}</h5>
+                    <h5>{:lang('Meter Balance Table')}</h5>
                 </div>
                 <div class="ibox-content">
                     <!-- 搜索条件 -->
@@ -56,7 +56,7 @@
                                 <tr>
                                     <td>{$vo.M_Code}</td>
                                     <td>{$vo.consumer.username}</td>
-                                    <td>{$vo.area.address}{$vo.detail_address}</td>
+                                    <td>{$vo.area.address}<br>{$vo.detail_address}</td>
                                     <td>{$vo.totalCube}</td>
                                     <td>{$vo.balance}</td>
                                 </tr>

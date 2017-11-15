@@ -14,10 +14,8 @@ use app\manage\service\MeterService;
 use app\manage\service\MoneyLogService;
 use app\manage\service\UserService;
 use app\manage\service\TaskService;
-use app\manage\service\Money_logService;
-use think\Log;
 use think\Loader;
-use MongoDB\BSON\ObjectId;
+use think\Log;
 
 /**
  * 管理
@@ -341,7 +339,7 @@ class Manage extends Admin
                 $number = is_object($number) ? $number->__toString() : $number; //避免导入的value是object
                 $remark = $sheet->getCellByColumnAndRow(2,$row)->getValue();
                 $remark = is_object($remark) ? $remark->__toString() : $remark; //避免导入的value是object
-                $data[] = ['M_Code' => $M_Code,'number'=> floatval($number),'remark' => $remark];
+                $data[] = ['M_Code' => strval($M_Code),'number'=> $number,'remark' => strval($remark)];
             }
         }
         return $data;
@@ -460,8 +458,9 @@ class Manage extends Admin
             $money_log['money'] = $value['number'];
             $money_log['type'] = MONEY_DEDUCT;
             $money_log['to'] = $meter['id'];
-            $money_log['deduct_reason'] = $value['remark'];
+            $money_log['extra_desc'] = $value['remark'];
             $money_log['channel'] = MONEY_CHANNEL_MANAGE;
+            Loader::clearInstance();
             $result = insertMoneyLog($money_log);
             if(is_array($result)){
                 $arrs[$key]['code']=$value['M_Code'];
@@ -473,8 +472,8 @@ class Manage extends Admin
             $task['cmd'] = 'deduct';
             $task['param'] = $value['number'];
             $task['money_log_id'] = $result;
-            $task['balance_rmb'] = -$value['number'];
-            $ret = insertTask($task);
+            $task['balance_rmb'] = -floatval($value['number']);
+            $ret = upsertTask($task);
             if(is_array($ret)){
                 $arrs[$key]['code']=$value['M_Code'];
                 $arrs[$key]['reson']=$ret['msg'];
@@ -527,5 +526,143 @@ class Manage extends Admin
             }
         }
         return json($ajaxReturn);
+    }
+
+    /**
+     * 任务列表
+     * @return \think\response\View
+     */
+    public function tasklist(){
+        $M_Code = input('M_Code');
+        $cmd = input('cmd');
+        $taskStatus = input('taskStatus/d');
+        $consumer_name = input('name');
+        $consumer_identity = input('identity');
+        $consumer_tel = input('tel');
+        $where = [];
+        if($M_Code){
+            $meterInfo = (new MeterService())->findInfo(['M_Code' => $M_Code,'meter_life' => METER_LIFE_ACTIVE,'meter_status' => METER_STATUS_BIND],'id');
+            $where['meter_id'] = $meterInfo['id'];
+        }
+        if($taskStatus){
+            $where['status'] = $taskStatus;
+        }
+        if($cmd){
+            $where['cmd'] = $cmd;
+        }
+        if($consumer_name){
+            $consumer_where['username'] = $consumer_name;
+        }
+        if($consumer_identity){
+            $consumer_where['identity'] = $consumer_identity;
+        }
+        if($consumer_tel){
+            $consumer_tel['tel'] = $consumer_tel;
+        }
+        if(isset($consumer_where)){
+            $consumer_where['consumer_state'] = CONSUMER_STATE_NORMAL;
+            $consumer = (new ConsumerService())->findInfo($consumer_where,'meter_id');
+            $where['meter_id'] = $consumer['meter_id'];
+        }
+        $tasklist = (new TaskService())->getInfoPaginate($where,['M_Code' => $M_Code,'cmd' => $cmd,'name' => $consumer_name,'identity' => $consumer_identity,'tel' => $consumer_tel]);
+        $tasklist = $this->parseTaskStatus($tasklist);
+        $tasklist = $this->parseTaskCmd($tasklist);
+        $this->assign('M_Code',$M_Code);
+        $this->assign('cmd',$cmd);
+        $this->assign('consumer_name',$consumer_name);
+        $this->assign('consumer_identity',$consumer_identity);
+        $this->assign('consumer_tel',$consumer_tel);
+        $this->assign('tasklist',$tasklist);
+        $this->assign('statusList',config('taskStatus'));
+        $this->assign('cmdList',config('taskCmd'));
+        $this->assign('taskStatus',$taskStatus);
+        return view();
+    }
+
+    /**
+     * 解析task状态
+     * @param $tasklist
+     * @return mixed
+     */
+    private function parseTaskStatus($tasklist){
+        $taskStatus = config('taskStatus');
+        foreach($tasklist as & $task){
+            $task['status_name'] = $taskStatus[$task['status']];
+        }
+        return $tasklist;
+    }
+
+    /**
+     * 解析task命令
+     * @param $tasklist
+     * @return mixed
+     */
+    private function parseTaskCmd($tasklist){
+        $cmdlist = config('taskCmd');
+        foreach($tasklist as & $task){
+            $task['cmd_name'] = $cmdlist[$task['cmd']];
+        }
+        return $tasklist;
+    }
+
+    /**
+     * 查看订单
+     * @return \think\response\View
+     */
+    public function showOrder(){
+        $id = input('id');
+        $moneyLog = (new MoneyLogService())->findInfo(['id' => $id]);
+        $this->assign('moneyLog',$moneyLog);
+        $channels = config('channels');
+        $this->assign('channels',$channels);
+        $ordertypes = config('ordertypes');
+        $this->assign('ordertypes',$ordertypes);
+        return view();
+    }
+
+    /**
+     * 处理失败task
+     * @return \think\response\Json
+     */
+    public function handleTask(){
+        $id = input('id');
+        $status = input('status/d');
+        $ignore_reason = input('ignore_reason');
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try{
+            $taskService = new TaskService();
+            if(!$task = $taskService->findInfo(['id' => $id,'status' => TASK_FAIL])){
+                exception(lang('Task Not Found'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            if($status == TASK_RESENT){
+                $updateTaskResult = upsertTask(['id' => $id,'status' => $status]);
+                if(is_array($updateTaskResult)){
+                    return json($updateTaskResult);
+                }
+                $newTaskData = $task->toArray();
+                unset($newTaskData['id']);
+                unset($newTaskData['create_time']);
+                unset($newTaskData['update_time']);
+                unset($newTaskData['status']);
+                unset($newTaskData['seq_id']);
+                $newTaskData['exec_times'] += 1;
+                $insertNewtaskResult = upsertTask($newTaskData);
+                if(is_array($insertNewtaskResult)){
+                    return json($insertNewtaskResult);
+                }
+            }elseif($status == TASK_IGNORE){
+                $updateTaskResult = upsertTask(['id' => $id,'status' => $status,'ignore_reason' => trim($ignore_reason)]);
+                if(is_array($updateTaskResult)){
+                    return json($updateTaskResult);
+                }
+            }else{
+                exception(lang('Task Status Illegal'),ERROR_CODE_DATA_ILLEGAL);
+            }
+        }catch (\Exception $e){
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
     }
 }

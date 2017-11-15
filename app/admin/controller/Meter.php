@@ -97,6 +97,16 @@ class Meter extends Admin
             if( !$meter = model('Meter')->getMeterInfo($where,'find') ){
                 exception("表具不存在或已报装,请检查表号",ERROR_CODE_DATA_ILLEGAL);
             }
+
+            //报装新用户,将旧用户标记为废弃状态
+            if(model('Consumer')->where(['M_Code' => $data['meter']['M_Code'],'consumer_state' => CONSUMER_STATE_NORMAL])->find()){
+                if( !model('Consumer')->where(['M_Code' => $data['meter']['M_Code'],'consumer_state' => CONSUMER_STATE_NORMAL])->update(['consumer_state' => CONSUMER_STATE_DISABLE,'update_time' => time()]) ){
+                    $error = model('Consumer')->getError();
+                    Log::record(['报装修改旧用户状态失败' => $error,'data' => $data],'error');
+                    exception('报装修改旧用户状态失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
+                }
+            }
+
             //插入报装用户信息
             $data['consumer']['M_Code'] = $data['meter']['M_Code'];
             $data['consumer']['meter_id'] = $meter['id'];
@@ -107,14 +117,6 @@ class Meter extends Admin
                 $error = model('Consumer')->getError();
                 Log::record(['报装用户失败' => $error,'data' => $data],'error');
                 exception('添加用户失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
-            }
-            //报装新用户,将旧用户标记为废弃状态
-            if(model('Consumer')->where(['M_Code' => $data['meter']['M_Code'],'consumer_state' => CONSUMER_STATE_NORMAL])->find()){
-                if( !model('Consumer')->where(['M_Code' => $data['meter']['M_Code'],'consumer_state' => CONSUMER_STATE_NORMAL])->update(['consumer_state' => CONSUMER_STATE_DISABLE,'update_time' => time()]) ){
-                    $error = model('Consumer')->getError();
-                    Log::record(['报装修改旧用户状态失败' => $error,'data' => $data],'error');
-                    exception('报装修改旧用户状态失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
-                }
             }
 
             //更新表具信息

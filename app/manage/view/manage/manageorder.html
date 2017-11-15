@@ -76,6 +76,7 @@
                                 <th>{:lang('Money Type')}</th>
                                 <th>{:lang('Order Type')}</th>
                                 <th>{:lang('Order Channel')}</th>
+                                <th>{:lang('Order Extra Desc')}</th>
                                 <th>{:lang('Date')}</th>
                             </tr>
                             </thead>
@@ -114,6 +115,7 @@
                                     {:lang('Manage Platform')}
                                     {/if}
                                 </td>
+                                <td>{$moneylog.extra_desc ?? '-'}</td>
                                 <td>{$moneylog.create_time}</td>
                             </tr>
                             {/foreach}

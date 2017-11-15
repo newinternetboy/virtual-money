@@ -99,9 +99,26 @@ return [
     //订单类型
     'ordertypes' => [
         MONEY_PAY => lang('Order Pay'),
+        MONEY_DEDUCT => lang('Order Deduct'),
         MONEY_PERSON => lang('Order Person'),
         MONEY_COMPANY => lang('Order Company'),
         MONEY_DELI => lang('Order Deli'),
         MONEY_SYSTEM_DELI => lang('Order System Deli'),
+    ],
+
+    //task状态
+    'taskStatus' => [
+        TASK_WAITING        => lang('Task Waiting'),
+        TASK_SENT           => lang('Task Sent'),
+        TASK_SUCCESS        => lang('Task Success'),
+        TASK_FAIL           => lang('Task Fail'),
+        TASK_RESENT         => lang('Task Resent'),
+        TASK_IGNORE         => lang('Task Ignore'),
+    ],
+    //task 命令
+    'taskCmd' => [
+        'charge'        => lang('Cmd Charge'),
+        'deduct'        => lang('Cmd Deduct'),
+        'changePrice'   => lang('Cmd Price'),
     ]
 ];
