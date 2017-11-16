@@ -272,6 +272,10 @@ class Manage extends Admin
         $meterService->createExample_xls($filename,$title);
     }
 
+    /**
+     * excel提交扣除余额
+     * @return \think\response\Json
+     */
     public function uploadExcel(){
         // 获取表单上传文件
         $file = request()->file('excel');
@@ -296,6 +300,7 @@ class Manage extends Admin
                         $ajaxReturn['msg'] = $arr;
                     }else{
                         $result = $this->addAllTask($filedata);
+                        model('app\admin\model\LogRecord')->record( 'Deduct',['source' => $localfile,'faildata' => $result]);
                         if(!empty($result)){
                             $ajaxReturn['status'] = 201;
                             $ajaxReturn['msg'] = $result;
@@ -485,6 +490,7 @@ class Manage extends Admin
     }
 
     /**
+     *输入框提价扣除余额
      * @return \think\response\Json
      */
     public function uploadData(){
@@ -520,6 +526,7 @@ class Manage extends Admin
             $ajaxReturn['msg'] = $tmp;
         }else{
             $result = $this->addAllTask($arr);
+            model('app\admin\model\LogRecord')->record( 'Deduct',['source' => $arr,'faildata' => $result]);
             if(!empty($result)){
                 $ajaxReturn['status'] = 201;
                 $ajaxReturn['msg'] = $result;
@@ -659,6 +666,7 @@ class Manage extends Admin
             }else{
                 exception(lang('Task Status Illegal'),ERROR_CODE_DATA_ILLEGAL);
             }
+            model('app\admin\model\LogRecord')->record( 'Handle Task',['id' => $id,'status' => $status,'ignore_reason' => $ignore_reason]);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();

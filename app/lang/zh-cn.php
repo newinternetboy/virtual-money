@@ -269,6 +269,8 @@ return [
     'record Content'          => '记录内容',
     'Add Time'                => '添加时间',
     'Record Type'             => '记录类型',
+    'Deduct'                  => '扣款',
+    'Handle Task'             => '处理任务',
 
     //自动报警
     'Pulse Constant(imp/m³)'          => '脉冲常量(imp/m³)',
