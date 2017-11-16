@@ -568,8 +568,12 @@ class Manage extends Admin
         }
         if(isset($consumer_where)){
             $consumer_where['consumer_state'] = CONSUMER_STATE_NORMAL;
-            $consumer = (new ConsumerService())->findInfo($consumer_where,'meter_id');
-            $where['meter_id'] = $consumer['meter_id'];
+            $consumers= (new ConsumerService())->selectInfo($consumer_where,'meter_id');
+            $tmp = [];
+            foreach($consumers as $consumer){
+                $tmp[] = $consumer['meter_id'];
+            }
+            $where['meter_id'] = ['in',$tmp];
         }
         $tasklist = (new TaskService())->getInfoPaginate($where,['M_Code' => $M_Code,'cmd' => $cmd,'name' => $consumer_name,'identity' => $consumer_identity,'tel' => $consumer_tel]);
         $tasklist = $this->parseTaskStatus($tasklist);
