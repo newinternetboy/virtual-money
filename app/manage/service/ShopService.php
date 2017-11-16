@@ -16,4 +16,8 @@ class ShopService extends BasicService
     public function __construct(){
         $this->dbModel = new ShopModel();
     }
+
+    public function columnInfo($where,$field){
+        return $this->dbModel->columnInfo($where,$field);
+    }
 }

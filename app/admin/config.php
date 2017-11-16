@@ -128,6 +128,8 @@ return [
         'Save User',
         'Delete User',
         'Update Password',
+        'Settle Success',
+        'Freeze/Not Freeze Cart',
     ],
 
     //统计报表默认查询时间差

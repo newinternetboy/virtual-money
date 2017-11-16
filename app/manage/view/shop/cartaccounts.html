@@ -1,0 +1,160 @@
+{js href="__JS__/bootstrap-datetimepicker.min.js" /}
+{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
+{css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-title">
+                    <h5>订单结算列表</h5>
+                </div>
+                <div class="ibox-content">
+                    <!-- 表格数据 -->
+                    <form  method="" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="shop_name" class="col-sm-2 control-label">商铺名称:</label>
+                                    <div class="col-sm-6">
+                                        <input name="shop_name" id="shop_name" type="text" class="form-control" placeholder="请输入商铺名称" value="{$data['shop_name'] ?? ''}">
+                                    </div>
+                                </div><!-- /form-group -->
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="start_datetimepicker" class="col-sm-2 control-label">付款时间{:lang('From')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="start_datetimepicker" name="startDate" value="{$data['startDate'] ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div><!-- /.col-lg-6 -->
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="end_datetimepicker" class="col-sm-2 control-label">{:lang('To')}:</label>
+                                    <div class="col-sm-6">
+                                        <input id="end_datetimepicker" name="endDate" value="{$data['endDate'] ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: left" class="btn btn-success" type="button" onclick='exportExcel({$data|json_encode})'  >导出excel</button>
+                                <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
+                            </div>
+                        </div>
+                    </form>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <!--原表信息-->
+                        <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                   <th>{:lang('Shop Name')}</th>
+                                   <th>订单数量</th>
+                                   <th>总价</th>
+                                   <th>开户行</th>
+                                   <th>银行卡号</th>
+                                   <th>持卡人姓名</th>
+                                   <th>付款</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {volist name='shop' id='vo'}
+                                <tr>
+
+                                   <td>{$vo->shopname ?? ''}</td>
+                                   <td>{$vo->count ?? ''}</td>
+                                   <td>{$vo->sum ?? ''}</td>
+                                   <td>{$vo->bank ?? ''}</td>
+                                   <td>{$vo->cardNumber ?? ''}</td>
+                                   <td>{$vo->personName ?? ''}</td>
+                                    <td><button class="btn btn-primary" onclick='moneyPay("{$vo->_id->sid}",{$data|json_encode})'>支付</button></td>
+                                </tr>
+                            {/volist}
+                            </tbody>
+                        </table></div>
+                       <div>
+                        <div>
+                            {$str}
+                        </div>
+                       </div>
+                        <!--换表信息-->
+                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+                        <div class="form-group" style="color:red">
+                            <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
+                            <div class="col-sm-10">
+                                <p class="form-control" style="border: none">{:lang('Please in the search box enter the query query, return the result')}</p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#start_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: "month"
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+                event.preventDefault();
+                event.stopPropagation();
+            });
+    $("#end_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: "month"
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+                event.preventDefault();
+                event.stopPropagation();
+            });
+
+</script>
+<script>
+    function moneyPay(id,data){
+        data.id = id;
+        $.ajax({
+            url:"{:url('manage/shop/toMoneyPay')}",
+            method:'post',
+            dataType:'json',
+            data:data,
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg)
+                }else{
+                    alertMsg(res.msg)
+                    setTimeout(function(){window.location.href=""},2)
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+</script>
+<script>
+    function exportExcel(data){
+        window.location.href="{:url('manage/shop/exportExcel')}?shop_name="+data.shop_name+"&startDate="+data.startDate+"&endDate="+data.endDate;
+   }
+</script>
+
+
+                   

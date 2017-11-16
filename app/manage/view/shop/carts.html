@@ -1,0 +1,354 @@
+{js href="__JS__/bootstrap-datetimepicker.min.js" /}
+{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
+{js href="__JS__/layer/layer.js" /}
+{css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-title">
+                    <h5>订单列表</h5>
+                </div>
+                <div class="ibox-content">
+                    <!-- 表格数据 -->
+                    <form  method="" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="order_number" class="col-sm-2 control-label">{:lang('Order Number')}:</label>
+                                    <div class="col-sm-6">
+                                        <input name="order_number" id="order_number" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('Order Number')}..." value="{$order_number ?? ''}">
+                                    </div>
+                                </div><!-- /form-group -->
+                            </div><!-- /.col-lg-6 -->
+                            <div class="col-lg-6" style="float: right">
+                                <div class="form-group">
+                                    <label for="mobile" class="col-sm-2 control-label">{:lang('Mobile Number')}:</label>
+                                    <div class="col-sm-6">
+                                        <input name="mobile" id="mobile" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('Mobile Number')}..." value="{$mobile ?? ''}">
+                                    </div>
+                                </div><!-- /form-group -->
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                        <div class="form-group">
+                             <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="freeze" class="col-sm-2 control-label">{:lang('Order Freeze Status')}:</label>
+                                    <div class="col-sm-6">
+                                        <select name="freeze" id="freeze" class="form-control">
+                                            <option value="2" {if condition="(isset($freeze)) and ($freeze eq 2)"}selected{/if} >{:lang('Search All')}</option>
+                                            <option value="0" {if condition="empty($freeze)"}selected{/if}>正常</option>
+                                            <option value="1" {if condition="(isset($freeze)) and ($freeze eq 1)"}selected{/if}>待处理</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                             </div>
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="status" class="col-sm-2 control-label">{:lang('Order Status')}:</label>
+                                    <div class="col-sm-6">
+                                        <select name="status" id="status" class="form-control">
+                                            <option value="" >{:lang('Search All')}</option>
+                                            <option value="1" {if condition="(isset($status)) and ($status eq 1)"}selected{/if}>待付款</option>
+                                            <option value="2" {if condition="(isset($status)) and ($status eq 2)"}selected{/if}>待发货</option>
+                                            <option value="3" {if condition="(isset($status)) and ($status eq 3)"}selected{/if}>待收货</option>
+                                            <option value="4" {if condition="(isset($status)) and ($status eq 4)"}selected{/if}>已收货待评价</option>
+                                            <option value="5" {if condition="(isset($status)) and ($status eq 5)"}selected{/if}>订单完成</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Pay Money')}{:lang('From')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="start_datetimepicker" name="starttime" value="{$starttime ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div><!-- /.col-lg-6 -->
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="end_datetimepicker" class="col-sm-2 control-label">{:lang('To')}:</label>
+                                    <div class="col-sm-6">
+                                        <input id="end_datetimepicker" name="endtime" value="{$endtime  ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
+                            </div>
+                        </div>
+                    </form>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <!--原表信息-->
+                        <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                   <th style="width:200px;">{:lang('Order Number')}</th>
+                                   <th>{:lang('Shop Name')}</th>
+                                   <th>卖家名字</th>
+                                   <th>{:lang('Order Status')}</th>
+                                   <th>买家姓名</th>
+                                   <th>买家电话</th>
+                                   <th>{:lang('Pay Money')}</th>
+                                   <th>{:lang('Order Freeze Status')}</th>
+                                   <th>{:lang('Operate')}</th>
+                                    <th style="width: 200px;">{:lang('Production')}{:lang('Detail Message')}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {volist name='orders' id='vo'}
+                                <tr>
+                                   <td>{$vo.id}</td>
+                                   <td></td>
+                                   <td>{$vo.consumer.username}</td>
+                                   <td>
+                                       {switch name="vo.status"}
+                                       {case 1}待付款{/case}
+                                       {case 2}待发货{/case}
+                                       {case 3}待收货{/case}
+                                       {case 4}已收货待评价{/case}
+                                       {case 5}订单完成{/case}
+                                       {default /}默认情况
+                                       {/switch}
+                                   </td>
+                                   <td>{$vo.contact_name ?? ''}</td>
+                                   <td>{$vo.contact_tel ?? ''}</td>
+                                   <td>{if condition="isset($vo.pay_time)"}{$vo.pay_time|date="Y-m-d H:i:s",###}{/if}</td>
+                                   <td>
+                                       {if condition="isset($vo.freeze)"}
+                                       {switch name="vo.freeze" }
+                                       {case 1}待处理{/case}
+                                       {default /}正常
+                                       {/switch}
+                                       {/if}
+                                   </td>
+                                   <td>
+                                       {if condition="isset($vo.freeze)"}
+                                      <button class="btn btn-primary" onclick="change('{$vo.id}')">编辑</button>
+                                       {/if}
+                                   </td>
+                                    <td><button class="btn btn-success" onclick='checkProduction({$vo.products|json_encode})'>查看商品</button></td>
+                                </tr>
+                            {/volist}
+                            </tbody>
+                        </table></div>
+                        <div>
+                            {$orders->render()}
+                        </div>
+                        <!--换表信息-->
+                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+                        <div class="form-group" style="color:red">
+                            <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
+                            <div class="col-sm-10">
+                                <p class="form-control" style="border: none">{:lang('Please in the search box enter the query query, return the result')}</p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel1">修改处理状态</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <input style="display: none" name="id" value="" id="id1" />
+                <input style="display: none" name="" value="" id="save_freeze" />
+
+                <div class="form-group">
+                    <label for="freeze_edit" class="col-md-2 control-label">处理状态:</label>
+                    <div class="col-md-10">
+                        <select name="freeze_edit" id="freeze_edit" class="form-control">
+                            <option value="0">正常</option>
+                            <option value="1">待处理</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="reason" class="col-md-2 control-label">修改原因:</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="reason" id="reason">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">备注:</label>
+                    <div class="col-md-10" id="message">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel2">修改处理状态</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+
+                <div id="production">
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#start_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: "month"
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+        event.preventDefault();
+        event.stopPropagation();
+    });
+    $("#end_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: "month"
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+        event.preventDefault();
+        event.stopPropagation();
+    });
+    function change(id){
+        $.ajax({
+            url:"{:url('manage/shop/getCartInfoById')}",
+            method:'post',
+            dataType:'json',
+            data: {id: id},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg)
+                }else{
+                    fillModal1(res.data);
+                    $('#myModal1').modal('show')
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+    function checkProduction(production){
+        var str= ''
+        $.each(production,function(i,n){
+            str+="<p class='form-control' style='border: none;'>("+ (i+1)+")商品名称为："+ n.name+"；单价为："+ n.cost+"; 数量为:"+ n.count+"</p>"
+        })
+        $('#production').html(str);
+        $('#myModal2').modal('show');
+    }
+    function editShop(shop_id){
+        $.ajax({
+            url:"{:url('manage/shop/getShopInfoById')}",
+            method:'post',
+            dataType:'json',
+            data: {id: shop_id},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    fillModal1(res.data);
+                    $('#myModal').modal('show')
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+    function fillModal1(data){
+        $('#id1').val(data.id);
+        $('#save_freeze').val(data.freeze);
+        if(data.freeze == 1){
+            $('#freeze_edit').find('option[value="1"]').prop("selected",true);
+        }else{
+            $('#freeze_edit').find('option[value="0"]').prop("selected",true);
+        }
+        if( data.freeze_msg != '' && data.freeze_msg != 'undefined' && data.freeze_msg != null){
+            var str= '';
+            $.each(data.freeze_msg,function(i,n){
+                if(n.freeze_num == 1){
+                    str+="<p class='form-control' style='border: none;color:red;'>"+ (i+1)+"由正常转成待处理；原因："+ n.reason+"； 时间为："+ n.times+"</p>"
+                }else{
+                    str+="<p class='form-control' style='border: none;color:red;'>"+ (i+1)+"由待处理转成正常；原因："+ n.reason+"； 时间为："+ n.times+"</p>"
+                }
+            })
+            $('#message').html(str);
+        }
+    }
+
+    function sub(){
+        var id = $('#id1').val();
+        var reason = $('#reason').val();
+        var save_freeze = $('#save_freeze').val();
+        var freeze = $('#freeze_edit').val();
+        if( reason == '' || reason == 'undefined' || reason == null ){
+            alertMsg("请填写修改原因！");
+            return false;
+        }
+        if(freeze == save_freeze){
+            alertMsg("没有修改无法保存！");
+            return false;
+        }
+        var data = {id: id, reason: reason, freeze: freeze};
+        $.ajax({
+            url:"{:url('manage/shop/saveCart')}",
+            method:'post',
+            dataType:'json',
+            data: {data: JSON.stringify(data)},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    alertMsg(res.msg);
+                    window.location.href = '';
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+</script>
+
+                   

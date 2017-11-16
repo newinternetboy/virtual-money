@@ -311,11 +311,8 @@ class Manage extends Admin
             $PHPReader = new \PHPExcel_Reader_Excel5();
         }
         $PHPExcel = $PHPReader->load($path);
-        /**读取excel文件中的第一个工作表*/
         $sheet = $PHPExcel->getSheet(0);
-        /**取得一共有多少行*/
         $highestRow = $sheet->getHighestRow();
-        /**从第二行开始输出，因为excel表中第一行为列名*/
         if($highestRow >= 4 ){
             for ($row = 4; $row <= $highestRow; $row++){//行数是以第2行开始
                 $M_Code = $sheet->getCellByColumnAndRow(0,$row)->getValue();

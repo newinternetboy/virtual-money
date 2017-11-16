@@ -546,5 +546,14 @@ return [
     'Charge Times'                      => '充值次数',
     'Charge Money'                      => '充值金额',
     'Charge Type Report'                => '运营商充值类型统计表',
-    'Please Input The Company Name'     => '请输入运营商名称'
+    'Please Input The Company Name'     => '请输入运营商名称',
+
+    //订单管理；
+    'Order Number'                      => '订单号',
+    'Order Freeze Status'               => '订单冻结状态',
+    'Order Status'                      => '订单状态',
+    'Settle Success'                    => '结算成功',
+    'Freeze/Not Freeze Cart'            => '冻结/解冻订单',
+    'Pay Money'                         => '付款时间',
+    'Production'                        => '商品',
 ];
