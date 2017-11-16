@@ -4,7 +4,7 @@
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
                 <!-- 表单标题概要 -->
                 <div class="ibox-title">
-                    <h5>{:lang('Deduct Balance')}(单条扣款)</h5>
+                    <h5>{:lang('Deduct Balance')}</h5>
                 </div>
                 <!-- 表单内容 -->
                 <div class="ibox-content">
@@ -13,7 +13,7 @@
                             <div class="form-group">
                                 <label for="M_Code" class="col-md-2 control-label">{:lang('M_Code')}:</label>
                                 <div class="col-md-10">
-                                    <input id="M_Code" placeholder="表号之间用英文下分号隔开,如:12364579;66633344;99666952" type="text" class="form-control" />
+                                    <input id="M_Code" placeholder="表号之间用英文下分号隔开,如:12364577;12364578;12364579" type="text" class="form-control" />
                                 </div>
                             </div><!-- /form-group -->
                         </div><!-- /.col-lg-6 -->
@@ -21,7 +21,7 @@
                             <div class="form-group">
                                 <label for="money" class="col-md-2 control-label">{:lang('Deduct Balance')}:</label>
                                 <div class="col-md-10">
-                                    <input id="money" placeholder="请输入扣除的钱数" type="number" class="form-control" />
+                                    <input id="money" placeholder="请输入扣除的金额" type="number" class="form-control" />
                                 </div>
                             </div><!-- /form-group -->
                         </div><!-- /.col-lg-6 -->
@@ -52,18 +52,18 @@
                 </div>
                 <!-- 表单标题概要 -->
                 <div class="ibox-title">
-                    <h5>{:lang('Deduct Balance')}(上传Excel表扣款)</h5>
+                    <h5>{:lang('Deduct Balance')}(批量扣款)</h5>
                 </div>
                 <div class="ibox-content">
                     <form action=""  method="post" class="form-horizontal">
                         <div class="col-lg-8" >
                             <div class="form-group">
-
                                 <div class="col-md-4">
+                                    <label for="uploadexcel">请上传excel,支持格式xls/xlsx,最大10M,模板可通过右侧下载模板获取</label>
                                     <input id="uploadexcel" name="uploadexcel" type="file" class="form-control" />
                                 </div>
                                 <div class="col-md-8">
-                                    <button  class="btn btn-success" id="excelupload" type="button" onclick="ajaxFileUploadForType()">{:lang('Sure')}</button>
+                                    <button  class="btn btn-success" id="excelupload" type="button" onclick="ajaxFileUploadForType()">{:lang('Button')}</button>
                                 </div>
                             </div><!-- /form-group -->
                         </div><!-- /.col-lg-6 -->
@@ -91,6 +91,7 @@
 
 <script>
    $('#tijiao').click(function(){
+       $('#excelupload').prop('disabled',true);
        $('#s_data').html('');
        $('#sure').hide();
        var M_Code=$('#M_Code').val();
@@ -98,6 +99,7 @@
        var message = $('#message').val();
        data = {M_Code:M_Code,money:money,message:message}
        if( !checks(M_Code,money) ){
+           $('#excelupload').prop('disabled',false);
             return false;
        }
        $.post("{:url('manage/manage/uploaddata')}",data,function(res){
@@ -123,9 +125,8 @@
                    }else{
                        alertMsg(res.msg,3)
                    }
-
+                    $('#excelupload').prop('disabled',false);
                  },'json');
-
        })
    function checks(M_Code,money){
        if(M_Code == "" || M_Code == null || M_Code == "undefined"){
@@ -146,16 +147,18 @@
         location.href="{:url('manage/manage/exampleExcel')}"
     })
     function ajaxFileUploadForType(){
-        $('#excelupload').disabled="disabled";
+        $('#excelupload').prop('disabled',true);
         $('#p_data').html('');
         $('#prompt').hide();
         if($('#uploadexcel').val()==""){
             alertMsg("请选excel文件！");
+            $('#excelupload').prop('disabled',false);
             return false;
         }
         var extend=$('#uploadexcel').val().substr($('#uploadexcel').val().lastIndexOf(".")+1);
         if("xls|xlsx".indexOf(extend) == -1){
             alertMsg("请输入excel文件!");
+            $('#excelupload').prop('disabled',false);
             return false;
         }
         var formData = new FormData();
@@ -174,7 +177,7 @@
                 }else if(res.status==201||res.status==202){
 
                     if(res.status==201){
-                        alertMsg('下列表号未提交成功，其余已提交完成',3)
+                        alertMsg('下列表号执行失败',3)
                         var str="<p class='form-control' style='border: none;color:red;'>下列表号未提交成功，其余已提交完成</p>";
                     }else{
                         alertMsg('下列表号不存在或者未报装，请重新提交！',3)
@@ -190,12 +193,12 @@
                 }else{
                     alertMsg(res.msg,3)
                 }
-
+                $('#excelupload').prop('disabled',false);
             },
             error: function () {
                 alert("上传失败！");
+                $('#excelupload').prop('disabled',false);
             }
         });
-        $('#excelupload').disabled="";
     }
 </script>

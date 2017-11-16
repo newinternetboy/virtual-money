@@ -74,6 +74,8 @@ define('TASK_WAITING',1);  //待处理任务
 define('TASK_SENT',2);     //已下发任务
 define('TASK_SUCCESS',3);  //执行成功
 define('TASK_FAIL',4);     //执行失败
+define('TASK_RESENT',5);     //已重发
+define('TASK_IGNORE',6);     //已忽略
 
 /***************后台用户表***************/
 define('PLATFORM_ADMIN',1);  //运营商后台用户
@@ -88,7 +90,7 @@ define('MONEY_PAY',1); //缴费
 define('MONEY_PERSON',2); //个人电商中消费
 define('MONEY_COMPANY',3); //企业电商中消费
 define('MONEY_DELI',4); //得力专供中消费
-define('MONEY_DEDUCT',10);
+define('MONEY_DEDUCT',10); //清分扣除余额
 define('MONEY_SYSTEM_DELI',5); //系统赠送得力币
 //付费方式
 define('MONEY_CHANNEL_WEIXIN',1); //微信

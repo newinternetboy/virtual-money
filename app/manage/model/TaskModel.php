@@ -18,4 +18,7 @@ class TaskModel extends BasicModel
     // 当前模型名称
     protected $name = 'Task';
 
+    public function meter(){
+        return $this->belongsTo('MeterModel','meter_id','id');
+    }
 }

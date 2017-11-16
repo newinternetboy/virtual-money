@@ -1,0 +1,123 @@
+{js href="__JS__/jquery.jqprint-0.3.js" /}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Order Detail')}</h5>
+                </div>
+                <div class="ibox-content">
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--报表-->
+                    <div id="order">
+                        {switch name='moneyLog.type'}
+                            {case $Think.const.MONEY_PAY:case $Think.const.MONEY_DEDUCT}
+                                <div class="form-group">
+                                    <div class="col-lg-6" style="float: left">
+                                        <div class="form-group">
+                                            <label for="company_name" class="col-sm-4 control-label">{:lang('Order Company Name')}:</label>
+                                            <div class="col-sm-6">
+                                                <p id="company_name">{$moneyLog.meter.company.company_name ?? $moneyLog.tometer.company.company_name}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="clear: both"></div>
+                                <div class="form-group">
+                                    <div class="col-lg-6" style="float: left">
+                                        <div class="form-group">
+                                            <label for="consumer" class="col-sm-4 control-label">{:lang('Order Consumer')}:</label>
+                                            <div class="col-sm-6">
+                                                <p id="consumer">{$moneyLog.meter.consumer.username ?? $moneyLog.tometer.company.company_name }</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" style="float: left">
+                                        <div class="form-group">
+                                            <label for="identity" class="col-sm-4 control-label">{:lang('Order Identity')}:</label>
+                                            <div class="col-sm-6">
+                                                <p id="identity">{$moneyLog.meter.consumer.identity ?? $moneyLog.tometer.consumer.identity }</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" style="float: left">
+                                        <div class="form-group">
+                                            <label for="tel" class="col-sm-4 control-label">{:lang('Order Tel')}:</label>
+                                            <div class="col-sm-6">
+                                                <p id="tel">{$moneyLog.meter.consumer.tel ?? $moneyLog.tometer.consumer.tel}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" style="float: left">
+                                        <div class="form-group">
+                                            <label for="address" class="col-sm-4 control-label">{:lang('Order Address')}:</label>
+                                            <div class="col-sm-6">
+                                                <p id="address">{$moneyLog.meter.detail_address ?? $moneyLog.tometer.detail_address }</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" style="float: left">
+                                        <div class="form-group">
+                                            <label for="From M_Code" class="col-sm-4 control-label">{:lang('M_Code')}:</label>
+                                            <div class="col-sm-6">
+                                                <p id="From M_Code">{$moneyLog.meter.M_Code ?? $moneyLog.tometer.M_Code }</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" style="float: left">
+                                        <div class="form-group">
+                                            <label for="money" class="col-sm-4 control-label">{:lang('Money')}:</label>
+                                            <div class="col-sm-6">
+                                                <p id="money">{$moneyLog.money ?? '-'}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" style="float: left">
+                                        <div class="form-group">
+                                            <label for="type_name" class="col-sm-4 control-label">{:lang('Order Type')}:</label>
+                                            <div class="col-sm-6">
+                                                <p id="type_name">{$ordertypes[$moneyLog.type] ?? '-'}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" style="float: left">
+                                        <div class="form-group">
+                                            <label for="channel_name" class="col-sm-4 control-label">{:lang('Order Channel')}:</label>
+                                            <div class="col-sm-6">
+                                                <p id="channel_name">{$channels[$moneyLog.channel] ?? '-'}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" style="float: left">
+                                        <div class="form-group">
+                                            <label for="Order Id" class="col-sm-4 control-label">{:lang('Order Id')}:</label>
+                                            <div class="col-sm-6">
+                                                <p id="Order Id">{$moneyLog.order_id ?? '-'}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" style="float: left">
+                                        <div class="form-group">
+                                            <label for="time" class="col-sm-4 control-label">{:lang('Order Time')}:</label>
+                                            <div class="col-sm-6">
+                                                <p id="time">{$moneyLog.create_time ?? '-'}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {/case}
+                            {default /}
+                        {/switch}
+                    </div>
+                    <button style="float: right" class="btn btn-primary col-sm-1"  type="button" onclick="printOrder()">{:lang('Print')}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function printOrder(){
+        $('#order').jqprint();
+    }
+</script>

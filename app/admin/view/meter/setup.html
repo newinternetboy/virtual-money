@@ -1,19 +1,25 @@
 <!--<div class="wrapper wrapper-content animated fadeInRight">-->
 {js href="__JS__/jquery.jqprint-0.3.js" /}
-<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid;">
+
+<style>
+    #contentPrint .col-md-10-P {
+        text-align: left;
+    }
+</style>
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
     <section id="widget-grid">
         <div class="row">
             <div class="col-lg-12">
-                <div class="ibox float-e-margins" style="background: white">
+                <div class="ibox float-e-margins" style="background: white; float: left;">
                     <!-- 表单标题概要 -->
                     <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
                         <h5>{:lang('Meter')}{:lang('Setup')}</h5>
                         <div class="ibox-tools">
                             <!--<a class="collapse-link">-->
-                                <!--<i class="fa fa-chevron-up"></i>-->
+                            <!--<i class="fa fa-chevron-up"></i>-->
                             <!--</a>-->
                             <!--<a class="close-link">-->
-                                <!--<i class="fa fa-times"></i>-->
+                            <!--<i class="fa fa-times"></i>-->
                             <!--</a>-->
                         </div>
                     </div>
@@ -175,12 +181,116 @@
 
                         </form>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="float: left; width: 100%;">
                         <label  class="col-sm-2 control-label"></label>
                         <div class="col-sm-10">
-                            <button style="float: right;margin-left: 1vw;display: none;"  class="btn btn-primary col-sm-1" id="jqprint" type="button" >{:lang('Print')}</button>
                             <button style="float: right" class="btn btn-primary col-sm-1" onclick="saveData()" type="submit" id="submitBtn" >{:lang('Button')}</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div id="contentPrint" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px; padding: 10px 14px; position: relative; display: none">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins" style="background: white; float: left; width: 100%;">
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Meter')}{:lang('Setup')} - 打印</h5>
+                        <div class="ibox-tools">
+                            <!--<a class="collapse-link">-->
+                            <!--<i class="fa fa-chevron-up"></i>-->
+                            <!--</a>-->
+                            <!--<a class="close-link">-->
+                            <!--<i class="fa fa-times"></i>-->
+                            <!--</a>-->
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <!-- 表格数据 -->
+
+                        <form id="save" method="post" class="form-horizontal" role="form" novalidate="novalidate">
+
+                            <fieldset>
+                                <legend>{:lang('M_Code Resources')}</legend>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">{:lang('Meter Type')}</label>
+                                    <div class="col-md-10 control-label col-md-10-P" style="text-align: left" id="M_Type_P">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="M_Code" class="col-md-2 control-label">{:lang('M_Code')}</label>
+                                    <div class="col-md-10 control-label col-md-10-P" style="text-align: left" id="M_Code_P">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="P_ID" class="col-md-2 control-label">{:lang('Price')}{:lang('Price Type')}</label>
+                                    <div class="col-md-10 control-label col-md-10-P" id="P_ID_P">
+
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset id="consumerinfo">
+                                <legend>{:lang('Personal Profile')}</legend>
+                                <div class="form-group">
+                                    <label for="username" class="col-md-2 control-label">{:lang('Name')}</label>
+                                    <div class="col-md-10 control-label col-md-10-P" id="username_P">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tel" class="col-md-2 control-label">{:lang('Mobile Number')}</label>
+                                    <div class="col-md-10 control-label col-md-10-P" id="tel_P">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="identity" class="col-md-2 control-label">{:lang('PIN-codes')}</label>
+                                    <div class="col-md-10 control-label col-md-10-P" id="identity_P">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-md-6">
+                                    <label for="M_Address" class="col-md-4 control-label">{:lang('Installation Address')}</label>
+                                    <!--<label for="detail_address" class="display:none"></label>-->
+                                    <div class="col-md-8 control-label col-md-10-P" style="padding-right: 0" id="M_Address_P">
+                                    </div>
+                                </div>
+                                <div class="form-group col col-md-6">
+                                    <label for="detail_address" style="display: none"></label>
+                                    <div class="col-md-12 control-label col-md-10-P" style="padding-left: 0" id="detail_address_P">
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset id="addtion">
+                                <legend>{:lang('Additional Resources')}</legend>
+                                <div class="form-group">
+                                    <label for="family_num" class="col-md-2 control-label">{:lang('Family Size')}</label>
+                                    <div class="col-md-4 control-label col-md-10-P" id="family_num_P">
+                                    </div>
+                                    <label for="building_area" class="col-md-2 control-label">{:lang('Residential Buildings')}</label>
+                                    <div class="col-md-4 control-label col-md-10-P" id="building_area_P">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="income_peryear" class="col-md-2 control-label">{:lang('Annual Income')}</label>
+                                    <div class="col-md-4 control-label col-md-10-P" id="income_peryear_P">
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="form-group" style="float: left; width: 100%;">
+                                <label  class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button style="margin-right: 20px; float: right" class="btn btn-primary col-sm-1" onclick="refreshPage()" id="compeleteBtn" >完成</button>
+                                    <button style="margin-right: 20px; float: right;" class="btn btn-primary col-sm-1" style="display:block;" id="jqprint" type="button" onclick="printInfo()">{:lang('Print')}</button>
+
+                                </div>
+                            </div>
+
+                        </form>
                     </div>
                 </div>
             </div>
@@ -192,7 +302,9 @@
 <script>
 
     $('#M_Code').change(function(){
+
         $('#jqprint').hide();
+
         $('#warning').html('');
         var M_Code = $('#M_Code').val().trim('');
         if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
@@ -227,8 +339,6 @@
             label.text('').addClass('valid');
             label.parent().parent().removeClass('has-error');
         }
-
-
     });
 
     // 手机号码验证
@@ -298,8 +408,8 @@
         var meter = data['meter'];
         var consumer = data['consumer'];
         if( consumer == "undefined" || consumer == null || consumer == ''){
-            $('#P_ID option:selected').prop("selected",false)
-            $('#M_Address option:selected').prop("selected",false)
+            $('#P_ID option:selected').prop("selected",false);
+            $('#M_Address option:selected').prop("selected",false);
             $('#detail_address').val('');
             $('#username').val('');
             $('#tel').val('');
@@ -326,6 +436,38 @@
         $("#save").find("div.state-error").parent().parent().addClass("has-error");
     });
 
+    function printInfo () {
+        $("#contentPrint").jqprint();
+    }
+
+    function refreshPage () {
+        window.location.reload();
+    }
+
+    function getPrintInfo (M_Type,M_Code,P_ID,username,tel,identity,M_Address,detail_address,family_num,building_area,income_peryear) {
+        switch (M_Type) {
+            case "1":
+                $("#M_Type_P").html("水表");
+                break;
+            case "2":
+                $("#M_Type_P").html("电表");
+                break;
+            case "3":
+                $("#M_Type_P").html("气表");
+                break;
+        }
+        $("#M_Code_P").html(M_Code);
+        $("#P_ID_P").html(P_ID);
+        $("#username_P").html(username);
+        $("#tel_P").html(tel);
+        $("#identity_P").html(identity);
+        $("#M_address_P").html(M_Address);
+        $("#detail_address_P").html(detail_address);
+        $("#family_num_P").html(family_num);
+        $("#building_area_P").html(building_area);
+        $("#income_peryear_P").html(income_peryear);
+    }
+
     function saveData(){
 
         $("#save").valid();
@@ -349,6 +491,13 @@
 //        if( !check(meter,consumer) ){
 //            return false;
 //        }
+
+        console.log(P_ID);
+
+        getPrintInfo(M_Type,M_Code,P_ID,username,tel,identity,M_Address,detail_address,family_num,building_area,income_peryear);
+
+
+
         $.ajax({
             url:"{:url('admin/meter/binding')}",
             method:'post',
@@ -363,59 +512,68 @@
                 }
 
                 $("#submitBtn").removeAttrs("disabled");
+                $("#submitBtn").html("提交");
+
+                //隐藏提交界面,显示打印界面
+                $("#content").hide();
+                $("#contentPrint").show();
             },
             error:function(){
                 alertMsg("操作失败！",5);
                 $("#submitBtn").removeAttrs("disabled");
+                $("#submitBtn").html("提交");
             }
         })
+
+
+
     }
 
-    $('#jqprint').click(function(){
-        $(".ibox-content").jqprint();
-    })
-//    function check(meter,consumer){
-//        if( meter.M_Type == "" || meter.M_Type == null || meter.M_Type == "undefined"){
-//            alertMsg("请先选择表具类型");
-//            return false;
-//        }
-//        if( meter.M_Code == "" || meter.M_Code == null || meter.M_Code == "undefined"){
-//            alertMsg("请先填写表号");
-//            return false;
-//        }
-//        if( meter.P_ID == "" || meter.P_ID == null || meter.P_ID == "undefined"){
-//            alertMsg("请先选择价格类型");
-//            return false;
-//        }
-//        if( meter.M_Address == "" || meter.M_Address == null || meter.M_Address == "undefined"){
-//            alertMsg("请先选择安装地址");
-//            return false;
-//        }
-//        if( meter.detail_address == "" || meter.detail_address == null || meter.detail_address == "undefined"){
-//            alertMsg("请先填写详细地址");
-//            return false;
-//        }
-//        if( consumer.username == "" || consumer.username == null || consumer.username == "undefined"){
-//            alertMsg("请先填写姓名");
-//            return false;
-//        }
-//        if( consumer.telephone == "" || consumer.telephone == null || consumer.telephone == "undefined"){
-//            alertMsg("请先填写电话");
-//            return false;
-//        }
-//        if(!checkTelephone(consumer.telephone)){
-//            return false;
-//        }
-//        if( consumer.identity == "" || consumer.identity == null || consumer.identity == "undefined"){
-//            alertMsg("请先填写身份证号");
-//            return false;
-//        }
-//        if (!checkCard(consumer.identity)) {
-//            alertMsg("请输入正确的身份证号码");
-//            return false;
-//        }
-//        return true;
-//    }
+//    $('#jqprint').click(function(){
+//        $(".ibox-content").jqprint();
+//    });
+    //    function check(meter,consumer){
+    //        if( meter.M_Type == "" || meter.M_Type == null || meter.M_Type == "undefined"){
+    //            alertMsg("请先选择表具类型");
+    //            return false;
+    //        }
+    //        if( meter.M_Code == "" || meter.M_Code == null || meter.M_Code == "undefined"){
+    //            alertMsg("请先填写表号");
+    //            return false;
+    //        }
+    //        if( meter.P_ID == "" || meter.P_ID == null || meter.P_ID == "undefined"){
+    //            alertMsg("请先选择价格类型");
+    //            return false;
+    //        }
+    //        if( meter.M_Address == "" || meter.M_Address == null || meter.M_Address == "undefined"){
+    //            alertMsg("请先选择安装地址");
+    //            return false;
+    //        }
+    //        if( meter.detail_address == "" || meter.detail_address == null || meter.detail_address == "undefined"){
+    //            alertMsg("请先填写详细地址");
+    //            return false;
+    //        }
+    //        if( consumer.username == "" || consumer.username == null || consumer.username == "undefined"){
+    //            alertMsg("请先填写姓名");
+    //            return false;
+    //        }
+    //        if( consumer.telephone == "" || consumer.telephone == null || consumer.telephone == "undefined"){
+    //            alertMsg("请先填写电话");
+    //            return false;
+    //        }
+    //        if(!checkTelephone(consumer.telephone)){
+    //            return false;
+    //        }
+    //        if( consumer.identity == "" || consumer.identity == null || consumer.identity == "undefined"){
+    //            alertMsg("请先填写身份证号");
+    //            return false;
+    //        }
+    //        if (!checkCard(consumer.identity)) {
+    //            alertMsg("请输入正确的身份证号码");
+    //            return false;
+    //        }
+    //        return true;
+    //    }
 
 </script>
 <script>
