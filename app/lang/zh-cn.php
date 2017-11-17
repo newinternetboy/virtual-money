@@ -609,6 +609,7 @@ return [
     'Order Freeze Status'               => '订单冻结状态',
     'Order Status'                      => '订单状态',
     'Order Count'                       => '订单数量',
+    'Order Number'                      => '订单数量',
     'Settle Success'                    => '结算成功',
     'Freeze/Not Freeze Cart'            => '冻结/解冻订单',
     'Pay Money'                         => '付款时间',
@@ -670,5 +671,4 @@ return [
     'Shop Admin ShopId Require'         => '商铺id必须',
     'Shop Admin Not Exist'              => '商铺管理员不存在',
     'Shop Admin'                        => '企业商铺管理员'
-
 ];
