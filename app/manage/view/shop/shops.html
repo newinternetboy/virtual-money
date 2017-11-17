@@ -27,9 +27,9 @@
                                     <label for="status" class="col-sm-2 control-label">{:lang('Shop Status')}:</label>
                                     <div class="col-sm-6">
                                         <select name="status" id="status" class="form-control">
-                                            <option value="" {if conditon="isset($status)"}selected>{:lang('Search All')}</option>
-                                            <option value="1" {if condition="(isset($status)) and ($status eq 1)"}selected{/if}>{:lang('Open')}</option>
-                                            <option value="2" {if condition="(isset($status)) and ($status eq 2)"}selected{/if}>{:lang('Close')}</option>
+                                            <option value="all">{:lang('Search All')}</option>
+                                            <option value="{$Think.SHOP_STATUS_CLOSE}" {if condition="$status === strval($Think.SHOP_STATUS_CLOSE) "}selected{/if}>{:lang('Close')}</option>
+                                            <option value="{$Think.SHOP_STATUS_OPEN}" {if condition="$status === strval($Think.SHOP_STATUS_OPEN) "}selected{/if}>{:lang('Open')}</option>
                                         </select>
                                     </div>
                                 </div><!-- /form-group -->
@@ -56,12 +56,12 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="type" class="col-sm-2 control-label">商铺类型:</label>
+                                    <label for="type" class="col-sm-2 control-label">{:lang('Shop Type')}:</label>
                                     <div class="col-sm-6">
                                         <select name="type" id="type" class="form-control">
-                                            <option value="2" {if conditon="$type eq 2"}selected>{:lang('Search All')}</option>
-                                            <option value="0" {if condition="empty($type) "}selected{/if}>个人电商</option>
-                                            <option value="1" {if condition="$type eq 1"}企业电商{/if}>企业电商</option>
+                                            <option value="all">{:lang('Search All')}</option>
+                                            <option value="{$Think.PERSONAL_ELE_BUSINESS}" {if condition="$type === strval($Think.PERSONAL_ELE_BUSINESS) "}selected{/if}>{:lang('Order Person')}</option>
+                                            <option value="{$Think.COMPANY_ELE_BUSINESS}" {if condition="$type === strval($Think.COMPANY_ELE_BUSINESS) "}selected{/if}>{:lang('Order Company')}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -98,7 +98,7 @@
                             <thead>
                                 <tr>
                                    <th>{:lang('Shop Name')}</th>
-                                   <th>商铺类型</th>
+                                   <th>{:lang('Shop Type')}</th>
                                    <th>{:lang('Username')}</th>
                                    <th>{:lang('M_Code')}</th>
                                    <th>{:lang('Shop Status')}</th>
@@ -113,17 +113,21 @@
                                    <td>{$vo.name}</td>
                                    <td>
                                    {switch name="vo.type"}
-                                       {case 1}企业电商{/case}
-                                       {default /}个人电商
+                                       {case $Think.COMPANY_ELE_BUSINESS}{:lang('Order Company')}{/case}
+                                       {default /}{:lang('Order Person')}
                                    {/switch}
                                    </td>
-                                   <td>{$vo.type}</td>
                                    <td>{$vo.uid ? $vo.consumer.username : '-'}</td>
                                    <td>{$vo.uid ? $vo.consumer.M_Code : '-'}</td>
-                                   <td>{$vo.status}</td>
+                                   <td>
+                                       {switch name="vo.status"}
+                                       {case $Think.SHOP_STATUS_OPEN}{:lang('Open')}{/case}
+                                       {default /}{:lang('Close')}
+                                       {/switch}
+                                   </td>
                                    <td>{$vo.create_time}</td>
                                    <td><button class="btn btn-success" onclick="editShop('{$vo.id}')">{:lang('Edit')}</button></td>
-                                   <td><button class="btn btn-link" onclick="production('{$vo.id}')">查看商品</button></td>
+                                   <td><button class="btn btn-link" onclick="production('{$vo.id}')">{:lang('Check Production')}</button></td>
                                 </tr>
                             {/volist}
                             </tbody>
@@ -163,8 +167,8 @@
                     <label for="edit_status" class="col-md-2 control-label">{:lang('Shop Status')}</label>
                     <div class="col-md-10">
                         <select name="edit_status" id="edit_status" class="form-control">
-                            <option value="1">{:lang('Open')}</option>
-                            <option value="0">{:lang('Close')}</option>
+                            <option value="{$Think.SHOP_STATUS_OPEN}">{:lang('Open')}</option>
+                            <option value="{$Think.SHOP_STATUS_CLOSE}">{:lang('Close')}</option>
                         </select>
                     </div>
                 </div>
@@ -265,7 +269,6 @@
                 if(res.code != 200){
                     alertMsg(res.msg);
                 }else{
-//                    clearModal();
                     fillModal(res.data);
                     $('#myModal').modal('show')
                 }
@@ -297,10 +300,10 @@
         }else{
             $('#sdl_auth').find('option[value="0"]').prop("selected",true);
         }
-        if(data.status == 1){
-            $('#edit_status').find('option[value="1"]').prop("selected",true);
+        if(data.status == {$Think.SHOP_STATUS_OPEN}){
+            $('#edit_status').find('option[value="{$Think.SHOP_STATUS_OPEN}"]').prop("selected",true);
         }else{
-            $('#edit_status').find('option[value="0"]').prop("selected",true);
+            $('#edit_status').find('option[value="{$Think.SHOP_STATUS_CLOSE}"]').prop("selected",true);
         }
     }
 

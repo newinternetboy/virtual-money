@@ -20,4 +20,9 @@ class ShopService extends BasicService
     public function columnInfo($where,$field){
         return $this->dbModel->columnInfo($where,$field);
     }
+
+    public function insertQYShop($data,$scene = true){
+        $data['type'] = COMPANY_ELE_BUSINESS;
+        return $this->upsert($data,$scene);
+    }
 }

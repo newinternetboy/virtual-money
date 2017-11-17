@@ -120,5 +120,8 @@ return [
         'charge'        => lang('Cmd Charge'),
         'deduct'        => lang('Cmd Deduct'),
         'changePrice'   => lang('Cmd Price'),
-    ]
+    ],
+    //商铺封面图压缩尺寸限制
+    'thumbMaxWidth' => 250,
+    'thumbMaxHeight' => 250,
 ];

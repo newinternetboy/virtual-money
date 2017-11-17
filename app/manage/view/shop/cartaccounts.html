@@ -7,7 +7,7 @@
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
                 <!-- 表单内容 -->
                 <div class="ibox-title">
-                    <h5>订单结算列表</h5>
+                    <h5>{:lang('Order Account List')}</h5>
                 </div>
                 <div class="ibox-content">
                     <!-- 表格数据 -->
@@ -15,9 +15,9 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="shop_name" class="col-sm-2 control-label">商铺名称:</label>
+                                    <label for="shop_name" class="col-sm-2 control-label">{:lang('Shop Name')}:</label>
                                     <div class="col-sm-6">
-                                        <input name="shop_name" id="shop_name" type="text" class="form-control" placeholder="请输入商铺名称" value="{$data['shop_name'] ?? ''}">
+                                        <input name="shop_name" id="shop_name" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('Shop Name')}..." value="{$data['shop_name'] ?? ''}">
                                     </div>
                                 </div><!-- /form-group -->
                             </div><!-- /.col-lg-6 -->
@@ -25,7 +25,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="start_datetimepicker" class="col-sm-2 control-label">付款时间{:lang('From')}</label>
+                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Pay Money')}{:lang('From')}</label>
                                     <div class="col-sm-6">
                                         <input id="start_datetimepicker" name="startDate" value="{$data['startDate'] ?? ''}" type="text" class="form-control">
                                     </div>
@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <label  class="col-sm-2 control-label"></label>
                             <div class="col-sm-10">
-                                <button style="float: left" class="btn btn-success" type="button" onclick='exportExcel({$data|json_encode})'  >导出excel</button>
+                                <button style="float: left" class="btn btn-success" type="button" onclick='exportExcel({$data|json_encode})'  >{:lang('Export Excel')}</button>
                                 <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
                             </div>
                         </div>
@@ -54,12 +54,12 @@
                             <thead>
                                 <tr>
                                    <th>{:lang('Shop Name')}</th>
-                                   <th>订单数量</th>
-                                   <th>总价</th>
-                                   <th>开户行</th>
-                                   <th>银行卡号</th>
-                                   <th>持卡人姓名</th>
-                                   <th>付款</th>
+                                   <th>{:lang('Order Count')}</th>
+                                   <th>{:lang('Total Price')}</th>
+                                   <th>{:lang('Bank Of Deposit')}</th>
+                                   <th>{:lang('Code Of Bank')}</th>
+                                   <th>{:lang('Name On Card')}</th>
+                                   <th>{:lang('Paid')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -72,7 +72,7 @@
                                    <td>{$vo->bank ?? ''}</td>
                                    <td>{$vo->cardNumber ?? ''}</td>
                                    <td>{$vo->personName ?? ''}</td>
-                                    <td><button class="btn btn-primary" onclick='moneyPay("{$vo->_id->sid}",{$data|json_encode})'>支付</button></td>
+                                    <td><button class="btn btn-primary" onclick='moneyPay("{$vo->_id->sid}",{$data|json_encode})'>{:lang('Pay')}</button></td>
                                 </tr>
                             {/volist}
                             </tbody>

@@ -22,4 +22,24 @@ class ShopModel extends BasicModel
         return $this->where($where)->column($field);
     }
 
+    public function setStatusAttr($value){
+        return intval($value);
+    }
+
+    public function setTypeAttr($value){
+        return intval($value);
+    }
+
+    public function setSdlPreferenceAttr($value){
+        return intval($value);
+    }
+
+    public function setHealthAuthAttr($value){
+        return intval($value);
+    }
+
+    public function setSdlAuthAttr($value){
+        return intval($value);
+    }
+
 }
