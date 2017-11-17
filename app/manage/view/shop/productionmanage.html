@@ -8,7 +8,7 @@
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
                 <!-- 表单内容 -->
                 <div class="ibox-title">
-                    <h5>{:lang('Production List')}</h5>
+                    <h5>{:lang('Delis')}{:lang('Production List')}</h5>
                 </div>
                 <div class="ibox-content">
                     <!-- 表格数据 -->
@@ -19,7 +19,6 @@
                                     <label for="name" class="col-sm-2 control-label">{:lang('Production Name')}:</label>
                                     <div class="col-sm-6">
                                         <input name="name" id="name" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('Production Name')}" value="{$name ?? ''}">
-                                        <input type="hidden" name="id" value="{$id ?? ''}" />
                                     </div>
                                 </div><!-- /form-group -->
                             </div><!-- /.col-lg-6 -->
@@ -55,11 +54,11 @@
                             </div><!-- /.col-lg-6 -->
                         </div>
                         <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
+                            <div  class="col-sm-2">
+                                <button style="float: left;" onclick="production_add()" class="btn btn-primary" type="button"  >{:lang('Add')}</button>
+                            </div>
                             <div class="col-sm-10">
                                 <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
-                                <button style="float:right;margin-right: 1vw;" onclick="javascript:history.back(-1);" type="button" class="btn btn-primary">{:lang('Back')}</button>
-
                             </div>
                         </div>
                     </form>
@@ -68,7 +67,6 @@
                         <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
                             <thead>
                                 <tr>
-                                   <th>{:lang('Shop Name')}</th>
                                    <th>{:lang('Production Name')}</th>
                                    <th>{:lang('DeLi Price')}</th>
                                    <th>{:lang('RMB Price')}</th>
@@ -80,7 +78,6 @@
                             <tbody>
                             {volist name='productions' id='vo'}
                                 <tr>
-                                   <td>{$vo.shop.name}</td>
                                    <td>{$vo.name}</td>
                                    <td>{$vo.sdlenable?$vo.sdlprice:'不支持'}</td>
                                    <td>{$vo.rmbenable?$vo.rmbprice:'不支持'}</td>
@@ -166,15 +163,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="edit_create_time" class="col-md-2 control-label">{:lang('Create Time')}</label>
+                    <label for="desc" class="col-md-2 control-label">{:lang('Desc')}</label>
                     <div class="col-md-10">
-                        <input class="form-control" readonly="readonly" name="create_time" id="edit_create_time">
+                        <input class="form-control" name="desc" id="desc">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="edit_update_time" class="col-md-2 control-label">{:lang('Update Time')}</label>
+                    <label for="img" class="col-md-2 control-label">{:lang('Image')}</label>
                     <div class="col-md-10">
-                        <input class="form-control" readonly="readonly" name="update_time" id="edit_update_time">
+                        <input type="file" name="image" id="img">
                     </div>
                 </div>
 
@@ -215,6 +212,9 @@
         event.preventDefault();
         event.stopPropagation();
     });
+    function production_add(){
+        $('#myModal').modal('show')
+    }
     function production_eidt(production_id){
         $.ajax({
             url:"{:url('manage/shop/getProductionInfoById')}",

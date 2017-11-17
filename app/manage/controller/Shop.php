@@ -25,7 +25,7 @@ class Shop extends Admin
     public function shops(){
         $status = input('status');
         $M_Code = input('M_Code');
-        $type = input('type',2);
+        $type = input('type');
         $shopname = input('shopname');
         $username = input('username');
         $starttime = input('starttime');
@@ -34,14 +34,10 @@ class Shop extends Admin
         if($M_Code){
             $where['M_Code'] = $M_Code;
         }
-        if($status){
-            if($status == 1){
-                $where['status'] = 1;
-            }else{
-                $where['status'] = 0;
-            }
+        if($status !==null&&$status !='all'){
+            $where['status'] = intval($status);
         }
-        if($type == 0||$type==1){
+        if($type !==null&&$type !='all'){
             $where['type'] = intval($type);
         }
         if($shopname){
@@ -71,9 +67,6 @@ class Shop extends Admin
         $param['endtime']    = $endtime;
         $shopService = new ShopService();
         $shops = $shopService->getInfoPaginate($where,$param);
-        foreach($shops as & $shop){
-            $shop['status'] = ($shop['status'] == 1) ? '打开':'关闭';
-        }
         $this->assign('shops',$shops);
         $this->assign('status',$status);
         $this->assign('type',$type);
@@ -91,7 +84,7 @@ class Shop extends Admin
         $ret['msg'] = lang('Operation Success');
         try{
             $shopService = new ShopService();
-            if( !$shopInfo = $shopService->findInfo(['id' => $id],'id,create_time,update_time,name,uid,productsCount,status') ){
+            if( !$shopInfo = $shopService->findInfo(['id' => $id]) ){
                 exception(lang('Data ID exception'),ERROR_CODE_DATA_ILLEGAL);
             }
             $ret['data'] = $shopInfo;
@@ -130,19 +123,15 @@ class Shop extends Admin
         $start_time = input('start_time');
         $end_time = input('end_time');
         if($id){
-            $where['sid'] = new ObjectId($id);
+            $where['sid'] = $id;
         }else{
             return false;
         }
         if($name){
             $where['name'] = ['like',$name];
         }
-        if($status){
-            if($status == 1){
-                $where['status'] = 1;
-            }else{
-                $where['status'] = 0;
-            }
+        if($status !==null&&$status !='all'){
+            $where['status'] = intval($status);
         }
         if($start_time){
             $where['create_time'] = ['>',strtotime($start_time.' 00:00:00')];
@@ -160,9 +149,6 @@ class Shop extends Admin
         $param['status']     = $status;
         $productionService = new ProductionService();
         $productions = $productionService->getInfoPaginate($where,$param);
-        foreach($productions as & $production){
-            $production['status'] = ($production['status'] == 1) ? '上架':'下架';
-        }
         $this->assign('id',$id);
         $this->assign('name',$name);
         $this->assign('start_time',$start_time);
@@ -213,7 +199,7 @@ class Shop extends Admin
     public function carts(){
         $order_number = input('order_number');
         $mobile = input('mobile');
-        $freeze = input('freeze',2);
+        $freeze = input('freeze');
         $status = input('status');
         $starttime = input('starttime',date('Y-m-d',strtotime('-1 month')));
         $endtime = input('endtime',date('Y-m-d'));
@@ -224,7 +210,7 @@ class Shop extends Admin
         if($mobile){
             $where['contact_tel'] = $mobile;
         }
-        if($freeze==0||$freeze==1){
+        if($freeze !==null&&$freeze !='all'){
             $where['freeze'] = intval($freeze);
         }
         if($status){
@@ -311,10 +297,10 @@ class Shop extends Admin
             $where['_id'] = ['$in'=>$res];
         }
         $where['pay_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
-        $where['status']=['$in'=>[4,5]];
-        $where['money_type'] = 1;
-        $where['deli_settle_status'] = 0;
-        $where['freeze'] = 0;
+        $where['status']=['$in'=>[ORDER_SEED_WAITING_COMMENT,ORDER_OVER]];
+        $where['money_type'] = ORDER_MONEY_TYPE_RMB;
+        $where['deli_settle_status'] = ORDER_NOT_ACCOUNT;
+        $where['freeze'] = ORDER_NORMAL;
         $page_size = 10;
         $skip = ($page-1)*$page_size;
         $cartService = new cartService();
@@ -351,7 +337,7 @@ class Shop extends Admin
      */
     public function toMoneyPay(){
         $returnAjax['code'] = 200;
-        $returnAjax['msg'] ='操作完成';
+        $returnAjax['msg'] =lang('Operation Success');
         $sid= input('id');
         $shop_name = input('shop_name');
         $startDate = input('startDate');
@@ -363,15 +349,15 @@ class Shop extends Admin
         }
         $where['sid'] = $sid;
         $where['pay_time'] = ['between' , [strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
-        $where['status']=['in',[4,5]];
-        $where['money_type'] = 1;
-        $where['deli_settle_status'] = 0;
-        $where['freeze'] = 0;
-        $change['deli_settle_status'] = 1;
+        $where['status']=['$in'=>[ORDER_SEED_WAITING_COMMENT,ORDER_OVER]];
+        $where['money_type'] = ORDER_MONEY_TYPE_RMB;
+        $where['deli_settle_status'] = ORDER_NOT_ACCOUNT;
+        $where['freeze'] = ORDER_NORMAL;
+        $change['deli_settle_status'] = ORDER_ALREADY_ACCOUNT;
         $cartService = new CartService();
         if(!$cartService ->updateCart($where,$change)){
             $returnAjax['code'] = 201;
-            $returnAjax['msg'] ='操作失败';
+            $returnAjax['msg'] =lang('Operation fail');
             Log::record(['付款失败','data' => $change],'error');
         }
         model('app\admin\model\LogRecord')->record('Settle Success',$change);
@@ -388,10 +374,10 @@ class Shop extends Admin
             $where['_id'] = ['$in'=>$res];
         }
         $where['pay_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
-        $where['status']=['$in'=>[4,5]];
-        $where['money_type'] = 1;
-        $where['deli_settle_status'] = 0;
-        $where['freeze'] = 0;
+        $where['status']=['$in'=>[ORDER_SEED_WAITING_COMMENT,ORDER_OVER]];
+        $where['money_type'] = ORDER_MONEY_TYPE_RMB;
+        $where['deli_settle_status'] = ORDER_NOT_ACCOUNT;
+        $where['freeze'] = ORDER_NORMAL;
         $cartService = new CartService();
         $res = $cartService->getAllGroupByShop('cart',$where);
         $shop = $res[0]->result;
@@ -410,5 +396,43 @@ class Shop extends Admin
         $title = '订单结算Excel';
         $total = "总订单数为：".$totalOrder."；总金额为：".$totalMoney;
         $cartService->create_xls($shop,$filename,$title,$total);
+    }
+
+    //得利商品管理
+    public function productionManage(){
+        $name = input('name');
+        $status = input('status');
+        $start_time = input('start_time');
+        $end_time = input('end_time');
+        $where['sid'] = PRODUCTION_ID_DELI;
+        if($name){
+            $where['name'] = ['like',$name];
+        }
+        if($status !==null&&$status !='all'){
+            $where['status'] = intval($status);
+        }
+        if($start_time){
+            $where['create_time'] = ['>',strtotime($start_time.' 00:00:00')];
+        }
+        if($end_time){
+            $where['create_time'] = ['<',strtotime($end_time.' 23:59:59')];
+        }
+        if($start_time&&$end_time){
+            $where['create_time'] = ['between',[strtotime($start_time." 00:00:00"),strtotime($end_time." 23:59:59")]];
+        }
+        $param['name'] = $name;
+        $param['start_time'] = $start_time;
+        $param['end_time']   = $end_time;
+        $param['status']     = $status;
+        $productionService = new ProductionService();
+        $productions = $productionService->getInfoPaginate($where,$param);
+        $dictService = new DictService();
+
+        $this->assign('name',$name);
+        $this->assign('start_time',$start_time);
+        $this->assign('end_time',$end_time);
+        $this->assign('status',$status);
+        $this->assign('productions',$productions);
+        return $this->fetch();
     }
 }
