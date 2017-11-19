@@ -1,0 +1,366 @@
+{js href="__JS__/bootstrap-datetimepicker.min.js" /}
+{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
+{js href="__JS__/layer/layer.js" /}
+{css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Shop List')}</h5>
+                </div>
+                <div class="ibox-content">
+                    <!-- 表格数据 -->
+                    <form  method="" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="shopname" class="col-sm-2 control-label">{:lang('Shop Name')}:</label>
+                                    <div class="col-sm-6">
+                                        <input name="shopname" id="shopname" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('Shop Name')}..." value="{$shopname ?? ''}">
+                                    </div>
+                                </div><!-- /input-group -->
+                            </div><!-- /.col-lg-6 -->
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="search_status" class="col-sm-2 control-label">{:lang('Shop Status')}:</label>
+                                    <div class="col-sm-6">
+                                        <select name="status" id="search_status" class="form-control">
+                                            <option value="all" >{:lang('Search All')}</option>
+                                            <option value="1" {if condition="$status eq $Think.const.SHOP_STATUS_OPEN"}selected{/if}>{:lang('Start')}</option>
+                                            <option value="2" {if condition="$status eq $Think.const.SHOP_STATUS_CLOSE"}selected{/if}>{:lang('Off')}</option>
+                                        </select>
+                                    </div>
+                                </div><!-- /form-group -->
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Create time')}{:lang('From')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="start_datetimepicker" name="starttime" value="{$starttime ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div><!-- /.col-lg-6 -->
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="end_datetimepicker" class="col-sm-2 control-label">{:lang('To')}:</label>
+                                    <div class="col-sm-6">
+                                        <input id="end_datetimepicker" name="endtime" value="{$endtime ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div style="float: left">
+                        <button style="margin-right: 1vw" class="btn btn-success" onclick="showAddModal()">{:lang('Add')}</button>
+                    </div>
+                    <div style="clear: both"></div>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--原表信息-->
+                    <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>{:lang('Shop Name')}</th>
+                            <th>{:lang('Shop Status')}</th>
+                            <th>{:lang('Create time')}</th>
+                            <th>{:lang('Operate')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name='shops' id='vo'}
+                        <tr>
+                            <td>{$vo.name}</td>
+                            <td>{if condition="$vo.status"}
+                                    {:lang('Start')}
+                                {else /}
+                                    {:lang('Off')}
+                                {/if}
+                            </td>
+                            <td>{$vo.create_time}</td>
+                            <td><button class="btn btn-success" onclick="editAdmin('{$vo.id}')">{:lang('Admin')}</button></td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table></div>
+                    <div>
+                        {$shops->render()}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{:lang('Add')}</h4>
+            </div>
+            <div class="modal-body form-horizontal" id="add">
+                <div class="form-group">
+                    <label for="name" class="col-md-2 control-label">{:lang('Shop Name')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="name" id="name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="desc" class="col-md-2 control-label">{:lang('Shop Desc')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="desc" id="desc">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="notify" class="col-md-2 control-label">{:lang('Shop Notify')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="notify" id="notify">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="preview" class="col-md-2 control-label">{:lang('Shop Preview')}</label>
+                    <div id="preview" class="col-md-10">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="img" class="col-md-2 control-label">{:lang('Shop Img')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="file"  accept=".png,.jpg" name="img" id="img" />
+                        <span style="color:red">(支持格式：jpg、png，图片大小：10M)</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="personName" class="col-md-2 control-label">{:lang('Shop personName')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="personName" id="personName">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="bank" class="col-md-2 control-label">{:lang('Shop Bank')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="bank" id="bank">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="cardNumber" class="col-md-2 control-label">{:lang('Shop cardNumber')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="cardNumber" id="cardNumber">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="status" class="col-md-2 control-label">{:lang('Shop Status')}</label>
+                    <div class="col-md-10">
+                        <select name="status" id="status" class="form-control">
+                            <option value={$Think.const.SHOP_STATUS_OPEN}>{:lang('Open')}</option>
+                            <option value={$Think.const.SHOP_STATUS_CLOSE}>{:lang('Close')}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sdl_preference" class="col-md-2 control-label">{:lang('Deli Preference')}</label>
+                    <div class="col-md-10">
+                        <select name="sdl_preference" id="sdl_preference" class="form-control">
+                            <option value="1">{:lang('Open')}</option>
+                            <option value="0">{:lang('Close')}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="health_auth" class="col-md-2 control-label">{:lang('Health Authentication')}</label>
+                    <div class="col-md-10">
+                        <select name="health_auth" id="health_auth" class="form-control">
+                            <option value="1">{:lang('Open')}</option>
+                            <option value="0">{:lang('Close')}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sdl_auth" class="col-md-2 control-label">{:lang('Deli Authentication')}</label>
+                    <div class="col-md-10">
+                        <select name="sdl_auth" id="sdl_auth" class="form-control">
+                            <option value="1">{:lang('Open')}</option>
+                            <option value="0">{:lang('Close')}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button id='sub' type="button" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#start_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        startView: 4,
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: 2,
+    });
+    $("#end_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        startView: 4,
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: "month"
+    });
+
+    function showAddModal(){
+        $('#myModal').modal('show');
+    }
+
+    window.onload = function(){
+        var img = $('#img');
+        if ( typeof(FileReader) === 'undefined' ){
+            alert("抱歉，你的浏览器不支持 FileReader，请使用现代浏览器操作！");
+            img.setAttribute( 'disabled','disabled' );
+        }
+    }
+
+    $('#img').change(function(){
+        var file = this.files[0];
+        //这里我们判断下类型如果不是图片就返回 去掉就可以上传任意文件
+        if(!/image\/\w+/.test(file.type)){
+            alert("请确保文件为图像类型");
+            return false;
+        }
+        $('#preview').empty();
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e){
+            createCanvas(this.result);
+        }
+    })
+
+    function createCanvas(src){
+        var canvas = document.createElement('CANVAS');
+        var cxt = canvas.getContext('2d');
+        var img = new Image();
+        img.src = src;
+        img.onload = function() {
+            var maxHeight = 200;
+            var maxWidth=  200;
+            if(img.height > img.width){
+                if(img.height > maxHeight){
+                    img.width *= maxHeight/img.height;
+                    img.height = maxHeight;
+                }
+            }else{
+                if(img.width > maxWidth){
+                    img.height *= maxWidth/img.width;
+                    img.width = maxWidth;
+                }
+            }
+            canvas.width = img.width;
+            canvas.height = img.height;
+            cxt.drawImage(img,0,0,img.width,img.height);
+            var base64 = canvas.toDataURL("image/jpeg");
+            var preview = $('<img />');
+            preview.attr('src',base64);
+            $('#preview').append(preview);
+        }
+    }
+
+    function sub(){
+        $('#sub').prop('disabled',true);
+        var name = $('#name').val();
+        var img = document.getElementById("img").files[0];
+        var desc =$('#desc').val();
+        var notify =$('#notify').val();
+        var personName =$('#personName').val();
+        var bank =$('#bank').val();
+        var status =$('#status').val();
+        var cardNumber =$('#cardNumber').val();
+        var sdl_preference =$('#sdl_preference').val();
+        var health_auth =$('#health_auth').val();
+        var sdl_auth =$('#sdl_auth').val();
+        if(name == ''|| name =='undefined'||name==null){
+            alertMsg('{:lang("Shop Name Require")}',2);
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        if(desc == ''|| desc =='undefined'||desc==null){
+            alertMsg('{:lang("Shop Desc Require")}',2);
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        if($('#img').val()==""){
+            alertMsg('{:lang("Shop Img Require")}');
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        if(personName == ''|| personName =='undefined'||personName==null){
+            alertMsg('{:lang("Shop PersonName Require")}',2);
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        if(bank == ''|| bank =='undefined'||bank==null){
+            alertMsg('{:lang("Shop Bank Require")}',2);
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        if(cardNumber == ''|| cardNumber =='undefined'||cardNumber==null){
+            alertMsg('{:lang("Shop cardNumber Require")}',2);
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        var formData = new FormData();
+        formData.append('name',name);
+        formData.append('desc',desc);
+        formData.append('notify',notify);
+        formData.append('personName',personName);
+        formData.append('bank',bank);
+        formData.append('cardNumber',cardNumber);
+        formData.append('status',status);
+        formData.append('sdl_preference',sdl_preference);
+        formData.append('health_auth',health_auth);
+        formData.append('sdl_auth',sdl_auth);
+        formData.append('img',img);
+        $.ajax({
+            url: "{:url('manage/shop/addQYShop')}",
+            type: "POST",
+            dataType:"json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success:function (res) {
+                if(res.code==200){
+                    alertMsg(res.msg,3);
+                    setTimeout(function(){ window.location.href = ''},2000);
+                }else{
+                    alertMsg(res.msg,3);
+                    $('#sub').prop('disabled',false);
+                }
+            },
+            error: function () {
+                alertMsg("{:lang('Operation fail')}");
+                $('#sub').prop('disabled',false);
+            }
+        });
+    }
+
+    function editAdmin(id){
+        window.location.href = "{:url('manage/shop/shopAdmin')}"+"?shopId="+id;
+    }
+</script>

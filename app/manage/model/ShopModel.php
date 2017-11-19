@@ -18,24 +18,28 @@ class ShopModel extends BasicModel
         return $this->belongsTo('ConsumerModel','uid');
     }
 
-    public function setSdlpreferenceAttr($value){
-        return intval($value);
+    public function columnInfo($where,$field){
+        return $this->where($where)->column($field);
     }
 
     public function setStatusAttr($value){
         return intval($value);
     }
 
-    public function setHealthauthAttr($value){
+    public function setTypeAttr($value){
         return intval($value);
     }
 
-    public function setSdlauthAttr($value){
+    public function setSdlPreferenceAttr($value){
         return intval($value);
     }
 
-    public function columnInfo($where,$field){
-        return $this->where($where)->column($field);
+    public function setHealthAuthAttr($value){
+        return intval($value);
+    }
+
+    public function setSdlAuthAttr($value){
+        return intval($value);
     }
 
 }

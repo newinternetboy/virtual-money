@@ -10,6 +10,7 @@ namespace app\manage\controller;
 
 use app\manage\service\ConsumerService;
 use app\manage\service\ShopService;
+use app\manage\service\ShopAdminService;
 use app\manage\service\ProductionService;
 use app\manage\service\CartService;
 use app\manage\service\DictService;
@@ -398,6 +399,167 @@ class Shop extends Admin
         $title = '订单结算Excel';
         $total = "总订单数为：".$totalOrder."；总金额为：".$totalMoney;
         $cartService->create_xls($shop,$filename,$title,$total);
+    }
+
+    /**
+     * 企业商铺管理
+     * @return \think\response\View
+     */
+    public function qyshops(){
+        $shopname = input('shopname');
+        $status = input('status');
+        $startTime = input('startTime');
+        $endTime = input('endTime');
+        $where['type'] = COMPANY_ELE_BUSINESS;
+        if($shopname){
+            $where['name'] = ['like',$shopname];
+        }
+        if($status !== null && $status != 'all'){
+            $where['status'] = intval($status);
+        }
+        if($startTime){
+            $where['create_time'] = ['>',strtotime($startTime.' 00:00:00')];
+        }elseif($endTime){
+            $where['create_time'] = ['<',strtotime($endTime.' 23:59:59')];
+        }elseif($startTime&&$endTime){
+            $where['create_time'] = ['between',[strtotime($startTime." 00:00:00"),strtotime($endTime." 23:59:59")]];
+        }
+        $shopService = new ShopService();
+        $shops = $shopService->getInfoPaginate($where,['shopname' => $shopname,'status' => $status,'startTime' => $startTime,'endTime' => $endTime],'name,status,create_time');
+        $this->assign('shops',$shops);
+        $this->assign('shopname',$shopname);
+        $this->assign('status',$status);
+        $this->assign('startTime',$startTime);
+        $this->assign('endTime',$endTime);
+        return view();
+    }
+
+    /**
+     * 添加企业商铺
+     * @return \think\response\Json
+     */
+    public function addQYShop()
+    {
+        $name = input('name');
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try {
+            $shopService = new ShopService();
+            if($shop = $shopService->findInfo(['name' => $name])){
+                exception(lang('Shop Name Unique'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            $desc = input('desc');
+            $notify = input('notify');
+            $personName = input('personName');
+            $bank = input('bank');
+            $cardNumber = input('cardNumber');
+            $status = input('status/d');
+            $sdl_preference = input('sdl_preference/d');
+            $health_auth = input('health_auth/d');
+            $sdl_auth = input('sdl_auth/d');
+            $img = request()->file('img');
+            if (!$img) {
+                exception(lang('Shop Img Require'), ERROR_CODE_DATA_ILLEGAL);
+            } else {
+                $oriPath = ROOT_PATH . 'public' . DS . 'shopCover' . DS . 'origin';
+                $thumbPath = ROOT_PATH . 'public' . DS . 'shopCover' . DS . 'thumb';
+                $savedthumbFilePath = saveImg($img,$oriPath,$thumbPath);
+                //添加商铺
+                $data['name'] = $name;
+                $data['desc'] = $desc;
+                $data['img'] = $savedthumbFilePath;
+                $data['notify'] = $notify;
+                $data['personName'] = $personName;
+                $data['bank'] = $bank;
+                $data['cardNumber'] = $cardNumber;
+                $data['status'] = $status;
+                $data['sdl_preference'] = $sdl_preference;
+                $data['health_auth'] = $health_auth;
+                $data['sdl_auth'] = $sdl_auth;
+                if (!$shopService->insertQYShop($data, 'Shop.insertQYShop')) {
+                    exception($shopService->getError(), ERROR_CODE_DATA_ILLEGAL);
+                }
+                model('app\admin\model\LogRecord')->record('Insert QYShop', ['data' => $data]);
+            }
+        } catch (\Exception $e) {
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    /**
+     *商铺管理员
+     */
+    public function shopAdmin(){
+        $shopId = input('shopId');
+        $shopAdminService = new ShopAdminService();
+        $shopAdmins = $shopAdminService->selectInfo(['shop_id' => $shopId]);
+        $this->assign('shopAdmins',$shopAdmins);
+        $this->assign('shopId',$shopId);
+        return view();
+    }
+
+    /**
+     * 保存商铺管理员
+     * @return \think\response\Json
+     */
+    public function saveShopAdmin(){
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try {
+            $data = input('data');
+            $data = json_decode($data,true);
+            if(!$data){
+                exception(lang('Date Require'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            if(isset($data['id']) && $data['id']){
+                if(isset($data['password']) && $data['password']){
+                    $data['password'] = mduser($data['password']);
+                    $scene = 'ShopAdmin.editAll';
+                }else{
+                    unset($data['password']);
+                    $scene = 'ShopAdmin.editInfo';
+                }
+            }else{
+                $data['password'] = mduser($data['password']);
+                $scene = 'ShopAdmin.insert';
+            }
+
+            $shopAdminService = new ShopAdminService();
+            if(!$shopAdminService->upsert($data,$scene)){
+                exception($shopAdminService->getError(),ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record('Save ShopAdmin', ['data' => $data]);
+        } catch (\Exception $e) {
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    /**
+     * 根据id获取商铺管理员信息
+     * @return \think\response\Json
+     */
+    public function getShopAdminById(){
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try {
+            $id = input('id');
+            if(!$id){
+                exception(lang('Shop Admin ShopId Require'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            $shopAdminService = new ShopAdminService();
+            if(!$shopAdmin = $shopAdminService->findInfo(['id' => $id],'name,login_name,tel,status')){
+                exception(lang('Shop Admin Not Exist'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            $ret['data'] = $shopAdmin;
+        } catch (\Exception $e) {
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
     }
 
     //得利商品管理

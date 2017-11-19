@@ -21,7 +21,8 @@
         "topthink/think-captcha": "^1.0.7",
         "topthink/think-testing": "^1.0",
         "topthink/think-mongo": "1.*",
-        "phpoffice/phpexcel": "^1.8"
+        "phpoffice/phpexcel": "^1.8",
+        "topthink/think-image": "^1.0"
     },
     "extra": {
         "think-path": "thinkphp"

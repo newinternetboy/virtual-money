@@ -401,3 +401,29 @@ function upsertTask($data){
     }
     return true;
 }
+
+/**
+ * 保存并压缩图片
+ * @param $img
+ * @param $oriPath
+ * @param $thumbPath
+ * @return string
+ */
+function saveImg($img, $oriPath, $thumbPath){
+    // 保存原图
+    $info = $img->validate(['size' => 10 * 1024 * 1024, 'ext' => 'jpg,png'])->rule('uniqid')->move($oriPath);
+    if ($info) {
+        $filename = $info->getSaveName();
+        //保存缩略图
+        if (!is_dir($thumbPath)) {
+            mkdir($thumbPath);
+        }
+        $image = \think\Image::open($oriPath . DS . $filename);
+        if (!$image->thumb(config('thumbMaxWidth'), config('thumbMaxHeight'))->save($thumbPath . DS . $filename)) {
+            exception();
+        }
+    }else{
+        exception($img->getError());
+    }
+    return $thumbPath . DS . $filename;
+}
