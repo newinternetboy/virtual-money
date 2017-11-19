@@ -18,4 +18,16 @@ class ProductionModel extends BasicModel
         return $this->belongsTo('ShopModel','sid');
     }
 
+    public function setStatusAttr($value){
+        return intval($value);
+    }
+
+    public function setSdlpriceAttr($value){
+        return intval($value);
+    }
+
+    public function setRmbpriceAttr($value){
+        return intval($value);
+    }
+
 }

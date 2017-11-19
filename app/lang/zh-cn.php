@@ -540,7 +540,7 @@ return [
     'Production Status'                 =>'商品状态',
     'DeLi Price'                        =>'得利币价格',
     'RMB Price'                         =>'人民币价格',
-    'Save Production'                   =>'编辑/修改商品',
+    'Save Production'                   =>'编辑/添加商品',
     'Support DeLi Money'                =>'是否支持得利币',
     'Support RMB Money'                 =>'是否支持人民币',
     'Support'                           =>'支持',
@@ -638,4 +638,5 @@ return [
     'Bank Of Deposit'                   => '开户行',
     'Code Of Bank'                      => '银行卡号',
     'Name On Card'                      => '持卡人姓名',
+    'Image'                             => '图片',
 ];

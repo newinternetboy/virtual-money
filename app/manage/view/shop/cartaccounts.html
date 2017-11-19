@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <label  class="col-sm-2 control-label"></label>
                             <div class="col-sm-10">
-                                <button style="float: left" class="btn btn-success" type="button" onclick='exportExcel({$data|json_encode})'  >{:lang('Export Excel')}</button>
+                                <button style="float: left" class="btn btn-success" type="button" onclick='exportExcel()'  >{:lang('Export Excel')}</button>
                                 <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
                             </div>
                         </div>
@@ -151,8 +151,8 @@
 
 </script>
 <script>
-    function exportExcel(data){
-        window.location.href="{:url('manage/shop/exportExcel')}?shop_name="+data.shop_name+"&startDate="+data.startDate+"&endDate="+data.endDate;
+    function exportExcel(){
+        window.location.href="{:url('manage/shop/exportExcel',['shop_name' => $data['shop_name'],'startDate' => $data['startDate'],'endDate' => $data['endDate']])}";
    }
 </script>
 

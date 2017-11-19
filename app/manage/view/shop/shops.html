@@ -300,11 +300,7 @@
         }else{
             $('#sdl_auth').find('option[value="0"]').prop("selected",true);
         }
-        if(data.status == {$Think.SHOP_STATUS_OPEN}){
-            $('#edit_status').find('option[value="{$Think.SHOP_STATUS_OPEN}"]').prop("selected",true);
-        }else{
-            $('#edit_status').find('option[value="{$Think.SHOP_STATUS_CLOSE}"]').prop("selected",true);
-        }
+        $('#edit_status').find('option[value='+data.status+']').prop("selected",true);
     }
 
     function sub(){

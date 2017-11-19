@@ -12,6 +12,7 @@ use app\manage\service\ConsumerService;
 use app\manage\service\ShopService;
 use app\manage\service\ProductionService;
 use app\manage\service\CartService;
+use app\manage\service\DictService;
 use think\Loader;
 use page\page;
 use think\Log;
@@ -298,7 +299,7 @@ class Shop extends Admin
         }
         $where['pay_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
         $where['status']=['$in'=>[ORDER_SEED_WAITING_COMMENT,ORDER_OVER]];
-        $where['money_type'] = ORDER_MONEY_TYPE_RMB;
+        $where['money_type'] = MONEY_TYPE_RMB;
         $where['deli_settle_status'] = ORDER_NOT_ACCOUNT;
         $where['freeze'] = ORDER_NORMAL;
         $page_size = 10;
@@ -349,11 +350,12 @@ class Shop extends Admin
         }
         $where['sid'] = $sid;
         $where['pay_time'] = ['between' , [strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
-        $where['status']=['$in'=>[ORDER_SEED_WAITING_COMMENT,ORDER_OVER]];
-        $where['money_type'] = ORDER_MONEY_TYPE_RMB;
+        $where['status']=['in',[ORDER_SEED_WAITING_COMMENT,ORDER_OVER]];
+        $where['money_type'] = MONEY_TYPE_RMB;
         $where['deli_settle_status'] = ORDER_NOT_ACCOUNT;
         $where['freeze'] = ORDER_NORMAL;
         $change['deli_settle_status'] = ORDER_ALREADY_ACCOUNT;
+
         $cartService = new CartService();
         if(!$cartService ->updateCart($where,$change)){
             $returnAjax['code'] = 201;
@@ -375,7 +377,7 @@ class Shop extends Admin
         }
         $where['pay_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
         $where['status']=['$in'=>[ORDER_SEED_WAITING_COMMENT,ORDER_OVER]];
-        $where['money_type'] = ORDER_MONEY_TYPE_RMB;
+        $where['money_type'] = MONEY_TYPE_RMB;
         $where['deli_settle_status'] = ORDER_NOT_ACCOUNT;
         $where['freeze'] = ORDER_NORMAL;
         $cartService = new CartService();
@@ -427,12 +429,34 @@ class Shop extends Admin
         $productionService = new ProductionService();
         $productions = $productionService->getInfoPaginate($where,$param);
         $dictService = new DictService();
-
+        $dictlist = $dictService->selectInfo(['type'=>DICT_PERSON_ELE_BUSINESS]);
+        $this->assign('dictlist',$dictlist);
         $this->assign('name',$name);
         $this->assign('start_time',$start_time);
         $this->assign('end_time',$end_time);
         $this->assign('status',$status);
         $this->assign('productions',$productions);
         return $this->fetch();
+    }
+
+    public function saveDeliProduction(){
+        $data = input('data');
+        $data = json_decode($data,true);
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try{
+            $productionService = new ProductionService();
+            $scene = "Production.edit";
+            if( !$productionService->upsert($data,$scene) ){
+                $error = $productionService->getError();
+                Log::record(['添加失败:' => $error,'data' => $data],'error');
+                exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record('Save Production',$data);
+        }catch (\Exception $e){
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
     }
 }

@@ -139,9 +139,6 @@ define('ORDER_OVER',5);//订单完成
 //订单结算状态
 define('ORDER_ALREADY_ACCOUNT',1);//已结算
 define('ORDER_NOT_ACCOUNT',0);//未结算
-//付款时钱的类型
-define('ORDER_MONEY_TYPE_RMB',1); //人民币
-define('ORDER_MONEY_TYPE_DELI',2); //得利币
 
 /***************dict表***************/
 //类型
