@@ -42,18 +42,18 @@ class Shop extends Admin
     }
 
     /**
-     * 添加企业商铺
+     * 修改企业商铺
      * @return \think\response\Json
      */
-    public function addQYShop()
+    public function editQYShop()
     {
         $ret['code'] = 200;
         $ret['msg'] = lang('Operation Success');
         try {
             $name = input('name');
             $id = input('id');
-            if(!$shop = model('Shop')->findInfo(['id' => $id])){
-                exception(lang('QYShop Not Exist'),ERROR_CODE_DATA_ILLEGAL);
+            if($id != $this->shop_id){
+                exception(lang('Without Edit Permission'),ERROR_CODE_DATA_ILLEGAL);
             }
             if($shop = model('Shop')->findInfo(['name' => $name,'id' => ['neq',$id]])){
                 exception(lang('Shop Name Unique'),ERROR_CODE_DATA_ILLEGAL);

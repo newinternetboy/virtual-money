@@ -605,23 +605,77 @@ class Shop extends Admin
     }
 
     public function saveDeliProduction(){
-        $data = input('data');
-        $data = json_decode($data,true);
         $ret['code'] = 200;
         $ret['msg'] = lang('Operation Success');
-        try{
+        try {
+            $id = input('id');
+            $name = input('name');
             $productionService = new ProductionService();
-            $scene = "Production.edit";
-            if( !$productionService->upsert($data,$scene) ){
-                $error = $productionService->getError();
-                Log::record(['添加失败:' => $error,'data' => $data],'error');
-                exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
+            $desc = input('desc');
+            $category = input('category');
+            $sdlprice = input('sdlprice');
+            $rmbprice = input('rmbprice');
+            $status = input('status');
+            $sdlenable = input('sdlenable');
+            $rmbenable = input('rmbenable');
+            $img = request()->file('img');
+            if ($img) {
+                $oriPath = DS . 'productionCover' . DS . 'origin';
+                $thumbPath = DS .'productionCover' . DS . 'thumb';
+                $savedthumbFilePath = saveImg($img,$oriPath,$thumbPath);
+                $data['img'] = $savedthumbFilePath;
             }
-            model('app\admin\model\LogRecord')->record('Save Production',$data);
-        }catch (\Exception $e){
-            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            //添加商铺
+            $data['desc'] = $desc;
+            $data['category'] = $category;
+            $data['sdlprice'] = $sdlprice;
+            $data['rmbprice'] = $rmbprice;
+            $data['status'] = $status;
+            $data['name'] = $name;
+            $data['sid'] = PRODUCTION_ID_DELI;
+            if($rmbenable=='true'){
+                $data['rmbenable'] = true;
+            }else{
+                $data['rmbenable'] = false;
+            }
+            if($sdlenable=='true'){
+                $data['sdlenable'] = true;
+            }else{
+                $data['sdlenable'] = false;
+            }
+            if($id){
+                $data['id'] = $id;
+            }
+            if (!$productionService->upsert($data, false)) {
+                exception($productionService->getError(), ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record('Edit Deli Production', ['data' => $data]);
+        } catch (\Exception $e) {
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
         }
         return json($ret);
+    }
+
+    public function dict(){
+        $type = input('type');
+        $name = input('name');
+        $where = [];
+        $param = [];
+        if($type){
+            $where['type'] = $type;
+        }
+        if($name){
+            $where['name'] = ['like',$name];
+        }
+        $param['type'] = $type;
+        $param['name'] = $name;
+        $dictService = new DictService();
+        $dictlist = $dictService->getInfoPaginate($where,$param);
+        $dicttype = config('dictType');
+        $this->assign('type',$type);
+        $this->assign('name',$name);
+        $this->assign('dictlist',$dictlist);
+        $this->assign('dicttype',$dicttype);
     }
 }

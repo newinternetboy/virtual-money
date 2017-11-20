@@ -113,36 +113,36 @@ define('COMPANY_STATUS_NORMAL',1); //正常
 define('COMPANY_STATUS_DEL',2);    //已删除
 
 /***************shop表***************/
-//店铺类型
+//店铺类型 type
 define('PERSONAL_ELE_BUSINESS',0); //个人电商
 define('COMPANY_ELE_BUSINESS',1);  //企业电商
-//店铺状态
+//店铺状态 status
 define('SHOP_STATUS_CLOSE',0); //关闭
 define('SHOP_STATUS_OPEN',1); //打开
 
 /***************production表***************/
-//商品状态
+//商品状态  status
 define('PRODUCTION_SHELVES',1); //上架
 define('PRODUCTION_OFF_SHELVES',0); //下架
-//商铺id状态
+//商铺id状态  sid
 define('PRODUCTION_ID_DELI','0');//得利商铺
 
 /***************cart表***************/
-//订单冻结状态
+//订单冻结状态 freeze
 define('ORDER_FREEZE',1);//待处理
 define('ORDER_NORMAL',0);//正常
-//订单状态
+//订单状态 status
 define('ORDER_UNPAID',1);//待付款
 define('ORDER_WAITING_SEED',2);//待发货
 define('ORDRE_WAITING_TASK',3);//待收货
 define('ORDER_SEED_WAITING_COMMENT',4);//待评价
 define('ORDER_OVER',5);//订单完成
-//订单结算状态
+//订单结算状态 deli_settle_status
 define('ORDER_ALREADY_ACCOUNT',1);//已结算
 define('ORDER_NOT_ACCOUNT',0);//未结算
 
 /***************dict表***************/
-//类型
+//类型 status
 define('DICT_COMPANY_ELE_BUSINESS',1); //企业电商类别
 define('DICT_PERSON_ELE_BUSINESS',2); //得利专供类别
 define('DICT_PERCENT',3); //充值时赠送得利币的比例

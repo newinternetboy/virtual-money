@@ -672,6 +672,12 @@ return [
     'Shop Admin ShopId Require'         => '店铺id必须',
     'Shop Admin Not Exist'              => '店铺管理员不存在',
     'Shop Admin'                        => '企业店铺管理员',
+    //得力商品管理
+    'Production Dict'                   => '所属分类',
+    'Production Img'                    => '商品封面',
+    'Company Ele_business Type'         => '企业电商类别',
+    'Deli Ele_business Type'            => '得利专供类别',
+    'Proportion of Deli_money Gifts'    => '得利币赠送比例',
 
     /******************************企业店铺系统**************************/
     //店铺信息
@@ -680,4 +686,7 @@ return [
     'QYShop Id Require'                 => '店铺id必须',
     'QYShop Not Exist'                  => '店铺不存在',
     'Manage Production'                 => '产品管理',
+    'Without Edit Permission'           => '无操作权限',
+
+
 ];

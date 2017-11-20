@@ -1,7 +1,4 @@
-{js href="__JS__/bootstrap-datetimepicker.min.js" /}
-{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
-{js href="__JS__/layer/layer.js" /}
-{css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class=" table-responsive">
@@ -28,29 +25,10 @@
                                     <div class="col-sm-6">
                                         <select name="status" id="status" class="form-control">
                                             <option value="all">{:lang('Search All')}</option>
-                                            <option value="{$Think.PRODUCTION_SHELVES}" {if condition="$status === strval($Think.PRODUCTION_SHELVES) "}selected{/if}>{:lang('put on sale')}</option>
-                                            <option value="{$Think.PRODUCTION_OFF_SHELVES}" {if condition="$status === strval($Think.PRODUCTION_OFF_SHELVES) "}selected{/if}>{:lang('pull off shelves')}</option>
+                                            {volist name="dict"}
                                         </select>
                                     </div>
                                 </div><!-- /form-group -->
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Create time')}{:lang('From')}</label>
-                                    <div class="col-sm-6">
-                                        <input id="start_datetimepicker" name="start_time" value="{$start_time ?? ''}" type="text" class="form-control">
-                                    </div>
-                                </div>
-                            </div><!-- /.col-lg-6 -->
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="end_datetimepicker" class="col-sm-2 control-label">{:lang('To')}:</label>
-                                    <div class="col-sm-6">
-                                        <input id="end_datetimepicker" name="end_time" value="{$end_time ?? ''}" type="text" class="form-control">
-                                    </div>
-                                </div>
                             </div><!-- /.col-lg-6 -->
                         </div>
                         <div class="form-group">
@@ -126,7 +104,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="category" class="col-md-2 control-label">{:lang('Production Dict')}</label>
+                    <label for="category" class="col-md-2 control-label">所属分类</label>
                     <div class="col-md-10">
                         <select name="category" id="category" class="form-control">
                             {volist name="dictlist" id="vo"}
@@ -137,11 +115,11 @@
                 </div>
                 <div class="form-group">
                     <label for="preview" class="col-md-2 control-label">{:lang('Shop Preview')}</label>
-                    <div id="preview" class="col-md-10"><img src="" alt=""/>
+                    <div id="preview" class="col-md-10"><img src="/productionCover/thumb/5a127eba87b8b.jpg" alt=""/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="img" class="col-md-2 control-label">{:lang('Production Img')}</label>
+                    <label for="img" class="col-md-2 control-label">{:lang('Shop Img')}</label>
                     <div class="col-md-10">
                         <input class="form-control" type="file"  accept=".png,.jpg" name="img" id="img" />
                         <span style="color:red">(支持格式：jpg、png，图片大小：10M)</span>
@@ -203,34 +181,6 @@
     </div>
 </div>
 <script>
-    $("#start_datetimepicker").datetimepicker({
-        language:"zh-CN",
-        format: "yyyy-mm-dd",
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left",
-        minuteStep: 1,
-        bootcssVer:3,
-        minView: "month",
-//        startDate: new Date()
-    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
-        event.preventDefault();
-        event.stopPropagation();
-    });
-    $("#end_datetimepicker").datetimepicker({
-        language:"zh-CN",
-        format: "yyyy-mm-dd",
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left",
-        minuteStep: 1,
-        bootcssVer:3,
-        minView: "month"
-//        startDate: new Date()
-    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
-        event.preventDefault();
-        event.stopPropagation();
-    });
     function production_add(){
         clearModal()
         $('#myModal').modal('show')
@@ -346,7 +296,7 @@
     }
 
     function sub(){
-        $('#sub').prop('disabled',true);
+//        $('#sub').prop('disabled',true);
         var id = $('#id').val();
         var category = $('#category').val();
         var sdlprice = $('#sdlprice').val();
