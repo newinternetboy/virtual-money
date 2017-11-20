@@ -80,6 +80,7 @@ define('TASK_IGNORE',6);     //已忽略
 /***************后台用户表***************/
 define('PLATFORM_ADMIN',1);  //运营商后台用户
 define('PLATFORM_MANAGE',2); //清分平台用户
+define('PLATFORM_QYSHOP',3); //企业商铺管理员
 
 /***************moneyLog表***************/
 //钱类型 money_type

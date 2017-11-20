@@ -28,7 +28,7 @@
                         <tbody>
                         {volist name='shopAdmins' id='vo'}
                         <tr>
-                            <td>{$vo.name}</td>
+                            <td>{$vo.username}</td>
                             <td>{$vo.login_name}</td>
                             <td>{$vo.tel}</td>
                             <td>{if condition="$vo.status eq 1"}
@@ -59,9 +59,9 @@
             <div class="modal-body form-horizontal">
                 <input style="display: none" name="id" id="id" value="" />
                 <div class="form-group">
-                    <label for="name" class="col-md-2 control-label">{:lang('Shop Admin Name')}</label>
+                    <label for="username" class="col-md-2 control-label">{:lang('Shop Admin Name')}</label>
                     <div class="col-md-10">
-                        <input class="form-control" name="name" id="name">
+                        <input class="form-control" name="username" id="username">
                     </div>
                 </div>
                 <div class="form-group">
@@ -93,7 +93,7 @@
                     <div class="col-md-10">
                         <select name="status" id="status" class="form-control">
                             <option value=1>{:lang('Start')}</option>
-                            <option value=2>{:lang('Off')}</option>
+                            <option value=0>{:lang('Off')}</option>
                         </select>
                     </div>
                 </div>
@@ -125,8 +125,8 @@
     function sub(){
         var id = $('#id').val();
         $('#sub').prop('disabled',true);
-        var name = $('#name').val();
-        if(name == ''|| name =='undefined'||name==null){
+        var username = $('#username').val();
+        if(username == ''|| username =='undefined'||username==null){
             alertMsg('{:lang("Shop Admin Name Require")}',2);
             $('#sub').prop('disabled',false);
             return false;
@@ -167,12 +167,12 @@
         }
         if(id != '' && id !='undefined'&&id!=null){
             if(password != ''){
-                var data = {shop_id: shop_id,id: id,name: name,login_name: login_name,tel: tel,password: password,status: status};
+                var data = {shop_id: shop_id,id: id,username: username,login_name: login_name,tel: tel,password: password,status: status};
             }else{
-                var data = {shop_id: shop_id,id: id,name: name,login_name: login_name,tel: tel,status: status};
+                var data = {shop_id: shop_id,id: id,username: username,login_name: login_name,tel: tel,status: status};
             }
         }else{
-            var data = {shop_id: shop_id,name: name,login_name: login_name,tel: tel,password: password,status: status};
+            var data = {shop_id: shop_id,username: username,login_name: login_name,tel: tel,password: password,status: status};
         }
         $.ajax({
             url:"{:url('manage/shop/saveShopAdmin')}",
@@ -219,7 +219,7 @@
 
     function fillModal(data){
         $('#id').val(data.id);
-        $('#name').val(data.name);
+        $('#username').val(data.username);
         $('#tel').val(data.tel);
         $('#password').val(data.password);
         $('#login_name').val(data.login_name);

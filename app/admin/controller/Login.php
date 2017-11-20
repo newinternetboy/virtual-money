@@ -53,8 +53,10 @@ class Login extends Common
 		Loader::model('LogRecord')->record( 'Login succeed' );
 		if( $ret['data']['type'] == PLATFORM_ADMIN ){
 			return $this->success($ret['msg'], url('admin/index/index'));
-		}else{
+		}elseif( $ret['data']['type'] == PLATFORM_MANAGE ){
 			return $this->success($ret['msg'], url('manage/index/index'));
+		}elseif( $ret['data']['type'] ==  PLATFORM_QYSHOP ){
+			return $this->success($ret['msg'], url('qyshop/shop/index'));
 		}
 	}
 

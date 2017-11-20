@@ -438,7 +438,7 @@ return [
     'Password and Confirm Password inconsistent'    => '密码与确认密码不一致',
     'Production Name Require'           =>'商品名称必须',
     'Production List'                   =>'商品列表',
-    'Shop List'                         =>'商铺列表',
+    'Shop List'                         =>'店铺列表',
     'put on sale'                       =>'上架',
     'pull off shelves'                  =>'下架',
     'Open'                              =>'打开',
@@ -521,16 +521,16 @@ return [
     'Setup Time'                        => '安装时间',
     'Download'                          => '导出',
 
-    //商铺
+    //店铺
     'Upload'                            => '下载',
-    'Shop Name'                         =>'商铺名称',
+    'Shop Name'                         =>'店铺名称',
     'Username'                          =>'用户名称',
     'Shop Status'                       =>'店铺状态',
     'Create time'                       =>'创建时间',
     'From'                              =>' 从:',
     'Save Shop'                         =>'编辑店铺',
     'Update Time'                       =>'修改时间',
-    'Shop Number'                       =>'商铺数量',
+    'Shop Number'                       =>'店铺数量',
     'Production Name'                   =>'商品名称',
     'Production Status'                 =>'商品状态',
     'DeLi Price'                        =>'得利币价格',
@@ -615,7 +615,7 @@ return [
     'Pay Money'                         => '付款时间',
     'Production'                        => '商品',
     'Check Production'                  => '查看商品',
-    'Shop Type'                         => '商铺类型',
+    'Shop Type'                         => '店铺类型',
     'To-do Task'                        => '待处理',
     'Normal'                            => '正常',
     'Production Detail'                 => '商品详情',
@@ -636,15 +636,15 @@ return [
     'Name On Card'                      => '持卡人姓名',
     'Image'                             => '图片',
 
-    //企业商铺管理
-    'Shop Desc'                         => '商铺描述',
-    'Shop Desc Require'                 => '商铺描述必须',
-    'Shop Name Require'                 => '商铺名称必须',
-    'Shop Name Unique'                  => '商铺名称重复',
-    'Shop Notify'                       => '商铺通知',
+    //企业店铺管理
+    'Shop Desc'                         => '店铺描述',
+    'Shop Desc Require'                 => '店铺描述必须',
+    'Shop Name Require'                 => '店铺名称必须',
+    'Shop Name Unique'                  => '店铺名称重复',
+    'Shop Notify'                       => '店铺通知',
     'Shop Preview'                      => '封面预览',
-    'Shop Img'                          => '商铺封面',
-    'Shop Img Require'                  => '商铺封面必须',
+    'Shop Img'                          => '店铺封面',
+    'Shop Img Require'                  => '店铺封面必须',
     'Shop personName'                   => '持卡人姓名',
     'Shop personName Require'           => '持卡人姓名必须',
     'Shop Bank'                         => '开户行',
@@ -669,7 +669,15 @@ return [
     'Shop Admin Password Require'       => '密码必须',
     'Shop Admin Status'                 => '状态',
     'Shop Admin Status Require'         => '用户状态必须',
-    'Shop Admin ShopId Require'         => '商铺id必须',
-    'Shop Admin Not Exist'              => '商铺管理员不存在',
-    'Shop Admin'                        => '企业商铺管理员'
+    'Shop Admin ShopId Require'         => '店铺id必须',
+    'Shop Admin Not Exist'              => '店铺管理员不存在',
+    'Shop Admin'                        => '企业店铺管理员',
+
+    /******************************企业店铺系统**************************/
+    //店铺信息
+    'Manage Shop'                       => '店铺管理',
+    'Production Info'                   => '商品列表',
+    'QYShop Id Require'                 => '店铺id必须',
+    'QYShop Not Exist'                  => '店铺不存在',
+    'Manage Production'                 => '产品管理',
 ];
