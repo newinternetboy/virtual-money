@@ -14,6 +14,7 @@ use app\manage\service\ShopAdminService;
 use app\manage\service\ProductionService;
 use app\manage\service\CartService;
 use app\manage\service\DictService;
+use app\manage\service\UserService;
 use think\Loader;
 use page\page;
 use think\Log;
@@ -461,10 +462,10 @@ class Shop extends Admin
             if (!$img) {
                 exception(lang('Shop Img Require'), ERROR_CODE_DATA_ILLEGAL);
             } else {
-                $oriPath = ROOT_PATH . 'public' . DS . 'shopCover' . DS . 'origin';
-                $thumbPath = ROOT_PATH . 'public' . DS . 'shopCover' . DS . 'thumb';
+                $oriPath = DS . 'shopCover' . DS . 'origin';
+                $thumbPath = DS . 'shopCover' . DS . 'thumb';
                 $savedthumbFilePath = saveImg($img,$oriPath,$thumbPath);
-                //添加商铺
+               //添加商铺
                 $data['name'] = $name;
                 $data['desc'] = $desc;
                 $data['img'] = $savedthumbFilePath;
@@ -493,8 +494,8 @@ class Shop extends Admin
      */
     public function shopAdmin(){
         $shopId = input('shopId');
-        $shopAdminService = new ShopAdminService();
-        $shopAdmins = $shopAdminService->selectInfo(['shop_id' => $shopId]);
+        $userService = new UserService();
+        $shopAdmins = $userService->selectInfo(['shop_id' => $shopId,'type' => PLATFORM_QYSHOP]);
         $this->assign('shopAdmins',$shopAdmins);
         $this->assign('shopId',$shopId);
         return view();
@@ -510,25 +511,27 @@ class Shop extends Admin
         try {
             $data = input('data');
             $data = json_decode($data,true);
+            $userService = new UserService();
             if(!$data){
                 exception(lang('Date Require'),ERROR_CODE_DATA_ILLEGAL);
             }
             if(isset($data['id']) && $data['id']){
-                if(isset($data['password']) && $data['password']){
-                    $data['password'] = mduser($data['password']);
-                    $scene = 'ShopAdmin.editAll';
-                }else{
-                    unset($data['password']);
-                    $scene = 'ShopAdmin.editInfo';
+                if($userService->findInfo(['login_name' => $data['login_name'],'id' => ['neq',$data['id']]])){
+                    exception(lang('login_name already exists'),ERROR_CODE_DATA_ILLEGAL);
                 }
+                if(isset($data['password']) && $data['password'] === ''){
+                    unset($data['password']);
+                }
+                $scene = 'User.qyshop_edit';
             }else{
-                $data['password'] = mduser($data['password']);
-                $scene = 'ShopAdmin.insert';
+                if($userService->findInfo(['login_name' => $data['login_name']])){
+                    exception(lang('login_name already exists'),ERROR_CODE_DATA_ILLEGAL);
+                }
+                $data['type'] = PLATFORM_QYSHOP;
+                $scene = 'User.qyshop_insert';
             }
-
-            $shopAdminService = new ShopAdminService();
-            if(!$shopAdminService->upsert($data,$scene)){
-                exception($shopAdminService->getError(),ERROR_CODE_DATA_ILLEGAL);
+            if(!$userService->upsert($data,$scene)){
+                exception($userService->getError(),ERROR_CODE_DATA_ILLEGAL);
             }
             model('app\admin\model\LogRecord')->record('Save ShopAdmin', ['data' => $data]);
         } catch (\Exception $e) {
@@ -550,8 +553,8 @@ class Shop extends Admin
             if(!$id){
                 exception(lang('Shop Admin ShopId Require'),ERROR_CODE_DATA_ILLEGAL);
             }
-            $shopAdminService = new ShopAdminService();
-            if(!$shopAdmin = $shopAdminService->findInfo(['id' => $id],'name,login_name,tel,status')){
+            $userService = new UserService();
+            if(!$shopAdmin = $userService->findInfo(['id' => $id],'username,login_name,tel,status')){
                 exception(lang('Shop Admin Not Exist'),ERROR_CODE_DATA_ILLEGAL);
             }
             $ret['data'] = $shopAdmin;
