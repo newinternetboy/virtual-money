@@ -671,5 +671,8 @@ return [
     'Shop Admin Status Require'         => '用户状态必须',
     'Shop Admin ShopId Require'         => '商铺id必须',
     'Shop Admin Not Exist'              => '商铺管理员不存在',
-    'Shop Admin'                        => '企业商铺管理员'
+    'Shop Admin'                        => '企业商铺管理员',
+    'Company Ele_business Type'         => '企业电商类别',
+    'Deli Ele_business Type'            => '得利专供类别',
+    'Proportion of Deli_money Gifts'    => '得利币赠送比例',
 ];

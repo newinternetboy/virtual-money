@@ -628,8 +628,8 @@ class Shop extends Admin
             $rmbenable = input('rmbenable');
             $img = request()->file('img');
             if ($img) {
-                $oriPath = 'productionCover' . DS . 'origin';
-                $thumbPath = 'productionCover' . DS . 'thumb';
+                $oriPath = DS . 'productionCover' . DS . 'origin';
+                $thumbPath = DS .'productionCover' . DS . 'thumb';
                 $savedthumbFilePath = saveImg($img,$oriPath,$thumbPath);
                 $data['img'] = $savedthumbFilePath;
             }
@@ -663,5 +663,27 @@ class Shop extends Admin
             $ret['msg'] = $e->getMessage();
         }
         return json($ret);
+    }
+
+    public function dict(){
+        $type = input('type');
+        $name = input('name');
+        $where = [];
+        $param = [];
+        if($type){
+            $where['type'] = $type;
+        }
+        if($name){
+            $where['name'] = ['like',$name];
+        }
+        $param['type'] = $type;
+        $param['name'] = $name;
+        $dictService = new DictService();
+        $dictlist = $dictService->getInfoPaginate($where,$param);
+        $dicttype = config('dictType');
+        $this->assign('type',$type);
+        $this->assign('name',$name);
+        $this->assign('dictlist',$dictlist);
+        $this->assign('dicttype',$dicttype);
     }
 }
