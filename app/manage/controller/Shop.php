@@ -602,21 +602,61 @@ class Shop extends Admin
     }
 
     public function saveDeliProduction(){
-        $data = input('data');
-        $data = json_decode($data,true);
         $ret['code'] = 200;
         $ret['msg'] = lang('Operation Success');
-        try{
+        try {
+            $id = input('id');
+            $name = input('name');
             $productionService = new ProductionService();
-            $scene = "Production.edit";
-            if( !$productionService->upsert($data,$scene) ){
-                $error = $productionService->getError();
-                Log::record(['添加失败:' => $error,'data' => $data],'error');
-                exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
+            if($production = $productionService->findInfo(['name' => $name])){
+                if(isset($id) && $id==$production['id']){
+
+                }else{
+                    exception(lang('Production Name Unique'),ERROR_CODE_DATA_ILLEGAL);
+                }
             }
-            model('app\admin\model\LogRecord')->record('Save Production',$data);
-        }catch (\Exception $e){
-            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $name = input('name');
+            $desc = input('desc');
+            $category = input('category');
+            $sdlprice = input('sdlprice');
+            $rmbprice = input('rmbprice');
+            $status = input('status');
+            $sdlenable = input('sdlenable');
+            $rmbenable = input('rmbenable');
+            $img = request()->file('img');
+            if ($img) {
+                $oriPath = 'productionCover' . DS . 'origin';
+                $thumbPath = 'productionCover' . DS . 'thumb';
+                $savedthumbFilePath = saveImg($img,$oriPath,$thumbPath);
+                $data['img'] = $savedthumbFilePath;
+            }
+            //添加商铺
+            $data['desc'] = $desc;
+            $data['category'] = $category;
+            $data['sdlprice'] = $sdlprice;
+            $data['rmbprice'] = $rmbprice;
+            $data['status'] = $status;
+            $data['name'] = $name;
+            $data['sid'] = PRODUCTION_ID_DELI;
+            if($rmbenable=='true'){
+                $data['rmbenable'] = true;
+            }else{
+                $data['rmbenable'] = false;
+            }
+            if($sdlenable=='true'){
+                $data['sdlenable'] = true;
+            }else{
+                $data['sdlenable'] = false;
+            }
+            if($id){
+                $data['id'] = $id;
+            }
+            if (!$productionService->upsert($data, false)) {
+                exception($productionService->getError(), ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record('Edit Deli Production', ['data' => $data]);
+        } catch (\Exception $e) {
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
         }
         return json($ret);

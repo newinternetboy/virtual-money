@@ -78,7 +78,7 @@
                             <tbody>
                             {volist name='productions' id='vo'}
                                 <tr>
-                                   <td>{$vo.name}</td>
+                                   <td>{$vo.name??''}</td>
                                    <td>{$vo.sdlenable?$vo.sdlprice:'不支持'}</td>
                                    <td>{$vo.rmbenable?$vo.rmbprice:'不支持'}</td>
                                    <td>{switch name="vo.status"}
@@ -86,7 +86,9 @@
                                        {default /}{:lang('pull off shelves')}
                                        {/switch}
                                    </td>
-                                   <td>{$vo.createdAt->__toString()/1000|intval|date='Y-m-d H:i:s',###}</td>
+                                   <td>
+                                        {$vo.create_time}
+                                   </td>
                                    <td><button class="btn btn-primary" onclick="production_eidt('{$vo.id}')">{:lang('Edit')}</button></td>
                                 </tr>
                             {/volist}
@@ -134,6 +136,18 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="preview" class="col-md-2 control-label">{:lang('Shop Preview')}</label>
+                    <div id="preview" class="col-md-10">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="img" class="col-md-2 control-label">{:lang('Shop Img')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="file"  accept=".png,.jpg" name="img" id="img" />
+                        <span style="color:red">(支持格式：jpg、png，图片大小：10M)</span>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="sdlenable" class="col-md-2 control-label">{:lang('Support DeLi Money')}</label>
                     <div class="col-md-10">
                         <select name="sdlenable" id="sdlenable" class="form-control">
@@ -175,20 +189,15 @@
                 <div class="form-group">
                     <label for="desc" class="col-md-2 control-label">商品描述</label>
                     <div class="col-md-10">
-                        <input class="form-control" name="desc" id="desc">
+                        <textarea name="desc" id="desc" cols="63" rows="5"></textarea>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="img" class="col-md-2 control-label">{:lang('Image')}</label>
-                    <div class="col-md-10">
-                        <input type="file" name="image" id="img">
-                    </div>
-                </div>
+
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
-                <button type="button" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
+                <button type="button" id="sub" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
             </div>
         </div>
     </div>
@@ -234,6 +243,7 @@
         $('#rmbprice').val('');
         $('#desc').val('');
         $('#img').val('');
+        $('#preview').val('');
         $('#category').find('option').each(function(){
             $(this).prop("selected",false);
         });
@@ -259,7 +269,7 @@
                 if(res.code != 200){
                     alertMsg(res.msg);
                 }else{
-//                    clearModal();
+                    clearModal();
                     fillModal(res.data);
                     $('#myModal').modal('show')
                 }
@@ -276,15 +286,67 @@
         $('#rmbprice').val(data.rmbprice);
         $('#edit_productionname').val(data.name);
         $('#desc').val(data.desc);
-        $('#edit_create_time').val(data.create_time);
-        $('#edit_update_time').val(data.update_time);
+        createCanvas(data.img);
         $('#category').find('option[value='+data.category+']').prop("selected",true);
         $('#edit_status').find('option[value="'+data.status+'"]').prop("selected",true);
         $('#sdlenable').find('option[value='+data.sdlenable+']').prop("selected",true);
         $('#rmbenable').find('option[value='+data.rmbenable+']').prop("selected",true);
     }
 
+    window.onload = function(){
+        var img = $('#img');
+        if ( typeof(FileReader) === 'undefined' ){
+            alert("抱歉，你的浏览器不支持 FileReader，请使用现代浏览器操作！");
+            img.setAttribute( 'disabled','disabled' );
+        }
+    }
+
+    $('#img').change(function(){
+        var file = this.files[0];
+        //这里我们判断下类型如果不是图片就返回 去掉就可以上传任意文件
+        if(!/image\/\w+/.test(file.type)){
+            alert("请确保文件为图像类型");
+            return false;
+        }
+        $('#preview').empty();
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e){
+            createCanvas(this.result);
+        }
+    })
+
+    function createCanvas(src){
+        var canvas = document.createElement('CANVAS');
+        var cxt = canvas.getContext('2d');
+        var img = new Image();
+        img.src = src;
+        img.onload = function() {
+            var maxHeight = 200;
+            var maxWidth=  200;
+            if(img.height > img.width){
+                if(img.height > maxHeight){
+                    img.width *= maxHeight/img.height;
+                    img.height = maxHeight;
+                }
+            }else{
+                if(img.width > maxWidth){
+                    img.height *= maxWidth/img.width;
+                    img.width = maxWidth;
+                }
+            }
+            canvas.width = img.width;
+            canvas.height = img.height;
+            cxt.drawImage(img,0,0,img.width,img.height);
+            var base64 = canvas.toDataURL("image/jpeg");
+            var preview = $('<img />');
+            preview.attr('src',base64);
+            $('#preview').append(preview);
+        }
+    }
+
     function sub(){
+//        $('#sub').prop('disabled',true);
         var id = $('#id').val();
         var category = $('#category').val();
         var sdlprice = $('#sdlprice').val();
@@ -293,44 +355,62 @@
         var status = $('#edit_status').val();
         var sdlenable = $('#sdlenable').val();
         var desc = $('#desc').val();
-        if(sdlenable == 'true'){
-            sdlenable = true;
-        }else{
-            sdlenable = false;
-        }
+        var img = document.getElementById("img").files[0];
         var rmbenable = $('#rmbenable').val();
-        if(rmbenable == 'true'){
-            rmbenable = true;
-        }else{
-            rmbenable = false;
+        if($('#img').val()=="" && id==""){
+            alertMsg('{:lang("Shop Img Require")}');
+            $('#sub').prop('disabled',false);
+            return false;
         }
         if( name == '' || name == 'undefined' || name == null ){
-            alertMsg("{:lang('Production Name Require')}");
+            alertMsg("{:lang('Productionsss Name Require')}");
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        if( desc == '' || desc == 'undefined' || desc == null ){
+            alertMsg("{:lang('商品描述必须')}");
+            $('#sub').prop('disabled',false);
             return false;
         }
         if( rmbprice == '' || rmbprice == 'undefined' || rmbprice == null ){
             alertMsg("人民币价格不能为空！");
+            $('#sub').prop('disabled',false);
             return false;
         }
-        var data = {id: id,category: category,sdlprice: sdlprice, rmbprice: rmbprice, name: name, status: status,sdlenable: sdlenable, rmbenable: rmbenable,desc:desc};
+        var formData = new FormData();
+        formData.append('id',id);
+        formData.append('sdlprice',sdlprice);
+        formData.append('name',name);
+        formData.append('category',category);
+        formData.append('rmbprice',rmbprice);
+        formData.append('status',status);
+        formData.append('sdlenable',sdlenable);
+        formData.append('rmbenable',rmbenable);
+        formData.append('desc',desc);
+        formData.append('img',img);
         $.ajax({
-            url:"{:url('manage/shop/saveDeliProduction')}",
-            method:'post',
-            dataType:'json',
-            data: {data: JSON.stringify(data)},
+            url: "{:url('manage/shop/saveDeliProduction')}",
+            type: "POST",
+            dataType:"json",
+            data: formData,
+            contentType: false,
+            processData: false,
             beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
-            success: function(res){
-                if(res.code != 200){
-                    alertMsg(res.msg);
+            success:function (res) {
+                if(res.code==200){
+                    alertMsg(res.msg,3);
+                    $('#sub').prop('disabled',false);
+                    setTimeout(function(){ window.location.href = ''},2000);
                 }else{
-                    alertMsg(res.msg);
-                    window.location.href = '';
+                    alertMsg(res.msg,3);
+                    $('#sub').prop('disabled',false);
                 }
             },
-            error:function(){
+            error: function () {
                 alertMsg("{:lang('Operation fail')}");
+                $('#sub').prop('disabled',false);
             }
-        })
+        });
     }
 </script>
 
