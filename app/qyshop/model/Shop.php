@@ -11,5 +11,7 @@ namespace app\qyshop\model;
 
 class Shop extends Basic
 {
-
+    public function setStatusAttr($value){
+        return intval($value);
+    }
 }

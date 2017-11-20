@@ -609,7 +609,6 @@ return [
     'Order Freeze Status'               => '订单冻结状态',
     'Order Status'                      => '订单状态',
     'Order Count'                       => '订单数量',
-    'Order Number'                      => '订单数量',
     'Settle Success'                    => '结算成功',
     'Freeze/Not Freeze Cart'            => '冻结/解冻订单',
     'Pay Money'                         => '付款时间',
@@ -685,8 +684,11 @@ return [
     'Production Info'                   => '商品列表',
     'QYShop Id Require'                 => '店铺id必须',
     'QYShop Not Exist'                  => '店铺不存在',
-    'Manage Production'                 => '产品管理',
+    'Manage Production'                 => '商品管理',
     'Without Edit Permission'           => '无操作权限',
+    //商品管理
+    'Production Id Require'             => '商品id必须',
+    'Production Not Exist'              => '商品不存在'
 
 
 ];
