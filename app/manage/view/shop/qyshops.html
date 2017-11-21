@@ -22,6 +22,21 @@
                                     </div>
                                 </div><!-- /input-group -->
                             </div><!-- /.col-lg-6 -->
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="search_category" class="col-sm-2 control-label">{:lang('Production Dict')}:</label>
+                                    <div class="col-sm-6">
+                                        <select name="search_category" id="search_category" class="form-control">
+                                            <option value="" >{:lang('Search All')}</option>
+                                            {foreach $dictlist as $dict}
+                                                <option value="{$dict.id}" {if condition="$search_category eq $dict.id"}selected{/if}>{$dict.desc}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div><!-- /form-group -->
+                            </div><!-- /.col-lg-6 -->
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
                                     <label for="search_status" class="col-sm-2 control-label">{:lang('Shop Status')}:</label>
@@ -70,6 +85,7 @@
                         <thead>
                         <tr>
                             <th>{:lang('Shop Name')}</th>
+                            <th>{:lang('Production Dict')}</th>
                             <th>{:lang('Shop Status')}</th>
                             <th>{:lang('Create time')}</th>
                             <th>{:lang('Operate')}</th>
@@ -79,6 +95,7 @@
                         {volist name='shops' id='vo'}
                         <tr>
                             <td>{$vo.name}</td>
+                            <td>{$vo.dict.desc}</td>
                             <td>{if condition="$vo.status"}
                                     {:lang('Start')}
                                 {else /}
@@ -136,6 +153,16 @@
                     <div class="col-md-10">
                         <input class="form-control" type="file"  accept=".png,.jpg" name="img" id="img" />
                         <span style="color:red">(支持格式：jpg、png，图片大小：10M)</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="category" class="col-md-2 control-label">{:lang('Production Dict')}</label>
+                    <div class="col-md-10">
+                        <select name="category" id="category" class="form-control">
+                            {volist name="dictlist" id="vo"}
+                            <option value='{$vo.id}'>{$vo.desc}</option>
+                            {/volist}
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -287,6 +314,7 @@
         var img = document.getElementById("img").files[0];
         var desc =$('#desc').val();
         var notify =$('#notify').val();
+        var category =$('#category').val();
         var personName =$('#personName').val();
         var bank =$('#bank').val();
         var status =$('#status').val();
@@ -309,6 +337,11 @@
             $('#sub').prop('disabled',false);
             return false;
         }
+        if(category == ''|| category =='undefined'||category==null){
+            alertMsg('{:lang("Shop Category Require")}',2);
+            $('#sub').prop('disabled',false);
+            return false;
+        }
         if(personName == ''|| personName =='undefined'||personName==null){
             alertMsg('{:lang("Shop PersonName Require")}',2);
             $('#sub').prop('disabled',false);
@@ -328,6 +361,7 @@
         formData.append('name',name);
         formData.append('desc',desc);
         formData.append('notify',notify);
+        formData.append('category',category);
         formData.append('personName',personName);
         formData.append('bank',bank);
         formData.append('cardNumber',cardNumber);

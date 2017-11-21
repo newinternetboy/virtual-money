@@ -14,4 +14,8 @@ class Shop extends Basic
     public function setStatusAttr($value){
         return intval($value);
     }
+
+    public function dict(){
+        return $this->belongsTo('Dict','category','id');
+    }
 }

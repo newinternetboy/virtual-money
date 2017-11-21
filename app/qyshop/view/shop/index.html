@@ -13,6 +13,7 @@
                         <thead>
                         <tr>
                             <th>{:lang('Shop Name')}</th>
+                            <th>{:lang('Production Dict')}</th>
                             <th>{:lang('Shop Status')}</th>
                             <th>{:lang('Create time')}</th>
                             <th>{:lang('Operate')}</th>
@@ -21,6 +22,7 @@
                         <tbody>
                         <tr>
                             <td>{$shop.name}</td>
+                            <td>{$shop.dict.desc}</td>
                             <td>{if condition="$shop.status"}
                                 {:lang('Start')}
                                 {else /}
@@ -63,6 +65,16 @@
                     <label for="notify" class="col-md-2 control-label">{:lang('Shop Notify')}</label>
                     <div class="col-md-10">
                         <input class="form-control" name="notify" id="notify">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="category" class="col-md-2 control-label">{:lang('Production Dict')}</label>
+                    <div class="col-md-10">
+                        <select class="form-control" name="category" id="category">
+                            {foreach $dictlist as $dict}
+                                <option value="{$dict.id}">{$dict.desc}</option>
+                            {/foreach}
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -140,6 +152,7 @@
         $('#name').val(data.name);
         $('#desc').val(data.desc);
         $('#notify').val(data.notify);
+        $('#category').val(data.category.id);
         $('#pre').attr('src',data.img);
         $('#personName').val(data.personName);
         $('#bank').val(data.bank);
@@ -203,6 +216,7 @@
         var img = document.getElementById("img").files[0];
         var desc =$('#desc').val();
         var notify =$('#notify').val();
+        var category =$('#category').val();
         var personName =$('#personName').val();
         var bank =$('#bank').val();
         var status =$('#status').val();
@@ -237,6 +251,7 @@
         formData.append('name',name);
         formData.append('desc',desc);
         formData.append('notify',notify);
+        formData.append('category',category);
         formData.append('personName',personName);
         formData.append('bank',bank);
         formData.append('cardNumber',cardNumber);

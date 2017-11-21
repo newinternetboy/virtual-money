@@ -17,6 +17,7 @@ class Shop extends Validate
         'name'            => 'require|unique:shop',
         'desc'            => 'require',
         'img'             => 'require',
+        'category'        => 'require',
         'personName'      => 'require',
         'cardNumber'      => 'require',
         'bank'            => 'require',
@@ -35,6 +36,7 @@ class Shop extends Validate
         'personName.require'      => '{%Shop personName Require}',
         'bank.require'            => '{%Shop Bank Require}',
         'status.require'          => '{%Shop Status Require}',
+        'category.require'        => '{%Shop Category Require}',
         'cardNumber.require'      => '{%Shop cardNumber Require}',
         'sdl_preference.require'  => '{%Shop sdl_preference Require}',
         'health_auth.require'     => '{%Shop cardNumber Require}',
@@ -43,7 +45,7 @@ class Shop extends Validate
     ];
 
     protected $scene = [
-        'insertQYShop' => ['name','desc','img','personName','bank','status','cardNumber','sdl_preference','health_auth','sdl_auth','type'],
+        'insertQYShop' => ['name','desc','img','category','personName','bank','status','cardNumber','sdl_preference','health_auth','sdl_auth','type'],
         'updateGrshop' => ['name','sdl_preference','health_auth','sdl_auth','status'],
         'updateQyshop' => ['name','desc','personName','bank','status','cardNumber','sdl_preference','health_auth','sdl_auth'],
     ];
