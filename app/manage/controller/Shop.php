@@ -409,6 +409,7 @@ class Shop extends Admin
     public function qyshops(){
         $shopname = input('shopname');
         $status = input('status');
+        $search_category = input('search_category');
         $startTime = input('startTime');
         $endTime = input('endTime');
         $where['type'] = COMPANY_ELE_BUSINESS;
@@ -418,6 +419,9 @@ class Shop extends Admin
         if($status !== null && $status != 'all'){
             $where['status'] = intval($status);
         }
+        if($search_category){
+            $where['category'] = $search_category;
+        }
         if($startTime){
             $where['create_time'] = ['>',strtotime($startTime.' 00:00:00')];
         }elseif($endTime){
@@ -426,12 +430,15 @@ class Shop extends Admin
             $where['create_time'] = ['between',[strtotime($startTime." 00:00:00"),strtotime($endTime." 23:59:59")]];
         }
         $shopService = new ShopService();
-        $shops = $shopService->getInfoPaginate($where,['shopname' => $shopname,'status' => $status,'startTime' => $startTime,'endTime' => $endTime],'name,status,create_time');
+        $shops = $shopService->getInfoPaginate($where,['shopname' => $shopname,'status' => $status,'search_category' => $search_category,'startTime' => $startTime,'endTime' => $endTime],'name,status,create_time');
         $this->assign('shops',$shops);
         $this->assign('shopname',$shopname);
         $this->assign('status',$status);
         $this->assign('startTime',$startTime);
         $this->assign('endTime',$endTime);
+        $dictService = new DictService();
+        $dictlist = $dictService->selectInfo(['type'=>DICT_COMPANY_ELE_BUSINESS]);
+        $this->assign('dictlist',$dictlist);
         return view();
     }
 
@@ -451,6 +458,7 @@ class Shop extends Admin
             }
             $desc = input('desc');
             $notify = input('notify');
+            $category = input('category');
             $personName = input('personName');
             $bank = input('bank');
             $cardNumber = input('cardNumber');
@@ -470,6 +478,7 @@ class Shop extends Admin
                 $data['desc'] = $desc;
                 $data['img'] = $savedthumbFilePath;
                 $data['notify'] = $notify;
+                $data['category'] = $category;
                 $data['personName'] = $personName;
                 $data['bank'] = $bank;
                 $data['cardNumber'] = $cardNumber;

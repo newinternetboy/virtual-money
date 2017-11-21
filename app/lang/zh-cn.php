@@ -686,6 +686,7 @@ return [
     'QYShop Not Exist'                  => '店铺不存在',
     'Manage Production'                 => '商品管理',
     'Without Edit Permission'           => '无操作权限',
+    'Shop Category Require'             => '分类必须',
     //商品管理
     'Production Id Require'             => '商品id必须',
     'Production Not Exist'              => '商品不存在',
