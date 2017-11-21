@@ -688,7 +688,12 @@ return [
     'Without Edit Permission'           => '无操作权限',
     //商品管理
     'Production Id Require'             => '商品id必须',
-    'Production Not Exist'              => '商品不存在'
+    'Production Not Exist'              => '商品不存在',
+    //修改用户信息
+    'Manage User'                       => '用户管理',
+    'Shop Admin Id Require'             => '企业管理员id必须',
+
+
 
 
 ];

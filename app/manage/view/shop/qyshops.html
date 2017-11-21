@@ -28,8 +28,8 @@
                                     <div class="col-sm-6">
                                         <select name="status" id="search_status" class="form-control">
                                             <option value="all" >{:lang('Search All')}</option>
-                                            <option value="1" {if condition="$status eq $Think.const.SHOP_STATUS_OPEN"}selected{/if}>{:lang('Start')}</option>
-                                            <option value="2" {if condition="$status eq $Think.const.SHOP_STATUS_CLOSE"}selected{/if}>{:lang('Off')}</option>
+                                            <option value="1" {if condition="isset($status) && $status eq $Think.const.SHOP_STATUS_OPEN"}selected{/if}>{:lang('Start')}</option>
+                                            <option value="0" {if condition="isset($status) && $status neq 'all' && $status eq $Think.const.SHOP_STATUS_CLOSE"}selected{/if}>{:lang('Off')}</option>
                                         </select>
                                     </div>
                                 </div><!-- /form-group -->

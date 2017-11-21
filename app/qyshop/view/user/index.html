@@ -1,0 +1,176 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class=" table-responsive">
+            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <!-- 表单内容 -->
+                <div class="ibox-title">
+                    <h5>{:lang('Manage User')}</h5>
+                </div>
+                <div class="ibox-content">
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--用户信息-->
+                    <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>{:lang('Shop Admin Name')}</th>
+                            <th>{:lang('Shop Admin LoginName')}</th>
+                            <th>{:lang('Shop Admin Tel')}</th>
+                            <th>{:lang('Shop Admin Status')}</th>
+                            <th>{:lang('Operate')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{$user.username}</td>
+                            <td>{$user.login_name}</td>
+                            <td>{$user.tel}</td>
+                            <td>{if condition="$user.status"}
+                                {:lang('Start')}
+                                {else /}
+                                {:lang('Off')}
+                                {/if}
+                            </td>
+                            <td><button class="btn btn-danger" onclick="edit('{$user.id}')">{:lang('Edit')}</button></td>
+                        </tr>
+                        </tbody>
+                    </table></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{:lang('Edit')}</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <input name="id" id="id" style="display: none">
+                <div class="form-group">
+                    <label for="username" class="col-md-2 control-label">{:lang('Shop Admin Name')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="username" id="username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="login_name" class="col-md-2 control-label">{:lang('Shop Admin LoginName')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="login_name" id="login_name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tel" class="col-md-2 control-label">{:lang('Shop Admin Tel')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="tel" id="tel">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="col-md-2 control-label">{:lang('Shop Admin Password')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="password" id="password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password" class="col-md-2 control-label">{:lang('Shop Admin Confirm Password')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="confirm_password" id="confirm_password">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button id='sub' type="button" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function edit(id){
+        $.ajax({
+            url:"{:url('qyshop/user/getUserById')}",
+            method:'post',
+            dataType:'json',
+            data: {id:id},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code == 200){
+                    fillModal(res.data);
+                    $('#myModal').modal('show');
+                }else{
+                    alertMsg(res.msg);
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+    function fillModal(data){
+        $('#id').val(data.id);
+        $('#username').val(data.username);
+        $('#login_name').val(data.login_name);
+        $('#tel').val(data.tel);
+    }
+
+    function sub(){
+        var id = $('#id').val();
+        $('#sub').prop('disabled',true);
+        var username = $('#username').val();
+        if(username == ''|| username =='undefined'||username==null){
+            alertMsg('{:lang("Shop Admin Name Require")}',2);
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        var login_name = $('#login_name').val();
+        if(login_name == ''|| login_name =='undefined'||login_name==null){
+            alertMsg('{:lang("Shop Admin LoginName Require")}',2);
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        var tel = $('#tel').val();
+        if(tel == ''|| tel =='undefined'||tel==null){
+            alertMsg('{:lang("Shop Admin Tel Require")}',2);
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        if(!checkTelephone(tel)){
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        var password = $('#password').val();
+        var confirm_password = $('#confirm_password').val();
+        if(password != confirm_password){
+            alertMsg('{:lang("Password and Confirm Password inconsistent")}',2);
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        if(password == ''){
+            var data = {id:id,username: username,login_name: login_name,tel: tel};
+        }else{
+            var data = {id:id,username: username,login_name: login_name,tel: tel,password: password};
+        }
+        $.ajax({
+            url:"{:url('qyshop/user/saveUser')}",
+            method:'post',
+            dataType:'json',
+            data: {data: JSON.stringify(data)},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                alertMsg(res.msg);
+                if(res.code == 200){
+                    setTimeout(function(){window.location.href=''},2000);
+                }
+                $('#sub').prop('disabled',false);
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+                $('#sub').prop('disabled',false);
+            }
+        })
+    }
+</script>
