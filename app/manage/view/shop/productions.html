@@ -116,7 +116,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{:lang('Save Production')}</h4>
+                <h4 class="modal-title" id="myModalLabel">{:lang('Edit')}</h4>
             </div>
             <div class="modal-body form-horizontal">
                 <input style="display: none" name="id" value="" id="id" />
@@ -127,11 +127,23 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="preview" class="col-md-2 control-label">{:lang('Shop Preview')}</label>
+                    <div id="preview" class="col-md-10"><img src="" alt=""/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="img" class="col-md-2 control-label">{:lang('Production Img')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="file"  accept=".png,.jpg" name="img" id="img" />
+                        <span style="color:red">(支持格式：jpg、png，图片大小：10M)</span>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="sdlenable" class="col-md-2 control-label">{:lang('Support DeLi Money')}</label>
                     <div class="col-md-10">
                         <select name="sdlenable" id="sdlenable" class="form-control">
-                            <option value='1'>{:lang('Support')}</option>
-                            <option value='0'>{:lang('Not Support')}</option>
+                            <option value=false>{:lang('Not Support')}</option>
+                            <option value=true>{:lang('Support')}</option>
                         </select>
                     </div>
                 </div>
@@ -145,8 +157,8 @@
                     <label for="rmbenable" class="col-md-2 control-label">{:lang('Support RMB Money')}</label>
                     <div class="col-md-10">
                         <select name="rmbenable" id="rmbenable" class="form-control">
-                            <option value='1'>{:lang('Support')}</option>
-                            <option value='0'>{:lang('Not Support')}</option>
+                            <option value=false>{:lang('Not Support')}</option>
+                            <option value=true>{:lang('Support')}</option>
                         </select>
                     </div>
                 </div>
@@ -160,28 +172,23 @@
                     <label for="edit_status" class="col-md-2 control-label">{:lang('Production Status')}</label>
                     <div class="col-md-10">
                         <select name="edit_status" id="edit_status" class="form-control">
-                            <option value="{$Think.PRODUCTION_SHELVES}">{:lang('put on sale')}</option>
                             <option value="{$Think.PRODUCTION_OFF_SHELVES}">{:lang('pull off shelves')}</option>
+                            <option value="{$Think.PRODUCTION_SHELVES}">{:lang('put on sale')}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="edit_create_time" class="col-md-2 control-label">{:lang('Create Time')}</label>
+                    <label for="desc" class="col-md-2 control-label">商品描述</label>
                     <div class="col-md-10">
-                        <input class="form-control" readonly="readonly" name="create_time" id="edit_create_time">
+                        <textarea name="desc" id="desc" cols="63" rows="5"></textarea>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="edit_update_time" class="col-md-2 control-label">{:lang('Update Time')}</label>
-                    <div class="col-md-10">
-                        <input class="form-control" readonly="readonly" name="update_time" id="edit_update_time">
-                    </div>
-                </div>
+
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
-                <button type="button" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
+                <button type="button" id="sub" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
             </div>
         </div>
     </div>
@@ -215,6 +222,26 @@
         event.preventDefault();
         event.stopPropagation();
     });
+
+    function clearModal(){
+        $('#id').val('');
+        $('#edit_productionname').val('');
+        $('#sdlprice').val('');
+        $('#rmbprice').val('');
+        $('#desc').val('');
+        $('#img').val('');
+        $('#preview').html('');
+        $('#sdlenable').find('option').each(function(){
+            $(this).prop("selected",false);
+        });
+        $('#rmbenable').find('option').each(function(){
+            $(this).prop("selected",false);
+        });
+        $('#edit_status').find('option').each(function(){
+            $(this).prop("selected",false);
+        });
+    }
+
     function production_eidt(production_id){
         $.ajax({
             url:"{:url('manage/shop/getProductionInfoById')}",
@@ -226,7 +253,7 @@
                 if(res.code != 200){
                     alertMsg(res.msg);
                 }else{
-//                    clearModal();
+                    clearModal();
                     fillModal(res.data);
                     $('#myModal').modal('show')
                 }
@@ -242,66 +269,134 @@
         $('#sdlprice').val(data.sdlprice);
         $('#rmbprice').val(data.rmbprice);
         $('#edit_productionname').val(data.name);
-        $('#edit_create_time').val(data.create_time);
-        $('#edit_update_time').val(data.update_time);
-        if(data.status == {$Think.PRODUCTION_SHELVES}){
-            $('#edit_status').find('option[value="{$Think.PRODUCTION_SHELVES}"]').prop("selected",true);
-        }else{
-            $('#edit_status').find('option[value="{$Think.PRODUCTION_OFF_SHELVES}"]').prop("selected",true);
+        $('#desc').val(data.desc);
+        $('#preview').html("<img src="+data.img+" />");
+        $('#edit_status').find('option[value="'+data.status+'"]').prop("selected",true);
+        $('#sdlenable').find('option[value='+data.sdlenable+']').prop("selected",true);
+        $('#rmbenable').find('option[value='+data.rmbenable+']').prop("selected",true);
+    }
+
+    window.onload = function(){
+        var img = $('#img');
+        if ( typeof(FileReader) === 'undefined' ){
+            alert("抱歉，你的浏览器不支持 FileReader，请使用现代浏览器操作！");
+            img.setAttribute( 'disabled','disabled' );
         }
-        if(data.sdlenable == true){
-            $('#sdlenable').find('option[value="1"]').prop("selected",true);
-        }else{
-            $('#sdlenable').find('option[value="0"]').prop("selected",true);
+    }
+
+    $('#img').change(function(){
+        var file = this.files[0];
+        //这里我们判断下类型如果不是图片就返回 去掉就可以上传任意文件
+        if(!/image\/\w+/.test(file.type)){
+            alert("请确保文件为图像类型");
+            return false;
         }
-        if(data.rmbenable == true){
-            $('#rmbenable').find('option[value="1"]').prop("selected",true);
-        }else{
-            $('#rmbenable').find('option[value="0"]').prop("selected",true);
+        $('#preview').empty();
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e){
+            createCanvas(this.result);
+        }
+    })
+
+    function createCanvas(src){
+        var canvas = document.createElement('CANVAS');
+        var cxt = canvas.getContext('2d');
+        var img = new Image();
+        img.src = src;
+        img.onload = function() {
+            var maxHeight = 200;
+            var maxWidth=  200;
+            if(img.height > img.width){
+                if(img.height > maxHeight){
+                    img.width *= maxHeight/img.height;
+                    img.height = maxHeight;
+                }
+            }else{
+                if(img.width > maxWidth){
+                    img.height *= maxWidth/img.width;
+                    img.width = maxWidth;
+                }
+            }
+            canvas.width = img.width;
+            canvas.height = img.height;
+            cxt.drawImage(img,0,0,img.width,img.height);
+            var base64 = canvas.toDataURL("image/jpeg");
+            var preview = $('<img />');
+            preview.attr('src',base64);
+            $('#preview').append(preview);
         }
     }
 
     function sub(){
+        $('#sub').prop('disabled',true);
         var id = $('#id').val();
         var sdlprice = $('#sdlprice').val();
         var rmbprice = $('#rmbprice').val();
         var name = $('#edit_productionname').val();
         var status = $('#edit_status').val();
         var sdlenable = $('#sdlenable').val();
-        if(sdlenable == 1){
-            sdlenable = true;
-        }else{
-            sdlenable = false;
-        }
+        var desc = $('#desc').val();
+        var img = document.getElementById("img").files[0];
         var rmbenable = $('#rmbenable').val();
-        if(rmbenable == 1){
-            rmbenable = true;
-        }else{
-            rmbenable = false;
-        }
-        if( name == '' || name == 'undefined' || name == null ){
-            alertMsg("{:lang('Production Name Require')}");
+        if($('#img').val()=="" && id==""){
+            alertMsg('{:lang("Shop Img Require")}');
+            $('#sub').prop('disabled',false);
             return false;
         }
-        var data = {id: id,sdlprice: sdlprice, rmbprice: rmbprice, name: name, status: status,sdlenable: sdlenable, rmbenable: rmbenable};
+        if( name == '' || name == 'undefined' || name == null ){
+            alertMsg("{:lang('Productionsss Name Require')}");
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        if( desc == '' || desc == 'undefined' || desc == null ){
+            alertMsg("{:lang('商品描述必须')}");
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        if( sdlenable == 'true' && (sdlprice == '' || sdlprice == 'undefined' || sdlprice == null) ){
+            alertMsg("得利币价格不能为空！");
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        if( rmbenable == 'true' && (rmbprice == '' || rmbprice == 'undefined' || rmbprice == null) ){
+            alertMsg("人民币价格不能为空！");
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        var formData = new FormData();
+        formData.append('id',id);
+        formData.append('sdlprice',sdlprice);
+        formData.append('name',name);
+        formData.append('rmbprice',rmbprice);
+        formData.append('status',status);
+        formData.append('sdlenable',sdlenable);
+        formData.append('rmbenable',rmbenable);
+        formData.append('desc',desc);
+        formData.append('img',img);
         $.ajax({
-            url:"{:url('manage/shop/saveProduction')}",
-            method:'post',
-            dataType:'json',
-            data: {data: JSON.stringify(data)},
+            url: "{:url('manage/shop/saveProduction')}",
+            type: "POST",
+            dataType:"json",
+            data: formData,
+            contentType: false,
+            processData: false,
             beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
-            success: function(res){
-                if(res.code != 200){
-                    alertMsg(res.msg);
+            success:function (res) {
+                if(res.code==200){
+                    alertMsg(res.msg,3);
+                    $('#sub').prop('disabled',false);
+                    setTimeout(function(){ window.location.href = ''},2000);
                 }else{
-                    alertMsg(res.msg);
-                    window.location.href = '';
+                    alertMsg(res.msg,3);
+                    $('#sub').prop('disabled',false);
                 }
             },
-            error:function(){
+            error: function () {
                 alertMsg("{:lang('Operation fail')}");
+                $('#sub').prop('disabled',false);
             }
-        })
+        });
     }
 </script>
 

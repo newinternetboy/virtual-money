@@ -225,21 +225,52 @@ class Shop extends Admin
     }
 
     public function saveProduction(){
-        $data = input('data');
-        $data = json_decode($data,true);
         $ret['code'] = 200;
         $ret['msg'] = lang('Operation Success');
-        try{
+        try {
+            $id = input('id');
+            $name = input('name');
             $productionService = new ProductionService();
-            $scene = "Production.edit";
-            if( !$productionService->upsert($data,$scene) ){
-                $error = $productionService->getError();
-                Log::record(['添加失败:' => $error,'data' => $data],'error');
-                exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
+            $desc = input('desc');
+            $sdlprice = input('sdlprice');
+            $rmbprice = input('rmbprice');
+            $status = input('status');
+            $sdlenable = input('sdlenable');
+            $rmbenable = input('rmbenable');
+            $img = request()->file('img');
+            if ($img) {
+                $oriPath = DS . 'productionCover' . DS . 'origin';
+                $thumbPath = DS .'productionCover' . DS . 'thumb';
+                $savedthumbFilePath = saveImg($img,$oriPath,$thumbPath);
+                $data['img'] = $savedthumbFilePath;
             }
-            model('app\admin\model\LogRecord')->record('Save Production',$data);
-        }catch (\Exception $e){
-            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            //添加商铺
+            $data['desc'] = $desc;
+            if($rmbprice){
+                $data['rmbprice'] = $rmbprice;
+            }
+            if($sdlprice){
+                $data['sdlprice'] = $sdlprice;
+            }
+            $data['status'] = $status;
+            $data['name'] = $name;
+            if($rmbenable=='true'){
+                $data['rmbenable'] = true;
+            }else{
+                $data['rmbenable'] = false;
+            }
+            if($sdlenable=='true'){
+                $data['sdlenable'] = true;
+            }else{
+                $data['sdlenable'] = false;
+            }
+            $data['id'] = $id;
+            if (!$productionService->upsert($data, 'Production.editProduction')) {
+                exception($productionService->getError(), ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record('Edit Deli Production', ['data' => $data]);
+        } catch (\Exception $e) {
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
         }
         return json($ret);
@@ -696,7 +727,7 @@ class Shop extends Admin
             if($id){
                 $data['id'] = $id;
             }
-            if (!$productionService->upsert($data, false)) {
+            if (!$productionService->upsert($data, 'Production.editProduction')) {
                 exception($productionService->getError(), ERROR_CODE_DATA_ILLEGAL);
             }
             model('app\admin\model\LogRecord')->record('Edit Deli Production', ['data' => $data]);

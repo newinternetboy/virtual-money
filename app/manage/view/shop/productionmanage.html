@@ -244,9 +244,6 @@
         $('#desc').val('');
         $('#img').val('');
         $('#preview').html('');
-        $('#category').find('option').each(function(){
-            $(this).prop("selected",false);
-        });
         $('#sdlenable').find('option').each(function(){
             $(this).prop("selected",false);
         });
@@ -373,7 +370,7 @@
             return false;
         }
         if( sdlenable == 'true' && (sdlprice == '' || sdlprice == 'undefined' || sdlprice == null) ){
-            alertMsg("人民币价格不能为空！");
+            alertMsg("得利币价格不能为空！");
             $('#sub').prop('disabled',false);
             return false;
         }
