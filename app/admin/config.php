@@ -130,6 +130,7 @@ return [
         'Update Password',
         'Settle Success',
         'Freeze/Not Freeze Cart',
+        'Edit Deli Production',
     ],
 
     //统计报表默认查询时间差

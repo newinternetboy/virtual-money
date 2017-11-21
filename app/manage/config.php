@@ -124,7 +124,7 @@ return [
     'dictType'=>[
         DICT_COMPANY_ELE_BUSINESS => lang('Company Ele_business Type'),
         DICT_PERSON_ELE_BUSINESS  => lang('Deli Ele_business Type'),
-        DICT_PERCENT              => lang('Proportion of Deli_money Gifts')
+        DICT_PERCENT              => lang('Deli_money Gifts')
     ],
     //商铺封面图压缩尺寸限制
     'thumbMaxWidth' => 250,

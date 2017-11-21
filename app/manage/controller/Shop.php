@@ -98,14 +98,14 @@ class Shop extends Admin
         return json($ret);
     }
     //保存商铺
-    public function saveShop(){
+    public function saveGrshop(){
         $data = input('data');
         $data = json_decode($data,true);
         $ret['code'] = 200;
         $ret['msg'] = lang('Operation Success');
         try{
             $shopService = new ShopService();
-            $scene = "Production.edit";
+            $scene = "Shop.updateGrshop";
             if( !$shopService->upsert($data,$scene) ){
                 $error = $shopService->getError();
                 Log::record(['添加失败:' => $error,'data' => $data],'error');
@@ -114,6 +114,52 @@ class Shop extends Admin
             model('app\admin\model\LogRecord')->record('Save Shop',$data);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    public function saveQyshop()
+    {
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try {
+            $name = input('name');
+            $shopService = new ShopService();
+            $id = input('id');
+            $desc = input('desc');
+            $notify = input('notify');
+            $personName = input('personName');
+            $bank = input('bank');
+            $cardNumber = input('cardNumber');
+            $status = input('status/d');
+            $sdl_preference = input('sdl_preference/d');
+            $health_auth = input('health_auth/d');
+            $sdl_auth = input('sdl_auth/d');
+            $img = request()->file('img');
+            if ($img) {
+                $oriPath = DS . 'shopCover' . DS . 'origin';
+                $thumbPath = DS . 'shopCover' . DS . 'thumb';
+                $savedthumbFilePath = saveImg($img,$oriPath,$thumbPath);
+                $data['img'] = $savedthumbFilePath;
+            }
+            $data['id'] = $id;
+            $data['name'] = $name;
+            $data['desc'] = $desc;
+            $data['notify'] = $notify;
+            $data['personName'] = $personName;
+            $data['bank'] = $bank;
+            $data['cardNumber'] = $cardNumber;
+            $data['status'] = $status;
+            $data['sdl_preference'] = $sdl_preference;
+            $data['health_auth'] = $health_auth;
+            $data['sdl_auth'] = $sdl_auth;
+            if (!$shopService->upsert($data, 'Shop.updateQyshop')) {
+                exception($shopService->getError(), ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record('Update QYShop', ['data' => $data]);
+        } catch (\Exception $e) {
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
         }
         return json($ret);
@@ -612,7 +658,7 @@ class Shop extends Admin
         $this->assign('productions',$productions);
         return $this->fetch();
     }
-
+    //保存得利商品
     public function saveDeliProduction(){
         $ret['code'] = 200;
         $ret['msg'] = lang('Operation Success');
@@ -637,8 +683,12 @@ class Shop extends Admin
             //添加商铺
             $data['desc'] = $desc;
             $data['category'] = $category;
-            $data['sdlprice'] = $sdlprice;
-            $data['rmbprice'] = $rmbprice;
+            if($rmbprice){
+                $data['rmbprice'] = $rmbprice;
+            }
+            if($sdlprice){
+                $data['sdlprice'] = $sdlprice;
+            }
             $data['status'] = $status;
             $data['name'] = $name;
             $data['sid'] = PRODUCTION_ID_DELI;
@@ -666,25 +716,92 @@ class Shop extends Admin
         return json($ret);
     }
 
+    //分类管理 操作dict表
     public function dict(){
         $type = input('type');
-        $name = input('name');
+        $desc = input('desc');
         $where = [];
         $param = [];
         if($type){
-            $where['type'] = $type;
+            $where['type'] = intval($type);
         }
-        if($name){
-            $where['name'] = ['like',$name];
+        if($desc){
+            $where['desc'] = ['like',$desc];
         }
         $param['type'] = $type;
-        $param['name'] = $name;
+        $param['desc'] = $desc;
         $dictService = new DictService();
         $dictlist = $dictService->getInfoPaginate($where,$param);
         $dicttype = config('dictType');
         $this->assign('type',$type);
-        $this->assign('name',$name);
+        $this->assign('desc',$desc);
         $this->assign('dictlist',$dictlist);
         $this->assign('dicttype',$dicttype);
+        return $this->fetch();
     }
+
+    public function getDictInfoById(){
+        $id = input('id');
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try{
+            $dictService = new DictService();
+            if( !$dictInfo = $dictService->findInfo(['id' => $id]) ){
+                exception(lang('Data ID exception'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            $ret['data'] = $dictInfo;
+        }catch (\Exception $e){
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    public function saveDict(){
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try {
+            $id = input('id');
+            $desc = input('desc');
+            $type = input('type/d');
+            $value = input('value');
+            $dictService = new DictService();
+            if($dict = $dictService->findInfo(['desc' => $desc,'type'=>$type])){
+                if(isset($id) && $id==$dict['id']){
+
+                }else{
+                    exception(lang('Dict Desc Unique'),ERROR_CODE_DATA_ILLEGAL);
+                }
+            }
+            $data['desc'] = $desc;
+            $data['type'] = $type;
+            if($value){
+                $data['value'] = floatval($value);
+            }
+            if($id){
+                $data['id'] = $id;
+            }
+            if (!$dictService->upsert($data, false)) {
+                exception($dictService->getError(), ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record('Save Dict', ['data' => $data]);
+        } catch (\Exception $e) {
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    public function deleteDictByid(){
+        $id = input('id');
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Update Success');
+        $dictService = new DictService();
+        if(!$dictService->del($id)){
+            $ret['code'] = 201;
+            $ret['msg'] = lang('Update Faild');
+        }
+        return json($ret);
+    }
+
 }

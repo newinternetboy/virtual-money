@@ -530,7 +530,7 @@ return [
     'From'                              =>' 从:',
     'Save Shop'                         =>'编辑店铺',
     'Update Time'                       =>'修改时间',
-    'Shop Number'                       =>'店铺数量',
+    'Production Number'                 =>'商品数量',
     'Production Name'                   =>'商品名称',
     'Production Status'                 =>'商品状态',
     'DeLi Price'                        =>'得利币价格',
@@ -613,6 +613,7 @@ return [
     'Freeze/Not Freeze Cart'            => '冻结/解冻订单',
     'Pay Money'                         => '付款时间',
     'Production'                        => '商品',
+    'Production Img'                    => '商品封面',
     'Check Production'                  => '查看商品',
     'Shop Type'                         => '店铺类型',
     'To-do Task'                        => '待处理',
@@ -676,7 +677,14 @@ return [
     'Production Img'                    => '商品封面',
     'Company Ele_business Type'         => '企业电商类别',
     'Deli Ele_business Type'            => '得利专供类别',
-    'Proportion of Deli_money Gifts'    => '得利币赠送比例',
+    'Deli_money Gifts'                  => '得利币赠送',
+    'Edit Deli Production'              => '编辑得利商品',
+    //类别管理 dict
+    'Dict Name'                         => '类别名称',
+    'Dict Type'                         => '分类类型',
+    'Save Dict'                         => '编辑/添加分类',
+    'Proportion of Gifts'               => '赠送比例',
+    'Dict List'                         => '类别列表',
 
     /******************************企业店铺系统**************************/
     //店铺信息
@@ -693,8 +701,6 @@ return [
     //修改用户信息
     'Manage User'                       => '用户管理',
     'Shop Admin Id Require'             => '企业管理员id必须',
-
-
 
 
 ];

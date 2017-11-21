@@ -286,7 +286,7 @@
         $('#rmbprice').val(data.rmbprice);
         $('#edit_productionname').val(data.name);
         $('#desc').val(data.desc);
-        createCanvas(data.img);
+        $('#preview').html("<img src="+data.img+" />");
         $('#category').find('option[value='+data.category+']').prop("selected",true);
         $('#edit_status').find('option[value="'+data.status+'"]').prop("selected",true);
         $('#sdlenable').find('option[value='+data.sdlenable+']').prop("selected",true);
@@ -372,7 +372,12 @@
             $('#sub').prop('disabled',false);
             return false;
         }
-        if( rmbprice == '' || rmbprice == 'undefined' || rmbprice == null ){
+        if( sdlenable == 'true' && (sdlprice == '' || sdlprice == 'undefined' || sdlprice == null) ){
+            alertMsg("人民币价格不能为空！");
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        if( rmbenable == 'true' && (rmbprice == '' || rmbprice == 'undefined' || rmbprice == null) ){
             alertMsg("人民币价格不能为空！");
             $('#sub').prop('disabled',false);
             return false;
