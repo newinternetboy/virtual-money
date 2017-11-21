@@ -21,6 +21,14 @@ class Login extends Common
 	public function index()
 	{
 		if( Session::has('userinfo', 'admin') ) {
+			$ret = session('userinfo','','admin');
+			if( $ret['type'] == PLATFORM_ADMIN ){
+				return $this->redirect(url('admin/index/index'));
+			}elseif( $ret['type'] == PLATFORM_MANAGE ){
+				return $this->redirect(url('manage/index/index'));
+			}elseif( $ret['type'] ==  PLATFORM_QYSHOP ){
+				return $this->redirect(url('qyshop/shop/index'));
+			}
 			$this->redirect( url('admin/index/index') );
 		}
 		return view();
@@ -53,8 +61,10 @@ class Login extends Common
 		Loader::model('LogRecord')->record( 'Login succeed' );
 		if( $ret['data']['type'] == PLATFORM_ADMIN ){
 			return $this->success($ret['msg'], url('admin/index/index'));
-		}else{
+		}elseif( $ret['data']['type'] == PLATFORM_MANAGE ){
 			return $this->success($ret['msg'], url('manage/index/index'));
+		}elseif( $ret['data']['type'] ==  PLATFORM_QYSHOP ){
+			return $this->success($ret['msg'], url('qyshop/shop/index'));
 		}
 	}
 

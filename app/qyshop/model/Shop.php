@@ -2,17 +2,15 @@
 /**
  * Created by PhpStorm.
  * User: hawk2fly
- * Date: 2017/11/17
- * Time: 下午2:35
+ * Date: 2017/11/20
+ * Time: 上午10:58
  */
 
-namespace app\manage\model;
+namespace app\qyshop\model;
 
 
-class ShopAdminModel extends BasicModel
+class Shop extends Basic
 {
-    public $name = 'shop_admin';
-
     public function setStatusAttr($value){
         return intval($value);
     }

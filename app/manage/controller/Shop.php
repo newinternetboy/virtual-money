@@ -657,14 +657,6 @@ class Shop extends Admin
             $id = input('id');
             $name = input('name');
             $productionService = new ProductionService();
-            if($production = $productionService->findInfo(['name' => $name])){
-                if(isset($id) && $id==$production['id']){
-
-                }else{
-                    exception(lang('Production Name Unique'),ERROR_CODE_DATA_ILLEGAL);
-                }
-            }
-            $name = input('name');
             $desc = input('desc');
             $category = input('category');
             $sdlprice = input('sdlprice');

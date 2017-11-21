@@ -8,103 +8,45 @@
             <div class="ibox float-e-margins" style="background: white;padding: 10px">
                 <!-- 表单内容 -->
                 <div class="ibox-title">
-                    <h5>{:lang('Delis')}{:lang('Production List')}</h5>
+                    <h5>{:lang('Manage Production')}</h5>
                 </div>
                 <div class="ibox-content">
-                    <!-- 表格数据 -->
-                    <form  method="" class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="name" class="col-sm-2 control-label">{:lang('Production Name')}:</label>
-                                    <div class="col-sm-6">
-                                        <input name="name" id="name" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('Production Name')}" value="{$name ?? ''}">
-                                    </div>
-                                </div><!-- /form-group -->
-                            </div><!-- /.col-lg-6 -->
-                            <div class="col-lg-6" style="float: right">
-                                <div class="form-group">
-                                    <label for="status" class="col-sm-2 control-label">{:lang('Production Status')}:</label>
-                                    <div class="col-sm-6">
-                                        <select name="status" id="status" class="form-control">
-                                            <option value="all">{:lang('Search All')}</option>
-                                            <option value="{$Think.PRODUCTION_SHELVES}" {if condition="$status === strval($Think.PRODUCTION_SHELVES) "}selected{/if}>{:lang('put on sale')}</option>
-                                            <option value="{$Think.PRODUCTION_OFF_SHELVES}" {if condition="$status === strval($Think.PRODUCTION_OFF_SHELVES) "}selected{/if}>{:lang('pull off shelves')}</option>
-                                        </select>
-                                    </div>
-                                </div><!-- /form-group -->
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Create time')}{:lang('From')}</label>
-                                    <div class="col-sm-6">
-                                        <input id="start_datetimepicker" name="start_time" value="{$start_time ?? ''}" type="text" class="form-control">
-                                    </div>
-                                </div>
-                            </div><!-- /.col-lg-6 -->
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="end_datetimepicker" class="col-sm-2 control-label">{:lang('To')}:</label>
-                                    <div class="col-sm-6">
-                                        <input id="end_datetimepicker" name="end_time" value="{$end_time ?? ''}" type="text" class="form-control">
-                                    </div>
-                                </div>
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                        <div class="form-group">
-                            <div  class="col-sm-2">
-                                <button style="float: left;" onclick="production_add()" class="btn btn-primary" type="button"  >{:lang('Add')}</button>
-                            </div>
-                            <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
-                            </div>
-                        </div>
-                    </form>
-                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
-                        <!--原表信息-->
-                        <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
-                            <thead>
-                                <tr>
-                                   <th>{:lang('Production Name')}</th>
-                                   <th>{:lang('DeLi Price')}</th>
-                                   <th>{:lang('RMB Price')}</th>
-                                   <th>{:lang('Production Status')}</th>
-                                   <th>{:lang('Create Time')}</th>
-                                   <th>{:lang('Operate')}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {volist name='productions' id='vo'}
-                                <tr>
-                                   <td>{$vo.name??''}</td>
-                                   <td>{$vo.sdlenable?$vo.sdlprice:'不支持'}</td>
-                                   <td>{$vo.rmbenable?$vo.rmbprice:'不支持'}</td>
-                                   <td>{switch name="vo.status"}
-                                       {case $Think.PRODUCTION_SHELVES}{:lang('put on sale')}{/case}
-                                       {default /}{:lang('pull off shelves')}
-                                       {/switch}
-                                   </td>
-                                   <td>
-                                        {$vo.create_time}
-                                   </td>
-                                   <td><button class="btn btn-primary" onclick="production_eidt('{$vo.id}')">{:lang('Edit')}</button></td>
-                                </tr>
-                            {/volist}
-                            </tbody>
-                        </table></div>
-                        <div>
-                            {$productions->render()}
-                        </div>
-                        <!--换表信息-->
-                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-                        <div class="form-group" style="color:red">
-                            <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
-                            <div class="col-sm-10">
-                                <p class="form-control" style="border: none">{:lang('Please in the search box enter the query query, return the result')}</p>
-                            </div>
-                        </div>
+                    <button class="btn btn-primary" onclick="production_add()">{:lang('Add')}</button>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--原表信息-->
+                    <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>{:lang('Production Name')}</th>
+                            <th>{:lang('DeLi Price')}</th>
+                            <th>{:lang('RMB Price')}</th>
+                            <th>{:lang('Production Status')}</th>
+                            <th>{:lang('Create Time')}</th>
+                            <th>{:lang('Operate')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name='productions' id='vo'}
+                        <tr>
+                            <td>{$vo.name??''}</td>
+                            <td>{$vo.sdlenable?$vo.sdlprice:'不支持'}</td>
+                            <td>{$vo.rmbenable?$vo.rmbprice:'不支持'}</td>
+                            <td>{switch name="vo.status"}
+                                {case $Think.PRODUCTION_SHELVES}{:lang('put on sale')}{/case}
+                                {default /}{:lang('pull off shelves')}
+                                {/switch}
+                            </td>
+                            <td>
+                                {$vo.create_time}
+                            </td>
+                            <td><button class="btn btn-primary" onclick="production_eidt('{$vo.id}')">{:lang('Edit')}</button></td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table></div>
+                    <div>
+                        {$productions->render()}
+                    </div>
                 </div>
             </div>
         </div>
@@ -120,24 +62,14 @@
             <div class="modal-body form-horizontal">
                 <input style="display: none" name="id" value="" id="id" />
                 <div class="form-group">
-                    <label for="edit_productionname" class="col-md-2 control-label">{:lang('Production Name')}</label>
+                    <label for="name" class="col-md-2 control-label">{:lang('Production Name')}</label>
                     <div class="col-md-10">
-                        <input class="form-control" name="productionname" id="edit_productionname">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="category" class="col-md-2 control-label">{:lang('Production Dict')}</label>
-                    <div class="col-md-10">
-                        <select name="category" id="category" class="form-control">
-                            {volist name="dictlist" id="vo"}
-                            <option value='{$vo.id}'>{$vo.desc}</option>
-                            {/volist}
-                        </select>
+                        <input class="form-control" name="name" id="name">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="preview" class="col-md-2 control-label">{:lang('Shop Preview')}</label>
-                    <div id="preview" class="col-md-10"><img src="" alt=""/>
+                    <div id="preview" class="col-md-10">
                     </div>
                 </div>
                 <div class="form-group">
@@ -178,9 +110,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="edit_status" class="col-md-2 control-label">{:lang('Production Status')}</label>
+                    <label for="status" class="col-md-2 control-label">{:lang('Production Status')}</label>
                     <div class="col-md-10">
-                        <select name="edit_status" id="edit_status" class="form-control">
+                        <select name="status" id="status" class="form-control">
                             <option value="{$Think.PRODUCTION_OFF_SHELVES}">{:lang('pull off shelves')}</option>
                             <option value="{$Think.PRODUCTION_SHELVES}">{:lang('put on sale')}</option>
                         </select>
@@ -203,34 +135,7 @@
     </div>
 </div>
 <script>
-    $("#start_datetimepicker").datetimepicker({
-        language:"zh-CN",
-        format: "yyyy-mm-dd",
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left",
-        minuteStep: 1,
-        bootcssVer:3,
-        minView: "month",
-//        startDate: new Date()
-    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
-        event.preventDefault();
-        event.stopPropagation();
-    });
-    $("#end_datetimepicker").datetimepicker({
-        language:"zh-CN",
-        format: "yyyy-mm-dd",
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left",
-        minuteStep: 1,
-        bootcssVer:3,
-        minView: "month"
-//        startDate: new Date()
-    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
-        event.preventDefault();
-        event.stopPropagation();
-    });
+
     function production_add(){
         clearModal()
         $('#myModal').modal('show')
@@ -243,10 +148,7 @@
         $('#rmbprice').val('');
         $('#desc').val('');
         $('#img').val('');
-        $('#preview').html('');
-        $('#category').find('option').each(function(){
-            $(this).prop("selected",false);
-        });
+        $('#preview').empty();
         $('#sdlenable').find('option').each(function(){
             $(this).prop("selected",false);
         });
@@ -260,7 +162,7 @@
 
     function production_eidt(production_id){
         $.ajax({
-            url:"{:url('manage/shop/getProductionInfoById')}",
+            url:"{:url('qyshop/production/getProductionInfoById')}",
             method:'post',
             dataType:'json',
             data: {id: production_id},
@@ -284,11 +186,13 @@
         $('#id').val(data.id);
         $('#sdlprice').val(data.sdlprice);
         $('#rmbprice').val(data.rmbprice);
-        $('#edit_productionname').val(data.name);
+        $('#name').val(data.name);
         $('#desc').val(data.desc);
-        $('#preview').html("<img src="+data.img+" />");
-        $('#category').find('option[value='+data.category+']').prop("selected",true);
-        $('#edit_status').find('option[value="'+data.status+'"]').prop("selected",true);
+        $('#preview').empty();
+        var preview = $('<img style="width: 200px;height: 200px"/>');
+        preview.attr('src',data.img);
+        $('#preview').append(preview)
+        $('#status').find('option[value="'+data.status+'"]').prop("selected",true);
         $('#sdlenable').find('option[value='+data.sdlenable+']').prop("selected",true);
         $('#rmbenable').find('option[value='+data.rmbenable+']').prop("selected",true);
     }
@@ -348,11 +252,10 @@
     function sub(){
         $('#sub').prop('disabled',true);
         var id = $('#id').val();
-        var category = $('#category').val();
         var sdlprice = $('#sdlprice').val();
         var rmbprice = $('#rmbprice').val();
-        var name = $('#edit_productionname').val();
-        var status = $('#edit_status').val();
+        var name = $('#name').val();
+        var status = $('#status').val();
         var sdlenable = $('#sdlenable').val();
         var desc = $('#desc').val();
         var img = document.getElementById("img").files[0];
@@ -363,17 +266,17 @@
             return false;
         }
         if( name == '' || name == 'undefined' || name == null ){
-            alertMsg("{:lang('Productionsss Name Require')}");
+            alertMsg("{:lang('Production Name Require')}");
             $('#sub').prop('disabled',false);
             return false;
         }
         if( desc == '' || desc == 'undefined' || desc == null ){
-            alertMsg("{:lang('商品描述必须')}");
+            alertMsg("{:lang('Production Desc Require')}");
             $('#sub').prop('disabled',false);
             return false;
         }
         if( sdlenable == 'true' && (sdlprice == '' || sdlprice == 'undefined' || sdlprice == null) ){
-            alertMsg("人民币价格不能为空！");
+            alertMsg("得力币价格不能为空！");
             $('#sub').prop('disabled',false);
             return false;
         }
@@ -383,10 +286,11 @@
             return false;
         }
         var formData = new FormData();
-        formData.append('id',id);
+        if(id != '' && id != null){
+            formData.append('id',id);
+        }
         formData.append('sdlprice',sdlprice);
         formData.append('name',name);
-        formData.append('category',category);
         formData.append('rmbprice',rmbprice);
         formData.append('status',status);
         formData.append('sdlenable',sdlenable);
@@ -394,7 +298,7 @@
         formData.append('desc',desc);
         formData.append('img',img);
         $.ajax({
-            url: "{:url('manage/shop/saveDeliProduction')}",
+            url: "{:url('qyshop/production/saveProduction')}",
             type: "POST",
             dataType:"json",
             data: formData,
