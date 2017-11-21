@@ -18,6 +18,10 @@ class ShopModel extends BasicModel
         return $this->belongsTo('ConsumerModel','uid');
     }
 
+    public function dict(){
+        return $this->belongsTo('DictModel','category');
+    }
+
     public function columnInfo($where,$field){
         return $this->where($where)->column($field);
     }

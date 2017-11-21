@@ -85,6 +85,7 @@
                         <thead>
                         <tr>
                             <th>{:lang('Shop Name')}</th>
+                            <th>{:lang('Production Dict')}</th>
                             <th>{:lang('Shop Status')}</th>
                             <th>{:lang('Create time')}</th>
                             <th>{:lang('Operate')}</th>
@@ -94,6 +95,7 @@
                         {volist name='shops' id='vo'}
                         <tr>
                             <td>{$vo.name}</td>
+                            <td>{$vo.dict.desc}</td>
                             <td>{if condition="$vo.status"}
                                     {:lang('Start')}
                                 {else /}

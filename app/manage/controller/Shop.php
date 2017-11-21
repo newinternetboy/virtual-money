@@ -476,10 +476,11 @@ class Shop extends Admin
             $where['create_time'] = ['between',[strtotime($startTime." 00:00:00"),strtotime($endTime." 23:59:59")]];
         }
         $shopService = new ShopService();
-        $shops = $shopService->getInfoPaginate($where,['shopname' => $shopname,'status' => $status,'search_category' => $search_category,'startTime' => $startTime,'endTime' => $endTime],'name,status,create_time');
+        $shops = $shopService->getInfoPaginate($where,['shopname' => $shopname,'status' => $status,'search_category' => $search_category,'startTime' => $startTime,'endTime' => $endTime],'name,category,status,create_time');
         $this->assign('shops',$shops);
         $this->assign('shopname',$shopname);
         $this->assign('status',$status);
+        $this->assign('search_category',$search_category);
         $this->assign('startTime',$startTime);
         $this->assign('endTime',$endTime);
         $dictService = new DictService();

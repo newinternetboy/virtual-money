@@ -19,6 +19,8 @@ class Shop extends Admin
         $shop_id = $this->shop_id;
         $shop = model('Shop')->findInfo(['id' => $shop_id]);
         $this->assign('shop',$shop);
+        $dictlist = model('Dict')->selectInfo(['type' => DICT_COMPANY_ELE_BUSINESS]);
+        $this->assign('dictlist',$dictlist);
         return view();
     }
 
@@ -30,9 +32,11 @@ class Shop extends Admin
             if(!$id){
                 exception(lang('QYShop Id Require'),ERROR_CODE_DATA_ILLEGAL);
             }
-            if(!$shop = model('Shop')->findInfo(['id' => $id],'name,desc,notify,img,personName,bank,cardNumber,status')){
+            if(!$shop = model('Shop')->findInfo(['id' => $id],'name,desc,notify,category,img,personName,bank,cardNumber,status')){
                 exception(lang('QYShop Not Exist'),ERROR_CODE_DATA_ILLEGAL);
             }
+            $category = model('Dict')->findInfo(['id' => $shop['category']],'id,desc');
+            $shop['category'] = $category->toArray();
             $ret['data'] = $shop;
         } catch (\Exception $e) {
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
@@ -60,6 +64,7 @@ class Shop extends Admin
             }
             $desc = input('desc');
             $notify = input('notify');
+            $category = input('category');
             $personName = input('personName');
             $bank = input('bank');
             $cardNumber = input('cardNumber');
@@ -75,6 +80,7 @@ class Shop extends Admin
             $data['name'] = $name;
             $data['desc'] = $desc;
             $data['notify'] = $notify;
+            $data['category'] = $category;
             $data['personName'] = $personName;
             $data['bank'] = $bank;
             $data['cardNumber'] = $cardNumber;
