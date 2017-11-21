@@ -44,5 +44,7 @@ class Shop extends Validate
 
     protected $scene = [
         'insertQYShop' => ['name','desc','img','personName','bank','status','cardNumber','sdl_preference','health_auth','sdl_auth','type'],
+        'updateGrshop' => ['name','sdl_preference','health_auth','sdl_auth','status'],
+        'updateQyshop' => ['name','desc','personName','bank','status','cardNumber','sdl_preference','health_auth','sdl_auth'],
     ];
 }
