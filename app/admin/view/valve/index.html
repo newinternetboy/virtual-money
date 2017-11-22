@@ -1,67 +1,73 @@
 {js href="__JS__/bootstrap-datetimepicker.min.js" /}
 {js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
 {css href="__CSS__/bootstrap-datetimepicker.min.css" /}
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单标题概要 -->
-                <div class="ibox-title">
-                    <h5>{:lang('Remote Valve Control')}</h5>
-                </div>
-                <!-- 表单内容 -->
-                <div class="ibox-content">
-                    <form id="save" method="post" class="form-horizontal" role="form">
-                        <div class="form-group">
-                            <label for="valve_type" class="col-sm-2 control-label">{:lang('Method Search')}</label>
-                            <div class="col-sm-10" id="valve_type" >
-                                <label class="radio-inline">
-                                    <input type="radio" class="form-control" checked name="valve_type" value=1>{:lang('The specified user control')}
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" class="form-control" name="valve_type" value=2>{:lang('The user control area')}
-                                </label>
-                            </div>
-                        </div>
-                        <div id="content" style="margin-top: 2vw">
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12" style="float: left; width: 100%;">
+                <div class="ibox float-e-margins" style="background: white; float:left; width: 100%;">
+                    <!-- 表单标题概要 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Remote Valve Control')}</h5>
+                    </div>
+                    <!-- 表单内容 -->
+                    <div class="ibox-content">
+                        <form id="save" method="post" class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label for="M_Codes" class="col-sm-2 control-label">{:lang('M_Code')}</label>
+                                <label for="valve_type" class="col-sm-2 control-label">{:lang('Method Search')}</label>
+                                <div class="col-sm-10" id="valve_type" >
+                                    <label class="radio radio-inline">
+                                        <input type="radio" class="radiobox" checked name="valve_type" value=1>
+                                        <span>{:lang('The specified user control')}</span>
+                                    </label>
+                                    <label class="radio radio-inline">
+                                        <input type="radio" class="radiobox" name="valve_type" value=2>
+                                        <span>{:lang('The user control area')}</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="content_M" style="margin-top: 2vw">
+                                <div class="form-group">
+                                    <label for="M_Codes" class="col-sm-2 control-label">{:lang('M_Code')}</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control"  name="M_Codes" id="M_Codes" rows=3  placeholder="{:lang("Please enter the user's table number, use ；separation")}" ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">{:lang('Operate')}</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control"  name="M_Codes" id="M_Codes" rows=3  placeholder="{:lang("Please enter the user's table number, use ；separation")}" ></textarea>
+                                    <label class="radio radio-inline">
+                                        <input type="radio" class="radiobox" checked name="option"  value=1>
+                                        <span>{:lang('Close Valve')}</span>
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" class="radiobox" name="option"  value=2>
+                                        <span>{:lang('Open Valve')}</span>
+                                    </label>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">{:lang('Operate')}</label>
-                            <div class="col-sm-10">
-                                <label class="radio-inline">
-                                    <input type="radio" class="form-control" checked name="option"  value=1>{:lang('Close Valve')}
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" class="form-control" name="option"  value=2>{:lang('Open Valve')}
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group" style="margin-top: 2vw">
-                            <label class="col-sm-2 control-label">{:lang('Completion Time')}</label>
-                            <div class="col-sm-10">
-                                <div class="input-append date">
-                                    <input id="datetimepicker" size="20" name="exectime" type="text" class="form-control" required>
-                                    <span class="add-on"><i class="icon-th"></i></span>
+                            <div class="form-group" style="margin-top: 2vw">
+                                <label class="col-sm-2 control-label">{:lang('Completion Time')}</label>
+                                <div class="col-sm-10">
+                                    <div class="input-append date">
+                                        <input id="datetimepicker" size="20" name="exectime" type="text" class="form-control" required>
+                                        <span class="add-on"><i class="icon-th"></i></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
-                            <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="button" onclick="saveData()" >{:lang('Button')}</button>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button style="float: right" class="btn btn-success" type="button" onclick="saveData()" >{:lang('Button')}</button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 <script type="text/javascript">
@@ -99,12 +105,12 @@
         var checkval = $('input:radio[name="valve_type"]:checked').val();
         switch(checkval){
             case "1":
-                $('#content').empty();
-                $('#content').append(html_type_1);
+                $('#content_M').empty();
+                $('#content_M').append(html_type_1);
                 break;
             case "2":
-                $('#content').empty();
-                $('#content').append(html_type_2);
+                $('#content_M').empty();
+                $('#content_M').append(html_type_2);
                 break;
         }
     })

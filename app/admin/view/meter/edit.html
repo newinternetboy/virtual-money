@@ -1,24 +1,27 @@
-<div class="wrapper wrapper-content animated fadeInRight">
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
     <div class="row">
         <div class="col-lg-12">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
+            <div class="ibox float-e-margins" style="background: white;float: left;">
                 <!-- 表单标题概要 -->
-                <div class="ibox-title">
+                <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
                     <h5>{:lang('Meter')}{:lang('Edit')}</h5>
                 </div>
                 <!-- 表单内容 -->
                 <div class="ibox-content">
                     <!-- 表格数据 -->
                     <form id="save"  action="{:url('admin/meter/saveData')}" method="post" class="form-horizontal" role="form">
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: right">
+                        <div class="form-group" style="margin-bottom: 50px">
+                            <div class="col-md-10">
                                 <div class="input-group">
-                                    <input id="M_Code_S" type="text" class="form-control" placeholder="请输入表号...">
-                                        <span class="input-group-btn">
-                                            <button id="search" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> </button>
-                                        </span>
-                                </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
+                                    <input class="form-control" type="text" placeholder="{:lang('Please enter M_Code')}" name="M_Code" id="M_Code">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button id="search" class="btn btn-primary" type="button" style="width: 100%;">{:lang('Search')}</button>
+                            </div>
                         </div>
 
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
@@ -40,37 +43,81 @@
                                     <!--</select>-->
                                 <!--</div>-->
                             <!--</div>-->
-                            <h5>{:lang('Personal Profile')}</h5>
-                            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-                            <div id="consumerinfo">
-                                <div class="form-group">
-                                <label for="username" class="col-sm-2 control-label">{:lang('Name')}</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  name="username" id="username"  >
-                                </div>
-                            </div>
-                                <div class="form-group">
-                                    <label for="tel" class="col-sm-2 control-label">{:lang('Contact Number')}</label>
-                                    <div class="col-sm-10">
-                                        <input class="form-control" name="tel" id="tel"  >
+                            <legend>{:lang('Personal Profile')}</legend>
+                            <div class="form-group">
+                                <label for="username" class="col-md-2 control-label">{:lang('Name')}</label>
+                                <div class="col-md-10">
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" placeholder="{:lang('Please enter username')}" name="username" value="{$consumer.username ?? ''}" id="username">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-user fa-fw"></i>
+                                        </span>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="M_Address" class="col-sm-2 control-label">{:lang('Installation Address')}</label>
-                                    <div class="col-sm-4">
-                                        <select class="form-control"  name="M_Address" id="M_Address"  >
+                            </div>
+                            <div class="form-group">
+                                <label for="tel" class="col-md-2 control-label">{:lang('Contact Number')}</label>
+                                <div class="col-md-10">
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" placeholder="{:lang('Please enter mobile')}" maxlength="11" name="tel" value="{$consumer.tel ?? ''}" id="tel">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-phone fa-fw"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                                <!--<div class="form-group">-->
+                                    <!--<label for="tel" class="col-sm-2 control-label">{:lang('Contact Number')}</label>-->
+                                    <!--<div class="col-sm-10">-->
+                                        <!--<input class="form-control" name="tel" id="tel"  >-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="form-group">-->
+                                    <!--<label for="M_Address" class="col-sm-2 control-label">{:lang('Installation Address')}</label>-->
+                                    <!--<div class="col-sm-4">-->
+                                        <!--<select class="form-control"  name="M_Address" id="M_Address"  >-->
+                                            <!--{foreach $areas as $area }-->
+                                            <!--<option value="{$area.id}">{$area.name}</option>-->
+                                            <!--{/foreach}-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                    <!--<div class="col-sm-6">-->
+                                        <!--<input class="form-control"  name="detail_address" id="detail_address" placeholder="{:lang('Please enter')}{:lang('Area Address')}"  >-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                            <div class="form-group col col-md-6">
+                                <label for="M_Address" class="col-md-4 control-label">{:lang('Installation Address')}</label>
+                                <!--<label for="detail_address" class="display:none"></label>-->
+                                <div class="col-md-8" style="padding-right: 0">
+                                    <div class="input-group" style="width: 100%;">
+                                        <select class="form-control" style="width: 100%;" name="M_Address" id="M_Address" required>
+                                            <option value="0" selected disabled>{:lang('Please Search')}{:lang('Area')}</option>
                                             {foreach $areas as $area }
-                                            <option value="{$area.id}">{$area.name}</option>
+                                            <option value="{$area.id}" {if condition="(isset($meter.M_Address)) and ($area.id eq $meter.M_Address)"}selected{/if}>{$area.name}</option>
                                             {/foreach}
                                         </select>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <input class="form-control"  name="detail_address" id="detail_address" placeholder="{:lang('Please enter')}{:lang('Area Address')}"  >
+                                </div>
+
+                            </div>
+                            <div class="form-group col col-md-6">
+                                <label for="detail_address" style="display: none"></label>
+                                <div class="col-md-12" style="padding-left: 0">
+                                    <div class="input-group">
+                                        <input class="form-control" style="float: right" type="text" placeholder="{:lang('Please enter')}{:lang('detail address')}" value="{$meter.detail_address ?? ''}" name="detail_address" id="detail_address" >
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-map-marker fa-fw"></i>
+                                            </span>
                                     </div>
                                 </div>
                             </div>
-                            <h5>{:lang('Additional Resources')}</h5>
-                            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+
+
+
+                            </div>
+                        <div style="clear: both;"></div>
+                            <legend>{:lang('Additional Resources')}</legend>
                             <div id="addtion">
                                 <div class="form-group">
                                     <label for="family_num" class="col-sm-2 control-label">{:lang('Family Size')}</label>

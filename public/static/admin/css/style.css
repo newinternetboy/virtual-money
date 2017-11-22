@@ -3317,8 +3317,10 @@ ol.unstyled {
 }
 /* FOOTER */
 .footer {
-  background: none repeat scroll 0 0 white;
+  /*background: none repeat scroll 0 0 white;*/
+  background-color: #1a1a1a;
   border-top: 1px solid #e7eaec;
+  color: #ffffff;
   bottom: 0;
   left: 0;
   padding: 10px 20px;
@@ -4179,7 +4181,12 @@ body.modal-open {
   padding-top: 110px;
 }
 .loginscreen.middle-box {
-  width: 300px;
+  width: 480px;
+  padding: 20px 80px 20px 80px;
+  background-color: rgba(255,255,255,0.9);
+  border-radius: 8px;
+  max-width: 480px;
+  margin: 30px auto 30px;
 }
 .loginColumns {
   max-width: 800px;
@@ -7477,4 +7484,39 @@ body.skin-3 {
   .welcome-message {
     display: none;
   }
+}
+
+#login_BG {
+  width: 100%;
+  height: 100%;
+  background-image: url(../images/loginBG.jpg);
+  background-size: cover;
+}
+
+.label_username .loginTitle:before {
+  content: url('../images/username.svg');
+  width: 15px;
+  height: 15px;
+  float: left;
+  margin: 2px 5px 0 0;
+}
+
+.label_password .loginTitle:before {
+  content: url('../images/password.svg');
+  width: 15px;
+  height: 15px;
+  float: left;
+  margin: 2px 5px 0 0;
+}
+
+.label_captcha .loginTitle:before {
+  content: url('../images/verification.svg');
+  width: 15px;
+  height: 15px;
+  float: left;
+  margin: 2px 5px 0 0;
+}
+
+.label_username .loginTitle, .label_password .loginTitle, .label_captcha .loginTitle {
+  text-align: left;
 }

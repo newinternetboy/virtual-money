@@ -1,10 +1,10 @@
-<div id="content" style="opacity: 1;">
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
     <section id="widget-grid">
         <div class="row">
             <div class="col-lg-12">
-                <div class="ibox float-e-margins" style="background: white;padding: 10px">
+                <div class="ibox float-e-margins" style="background: white; float:left">
                     <!-- 表单标题概要 -->
-                    <div class="ibox-title">
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
                         <h5>{:lang('Meter')}{:lang('Change')}</h5>
                     </div>
                     <!-- 表单内容 -->
@@ -60,19 +60,31 @@
                             </fieldset>
                             <fieldset id="newMeterInfo">
                                 <legend>{:lang('Change Code Information')}</legend>
-                                <div class="form-group">
-                                    <label for="new_M_Code" class="col-md-2 control-label">{:lang('New M_Code')}</label>
-
-                                    <div class="col-md-10">
-                                        <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="{:lang('Please enter M_Code')}"
-                                                   name="new_M_Code" id="new_M_Code">
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-user fa-fw"></i>
-                                        </span>
+                                <div id="newMeterInfo">
+                                    <div class="form-group">
+                                        <label for="new_M_Code" class="col-sm-2 control-label">{:lang('New M_Code')}</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control"  name="new_M_Code" id="new_M_Code" >
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="form-group">
+                                        <label for="change_reason" class="col-sm-2 control-label">{:lang('Change')}{:lang('Reason')}</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control"  name="change_reason" id="change_reason" >
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="color:red">
+                                        <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
+                                        <div class="col-sm-10">
+                                            <p class="form-control" style="border: none">{:lang('Please in the search box enter the query query, return the result')}</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label  class="col-sm-2 control-label"></label>
+                                        <div class="col-sm-10">
+                                            <button style="float: right" class="btn btn-success" type="button" onclick="changeMeter()" >{:lang('Button')}</button>
+                                        </div>
+                                    </div>
                             </fieldset>
 
                         </form>
@@ -80,102 +92,6 @@
                 </div>
             </div>
         </div>
-        <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单标题概要 -->
-                <div class="ibox-title">
-                    <h5>{:lang('Meter')}{:lang('Change')}</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- 表单内容 -->
-                <div class="ibox-content">
-                    <!-- 表格数据 -->
-                    <form data-method="post" data-submit="ajax" data-validate="true" class="form-horizontal">
-                        <!--<div class="form-group">-->
-                            <!--<div class="col-lg-6" style="float: right">-->
-                                <!--<div class="input-group">-->
-                                    <!--<input id="M_Code" type="text" class="form-control" placeholder="请输入表号...">-->
-                                        <!--<span class="input-group-btn">-->
-                                            <!--<button id="search" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> </button>-->
-                                        <!--</span>-->
-                                <!--</div>&lt;!&ndash; /input-group &ndash;&gt;-->
-                            <!--</div>&lt;!&ndash; /.col-lg-6 &ndash;&gt;-->
-                        <!--</div>-->
-
-                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
-
-                        <!--原表信息-->
-                        <h5>{:lang('Old Meter Message')}</h5>
-                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-                        <div id="meterInfo">
-                            <label for="M_Code_P" class="col-sm-2 control-label">{:lang('M_Code')}</label>
-                            <div class="col-sm-4">
-                                <p id="M_Code_P" class="form-control" style="border: none"></p>
-                            </div>
-                            <label for="M_Type" class="col-sm-2 control-label">{:lang('Meter Type')}</label>
-                            <div class="col-sm-4">
-                                <p id="M_Type" class="form-control" style="border: none"></p>
-                            </div>
-                            <label for="username" class="col-sm-2 control-label">{:lang('User Name')}</label>
-                            <div class="col-sm-4">
-                                <p id="username" class="form-control" style="border: none"></p>
-                            </div>
-                            <label for="left" class="col-sm-2 control-label">{:lang("Charge Balance")}</label>
-                            <div class="col-sm-4">
-                                <p id="left" class="form-control" style="border: none"></p>
-                            </div>
-                            <label for="tel" class="col-sm-2 control-label">{:lang('Contact Number')}</label>
-                            <div class="col-sm-4">
-                                <p id="tel" class="form-control" style="border: none"></p>
-                            </div>
-                            <label for="address" class="col-sm-2 control-label">{:lang('Installation Address')}</label>
-                            <div class="col-sm-4">
-                                <p id="address" class="form-control" style="border: none"></p>
-                            </div>
-                        </div>
-                        <!--换表信息-->
-                        <h5>{:lang('Change Code Information')}</h5>
-                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-                        <div id="newMeterInfo">
-                            <div class="form-group">
-                                <label for="new_M_Code" class="col-sm-2 control-label">{:lang('New M_Code')}</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  name="new_M_Code" id="new_M_Code" >
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="change_reason" class="col-sm-2 control-label">{:lang('Change')}{:lang('Reason')}</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  name="change_reason" id="change_reason" >
-                                </div>
-                            </div>
-                        <div class="form-group" style="color:red">
-                            <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
-                            <div class="col-sm-10">
-                                <p class="form-control" style="border: none">{:lang('Please in the search box enter the query query, return the result')}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
-                            <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="button" onclick="changeMeter()" >{:lang('Button')}</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
     </section>
 </div>
 <script>
