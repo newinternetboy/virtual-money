@@ -3,9 +3,9 @@
 return [
     //网站名称
     'website'   =>      [
-                            'name'          => 'Red-Team',
-                            'keywords'      =>  'TPAdmin,高性能，后台管理',
-                            'description'   =>  'ThinkPHP5,高性能，后台管理，权限管理，后台模版，组件化开发，软删除，验证器，多语言，国际化'
+                            'name'          => '双得利运营商系统',
+                            'keywords'      =>  '双得利运营商系统',
+                            'description'   =>  '双得利运营商系统'
                         ],
     // 默认输出类型
     'default_return_type'               => 'html',
