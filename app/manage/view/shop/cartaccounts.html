@@ -128,24 +128,26 @@
 </script>
 <script>
     function moneyPay(id,data){
-        data.id = id;
-        $.ajax({
-            url:"{:url('manage/shop/toMoneyPay')}",
-            method:'post',
-            dataType:'json',
-            data:data,
-            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
-            success: function(res){
-                if(res.code != 200){
-                    alertMsg(res.msg)
-                }else{
-                    alertMsg(res.msg)
-                    setTimeout(function(){window.location.href=""},2)
+        alertConfirm('确认要支付吗？',function(){
+            data.id = id;
+            $.ajax({
+                url:"{:url('manage/shop/toMoneyPay')}",
+                method:'post',
+                dataType:'json',
+                data:data,
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    if(res.code != 200){
+                        alertMsg(res.msg)
+                    }else{
+                        alertMsg(res.msg)
+                        setTimeout(function(){window.location.href=""},2)
+                    }
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
                 }
-            },
-            error:function(){
-                alertMsg("{:lang('Operation fail')}");
-            }
+            })
         })
     }
 

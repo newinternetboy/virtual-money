@@ -31,9 +31,13 @@ class Shop extends Admin
         $type = input('type');
         $shopname = input('shopname');
         $username = input('username');
+        $search_category =input('search_category');
         $starttime = input('starttime');
         $endtime = input('endtime');
         $where=[];
+        if($search_category){
+            $where['category'] = $search_category;
+        }
         if($M_Code){
             $where['M_Code'] = $M_Code;
         }
@@ -70,6 +74,10 @@ class Shop extends Admin
         $param['endtime']    = $endtime;
         $shopService = new ShopService();
         $shops = $shopService->getInfoPaginate($where,$param);
+        $dictService = new DictService();
+        $dictlist = $dictService->selectInfo(['type'=>DICT_COMPANY_ELE_BUSINESS]);
+        $this->assign('dictlist',$dictlist);
+        $this->assign('search_category',$search_category);
         $this->assign('shops',$shops);
         $this->assign('status',$status);
         $this->assign('type',$type);
@@ -130,6 +138,7 @@ class Shop extends Admin
             $desc = input('desc');
             $notify = input('notify');
             $personName = input('personName');
+            $category = input('category');
             $bank = input('bank');
             $cardNumber = input('cardNumber');
             $status = input('status/d');
@@ -149,6 +158,7 @@ class Shop extends Admin
             $data['notify'] = $notify;
             $data['personName'] = $personName;
             $data['bank'] = $bank;
+            $data['category'] = $category;
             $data['cardNumber'] = $cardNumber;
             $data['status'] = $status;
             $data['sdl_preference'] = $sdl_preference;
@@ -351,7 +361,7 @@ class Shop extends Admin
             $update['freeze_msg'] =$freeze_msg;
             $update['id'] = $data['id'];
             $update['freeze'] = $data['freeze'];
-            if( !$cartService->upsert($update,false) ){
+            if( !$cartService->upsert($update,'Cart.saveCart') ){
                 $error = $cartService->getError();
                 Log::record(['修改失败:' => $error,'data' => $update],'error');
                 exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
@@ -832,6 +842,66 @@ class Shop extends Admin
         if(!$dictService->del($id)){
             $ret['code'] = 201;
             $ret['msg'] = lang('Update Faild');
+        }
+        return json($ret);
+    }
+    //得利订单管理
+    public function deliCarts(){
+        $order_number = input('order_number');
+        $mobile = input('mobile');
+        $freeze = input('freeze');
+        $status = input('status',ORDER_WAITING_SEED);
+        $starttime = input('starttime',date('Y-m-d',strtotime('-1 month')));
+        $endtime = input('endtime',date('Y-m-d'));
+        $where['pay_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
+        $where['shopType'] = DELI_ELE_BUSINESS_TYPE;
+        if($order_number){
+            $where['id'] = $order_number;
+        }
+        if($mobile){
+            $where['contact_tel'] = $mobile;
+        }
+        if($freeze !==null&&$freeze !='all'){
+            $where['freeze'] = intval($freeze);
+        }
+        if($status){
+            $where['status'] = intval($status);
+        }
+        $param['order_number'] = $order_number;
+        $param['mobile'] = $mobile;
+        $param['freeze'] = $freeze;
+        $param['status'] = $status;
+        $param['starttime'] = $starttime;
+        $param['endtime'] = $endtime;
+        $cartService = new CartService();
+        $orders = $cartService->getInfoPaginate($where,$param);
+        $this->assign('orders',$orders);
+        $this->assign('order_number',$order_number);
+        $this->assign('mobile',$mobile);
+        $this->assign('freeze',$freeze);
+        $this->assign('status',$status);
+        $this->assign('starttime',$starttime);
+        $this->assign('endtime',$endtime);
+        return $this->fetch();
+    }
+
+    //保存得利订单；
+    public function saveDeliCart(){
+        $data = input('data');
+        $data = json_decode($data,true);
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try{
+            $cartService = new cartService();
+            if( !$cartService->upsert($data,'Cart.saveDeliCart') ){
+                $error = $cartService->getError();
+                Log::record(['修改失败:' => $error,'data' => $data],'error');
+                exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record('Cart Delivery',$data);
+        }catch (\Exception $e){
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
         }
         return json($ret);
     }

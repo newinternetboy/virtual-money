@@ -16,12 +16,12 @@ class Production extends Validate
     ];
 
     protected $message  =   [
-        'name.require'     => '{%Production Name Reuqire}',
+        'name.require'             => '{%Production Name Reuqire}',
         'sdlenable.require'        => '{%Production Sdlenable Reuqire}',
         'rmbenable.require'        => '{%Production Rmbenable Reuqire}',
-        'desc.require'     => '{%Production Desc Reuqire}',
-        'img.require'      => '{%Production Img Reuqire}',
-        'status.require'   => '{%Production Status Reuqire}'
+        'desc.require'             => '{%Production Desc Reuqire}',
+        'img.require'              => '{%Production Img Reuqire}',
+        'status.require'           => '{%Production Status Reuqire}'
     ];
 
     protected $scene = [

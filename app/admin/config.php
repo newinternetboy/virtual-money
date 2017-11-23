@@ -131,6 +131,7 @@ return [
         'Settle Success',
         'Freeze/Not Freeze Cart',
         'Edit Deli Production',
+        'Cart Delivery',
     ],
 
     //统计报表默认查询时间差

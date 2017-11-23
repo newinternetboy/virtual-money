@@ -66,6 +66,19 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-6" style="float: left">
+                                <div class="form-group">
+                                    <label for="search_category" class="col-sm-2 control-label">{:lang('Production Dict')}:</label>
+                                    <div class="col-sm-6">
+                                        <select name="search_category" id="search_category" class="form-control">
+                                            <option value="" >{:lang('Search All')}</option>
+                                            {foreach $dictlist as $dict}
+                                            <option value="{$dict.id}" {if condition="$search_category eq $dict.id"}selected{/if}>{$dict.desc}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div><!-- /form-group -->
+                            </div><!-- /.col-lg-6 -->
                         </div>
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
@@ -98,6 +111,7 @@
                                 <tr>
                                    <th>{:lang('Shop Name')}</th>
                                    <th>{:lang('Shop Type')}</th>
+                                   <th>{:lang('Production Dict')}</th>
                                    <th>{:lang('Username')}</th>
                                    <th>{:lang('M_Code')}</th>
                                    <th>{:lang('Shop Status')}</th>
@@ -116,6 +130,7 @@
                                        {default /}{:lang('Order Person')}
                                    {/switch}
                                    </td>
+                                   <td>{$vo.category ? $vo.dict.desc : '-'}</td>
                                    <td>{$vo.uid ? $vo.consumer.username : '-'}</td>
                                    <td>{$vo.uid ? $vo.consumer.M_Code : '-'}</td>
                                    <td>
@@ -244,6 +259,16 @@
                     <label for="desc_qy" class="col-md-2 control-label">{:lang('Shop Desc')}</label>
                     <div class="col-md-10">
                         <input class="form-control" name="desc" id="desc_qy">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="category" class="col-sm-2 control-label">{:lang('Production Dict')}:</label>
+                    <div class="col-sm-10">
+                        <select name="category" id="category" class="form-control">
+                            {foreach $dictlist as $dict}
+                            <option value="{$dict.id}">{$dict.desc}</option>
+                            {/foreach}
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -426,8 +451,6 @@
     }
 
     //企业电商的编辑
-
-
     function editQyshop(shop_id){
         $.ajax({
             url:"{:url('manage/shop/getShopInfoById')}",
@@ -462,6 +485,7 @@
         $('#health_auth_qy').find("option[value="+data.health_auth+"]").prop("selected",true);
         $('#sdl_auth_qy').find("option[value="+data.sdl_auth+"]").prop("selected",true);
         $('#status_qy').find('option[value='+data.status+']').prop("selected",true);
+        $('#category').find('option[value='+data.category+']').prop("selected",true);
     }
 
     function sub_qy(){
@@ -473,6 +497,7 @@
         var notify =$('#notify_qy').val();
         var personName =$('#personName_qy').val();
         var bank =$('#bank_qy').val();
+        var category =$('#category').val();
         var status =$('#status_qy').val();
         var cardNumber =$('#cardNumber_qy').val();
         var sdl_preference =$('#sdl_preference_qy').val();
@@ -515,6 +540,7 @@
         formData.append('notify',notify);
         formData.append('personName',personName);
         formData.append('bank',bank);
+        formData.append('category',category);
         formData.append('cardNumber',cardNumber);
         formData.append('status',status);
         formData.append('sdl_preference',sdl_preference);

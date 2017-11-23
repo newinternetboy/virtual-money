@@ -18,6 +18,10 @@ class CartModel extends BasicModel
         return intval($value);
     }
 
+    public function setStatusAttr($value){
+        return intval($value);
+    }
+
     public function shop(){
         return $this->belongsTo('ShopModel','sid');
     }

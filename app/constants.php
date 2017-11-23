@@ -116,6 +116,7 @@ define('COMPANY_STATUS_DEL',2);    //已删除
 //店铺类型 type
 define('PERSONAL_ELE_BUSINESS',0); //个人电商
 define('COMPANY_ELE_BUSINESS',1);  //企业电商
+define('DELI_ELE_BUSINESS_TYPE',2); //得利电商
 //店铺状态 status
 define('SHOP_STATUS_CLOSE',0); //关闭
 define('SHOP_STATUS_OPEN',1); //打开
@@ -129,7 +130,7 @@ define('PRODUCTION_ID_DELI','0');//得利商铺
 
 /***************cart表***************/
 //订单冻结状态 freeze
-define('ORDER_FREEZE',1);//待处理
+define('ORDER_FREEZE',1);//已冻结
 define('ORDER_NORMAL',0);//正常
 //订单状态 status
 define('ORDER_UNPAID',1);//待付款
