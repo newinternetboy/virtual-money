@@ -66,7 +66,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Pay Money')}{:lang('From')}</label>
+                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Pay Time')}{:lang('From')}</label>
                                     <div class="col-sm-6">
                                         <input id="start_datetimepicker" name="starttime" value="{$starttime ?? ''}" type="text" class="form-control">
                                     </div>
@@ -89,7 +89,6 @@
                         </div>
                     </form>
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
-                        <!--原表信息-->
                         <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
                             <thead>
                                 <tr>
@@ -134,7 +133,7 @@
                                    </td>
                                    <td>
                                        {if condition="$vo.status == $Think.ORDER_WAITING_SEED"}
-                                      <button class="btn btn-primary" onclick="change('{$vo.id}')">{:lang('Delivery')}</button>
+                                      <button class="btn btn-primary" onclick="changeStatus('{$vo.id}')">{:lang('Delivery')}</button>
                                        {/if}
                                    </td>
                                     <td><button class="btn btn-success" onclick='checkProduction({$vo.products|json_encode})'>{:lang('Production Detail')}</button> &nbsp;<button class="btn btn-success" onclick='checkOrder({$vo|json_encode})'>{:lang('Order Detail')}</button></td>
@@ -165,18 +164,7 @@
                 <h4 class="modal-title" id="myModalLabel1">{:lang('Edit')}{:lang('Order')}</h4>
             </div>
             <div class="modal-body form-horizontal">
-                <input style="display: none" name="id" value="" id="id1" />
-                <input style="display: none" name="" value="" id="save_freeze" />
-
-                <div class="form-group">
-                    <label for="status_edit" class="col-md-2 control-label">{:lang('Order Freeze Status')}:</label>
-                    <div class="col-md-10">
-                        <select name="status_edit" id="status_edit" class="form-control">
-                            <option value="{$Think.ORDER_WAITING_SEED}">{:lang('Waiting Seed')}</option>
-                            <option value="{$Think.ORDRE_WAITING_TASK}">{:lang('Waiting Task')}</option>
-                        </select>
-                    </div>
-                </div>
+                <input style="display: none" name="id" value="" id="id_edit" />
                 <div class="form-group">
                     <label for="express_company" class="col-md-2 control-label">{:lang('Express Company')}:</label>
                     <div class="col-md-10">
@@ -321,35 +309,10 @@
         event.preventDefault();
         event.stopPropagation();
     });
-    function change(id){
-        $.ajax({
-            url:"{:url('manage/shop/getCartInfoById')}",
-            method:'post',
-            dataType:'json',
-            data: {id: id},
-            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
-            success: function(res){
-                if(res.code != 200){
-                    alertMsg(res.msg)
-                }else{
-                    fillModal1(res.data);
-                    $('#myModal1').modal('show')
-                }
-            },
-            error:function(){
-                alertMsg("{:lang('Operation fail')}");
-            }
-        })
+    function changeStatus(id){
+        $('#id_edit').val(id);
+        $('#myModal1').modal('show')
     }
-
-    function fillModal1(data){
-        $('#id1').val(data.id);
-        $('#express_company').val(data.express_company);
-        $('#express_number').val(data.express_number);
-        $('#status_edit').find("option[value="+data.status+"]").prop("selected",true);
-
-    }
-
     function checkProduction(production){
         var str= ''
         $.each(production,function(i,n){
@@ -380,14 +343,12 @@
         $('#check_contact_address').html(order.contact_address)
         $('#check_express_company').html(order.express_company)
         $('#check_express_number').html(order.express_number)
-
         var deli_settle_status=''
         switch(order.deli_settle_status){
             case {$Think.const.ORDER_ALREADY_ACCOUNT}:deli_settle_status="{:lang('Already Account')}";break;
             default:deli_settle_status="{:lang('Not Account')}";break;
         }
         $('#check_deli_settle_status').html(deli_settle_status)
-
         var freeze=''
         switch(order.freeze){
             case {$Think.const.ORDER_FREEZE}:freeze="{:lang('Already Freeze')}";break;
@@ -397,32 +358,12 @@
         $('#check_totalCost').html(order.totalCost)
         $('#myModal3').modal('show');
     }
-    function editShop(shop_id){
-        $.ajax({
-            url:"{:url('manage/shop/getShopInfoById')}",
-            method:'post',
-            dataType:'json',
-            data: {id: shop_id},
-            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
-            success: function(res){
-                if(res.code != 200){
-                    alertMsg(res.msg);
-                }else{
-                    fillModal1(res.data);
-                    $('#myModal').modal('show')
-                }
-            },
-            error:function(){
-                alertMsg("{:lang('Operation fail')}");
-            }
-        })
-    }
 
     function sub(){
-        var id = $('#id1').val();
+        var id = $('#id_edit').val();
         var express_company = $('#express_company').val();
         var express_number = $('#express_number').val();
-        var status = $('#status_edit').val();
+        var status = {$Think.const.ORDRE_WAITING_TASK};
         if( express_company == '' || express_company == 'undefined' || express_company == null ){
             alertMsg("请填写快递公司！");
             return false;

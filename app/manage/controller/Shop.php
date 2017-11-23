@@ -64,7 +64,6 @@ class Shop extends Admin
         if($starttime&&$endtime){
             $where['create_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
         }
-//        var_dump($where);die;
         $param['status']     = $status;
         $param['M_Code']     = $M_Code;
         $param['type']       = $type;
@@ -126,7 +125,7 @@ class Shop extends Admin
         }
         return json($ret);
     }
-
+    //修改企业商铺信息
     public function saveQyshop()
     {
         $ret['code'] = 200;
@@ -174,7 +173,7 @@ class Shop extends Admin
         }
         return json($ret);
     }
-
+    //商品管理
     public function productions(){
         $id = input('id');
         $name = input('name');
@@ -216,7 +215,7 @@ class Shop extends Admin
         $this->assign('productions',$productions);
         return $this->fetch();
     }
-
+    //获取单条商品信息
     public function getProductionInfoById(){
         $id = input('id');
         $ret['code'] = 200;
@@ -233,7 +232,7 @@ class Shop extends Admin
         }
         return json($ret);
     }
-
+    //保存个人商品和企业商品
     public function saveProduction(){
         $ret['code'] = 200;
         $ret['msg'] = lang('Operation Success');
@@ -285,7 +284,7 @@ class Shop extends Admin
         }
         return json($ret);
     }
-    //查看订单；
+    //查看所有订单；
     public function carts(){
         $order_number = input('order_number');
         $mobile = input('mobile');
@@ -323,7 +322,7 @@ class Shop extends Admin
         $this->assign('endtime',$endtime);
         return $this->fetch();
     }
-
+    //获取单条订单信息
     public function getCartInfoById(){
         $id = input('id');
         $ret['code'] = 200;
@@ -375,7 +374,7 @@ class Shop extends Admin
     }
 
 
-    //订单结算
+    //订单结算管理
     public function cartAccounts(){
         $page = input('page',1);
         $startDate = input('startDate',date('Y-m-d',strtotime('-1 month')));
@@ -781,7 +780,7 @@ class Shop extends Admin
         $this->assign('dicttype',$dicttype);
         return $this->fetch();
     }
-
+    //获取单条分类信息
     public function getDictInfoById(){
         $id = input('id');
         $ret['code'] = 200;
@@ -798,7 +797,7 @@ class Shop extends Admin
         }
         return json($ret);
     }
-
+    //保存分类信息
     public function saveDict(){
         $ret['code'] = 200;
         $ret['msg'] = lang('Operation Success');
@@ -833,7 +832,7 @@ class Shop extends Admin
         }
         return json($ret);
     }
-
+    //删除分类信息
     public function deleteDictByid(){
         $id = input('id');
         $ret['code'] = 200;
@@ -892,6 +891,9 @@ class Shop extends Admin
         $ret['code'] = 200;
         $ret['msg'] = lang('Operation Success');
         try{
+            if($data['status'] != ORDRE_WAITING_TASK){
+                exception(lang('Operation fail').' : 提交的订单的状态错误！',ERROR_CODE_DATA_ILLEGAL);
+            }
             $cartService = new cartService();
             if( !$cartService->upsert($data,'Cart.saveDeliCart') ){
                 $error = $cartService->getError();
