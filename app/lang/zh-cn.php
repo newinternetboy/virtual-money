@@ -612,7 +612,7 @@ return [
     //订单管理；
     'Order List'                        => '订单列表',
     'Order Number'                      => '订单号',
-    'Order Freeze Status'               => '订单冻结状态',
+    'Order Freeze Status'               => '冻结状态',
     'Order Status'                      => '订单状态',
     'Order Count'                       => '订单数量',
     'Settle Success'                    => '结算成功',
@@ -655,6 +655,9 @@ return [
     'Cart Express_number Reuqire'       => '订单快递单号必须',
     'Cart Freeze Reuqire'               => '订单冻结状态必须',
     'Cart Freeze_msg Reuqire'           => '订单冻结原因信息必须',
+    'Contact Name'                      => '收货人',
+    'Contact Tel'                       => '联系方式',
+    'Contact Address'                   => '收货地址',
 
     //企业店铺管理
     'Shop Desc'                         => '店铺描述',
@@ -720,6 +723,8 @@ return [
     //修改用户信息
     'Manage User'                       => '用户管理',
     'Shop Admin Id Require'             => '企业管理员id必须',
+    //订单管理
+    'No Qualified Cart Exists'          => '没有符合条件的订单',
 
 
 ];
