@@ -2,88 +2,112 @@
 {js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
 {js href="__JS__/layer/layer.js" /}
 {css href="__CSS__/bootstrap-datetimepicker.min.css" /}
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class=" table-responsive">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单内容 -->
-                <div class="ibox-content">
-                    <!-- 表格数据 -->
-                    <form  method="" class="form-horizontal">
-                        <div class="form-group">
-                             <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="user_name" class="col-sm-2 control-label">{:lang('Operate People')}:</label>
-                                    <div class="col-sm-6">
-                                        <select class="form-control" id="user_name" name="user_name">
-                                            <option value="">{:lang('Search All')}</option>
-                                            {volist name="users" id="user"}
-                                            <option value="{$user.id}" {if condition="$user eq $user_name"}selected{/if}>{$user.username}</option>
-                                            {/volist}
-                                        </select>
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <div class="ibox float-e-margins" style="background: white">
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('logrecord')}{:lang('search')}</h5>
+                    </div>
+                    <!-- 表单内容 -->
+                    <div class="ibox-content" style="float: left;">
+                        <!-- 表格数据 -->
+                        <form method="" class="form-horizontal">
+                            <div class="form-group" style="margin-bottom: 15px">
+                                <div class="col-md-4" style="float: left">
+                                    <div class="form-group">
+                                        <label for="user_name" class="col-sm-6 control-label">{:lang('Operate People')}:</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="user_name" name="user_name">
+                                                <option value="">{:lang('Search All')}</option>
+                                                {volist name="users" id="user"}
+                                                <option value="{$user.id}" {if condition="$user eq $user_name"}selected{/if}>{$user.username}</option>
+                                                {/volist}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                             </div>
-                             <div class="col-lg-6" style="float: right">
-                                <div class="form-group">
-                                    <label for="remark" class="col-sm-2 control-label">{:lang('Record Type')}:</label>
-                                    <div class="col-sm-6">
-                                        <select class="form-control" id="remark" name="remark">
-                                            <option value="">{:lang('Search All')}</option>
-                                            {volist name="logtypes" id="logtype"}
-                                            <option value="{$logtype}" {if condition="$logtype eq $remark"}selected{/if}>{:lang($logtype)}</option>
-                                            {/volist}
-                                        </select>
-                                    </div>
-                                </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Start Time')}:</label>
-                                    <div class="col-sm-6">
-                                        <input id="start_datetimepicker" name="start_time" value="{$start_time ?? ''}" type="text" class="form-control">
+                                <div class="col-md-4" style="float: left">
+                                    <div class="form-group">
+                                        <label for="remark" class="col-sm-6 control-label">{:lang('Record Type')}:</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="remark" name="remark">
+                                                <option value="">{:lang('Search All')}</option>
+                                                {volist name="logtypes" id="logtype"}
+                                                <option value="{$logtype}" {if condition="$logtype eq $remark"}selected{/if}>{:lang($logtype)}</option>
+                                                {/volist}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div><!-- /.col-lg-6 -->
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="end_datetimepicker" class="col-sm-2 control-label">{:lang('End Time')}:</label>
-                                    <div class="col-sm-6">
-                                        <input id="end_datetimepicker" name="end_time" value="{$end_time ?? ''}" type="text" class="form-control">
-                                    </div>
-                                </div>
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
-                            <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
                             </div>
-                        </div>
-                    </form>
+                            <div class="form-group" style="margin-bottom: 15px">
+                                <div class="col-md-4" style="float: left">
+                                    <div class="form-group">
+                                        <label for="start_datetimepicker" class="col-sm-6 control-label">{:lang('Start Time')}:</label>
+                                        <div class="col-sm-6">
+                                            <input id="start_datetimepicker" name="start_time" value="{$start_time ?? ''}" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="float: left">
+                                    <div class="form-group">
+                                        <label for="end_datetimepicker" class="col-sm-6 control-label">{:lang('End Time')}:</label>
+                                        <div class="col-sm-6">
+                                            <input id="end_datetimepicker" name="end_time" value="{$end_time ?? ''}" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <!--<div class="col-lg-6" style="float: left">-->
+                                    <!--<div class="form-group">-->
+                                        <!--<label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Start Time')}:</label>-->
+                                        <!--<div class="col-sm-6">-->
+                                            <!--<input id="start_datetimepicker" name="start_time" value="{$start_time ?? ''}" type="text" class="form-control">-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>&lt;!&ndash; /.col-lg-6 &ndash;&gt;-->
+                                <!--<div class="col-lg-6" style="float: left">-->
+                                    <!--<div class="form-group">-->
+                                        <!--<label for="end_datetimepicker" class="col-sm-2 control-label">{:lang('End Time')}:</label>-->
+                                        <!--<div class="col-sm-6">-->
+                                            <!--<input id="end_datetimepicker" name="end_time" value="{$end_time ?? ''}" type="text" class="form-control">-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>&lt;!&ndash; /.col-lg-6 &ndash;&gt;-->
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
+                                </div>
+                            </div>
+                        </form>
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
                         <!--原表信息-->
                         <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
                             <thead>
-                                <tr>
-                                   <th>{:lang('Record Type')}</th>
-                                   <th>{:lang('Add Time')}</th>
-                                   <th>{:lang('record Content')}</th>
-                                   <th>{:lang('Operate People')}</th>
-                                   <th>{:lang('Operate')}</th>
-                                </tr>
+                            <tr>
+                                <th>{:lang('Record Type')}</th>
+                                <th>{:lang('Add Time')}</th>
+                                <th>{:lang('record Content')}</th>
+                                <th>{:lang('Operate People')}</th>
+                                <th>{:lang('Operate')}</th>
+                            </tr>
                             </thead>
                             <tbody>
                             {volist name='logrecord' id='vo'}
-                                <tr>
-                                   <td>{:lang($vo.remark)}</td>
-                                   <td>{$vo.create_time}</td>
-                                   <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{$vo.data}</td>
-                                   <td>{$vo.user.username}</td>
-                                   <td><button class="btn btn-primary record" >{:lang('Detailed Content')}</button></td>
-                                </tr>
+                            <tr>
+                                <td>{:lang($vo.remark)}</td>
+                                <td>{$vo.create_time}</td>
+                                <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{$vo.data}</td>
+                                <td>{$vo.user.username}</td>
+                                <td><button class="btn btn-primary record" >{:lang('Detailed Content')}</button></td>
+                            </tr>
                             {/volist}
                             </tbody>
                         </table></div>
@@ -98,10 +122,11 @@
                                 <p class="form-control" style="border: none">{:lang('Please in the search box enter the query query, return the result')}</p>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 <script>
     $("#start_datetimepicker").datetimepicker({

@@ -1,34 +1,38 @@
 <!-- Data Tables -->
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单标题概要 -->
-                <div class="ibox-title">
-                    <h5>{:lang('Role List')}</h5>
-                </div>
-                <!-- 表单内容 -->
-                <div class="ibox-content">
-                    <!-- 用户控件（操作） -->
-                    {toolbar id="toolbar"}
-                    {/toolbar}
-                    <!-- 表格数据 -->
-					<table id="table" data-toggle="gridview" class="table" data-url="{:url('admin/role/getList')}" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
-					    <thead>
-							<tr>
-								<th data-width="40" data-checkbox="true"></th>
-								<th data-width="100" data-field="name">{:lang('Role Name')}</th>
-								<th data-width="100" data-field="status" data-formatter="format_status">{:lang('Status')}</th>
-								<th data-field="remark">{:lang('Note')}</th>
-                                <th data-width="100" data-field="operate" data-align="center" data-formatter="operateFormatter" data-events="operateEvents">{:lang('Operate')}</th>
-                                
-							</tr>
-						</thead>
-					</table>
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins" style="background: white">
+                    <!-- 表单标题概要 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Role List')}</h5>
+                    </div>
+                    <!-- 表单内容 -->
+                    <div class="ibox-content">
+                        <!-- 用户控件（操作） -->
+                        {toolbar id="toolbar"}
+                        {/toolbar}
+                        <!-- 表格数据 -->
+                        <div class="table-responsive">
+                            <table id="table" data-toggle="gridview" class="table table-bordered" data-url="{:url('admin/role/getList')}" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
+                                <thead>
+                                <tr>
+                                    <th data-width="40" data-checkbox="true"></th>
+                                    <th data-width="100" data-field="name">{:lang('Role Name')}</th>
+                                    <th data-width="100" data-field="status" data-formatter="format_status">{:lang('Status')}</th>
+                                    <th data-field="remark">{:lang('Note')}</th>
+                                    <th data-width="100" data-field="operate" data-align="center" data-formatter="operateFormatter" data-events="operateEvents">{:lang('Operate')}</th>
+
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 <script type="text/javascript">

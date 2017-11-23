@@ -1,97 +1,96 @@
 {js href="__JS__/bootstrap-datetimepicker.min.js" /}
 {js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
 {css href="__CSS__/bootstrap-datetimepicker.min.css" /}
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class=" table-responsive">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单内容 -->
-                <div class="ibox-content">
-                    <!-- 表格数据 -->
-                    <form data-method="post" method="get" class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="M_Code" class="col-sm-3 control-label">{:lang('Old M_Code')}:</label>
-                                    <div class="col-sm-6">
-                                        <input name="M_Code" id="M_Code" type="text" class="form-control" placeholder="{:lang('Please enter old M_Code')}" value="{$M_Code ?? ''}">
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <div class="ibox float-e-margins" style="background: white;">
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('meter')}{:lang('changemeterrecord')}</h5>
+                    </div>
+                    <!-- 表单内容 -->
+                    <div class="ibox-content">
+                        <!-- 表格数据 -->
+                        <form data-method="post" method="get" class="form-horizontal">
+                            <div class="form-group" style="margin-bottom: 15px">
+                                <label for="M_Code" class="col-sm-2 control-label">{:lang('Old M_Code')}</label>
+                                <div class="col-sm-10">
+                                    <input name="M_Code" id="M_Code" type="text" class="form-control" placeholder="{:lang('Please enter old M_Code')}" value="{$M_Code ?? ''}">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 15px">
+                                <label for="new_meter_M_Code" class="col-sm-2 control-label">{:lang('New M_Code')}</label>
+                                <div class="col-sm-10">
+                                    <input name="new_meter_M_Code" id="new_meter_M_Code" type="text" class="form-control" placeholder="{:lang('Please enter new M_Code')}" value="{$new_meter_M_Code ?? ''}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4" style="float: left">
+                                    <div class="form-group">
+                                        <label for="start_datetimepicker" class="col-sm-6 control-label">{:lang('Change Code Time from')}：</label>
+                                        <div class="col-sm-6">
+                                            <input name="start_time" id="start_datetimepicker" type="text" class="form-control" value="{$start_time ?? ''}">
+                                        </div>
                                     </div>
-                                </div><!-- /form-group -->
-                            </div><!-- /.col-lg-6 -->
-                             <div class="col-lg-6" style="float: right">
-                                <div class="form-group">
-                                    <label for="new_meter_M_Code" class="col-sm-3 control-label">{:lang('New M_Code')}:</label>
-                                    <div class="col-sm-6">
-                                        <input name="new_meter_M_Code" id="new_meter_M_Code" type="text" class="form-control" placeholder="{:lang('Please enter new M_Code')}" value="{$new_meter_M_Code ?? ''}">
-                                    </div>
-                                </div><!-- /form-group -->
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="start_datetimepicker" class="col-sm-3 control-label">{:lang('Change Code Time from')}：</label>
-                                    <div class="col-sm-6">
-                                        <input name="start_time" id="start_datetimepicker" type="text" class="form-control" value="{$start_time ?? ''}">
+                                </div>
+                                <div class="col-md-4" style="float: left">
+                                    <div class="form-group">
+                                        <label for="end_datetimepicker" class="col-sm-6 control-label">{:lang('To')}：</label>
+                                        <div class="col-sm-6">
+                                            <input name="end_time" id="end_datetimepicker" type="text" class="form-control" value="{$end_time ?? ''}">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="end_datetimepicker" class="col-sm-3 control-label">{:lang('To')}：</label>
-                                    <div class="col-sm-6">
-                                        <input name="end_time" id="end_datetimepicker" type="text" class="form-control" value="{$end_time ?? ''}">
-                                    </div>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button style="float: right" class="btn btn-success" type="submit"  >查询</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
-                            <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="submit"  >查询</button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
                         <!--结果列表-->
                         <div>
                             <table class="table table-hover">
-                            <thead>
+                                <thead>
                                 <tr>
-                                   <th>{:lang('Installation Address')}</th>
-                                   <th>{:lang('Old M_Code')}</th>
-                                   <th>{:lang('New M_Code')}</th>
-                                   <th>{:lang('Change Code People')}</th>
-                                   <th>{:lang('Change')}{:lang('Reason')}</th>
-                                   <th>{:lang("Charge Balance")}</th>
-                                   <th>{:lang('Cumulative Amount')}</th>
-                                   <th>{:lang('Date')}</th>
+                                    <th>{:lang('Installation Address')}</th>
+                                    <th>{:lang('Old M_Code')}</th>
+                                    <th>{:lang('New M_Code')}</th>
+                                    <th>{:lang('Change Code People')}</th>
+                                    <th>{:lang('Change')}{:lang('Reason')}</th>
+                                    <th>{:lang("Charge Balance")}</th>
+                                    <th>{:lang('Cumulative Amount')}</th>
+                                    <th>{:lang('Date')}</th>
                                 </tr>
-                            </thead>
-                            <tbody>
-                            {volist name='meter' id='vo'}
-                                  <tr>
-                                   <td>{$vo.area.name}{$vo.detail_address}</td>
-                                   <td>{$vo.M_Code}</td>
-                                   <td>{$vo.new_meter_M_Code}</td>
-                                   <td>{$vo.user.username}</td>
-                                   <td>{$vo.change_reason}</td>
-                                   <td>{$vo.balance}</td>
-                                   <td>{$vo.totalCube}</td>
-                                   <td>{$vo.change_time|date="y-m-d H:i:s",###}</td>
-                                  </tr>
-                            {/volist}
-                            </tbody>
+                                </thead>
+                                <tbody>
+                                {volist name='meter' id='vo'}
+                                <tr>
+                                    <td>{$vo.area.name}{$vo.detail_address}</td>
+                                    <td>{$vo.M_Code}</td>
+                                    <td>{$vo.new_meter_M_Code}</td>
+                                    <td>{$vo.user.username}</td>
+                                    <td>{$vo.change_reason}</td>
+                                    <td>{$vo.balance}</td>
+                                    <td>{$vo.totalCube}</td>
+                                    <td>{$vo.change_time|date="y-m-d H:i:s",###}</td>
+                                </tr>
+                                {/volist}
+                                </tbody>
                             </table>
 
                         </div>
-                    <div>
-                        {$meter->render()}
+                        <div>
+                            {$meter->render()}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 <script>
     $("#start_datetimepicker").datetimepicker({

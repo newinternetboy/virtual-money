@@ -22,37 +22,64 @@
 	{js href="__LIB__/bootstrap3/js/bootstrap.min.js" /}
     {js href="__JS__/jquery.validate.min.js" /}
 </head>
+<style>
+    .loginTitle {
+        color: #235A7C;
+    }
+    .login_title {
+        font-size: 14px;
+        margin-top: 40px;
+    }
+    .login_subtitle {
+        font-size: 18px;
+        margin-bottom: 60px;
+    }
 
-<body class="gray-bg">
+
+</style>
+
+<body id="login_BG" class="gray-bg">
 
     <div class="middle-box text-center loginscreen animated fadeInDown">
         <div>
             <div>
-                <h1 class="logo-name">RED</h1>
+                <p class="loginTitle login_title">双得利智能物联网平台</p>
+                <hr style="width: 120px;margin: 10px 100px 10px 100px;">
+                <p class="loginTitle login_subtitle">后台管理系统</p>
+                <!--<h1 class="logo-name">RED</h1>-->
             </div>
-            <h3>Welcome to RED</h3>
-            <!-- <p>Perfectly designed,Simplicity,Useful,Free.
-            </p>
-            <p>Login in. To see it in action.</p> -->
+            <!--<h3>Welcome to RED</h3>-->
+            <!--&lt;!&ndash; <p>Perfectly designed,Simplicity,Useful,Free.-->
+            <!--</p>-->
+            <!--<p>Login in. To see it in action.</p> &ndash;&gt;-->
 
-			<!-- <a class="right-sidebar-toggle" href="#">
-                <i class="fa fa-tasks"></i>
-            </a> -->
-            
+			<!--&lt;!&ndash; <a class="right-sidebar-toggle" href="#">-->
+                <!--<i class="fa fa-tasks"></i>-->
+            <!--</a> &ndash;&gt;-->
+            <!---->
             <form class="m-t" id="login-form-hooks" onsubmit="return false;">
             	<div class="msgerr" style="color: #e15f63;text-align: left;"></div>
                 <div class="form-group">
+                    <div class="Loginlabel label_username">
+                        <p class="loginTitle">用户名</p>
+                    </div>
                     <input id="login_name" name="login_name" class="form-control" placeholder="{:lang('login name')}" maxlength="26" value="13330613321" required="">
                 </div>
                 <div class="form-group">
+                    <div class="Loginlabel label_password">
+                        <p class="loginTitle">密码</p>
+                    </div>
                     <input id="password" name="password" type="password"  class="form-control" placeholder="Password" rangelength="[6,16]" value="123456">
                 </div>
 
                 <div class="form-group">
+                    <div class="Loginlabel label_captcha">
+                        <p class="loginTitle">验证码</p>
+                    </div>
                     <input id="captcha" name="captcha" type="text"  class="form-control" placeholder="Captcha" required="">
                 </div>
 
-                <div class="form-group" style="float: left;">
+                <div class="form-group" style="float: left; margin-bottom: 30px">
                     <img id="captchaimg" src="{:captcha_src()}" alt="{:lang('Captcha')}" width="130" height="38" class="verify refcaptcha">
                     <span style="width: 100px;padding-left: 10px" class="refcaptcha">{:lang('Click On The Image Change One')}</span>
                 </div>
@@ -64,8 +91,8 @@
                 <a class="btn btn-sm btn-white btn-block" href="#">Create an account</a> -->
             </form>
 
-            <p class="m-t"> <small>Tp-admin framework base on Bootstrap 3 &copy; 2016</small> </p>
-            <p class="m-t"> <small>Thank you very much Inspinia's theme.</small> </p>
+            <!--<p class="m-t"> <small>Tp-admin framework base on Bootstrap 3 &copy; 2016</small> </p>-->
+            <!--<p class="m-t"> <small>Thank you very much Inspinia's theme.</small> </p>-->
         </div>
     </div>
 
@@ -78,12 +105,12 @@
             submitHandler: function () {
                 doLogin();
             }
-       })
+       });
 
         $('.refcaptcha').on('click', function(){
             $('#captchaimg').get(0).src=($('#captchaimg').get(0).src+'?=r'+Math.random(1, 10000));
         });
-    })
+    });
 
     function doLogin() {
     	$(function(){
@@ -95,7 +122,7 @@
     			}
                 $('.refcaptcha').click();
     		}, 'json');
-    	})
+    	});
         return false;
     }
 

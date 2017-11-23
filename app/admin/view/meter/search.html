@@ -1,88 +1,93 @@
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class=" table-responsive">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单内容 -->
-                <div class="ibox-content">
-                    <!-- 表格数据 -->
-                    <form data-method="post" method="get" class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="M_Code" class="col-sm-2 control-label">{:lang('M_Code')}:</label>
-                                    <div class="col-sm-6">
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <div class="ibox float-e-margins" style="background: white;">
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('meter')}{:lang('Search')}</h5>
+                    </div>
+                    <!-- 表单内容 -->
+                    <div class="ibox-content">
+                        <!-- 表格数据 -->
+                        <form data-method="post" method="get" class="form-horizontal">
+                            <div class="form-group" style="margin-bottom: 50px">
+                                <div class="col-md-10" style="margin-bottom: 15px">
+                                    <div class="input-group">
                                         <input name="M_Code" id="M_Code" type="text" class="form-control" placeholder="{:lang('Please enter M_Code')}" value="{$M_Code ?? ''}">
-                                    </div>
-                                </div><!-- /form-group -->
-                            </div><!-- /.col-lg-6 -->
-                             <div class="col-lg-6" style="float: right">
-                                <div class="form-group">
-                                    <label for="M_Address" class="col-sm-2 control-label">{:lang('Installation Address')}:</label>
-                                    <div class="col-sm-6">
-                                        <select id="M_Address" class="form-control" placeholder="{:lang('Please enter')}{:lang('Installation Address')}..." name="M_Address">
-                                            <option value="">{:lang('Please Search')}{:lang('Area')}</option>
-                                            {volist name="areas" id="val" }
-                                            <option value="{$val.id}" {if condition="$M_Address eq $val.id"}selected{/if}>{$val.name}</option>
-                                            {/volist}
-                                        </select>
-                                    </div>
-                                </div><!-- /form-group -->
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="detail_address" class="col-sm-2 control-label">{:lang('Detail Address')}:</label>
-                                    <div class="col-sm-6">
-                                        <input name="detail_address" id="detail_address" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('detail address')}" value="{$detail_address ?? ''}">
-                                    </div>
-                                </div><!-- /form-group -->
-                            </div><!-- /.col-lg-6 -->   
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
-                            <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
+                                        <span class="input-group-addon">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                    </div><!-- /form-group -->
+                                </div><!-- /.col-lg-6 -->
+                                <div style="clear: both;"></div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="M_Address" class="col-sm-4 control-label">{:lang('Installation Address')}:</label>
+                                        <div class="col-sm-8">
+                                            <select id="M_Address" class="form-control" placeholder="{:lang('Please enter')}{:lang('Installation Address')}..." name="M_Address">
+                                                <option value="">{:lang('Please Search')}{:lang('Area')}</option>
+                                                {volist name="areas" id="val" }
+                                                <option value="{$val.id}" {if condition="$M_Address eq $val.id"}selected{/if}>{$val.name}</option>
+                                                {/volist}
+                                            </select>
+                                        </div>
+                                    </div><!-- /form-group -->
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="detail_address" class="col-sm-4 control-label">{:lang('Detail Address')}:</label>
+                                        <div class="col-sm-8">
+                                            <input name="detail_address" id="detail_address" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('detail address')}" value="{$detail_address ?? ''}">
+                                        </div>
+                                    </div><!-- /form-group -->
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
+                                </div>
+                            </div>
+                        </form>
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
                         <!--结果列表-->
                         <div>
                             <table class="table table-hover">
-                            <thead>
+                                <thead>
                                 <tr>
-                                   <th>{:lang('M_Code')}</th>
-                                   <th>{:lang('Price')}{:lang('Price Type')}</th>
-                                   <th>{:lang('Installation Address')}</th>
-                                   <th>{:lang('Detail Address')}</th>
-                                   <th>{:lang('Initial Dosage')}</th>
-                                   <th>{:lang('Cumulative Amount')}</th>
-                                   <th>{:lang('Used Amount')}</th>
+                                    <th>{:lang('M_Code')}</th>
+                                    <th>{:lang('Price')}{:lang('Price Type')}</th>
+                                    <th>{:lang('Installation Address')}</th>
+                                    <th>{:lang('Detail Address')}</th>
+                                    <th>{:lang('Initial Dosage')}</th>
+                                    <th>{:lang('Cumulative Amount')}</th>
+                                    <th>{:lang('Used Amount')}</th>
                                 </tr>
-                            </thead>
-                            <tbody>
-                            {volist name='meter' id='vo'}
-                                  <tr>
-                                   <td>{$vo.M_Code}</td>
-                                   <td>{$vo.price.name}</td>
-                                   <td>{$vo.area.name}</td>
-                                   <td>{$vo.detail_address}</td>
-                                   <td>0.00</td>
-                                   <td>0.00</td>
-                                   <td>0.00</td>
-                                  </tr>
-                            {/volist}
-                            </tbody>
+                                </thead>
+                                <tbody>
+                                {volist name='meter' id='vo'}
+                                <tr>
+                                    <td>{$vo.M_Code}</td>
+                                    <td>{$vo.price.name}</td>
+                                    <td>{$vo.area.name}</td>
+                                    <td>{$vo.detail_address}</td>
+                                    <td>0.00</td>
+                                    <td>0.00</td>
+                                    <td>0.00</td>
+                                </tr>
+                                {/volist}
+                                </tbody>
                             </table>
 
                         </div>
-                    <div>
-                        {$meter->render()}
+                        <div>
+                            {$meter->render()}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
 </div>
                    
