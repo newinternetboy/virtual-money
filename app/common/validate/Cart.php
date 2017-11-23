@@ -25,6 +25,7 @@ class Cart extends Validate
     protected $scene = [
         'saveCart'      =>      ['freeze','freeze_msg'],
         'saveDeliCart'  =>      ['status','express_company','express_number'],
+        'deliverCart'   =>      ['status','express_company','express_number'],
     ];
 
 }
