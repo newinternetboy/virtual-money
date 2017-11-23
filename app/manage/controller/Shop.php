@@ -891,10 +891,11 @@ class Shop extends Admin
         $ret['code'] = 200;
         $ret['msg'] = lang('Operation Success');
         try{
-            if($data['status'] != ORDRE_WAITING_TASK){
+            $cartService = new cartService();
+            $cart_one = $cartService->findInfo(['id'=>$data['id']]);
+            if(($data['status'] != ORDRE_WAITING_TASK) || ($cart_one['status'] !=ORDER_WAITING_SEED) ){
                 exception(lang('Operation fail').' : 提交的订单的状态错误！',ERROR_CODE_DATA_ILLEGAL);
             }
-            $cartService = new cartService();
             if( !$cartService->upsert($data,'Cart.saveDeliCart') ){
                 $error = $cartService->getError();
                 Log::record(['修改失败:' => $error,'data' => $data],'error');
