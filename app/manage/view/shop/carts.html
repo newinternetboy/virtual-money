@@ -95,10 +95,10 @@
                                 <tr>
                                    <th style="width:200px;">{:lang('Order Number')}</th>
                                    <th>{:lang('Shop Name')}</th>
-                                   <th>{:lang('Seller Name')}</th>
-                                   <th>{:lang('Order Status')}</th>
                                    <th>{:lang('Buyer Name')}</th>
-                                   <th>{:lang('Buyer Tel')}</th>
+                                   <th>{:lang('Order Status')}</th>
+                                   <th>{:lang('Contact Name')}</th>
+                                   <th>{:lang('Contact Tel')}</th>
                                    <th>{:lang('Pay Time')}</th>
                                    <th>{:lang('Order Freeze Status')}</th>
                                    <th>{:lang('Operate')}</th>
@@ -139,10 +139,10 @@
                                    </td>
                                    <td>
                                        {if condition="isset($vo.freeze)"}
-                                      <button class="btn btn-primary" onclick="change('{$vo.id}')">{:lang('Edit')}</button>
+                                      <button class="btn btn-primary" onclick="changeFreeze('{$vo.id}')">{:lang('Edit')}</button>
                                        {/if}
                                    </td>
-                                    <td><button class="btn btn-success" onclick='checkProduction({$vo.products|json_encode})'>{:lang('Production Detail')}</button></td>
+                                    <td><button class="btn btn-success" onclick='checkProduction({$vo.products|json_encode})'>{:lang('Production Detail')}</button> &nbsp;<button class="btn btn-success" onclick='checkOrder({$vo|json_encode})'>{:lang('Order Detail')}</button></td>
                                 </tr>
                             {/volist}
                             </tbody>
@@ -223,6 +223,93 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel3">{:lang('Order Detail')}</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group">
+                    <label for="check_id" class="col-md-2 control-label">{:lang('Order Number')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_id" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_shopType" class="col-md-2 control-label">{:lang('Shop Type')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_shopType" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_money_type" class="col-md-2 control-label">{:lang('Paid Type')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_money_type" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_status" class="col-md-2 control-label">{:lang('Order Status')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_status" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_contact_name" class="col-md-2 control-label">{:lang('Contact Name')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_contact_name" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_contact_tel" class="col-md-2 control-label">{:lang('Contact Tel')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_contact_tel" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_contact_address" class="col-md-2 control-label">{:lang('Contact Address')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_contact_address" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_express_company" class="col-md-2 control-label">{:lang('Express Company')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_express_company" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_express_number" class="col-md-2 control-label">{:lang('Express Number')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_express_number" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_deli_settle_status" class="col-md-2 control-label">{:lang('Account Status')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_deli_settle_status" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_freeze" class="col-md-2 control-label">{:lang('Order Freeze Status')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_freeze" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_totalCost" class="col-md-2 control-label">{:lang('Total Cost')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_totalCost" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $("#start_datetimepicker").datetimepicker({
         language:"zh-CN",
@@ -252,7 +339,7 @@
         event.preventDefault();
         event.stopPropagation();
     });
-    function change(id){
+    function changeFreeze(id){
         $.ajax({
             url:"{:url('manage/shop/getCartInfoById')}",
             method:'post',
@@ -280,26 +367,6 @@
         $('#production').html(str);
         $('#myModal2').modal('show');
     }
-    function editShop(shop_id){
-        $.ajax({
-            url:"{:url('manage/shop/getShopInfoById')}",
-            method:'post',
-            dataType:'json',
-            data: {id: shop_id},
-            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
-            success: function(res){
-                if(res.code != 200){
-                    alertMsg(res.msg);
-                }else{
-                    fillModal1(res.data);
-                    $('#myModal').modal('show')
-                }
-            },
-            error:function(){
-                alertMsg("{:lang('Operation fail')}");
-            }
-        })
-    }
     function fillModal1(data){
         $('#id1').val(data.id);
         $('#save_freeze').val(data.freeze);
@@ -319,6 +386,52 @@
             })
             $('#message').html(str);
         }
+    }
+
+    function checkOrder(order){
+        var shopType=''
+        switch(order.money_type){
+            case {$Think.const.COMPANY_ELE_BUSINESS}:shopType="{:lang('Order Company')}";break;
+            case {$Think.const.DELI_ELE_BUSINESS_TYPE}:shopType="{:lang('Order Deli')}";break;
+            default:shopType="{:lang('Order Person')}";break;
+        }
+        $('#check_shopType').html(shopType)
+        var money_type=''
+        switch(order.money_type){
+            case {$Think.const.MONEY_TYPE_RMB}:money_type="{:lang('Rmb')}";break;
+            case {$Think.const.MONEY_TYPE_DELI}:money_type="{:lang('Deli')}";break;
+            default:money_type="{:lang('Not Choose Money_Type')}";break;
+        }
+        $('#check_money_type').html(money_type)
+        var status=''
+        switch(order.status){
+            case {$Think.const.ORDER_UNPAID}:status="{:lang('Unpaid')}";break;
+            case {$Think.const.ORDER_WAITING_SEED}:status="{:lang('Waiting Seed')}";break;
+            case {$Think.const.ORDRE_WAITING_TASK}:status="{:lang('Waiting Task')}";break;
+            case {$Think.const.ORDER_SEED_WAITING_COMMENT}:status="{:lang('Received goods to be evaluated ')}";break;
+            default:status="{:lang('Order Finish')}";break;
+        }
+        $('#check_status').html(status)
+        $('#check_id').html(order.id)
+        $('#check_contact_name').html(order.contact_name)
+        $('#check_contact_tel').html(order.contact_tel)
+        $('#check_contact_address').html(order.contact_address)
+        $('#check_express_company').html(order.express_company)
+        $('#check_express_number').html(order.express_number)
+        var deli_settle_status=''
+        switch(order.deli_settle_status){
+            case {$Think.const.ORDER_ALREADY_ACCOUNT}:deli_settle_status="{:lang('Already Account')}";break;
+            default:deli_settle_status="{:lang('Not Account')}";break;
+        }
+        $('#check_deli_settle_status').html(deli_settle_status)
+        var freeze=''
+        switch(order.freeze){
+            case {$Think.const.ORDER_FREEZE}:freeze="{:lang('Already Freeze')}";break;
+            default:freeze="{:lang('Normal')}";break;
+        }
+        $('#check_freeze').html(freeze)
+        $('#check_totalCost').html(order.totalCost)
+        $('#myModal3').modal('show');
     }
 
     function sub(){

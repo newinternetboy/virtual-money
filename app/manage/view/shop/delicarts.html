@@ -94,8 +94,9 @@
                                 <tr>
                                    <th style="width:200px;">{:lang('Order Number')}</th>
                                    <th>{:lang('Buyer Name')}</th>
-                                   <th>{:lang('Buyer Tel')}</th>
-                                   <th>{:lang('Buyer Address')}</th>
+                                   <th>{:lang('Contact Name')}</th>
+                                   <th>{:lang('Contact Tel')}</th>
+                                   <th>{:lang('Contact Address')}</th>
                                    <th>{:lang('Total Cost')}</th>
                                    <th>{:lang('Pay Time')}</th>
                                    <th>{:lang('Order Freeze Status')}</th>
@@ -108,6 +109,7 @@
                             {volist name='orders' id='vo'}
                                 <tr>
                                    <td>{$vo.id}</td>
+                                   <td>{$vo.consumer.username ?? ''}</td>
                                    <td>{$vo.contact_name ?? ''}</td>
                                    <td>{$vo.contact_tel ?? ''}</td>
                                    <td>{$vo.contact_address ?? ''}</td>
@@ -226,19 +228,19 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="check_contact_name" class="col-md-2 control-label">{:lang('Buyer Name')}:</label>
+                    <label for="check_contact_name" class="col-md-2 control-label">{:lang('Contact Name')}:</label>
                     <div class="col-md-10">
                         <p id="check_contact_name" class="form-control" style="border: none;"></p>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="check_contact_tel" class="col-md-2 control-label">{:lang('Buyer Tel')}:</label>
+                    <label for="check_contact_tel" class="col-md-2 control-label">{:lang('Contact Tel')}:</label>
                     <div class="col-md-10">
                         <p id="check_contact_tel" class="form-control" style="border: none;"></p>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="check_contact_address" class="col-md-2 control-label">{:lang('Buyer Address')}:</label>
+                    <label for="check_contact_address" class="col-md-2 control-label">{:lang('Contact Address')}:</label>
                     <div class="col-md-10">
                         <p id="check_contact_address" class="form-control" style="border: none;"></p>
                     </div>
