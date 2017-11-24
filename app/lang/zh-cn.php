@@ -732,4 +732,5 @@ return [
     /******************************表具上报api**************************/
     'Low Balance Title'                 => '余额过低提醒',
     'Low Balance Content'               => '表具余额低于%s元,请尽快充值',
+    'Low Balance Valve'                 => '余额提醒阀值',
 ];
