@@ -62,6 +62,8 @@ class Index extends Controller
                 $data = $this->generateData($data);
                 //根据表号获取表具信息
                 $meterInfo = $this->getMeterInfo($data['M_Code']);
+                //检查表具余额是否需要添加提醒
+                $this->checkBalance($data,$meterInfo['id']);
                 //上报数据入库
                 $this->insertMeterData($data,METER_REPORT,$meterInfo);
                 //更新累计流量表
@@ -379,5 +381,26 @@ class Index extends Controller
             return $newTask['cmd'];
         }
         return $newTask;
+    }
+
+    /**
+     * 判断余额,如果小于阈值,则调用添加通知api
+     * @param $data
+     * @param $meter_id
+     */
+    private function checkBalance($data, $meter_id){
+        $dict_threshold_value = db('Dict')->where('type',DICT_BALANCE_THRESHOLD_VALUE)->order('create_time','asc')->find();
+        $threshold_value = $dict_threshold_value['value'];
+        if($data['balance'] < $threshold_value){
+            $url = config('notificationUrl');
+            $post_data = [
+                'meter_id' => $meter_id,
+                'M_Code'   => $data['M_Code'],
+                'type'     => NOTICE_TYPE_LOW_BALANCE,
+                'title'    => lang('Low Balance Title'),
+                'content'  => lang('Low Balance Content',[$threshold_value])
+            ];
+            send_post($url,$post_data);
+        }
     }
 }

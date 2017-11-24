@@ -143,7 +143,12 @@ define('ORDER_ALREADY_ACCOUNT',1);//已结算
 define('ORDER_NOT_ACCOUNT',0);//未结算
 
 /***************dict表***************/
-//类型 status
+//类型 type
 define('DICT_COMPANY_ELE_BUSINESS',1); //企业电商类别
 define('DICT_PERSON_ELE_BUSINESS',2); //得利专供类别
 define('DICT_PERCENT',3); //充值时赠送得利币的比例
+define('DICT_BALANCE_THRESHOLD_VALUE',4); //表具余额阀值
+
+/***************通知类型***************/
+define('NOTICE_TYPE_LOW_BALANCE',1); //提醒充值
+define('NOTICE_TYPE_CART_STATUS_CHANGE',2); //订单状态变更
