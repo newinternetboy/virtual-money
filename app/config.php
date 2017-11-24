@@ -235,4 +235,8 @@ return [
 
     //后台用户密码salt
     'user_auth_key'     => 'Astonep@tp-admin!@#$',
+
+    //app 添加用户推送消息的api url
+    'notificationUrl'  => 'http://localhost:10086/notify/v1/push',
+
 ];
