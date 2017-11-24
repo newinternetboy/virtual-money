@@ -110,12 +110,9 @@
                                 <tr>
                                    <td>{$vo.id}</td>
                                    <td>
-                                       {switch name="vo.sid"}
-                                       {case $Think.PRODUCTION_ID_DELI}——{/case}
-                                       {default /}{$vo.shop.name}
-                                       {/switch}
+                                       {$vo.shop_name}
                                    </td>
-                                   <td>{$vo.consumer.username}</td>
+                                   <td>{$vo.consumer_username}</td>
                                    <td>
                                        {switch name="vo.status"}
                                        {case $Think.ORDER_UNPAID}{:lang('Unpaid')}{/case}
@@ -238,6 +235,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="check_shop_name" class="col-md-2 control-label">{:lang('Shop Name')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_shop_name" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="check_shopType" class="col-md-2 control-label">{:lang('Shop Type')}:</label>
                     <div class="col-md-10">
                         <p id="check_shopType" class="form-control" style="border: none;"></p>
@@ -253,6 +256,12 @@
                     <label for="check_status" class="col-md-2 control-label">{:lang('Order Status')}:</label>
                     <div class="col-md-10">
                         <p id="check_status" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_consumer_username" class="col-md-2 control-label">{:lang('Buyer Name')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_consumer_username" class="form-control" style="border: none;"></p>
                     </div>
                 </div>
                 <div class="form-group">
@@ -413,6 +422,8 @@
         }
         $('#check_status').html(status)
         $('#check_id').html(order.id)
+        $('#check_shop_name').html(order.shop_name)
+        $('#check_consumer_username').html(order.consumer_username)
         $('#check_contact_name').html(order.contact_name)
         $('#check_contact_tel').html(order.contact_tel)
         $('#check_contact_address').html(order.contact_address)
