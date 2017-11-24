@@ -345,47 +345,47 @@
         var shopType=''
         switch(order.money_type){
             case {$Think.const.COMPANY_ELE_BUSINESS}:shopType="{:lang('Order Company')}";break;
-    case {$Think.const.DELI_ELE_BUSINESS_TYPE}:shopType="{:lang('Order Deli')}";break;
-    default:shopType="{:lang('Order Person')}";break;
-    }
-    $('#check_shopType').html(shopType)
-    var money_type=''
-    switch(order.money_type){
-        case {$Think.const.MONEY_TYPE_RMB}:money_type="{:lang('Rmb')}";break;
-    case {$Think.const.MONEY_TYPE_DELI}:money_type="{:lang('Deli')}";break;
-    default:money_type="{:lang('Not Choose Money_Type')}";break;
-    }
-    $('#check_money_type').html(money_type)
-    var status=''
-    switch(order.status){
-        case {$Think.const.ORDER_UNPAID}:status="{:lang('Unpaid')}";break;
-    case {$Think.const.ORDER_WAITING_SEED}:status="{:lang('Waiting Seed')}";break;
-    case {$Think.const.ORDRE_WAITING_TASK}:status="{:lang('Waiting Task')}";break;
-    case {$Think.const.ORDER_SEED_WAITING_COMMENT}:status="{:lang('Received goods to be evaluated ')}";break;
-    default:status="{:lang('Order Finish')}";break;
-    }
-    $('#check_status').html(status)
-    $('#check_id').html(order.id)
-    $('#check_consumer_username').html(order.consumer_username)
-    $('#check_contact_name').html(order.contact_name)
-    $('#check_contact_tel').html(order.contact_tel)
-    $('#check_contact_address').html(order.contact_address)
-    $('#check_express_company').html(order.express_company)
-    $('#check_express_number').html(order.express_number)
-    var deli_settle_status=''
-    switch(order.deli_settle_status){
-        case {$Think.const.ORDER_ALREADY_ACCOUNT}:deli_settle_status="{:lang('Already Account')}";break;
-    default:deli_settle_status="{:lang('Not Account')}";break;
-    }
-    $('#check_deli_settle_status').html(deli_settle_status)
-    var freeze=''
-    switch(order.freeze){
-        case {$Think.const.ORDER_FREEZE}:freeze="{:lang('Already Freeze')}";break;
-    default:freeze="{:lang('Normal')}";break;
-    }
-    $('#check_freeze').html(freeze)
-    $('#check_totalCost').html(order.totalCost)
-    $('#myModal3').modal('show');
+            case {$Think.const.DELI_ELE_BUSINESS_TYPE}:shopType="{:lang('Order Deli')}";break;
+        default:shopType="{:lang('Order Person')}";break;
+        }
+        $('#check_shopType').html(shopType)
+        var money_type=''
+        switch(order.money_type){
+            case {$Think.const.MONEY_TYPE_RMB}:money_type="{:lang('Rmb')}";break;
+            case {$Think.const.MONEY_TYPE_DELI}:money_type="{:lang('Deli')}";break;
+            default:money_type="{:lang('Not Choose Money_Type')}";break;
+        }
+        $('#check_money_type').html(money_type)
+        var status=''
+        switch(order.status){
+            case {$Think.const.ORDER_UNPAID}:status="{:lang('Unpaid')}";break;
+            case {$Think.const.ORDER_WAITING_SEED}:status="{:lang('Waiting Seed')}";break;
+            case {$Think.const.ORDRE_WAITING_TASK}:status="{:lang('Waiting Task')}";break;
+            case {$Think.const.ORDER_SEED_WAITING_COMMENT}:status="{:lang('Received goods to be evaluated ')}";break;
+            default:status="{:lang('Order Finish')}";break;
+        }
+        $('#check_status').html(status)
+        $('#check_id').html(order.id)
+        $('#check_consumer_username').html(order.consumer_username)
+        $('#check_contact_name').html(order.contact_name)
+        $('#check_contact_tel').html(order.contact_tel)
+        $('#check_contact_address').html(order.contact_address)
+        $('#check_express_company').html(order.express_company)
+        $('#check_express_number').html(order.express_number)
+        var deli_settle_status=''
+        switch(order.deli_settle_status){
+            case {$Think.const.ORDER_ALREADY_ACCOUNT}:deli_settle_status="{:lang('Already Account')}";break;
+            default:deli_settle_status="{:lang('Not Account')}";break;
+        }
+        $('#check_deli_settle_status').html(deli_settle_status)
+        var freeze=''
+        switch(order.freeze){
+            case {$Think.const.ORDER_FREEZE}:freeze="{:lang('Already Freeze')}";break;
+            default:freeze="{:lang('Normal')}";break;
+        }
+        $('#check_freeze').html(freeze)
+        $('#check_totalCost').html(order.totalCost)
+        $('#myModal3').modal('show');
     }
 
     function sub(){

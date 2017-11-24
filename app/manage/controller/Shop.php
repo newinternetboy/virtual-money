@@ -769,23 +769,13 @@ class Shop extends Admin
 
     //分类管理 操作dict表
     public function dict(){
-        $type = input('type');
-        $desc = input('desc');
-        $where = [];
-        $param = [];
-        if($type){
-            $where['type'] = intval($type);
-        }
-        if($desc){
-            $where['desc'] = ['like',$desc];
-        }
+        $type = input('type',DICT_COMPANY_ELE_BUSINESS);
+        $where['type'] = intval($type);
         $param['type'] = $type;
-        $param['desc'] = $desc;
         $dictService = new DictService();
         $dictlist = $dictService->getInfoPaginate($where,$param);
         $dicttype = config('dictType');
         $this->assign('type',$type);
-        $this->assign('desc',$desc);
         $this->assign('dictlist',$dictlist);
         $this->assign('dicttype',$dicttype);
         return $this->fetch();
@@ -824,8 +814,10 @@ class Shop extends Admin
                     exception(lang('Dict Desc Unique'),ERROR_CODE_DATA_ILLEGAL);
                 }
             }
-            $data['desc'] = $desc;
             $data['type'] = $type;
+            if($desc){
+                $data['desc'] = $desc;
+            }
             if($value){
                 $data['value'] = floatval($value);
             }
@@ -906,7 +898,8 @@ class Shop extends Admin
         $ret['msg'] = lang('Operation Success');
         try{
             $cartService = new cartService();
-            if( !$cartService->findInfo(['id'=>$data['id'],'status'=>ORDER_WAITING_SEED])){
+            $cart = $cartService->findInfo(['id'=>$data['id'],'status'=>ORDER_WAITING_SEED]);
+            if(!$cart){
                 exception(lang('Operation fail').' : 提交的订单的状态错误！',ERROR_CODE_DATA_ILLEGAL);
             }
             $data['status'] = ORDRE_WAITING_TASK;
@@ -916,6 +909,15 @@ class Shop extends Admin
                 exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
             }
             model('app\admin\model\LogRecord')->record('Cart Delivery',$data);
+//            $consumerService = new ConsumerService();
+//            $consumer = $consumerService->findInfo(['id'=>$cart['uid']]);
+//            $url="http://localhost:10086/notify/v1/push";
+//            $post_data['meter_id'] = $consumer['meter_id'];
+//            $post_data['M_Code'] = $consumer['M_Code'];
+//            $post_data['type'] = 2;
+//            $post_data['cartid'] = $cart['id'];
+//            $post_data['title'] = "";
+//            $post_data['content'] = "";
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();

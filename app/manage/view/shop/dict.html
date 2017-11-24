@@ -11,20 +11,11 @@
                     <!-- 表格数据 -->
                     <form  method="" class="form-horizontal">
                         <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="desc" class="col-sm-2 control-label">{:lang('Dict Name')}:</label>
-                                    <div class="col-sm-6">
-                                        <input name="desc" id="desc" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('Production Name')}" value="{$desc ?? ''}">
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-lg-6" style="float: right">
                                 <div class="form-group">
                                     <label for="type" class="col-sm-2 control-label">{:lang('Dict Type')}:</label>
                                     <div class="col-sm-6">
                                         <select name="type" id="type" class="form-control">
-                                            <option value="">{:lang('Search All')}</option>
                                             {volist name="dicttype" id="vo" key="k"}
                                                 <option value="{$k}" {if condition="(isset($type)) and ($type eq $k)"}selected{/if} >{$vo}</option>
                                             {/volist}
@@ -46,22 +37,22 @@
                         <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
                             <thead>
                                 <tr>
-                                   <th>{:lang('Dict Name')}</th>
                                    <th>{:lang('Dict Type')}</th>
-                                   <th>{:lang('Proportion of Gifts')}</th>
+                                   <th>字符参数</th>
+                                   <th>数字参数</th>
                                    <th>{:lang('Operate')}</th>
                                 </tr>
                             </thead>
                             <tbody>
                             {volist name='dictlist' id='vo'}
                                 <tr>
-                                   <td>{$vo.desc??''}</td>
                                    <td>{switch name="vo.type"}
                                        {case $Think.DICT_COMPANY_ELE_BUSINESS}{:lang('Company Ele_business Type')}{/case}
                                        {case $Think.DICT_PERSON_ELE_BUSINESS}{:lang('Deli Ele_business Type')}{/case}
                                        {default /}{:lang('Deli_money Gifts')}
                                        {/switch}
                                    </td>
+                                   <td>{$vo.desc ?? '-'}</td>
                                    <td>
                                         {$vo.value ?? '-'}
                                    </td>
@@ -95,23 +86,23 @@
             <div class="modal-body form-horizontal">
                 <input type="hidden" id="id" name="id" />
                 <div class="form-group">
-                    <label for="edit_desc" class="col-md-2 control-label">{:lang('Dict Name')}</label>
-                    <div class="col-md-10">
-                        <input class="form-control" name="edit_desc" id="edit_desc">
-                    </div>
-                </div>
-                <div class="form-group">
                     <label for="edit_type" class="col-md-2 control-label">{:lang('Dict Type')}</label>
                     <div class="col-md-10">
                         <select name="edit_type" id="edit_type" class="form-control">
                             {volist name="dicttype" id="vo" key="k"}
-                            <option value='{$k}'>{$vo}</option>
+                            <option value="{$k}" {if condition="(isset($type)) and ($type eq $k)"}selected{/if} >{$vo}</option>
                             {/volist}
                         </select>
                     </div>
                 </div>
-                <div class="form-group" id="value_div" style="display: none">
-                    <label for="value" class="col-md-2 control-label">{:lang('Proportion of Gifts')}</label>
+                <div class="form-group" id="value_str">
+                    <label for="edit_desc" class="col-md-2 control-label">字符参数</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="edit_desc" id="edit_desc">
+                    </div>
+                </div>
+                <div class="form-group" id="value_number">
+                    <label for="value" class="col-md-2 control-label">数字参数</label>
                     <div class="col-md-10">
                         <input class="form-control" name="value" id="value">
                     </div>
@@ -128,25 +119,13 @@
 <script>
     function dict_add(){
         clearModal()
-        $('#value_div').hide()
         $('#myModal').modal('show')
     }
-
-    $('#edit_type').change(function(){
-        if($('#edit_type').val() == {$Think.DICT_PERCENT} ){
-            $('#value_div').show()
-        }else{
-            $('#value_div').hide()
-        }
-    })
 
     function clearModal(){
         $('#id').val('');
         $('#edit_desc').val('');
         $('#value').val('');
-        $('#edit_type').find('option').each(function(){
-            $(this).prop("selected",false);
-        });
     }
 
     function dict_eidt(dict_id){
@@ -173,11 +152,6 @@
 
     function fillModal(data){
         $('#id').val(data.id);
-        if(data.value != ''&&data.value != 'undefined'&&data.value != null){
-            $('#value_div').show()
-        }else{
-            $('#value_div').hide()
-        }
         $('#value').val(data.value);
         $('#edit_desc').val(data.desc);
         $('#edit_type').find('option[value='+data.type+']').prop("selected",true);
@@ -189,13 +163,8 @@
         var value = $('#value').val();
         var desc = $('#edit_desc').val();
         var type = $('#edit_type').val();;
-        if( desc == '' || desc == 'undefined' || desc == null ){
-            alertMsg("{:lang('Dict Name')}{:lang('Require')}");
-            $('#sub').prop('disabled',false);
-            return false;
-        }
-        if(type == {$Think.DICT_PERCENT} && (value == '' || value == 'undefined' || value == null)){
-            alertMsg("分类类型为得利币赠送，则赠送比例必填",2)
+        if((desc == '' || desc == 'undefined' || desc == null) && (value == '' || value == 'undefined' || value == null)){
+            alertMsg("字符参数和数字参数不能同时为空！",2)
             $('#sub').prop('disabled',false);
             return false;
         }
