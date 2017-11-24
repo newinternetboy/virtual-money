@@ -6,6 +6,13 @@
  * Time: 下午12:19
  */
 return [
+    //网站名称
+    'website'   =>      [
+        'name'          => '双得利企业电商系统',
+        'keywords'      =>  '双得利企业电商系统',
+        'description'   =>  '双得利企业电商系统'
+    ],
+
     // 默认输出类型
     'default_return_type'               => 'html',
     // 默认跳转页面对应的模板文件
@@ -84,4 +91,5 @@ return [
     //商铺封面图压缩尺寸限制
     'thumbMaxWidth' => 250,
     'thumbMaxHeight' => 250,
+
 ];

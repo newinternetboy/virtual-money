@@ -6,6 +6,14 @@
  * Time: 下午12:19
  */
 return [
+
+    //网站名称
+    'website'   =>      [
+        'name'          => '双得利清分系统',
+        'keywords'      =>  '双得利清分系统',
+        'description'   =>  '双得利清分系统'
+    ],
+
     // 默认输出类型
     'default_return_type'               => 'html',
     // 默认跳转页面对应的模板文件
