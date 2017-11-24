@@ -109,7 +109,7 @@
                             {volist name='orders' id='vo'}
                                 <tr>
                                    <td>{$vo.id}</td>
-                                   <td>{$vo.consumer.username ?? ''}</td>
+                                   <td>{$vo.consumer_username ?? ''}</td>
                                    <td>{$vo.contact_name ?? ''}</td>
                                    <td>{$vo.contact_tel ?? ''}</td>
                                    <td>{$vo.contact_address ?? ''}</td>
@@ -216,6 +216,18 @@
             </div>
             <div class="modal-body form-horizontal">
                 <div class="form-group">
+                    <label for="check_id" class="col-md-2 control-label">{:lang('Order Number')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_id" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_shopType" class="col-md-2 control-label">{:lang('Shop Type')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_shopType" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="check_money_type" class="col-md-2 control-label">{:lang('Paid Type')}:</label>
                     <div class="col-md-10">
                         <p id="check_money_type" class="form-control" style="border: none;"></p>
@@ -225,6 +237,12 @@
                     <label for="check_status" class="col-md-2 control-label">{:lang('Order Status')}:</label>
                     <div class="col-md-10">
                         <p id="check_status" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="check_consumer_username" class="col-md-2 control-label">{:lang('Buyer Name')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_consumer_username" class="form-control" style="border: none;"></p>
                     </div>
                 </div>
                 <div class="form-group">
@@ -324,48 +342,56 @@
         $('#myModal2').modal('show');
     }
     function checkOrder(order){
-        var money_type=''
+        var shopType=''
         switch(order.money_type){
-            case {$Think.const.MONEY_TYPE_RMB}:money_type="{:lang('Rmb')}";break;
-            case {$Think.const.MONEY_TYPE_DELI}:money_type="{:lang('Deli')}";break;
-            default:money_type="{:lang('Not Choose Money_Type')}";break;
-        }
-        $('#check_money_type').html(money_type)
-        var status=''
-        switch(order.status){
-            case {$Think.const.ORDER_UNPAID}:status="{:lang('Unpaid')}";break;
-            case {$Think.const.ORDER_WAITING_SEED}:status="{:lang('Waiting Seed')}";break;
-            case {$Think.const.ORDRE_WAITING_TASK}:status="{:lang('Waiting Task')}";break;
-            case {$Think.const.ORDER_SEED_WAITING_COMMENT}:status="{:lang('Received goods to be evaluated ')}";break;
-            default:status="{:lang('Order Finish')}";break;
-        }
-        $('#check_status').html(status)
-        $('#check_contact_name').html(order.contact_name)
-        $('#check_contact_tel').html(order.contact_tel)
-        $('#check_contact_address').html(order.contact_address)
-        $('#check_express_company').html(order.express_company)
-        $('#check_express_number').html(order.express_number)
-        var deli_settle_status=''
-        switch(order.deli_settle_status){
-            case {$Think.const.ORDER_ALREADY_ACCOUNT}:deli_settle_status="{:lang('Already Account')}";break;
-            default:deli_settle_status="{:lang('Not Account')}";break;
-        }
-        $('#check_deli_settle_status').html(deli_settle_status)
-        var freeze=''
-        switch(order.freeze){
-            case {$Think.const.ORDER_FREEZE}:freeze="{:lang('Already Freeze')}";break;
-        default:freeze="{:lang('Normal')}";break;
-        }
-        $('#check_freeze').html(freeze)
-        $('#check_totalCost').html(order.totalCost)
-        $('#myModal3').modal('show');
+            case {$Think.const.COMPANY_ELE_BUSINESS}:shopType="{:lang('Order Company')}";break;
+    case {$Think.const.DELI_ELE_BUSINESS_TYPE}:shopType="{:lang('Order Deli')}";break;
+    default:shopType="{:lang('Order Person')}";break;
+    }
+    $('#check_shopType').html(shopType)
+    var money_type=''
+    switch(order.money_type){
+        case {$Think.const.MONEY_TYPE_RMB}:money_type="{:lang('Rmb')}";break;
+    case {$Think.const.MONEY_TYPE_DELI}:money_type="{:lang('Deli')}";break;
+    default:money_type="{:lang('Not Choose Money_Type')}";break;
+    }
+    $('#check_money_type').html(money_type)
+    var status=''
+    switch(order.status){
+        case {$Think.const.ORDER_UNPAID}:status="{:lang('Unpaid')}";break;
+    case {$Think.const.ORDER_WAITING_SEED}:status="{:lang('Waiting Seed')}";break;
+    case {$Think.const.ORDRE_WAITING_TASK}:status="{:lang('Waiting Task')}";break;
+    case {$Think.const.ORDER_SEED_WAITING_COMMENT}:status="{:lang('Received goods to be evaluated ')}";break;
+    default:status="{:lang('Order Finish')}";break;
+    }
+    $('#check_status').html(status)
+    $('#check_id').html(order.id)
+    $('#check_consumer_username').html(order.consumer_username)
+    $('#check_contact_name').html(order.contact_name)
+    $('#check_contact_tel').html(order.contact_tel)
+    $('#check_contact_address').html(order.contact_address)
+    $('#check_express_company').html(order.express_company)
+    $('#check_express_number').html(order.express_number)
+    var deli_settle_status=''
+    switch(order.deli_settle_status){
+        case {$Think.const.ORDER_ALREADY_ACCOUNT}:deli_settle_status="{:lang('Already Account')}";break;
+    default:deli_settle_status="{:lang('Not Account')}";break;
+    }
+    $('#check_deli_settle_status').html(deli_settle_status)
+    var freeze=''
+    switch(order.freeze){
+        case {$Think.const.ORDER_FREEZE}:freeze="{:lang('Already Freeze')}";break;
+    default:freeze="{:lang('Normal')}";break;
+    }
+    $('#check_freeze').html(freeze)
+    $('#check_totalCost').html(order.totalCost)
+    $('#myModal3').modal('show');
     }
 
     function sub(){
         var id = $('#id_edit').val();
         var express_company = $('#express_company').val();
         var express_number = $('#express_number').val();
-        var status = {$Think.const.ORDRE_WAITING_TASK};
         if( express_company == '' || express_company == 'undefined' || express_company == null ){
             alertMsg("请填写快递公司！");
             return false;
@@ -374,7 +400,7 @@
             alertMsg("请填写快递单号！");
             return false;
         }
-        var data = {id: id, express_company: express_company, express_number: express_number,status:status};
+        var data = {id: id, express_company: express_company, express_number: express_number};
         $.ajax({
             url:"{:url('manage/shop/saveDeliCart')}",
             method:'post',
@@ -383,10 +409,10 @@
             beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
             success: function(res){
                 if(res.code != 200){
-                    alertMsg(res.msg);
+                    alertMsg(res.msg,2);
                 }else{
                     alertMsg(res.msg,2);
-                    setTimeout(function(){window.location.href = ''},2);
+                    setTimeout(function(){window.location.href = ''},2000);
                 }
             },
             error:function(){

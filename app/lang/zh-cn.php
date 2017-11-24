@@ -422,6 +422,7 @@ return [
     'OPT_ID Not Exist'                         => '运营商编号不存在',
     'Add/Edit Company'                         => '添加/编辑运营商',
     'Del Company'                              => '删除运营商',
+    'Download Template'                        => '下载模板',
 
     //运营商管理
     'Company Management'                => '运营商管理',
@@ -707,6 +708,8 @@ return [
     'Save Dict'                         => '编辑/添加分类',
     'Proportion of Gifts'               => '赠送比例',
     'Dict List'                         => '类别列表',
+    'Delete Success'                    => '删除成功',
+    'Delete Fail'                       => '删除失败',
 
     /******************************企业店铺系统**************************/
     //店铺信息

@@ -313,6 +313,16 @@ class Shop extends Admin
         $param['endtime'] = $endtime;
         $cartService = new CartService();
         $orders = $cartService->getInfoPaginate($where,$param);
+        foreach($orders as & $order){
+            $order['consumer_username'] = $order->consumer['username'];
+            if($order['sid'] == PRODUCTION_ID_DELI){
+                $order['shop_name'] = '--';
+            }else{
+                $order['shop_name'] = $order->shop['name'];
+            }
+            unset($order['consumer']);
+            unset($order['shop']);
+        }
         $this->assign('orders',$orders);
         $this->assign('order_number',$order_number);
         $this->assign('mobile',$mobile);
@@ -836,11 +846,11 @@ class Shop extends Admin
     public function deleteDictByid(){
         $id = input('id');
         $ret['code'] = 200;
-        $ret['msg'] = lang('Update Success');
+        $ret['msg'] = lang('Delete Success');
         $dictService = new DictService();
         if(!$dictService->del($id)){
             $ret['code'] = 201;
-            $ret['msg'] = lang('Update Faild');
+            $ret['msg'] = lang('Delete Fail');
         }
         return json($ret);
     }
@@ -874,6 +884,10 @@ class Shop extends Admin
         $param['endtime'] = $endtime;
         $cartService = new CartService();
         $orders = $cartService->getInfoPaginate($where,$param);
+        foreach($orders as & $order){
+            $order['consumer_username'] = $order->consumer['username'];
+            unset($order['consumer']);
+        }
         $this->assign('orders',$orders);
         $this->assign('order_number',$order_number);
         $this->assign('mobile',$mobile);
@@ -892,10 +906,10 @@ class Shop extends Admin
         $ret['msg'] = lang('Operation Success');
         try{
             $cartService = new cartService();
-            $cart_one = $cartService->findInfo(['id'=>$data['id']]);
-            if(($data['status'] != ORDRE_WAITING_TASK) || ($cart_one['status'] !=ORDER_WAITING_SEED) ){
+            if( !$cartService->findInfo(['id'=>$data['id'],'status'=>ORDER_WAITING_SEED])){
                 exception(lang('Operation fail').' : 提交的订单的状态错误！',ERROR_CODE_DATA_ILLEGAL);
             }
+            $data['status'] = ORDRE_WAITING_TASK;
             if( !$cartService->upsert($data,'Cart.saveDeliCart') ){
                 $error = $cartService->getError();
                 Log::record(['修改失败:' => $error,'data' => $data],'error');

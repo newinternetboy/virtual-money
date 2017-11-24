@@ -17,8 +17,8 @@
                                     <div class="col-sm-6">
                                         <input name="desc" id="desc" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('Production Name')}" value="{$desc ?? ''}">
                                     </div>
-                                </div><!-- /form-group -->
-                            </div><!-- /.col-lg-6 -->
+                                </div>
+                            </div>
                             <div class="col-lg-6" style="float: right">
                                 <div class="form-group">
                                     <label for="type" class="col-sm-2 control-label">{:lang('Dict Type')}:</label>
@@ -30,8 +30,8 @@
                                             {/volist}
                                         </select>
                                     </div>
-                                </div><!-- /form-group -->
-                            </div><!-- /.col-lg-6 -->
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <div  class="col-sm-2">
@@ -65,7 +65,7 @@
                                    <td>
                                         {$vo.value ?? '-'}
                                    </td>
-                                   <td><button class="btn btn-primary" onclick="dict_eidt('{$vo.id}')">{:lang('Edit')}</button> &nbsp;<button class="btn btn-danger" onclick="if(confirm('您确认要删除此项吗？'))deleteDict('{$vo.id}')">{:lang('Delete')}</button></td>
+                                   <td><button class="btn btn-primary" onclick="dict_eidt('{$vo.id}')">{:lang('Edit')}</button> &nbsp;<button class="btn btn-danger" onclick="deleteDict('{$vo.id}')">{:lang('Delete')}</button></td>
                                 </tr>
                             {/volist}
                             </tbody>
@@ -73,7 +73,6 @@
                         <div>
                             {$dictlist->render()}
                         </div>
-                        <!--换表信息-->
                         <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
                         <div class="form-group" style="color:red">
                             <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
@@ -222,23 +221,25 @@
     }
 
     function deleteDict(id){
-        $.ajax({
-            url:"{:url('manage/shop/deleteDictByid')}",
-            method:'post',
-            dataType:'json',
-            data: {id: id},
-            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
-            success: function(res){
-                if(res.code != 200){
-                    alertMsg(res.msg,2);
-                }else{
-                    alertMsg(res.msg,2);
-                    setTimeout(function(){window.location.href=''},2)
+        alertConfirm('确定要这一项吗？',function(){
+            $.ajax({
+                url:"{:url('manage/shop/deleteDictByid')}",
+                method:'post',
+                dataType:'json',
+                data: {id: id},
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    if(res.code != 200){
+                        alertMsg(res.msg,2);
+                    }else{
+                        alertMsg(res.msg,2);
+                        setTimeout(function(){window.location.href=''},2000)
+                    }
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
                 }
-            },
-            error:function(){
-                alertMsg("{:lang('Operation fail')}");
-            }
+            })
         })
     }
 </script>

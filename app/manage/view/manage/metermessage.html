@@ -54,7 +54,6 @@
                         </div>
                     </form>
                     <hr style="height:1px;border:none;border-top:1px solid #555555;" />
-                    <!--报表-->
                     <div id="table">
                         <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
                             <thead>
@@ -83,7 +82,7 @@
                                     <td>{$vo.U_ID?$vo.consumer.username : ''}</td>
                                     <td>{$vo.U_ID?$vo.consumer.tel : ''}</td>
                                     <td>{$vo.detail_address?? ''}</td>
-                                    <td><button class="btn btn-primary" onclick="meterInfo('{$vo.id}')">{:lang('Edit')}</button></td>
+                                    <td><button class="btn btn-primary" onclick="meterInfo('{$vo.id}')">{:lang('Detail Message')}</button></td>
                                 </tr>
                             {/volist}
                         </table>
