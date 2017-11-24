@@ -46,12 +46,7 @@
                             <tbody>
                             {volist name='dictlist' id='vo'}
                                 <tr>
-                                   <td>{switch name="vo.type"}
-                                       {case $Think.DICT_COMPANY_ELE_BUSINESS}{:lang('Company Ele_business Type')}{/case}
-                                       {case $Think.DICT_PERSON_ELE_BUSINESS}{:lang('Deli Ele_business Type')}{/case}
-                                       {default /}{:lang('Deli_money Gifts')}
-                                       {/switch}
-                                   </td>
+                                   <td>{$dicttype[$vo.type]}</td>
                                    <td>{$vo.desc ?? '-'}</td>
                                    <td>
                                         {$vo.value ?? '-'}
