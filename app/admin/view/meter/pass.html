@@ -10,7 +10,7 @@
                     <!-- 表单内容 -->
                     <div class="ibox-content">
                         <!-- 表格数据 -->
-                        <form data-method="post" data-submit="ajax" data-validate="true" class="form-horizontal">
+                        <form id="meterpass" data-method="post" data-submit="ajax" data-validate="true" class="form-horizontal">
                             <div class="form-group" style="margin-bottom: 50px">
                                 <div class="col-md-10">
                                     <div class="input-group">
@@ -193,7 +193,7 @@
                                     <label class="col-sm-2 control-label"></label>
 
                                     <div class="col-sm-10">
-                                        <button style="float: right" class="btn btn-success" type="button"
+                                        <button id="submitBtn" style="float: right" class="btn btn-primary col-sm-1" type="button"
                                                 onclick="passMeter()">{:lang('Button')}
                                         </button>
                                     </div>
@@ -220,9 +220,7 @@
                 }, //覆盖main.js中的方法,否则不能正常使用
                 success: function (res) {
                     if (res.code != 200) {
-                        $('#meterInfo P').each(function () {
-                            $(this).text('')
-                        });
+                        $('#meterInfo P').each(function () {$(this).text('')});
                         alertMsg(res.msg);
                     } else {
                         fillText(res);
@@ -236,7 +234,70 @@
             alertMsg("{:lang('Please fill in the form M_Code first')}");
         }
 
-    })
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function() {
+            alert("提交事件!");
+        },
+        success: function(label){
+            /*label的默认正确样式为valid，需要通过validClass来重置，否则这里添加的其他样式不能被清除*/
+            label.text('').addClass('valid');
+            label.parent().parent().removeClass('has-error');
+        }
+    });
+
+    // 手机号码验证
+    jQuery.validator.addMethod("isMobile", function(value, element) {
+        var length = value.length;
+        var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+        return this.optional(element) || (length == 11 && mobile.test(value));
+    }, "请正确填写您的手机号码");
+
+    // 身份证号码验证
+    jQuery.validator.addMethod("isIdCardNo", function(value, element) {
+        return this.optional(element) || checkCard(value);
+    }, "请正确输入您的身份证号码");
+
+    $("#meterpass").validate({
+        errorPlacement: function(error, element) {
+            // Append error within linked label
+            $(element)
+                    .closest( "form" )
+                    .find( "label[for='" + element.attr( "id" ) + "']" )
+                    .siblings().append( error );
+            $(element).closest("form")
+                    .find( "label[for='" + element.attr( "id" ) + "']" )
+                    .parent().addClass("has-error");
+        },
+
+        rules: {
+            new_telephone:{
+                required:true,
+                minlength:11,
+                isMobile:true
+            },
+            new_identity:{
+                required:true,
+                isIdCardNo:true
+            },
+            M_Code: "required",
+            new_username: "required"
+        },
+        messages: {
+            new_telephone:{
+                required:'请输入手机号',
+                minlength:'请输入11位手机号',
+                isMobile:'输入一个正确的手机号码'
+            },
+            new_identity:{
+                required:'身份证号不能为空',
+                isIdCardNo:'请输入一个正确的身份证号'
+            },
+            M_Code: "请输入您的表号",
+            new_username: "请输入用户姓名"
+        }
+    });
 
     function fillText(data) {
         var meter = data['meter'];
@@ -269,7 +330,17 @@
         }
     }
 
+    $("input").blur(function(){
+        $("#meterpass").find("div.state-error").parent().parent().addClass("has-error");
+    });
+
     function passMeter() {
+
+        $("#meterpass").valid();
+
+        $("#submitBtn").attr("disabled",true);
+        $("#submitBtn").html("提交中");
+
         var M_Code = $('#M_Code_P').text();
         var username = $('#new_username').val();
         var tel = $('#new_telephone').val();
@@ -299,13 +370,20 @@
                         setTimeout(function () {
                             window.location.href = ''
                         }, 1500);
+
+                        $("#submitBtn").removeAttrs("disabled");
+                        $("#submitBtn").html("提交");
                     }
                 },
                 error: function () {
                     alertMsg("{:lang('Operation fail')}");
+                    $("#submitBtn").removeAttrs("disabled");
+                    $("#submitBtn").html("提交");
                 }
             })
         }
+        $("#submitBtn").removeAttrs("disabled");
+        $("#submitBtn").html("提交");
     }
 
     function check(consumer) {

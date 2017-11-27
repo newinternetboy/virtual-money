@@ -3319,7 +3319,7 @@ ol.unstyled {
 .footer {
   /*background: none repeat scroll 0 0 white;*/
   background-color: #1a1a1a;
-  border-top: 1px solid #e7eaec;
+  /*border-top: 1px solid #e7eaec;*/
   color: #ffffff;
   bottom: 0;
   left: 0;
@@ -7519,4 +7519,13 @@ body.skin-3 {
 
 .label_username .loginTitle, .label_password .loginTitle, .label_captcha .loginTitle {
   text-align: left;
+}
+
+#index_BG {
+  background-image: url('../images/IndexBG.png');
+  background-size: cover;
+}
+
+#content {
+  border: 0 !important;
 }

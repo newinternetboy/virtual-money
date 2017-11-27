@@ -9,7 +9,7 @@
                     </div>
                     <!-- 表单内容 -->
                     <div class="ibox-content">
-                        <form data-method="post" data-submit="ajax" data-validate="true" class="form-horizontal">
+                        <form id="meterchange" data-method="post" data-submit="ajax" data-validate="true" class="form-horizontal">
                             <div class="form-group" style="margin-bottom: 50px">
                                 <div class="col-md-10">
                                     <div class="input-group">
@@ -82,7 +82,7 @@
                                     <div class="form-group">
                                         <label  class="col-sm-2 control-label"></label>
                                         <div class="col-sm-10">
-                                            <button style="float: right" class="btn btn-success" type="button" onclick="changeMeter()" >{:lang('Button')}</button>
+                                            <button id="submitBtn" style="float: right" class="btn btn-primary col-sm-1" type="button" onclick="changeMeter()" >{:lang('Button')}</button>
                                         </div>
                                     </div>
                             </fieldset>
@@ -119,8 +119,42 @@
         }else{
             alertMsg("{:lang('Please fill in the form M_Code first')}");
         }
+    });
 
-    })
+    $.validator.setDefaults({
+        submitHandler: function() {
+            alert("提交事件!");
+        },
+        success: function(label){
+            /*label的默认正确样式为valid，需要通过validClass来重置，否则这里添加的其他样式不能被清除*/
+            label.text('').addClass('valid');
+            label.parent().parent().removeClass('has-error');
+        }
+    });
+
+    $("#meterchange").validate({
+        errorPlacement: function(error, element) {
+            // Append error within linked label
+            $(element)
+                    .closest( "form" )
+                    .find( "label[for='" + element.attr( "id" ) + "']" )
+                    .siblings().append( error );
+            $(element).closest("form")
+                    .find( "label[for='" + element.attr( "id" ) + "']" )
+                    .parent().addClass("has-error");
+        },
+
+        rules: {
+            M_Code: "required",
+            new_M_Code: "required",
+            change_reason: "required"
+        },
+        messages: {
+            M_Code: "请输入您的表号",
+            new_username: "请输入用户姓名",
+            change_reason: "请输入换表原因"
+        }
+    });
 
     function fillText(data){
         var meter = data['meter'];
@@ -143,7 +177,16 @@
         }
     }
 
+    $("input").blur(function(){
+        $("#meterchange").find("div.state-error").parent().parent().addClass("has-error");
+    });
+
     function changeMeter(){
+        $("#meterchange").valid();
+
+        $("#submitBtn").attr("disabled",true);
+        $("#submitBtn").html("提交中");
+
         var old_M_Code = $('#M_Code_P').text();
         var new_M_Code = $('#new_M_Code').val();
         var change_reason = $('#change_reason').val();
@@ -159,13 +202,19 @@
                     alertMsg(res.msg);
                     if( res.code == 200 ){
                         setTimeout(function(){window.location.href = ''},1500);
+                        $("#submitBtn").removeAttrs("disabled");
+                        $("#submitBtn").html("提交");
                     }
                 },
                 error:function(){
                     alertMsg("{:lang('Operation fail')}");
+                    $("#submitBtn").removeAttrs("disabled");
+                    $("#submitBtn").html("提交");
                 }
-            })
+            });
         }
+        $("#submitBtn").removeAttrs("disabled");
+        $("#submitBtn").html("提交");
     }
 
     function check(meter){

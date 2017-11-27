@@ -9,7 +9,7 @@
                     <!-- 表单内容 -->
                     <div class="ibox-content">
                         <!-- 表格数据 -->
-                        <form data-method="post" method="get" class="form-horizontal">
+                        <form id="metersearch" data-method="post" method="get" class="form-horizontal">
                             <div class="form-group" style="margin-bottom: 50px">
                                 <div class="col-md-10" style="margin-bottom: 15px">
                                     <div class="input-group">
@@ -45,7 +45,7 @@
                             <div class="form-group">
                                 <label  class="col-sm-2 control-label"></label>
                                 <div class="col-sm-10">
-                                    <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
+                                    <button id="submitBtn" style="float: right" class="btn btn-primary col-sm-1" type="submit" onclick="searchmeter()">{:lang('Search')}</button>
                                 </div>
                             </div>
                         </form>
@@ -90,4 +90,54 @@
     </section>
 
 </div>
-                   
+<script>
+    $.validator.setDefaults({
+        submitHandler: function() {
+            alert("提交事件!");
+        },
+        success: function(label){
+            /*label的默认正确样式为valid，需要通过validClass来重置，否则这里添加的其他样式不能被清除*/
+            label.text('').addClass('valid');
+            label.parent().parent().removeClass('has-error');
+        }
+    });
+
+    $("#metersearch").validate({
+        errorPlacement: function(error, element) {
+
+            // Append error within linked label
+            $(element)
+                    .closest( "form" )
+                    .find( "label[for='" + element.attr( "id" ) + "']" )
+                    .siblings().append( error );
+            $(element).closest("form")
+                    .find( "label[for='" + element.attr( "id" ) + "']" )
+                    .parent().addClass("has-error");
+        },
+
+        rules: {
+            M_Code: "required",
+            M_Address : "required",
+            detail_address : "required"
+        },
+        messages: {
+            M_Code: "请输入您的表号",
+            M_Address: "请选择区域",
+            detail_address: "请输入详细地址"
+        }
+    });
+
+    $("input").blur(function(){
+        $("#metersearch").find("div.state-error").parent().parent().addClass("has-error");
+    });
+
+    function searchmeter () {
+        $("#metersearch").valid();
+
+        $("#submitBtn").attr("disabled",true);
+        $("#submitBtn").html("提交中");
+
+
+    }
+
+</script>
