@@ -73,7 +73,7 @@ class Cart extends Admin
         $ret['code'] = 200;
         $ret['msg'] = lang('Operation Success');
         try{
-            if(!model('Cart')->findInfo(['id' => $data['id'],'sid' => $this->shop_id,'status' => ORDER_WAITING_SEED])){
+            if(!$cart=model('Cart')->findInfo(['id' => $data['id'],'sid' => $this->shop_id,'status' => ORDER_WAITING_SEED])){
                 exception(lang('No Qualified Cart Exists'),ERROR_CODE_DATA_ILLEGAL);
             }
             $data['status'] = ORDRE_WAITING_TASK;
@@ -83,10 +83,26 @@ class Cart extends Admin
                 exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
             }
             model('app\admin\model\LogRecord')->record('Cart Delivery',$data);
+            $post_data['title'] = '订单商品已发货';
+            $post_data['content'] = '您的订单商品已发货，请注意查收！';
+            $post_data['cartid'] = $cart['id'];
+            $post_data['uid'] = $cart['uid'];
+            $this->sendApi($post_data);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
         }
         return json($ret);
+    }
+
+    public function sendApi($post_data){
+        $url= config('notificationUrl');
+        $consumerService = new ConsumerService();
+        $consumer = $consumerService->findInfo(['id'=>$post_data['uid']]);
+        unset($post_data['uid']);
+        $post_data['meter_id'] = $consumer['meter_id'];
+        $post_data['M_Code'] = $consumer['M_Code'];
+        $post_data['type'] = NOTICE_TYPE_CART_STATUS_CHANGE;
+        send_post($url,$post_data);
     }
 }

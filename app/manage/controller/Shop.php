@@ -376,6 +376,11 @@ class Shop extends Admin
                 exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
             }
             model('app\admin\model\LogRecord')->record('Freeze/Not Freeze Cart',$update);
+            $post_data['title'] = '订单被冻结';
+            $post_data['content'] = '你的订单因为一些原因已经被冻结';
+            $post_data['cartid'] = $cart['id'];
+            $post_data['uid'] = $cart['uid'];
+            $this->sendApi($post_data);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
@@ -909,20 +914,28 @@ class Shop extends Admin
                 exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
             }
             model('app\admin\model\LogRecord')->record('Cart Delivery',$data);
-//            $consumerService = new ConsumerService();
-//            $consumer = $consumerService->findInfo(['id'=>$cart['uid']]);
-//            $url="http://localhost:10086/notify/v1/push";
-//            $post_data['meter_id'] = $consumer['meter_id'];
-//            $post_data['M_Code'] = $consumer['M_Code'];
-//            $post_data['type'] = 2;
-//            $post_data['cartid'] = $cart['id'];
-//            $post_data['title'] = "";
-//            $post_data['content'] = "";
+            $post_data['title'] = '订单商品已发货';
+            $post_data['content'] = '您的订单商品已发货，请注意查收！';
+            $post_data['cartid'] = $cart['id'];
+            $post_data['uid'] = $cart['uid'];
+            $this->sendApi($post_data);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
         }
         return json($ret);
     }
+
+    public function sendApi($post_data){
+        $url= config('notificationUrl');
+        $consumerService = new ConsumerService();
+        $consumer = $consumerService->findInfo(['id'=>$post_data['uid']]);
+        unset($post_data['uid']);
+        $post_data['meter_id'] = $consumer['meter_id'];
+        $post_data['M_Code'] = $consumer['M_Code'];
+        $post_data['type'] = NOTICE_TYPE_CART_STATUS_CHANGE;
+        send_post($url,$post_data);
+    }
+
 
 }
