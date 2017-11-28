@@ -1,3 +1,4 @@
+{js href="__JS__/bootstrap-typeahead.js" /}
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-12">
@@ -9,23 +10,28 @@
                 <!-- 表单内容 -->
                 <div class="ibox-content">
                     <form id="companySelect" action="{:url('manage/manage/company')}"  method="post" class="form-horizontal">
-                        <div class="col-lg-8" >
-                            <div class="form-group">
-                                <label for="company" class="col-md-2 control-label">{:lang('Company')}:</label>
-                                <div class="col-md-10">
-                                    <select id="company" class="form-control"  name="company">
-                                        <option value="">{:lang('Please Choose Company')}</option>
-                                        {foreach companysAll as $item}
-                                        <option value="{$item.id}" {if condition="$company eq $item.id"}selected{/if}>{$item.company_name}</option>
-                                        {/foreach}
-                                    </select>
+                        <div class="form-group">
+                            <div class="col-lg-8" style="float: left">
+                                <div class="form-group">
+                                    <label for="company" class="col-sm-2 control-label">{:lang('Company')}:</label>
+                                    <div class="col-sm-10">
+                                        <input id="company" name="company" value="{$company ?? ''}" type="text" autocomplete="off" data-provide="typeahead"  class="form-control">
+                                    </div>
                                 </div>
-                            </div><!-- /form-group -->
-                        </div><!-- /.col-lg-6 -->
+                            </div>
+                            <div class="col-lg-4" style="float: left">
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label"></label>
+                                    <div class="col-sm-10">
+                                        <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                     <div class="col-lg-4" >
-                        <div style="float: right">
-                            <button style="margin-right: 1vw" class="btn btn-success" onclick="showAddModal()">{:lang('Add')}</button>
+                        <div style="float: left">
+                            <button style="margin-left: 1vw" class="btn btn-success" onclick="showAddModal()">{:lang('Add')}</button>
                         </div>
                     </div>
                     <div style="clear: both"></div>
@@ -256,11 +262,36 @@
     </div>
 </div>
 
-
 <script>
-    $('#company').change(function(){
-        $('#companySelect').submit();
-    })
+    $.fn.typeahead.Constructor.prototype.blur = function() {
+        var that = this;
+        setTimeout(function () { that.hide() }, 250);
+    };
+    $('#company').typeahead({
+        minLength: 0,
+        source: function (query, process) {
+            var company_name = $('#company').val();
+            var parameter = {company_name: company_name};
+            $.ajax({
+                url:"{:url('manage/report/getCompanyByName')}",
+                method:'post',
+                dataType:'json',
+                data: parameter,
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    var results = res.map(function (product) {
+                        return product.company_name;
+                    });
+                    process(results);
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
+                }
+            })
+        }
+    });
+</script>
+<script>
 
     function sub(){
         var id = $('#id').val();

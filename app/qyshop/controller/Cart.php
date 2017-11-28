@@ -97,8 +97,7 @@ class Cart extends Admin
 
     public function sendApi($post_data){
         $url= config('notificationUrl');
-        $consumerService = new ConsumerService();
-        $consumer = $consumerService->findInfo(['id'=>$post_data['uid']]);
+        $consumer = model('Consumer')->findInfo(['id'=>$post_data['uid']]);
         unset($post_data['uid']);
         $post_data['meter_id'] = $consumer['meter_id'];
         $post_data['M_Code'] = $consumer['M_Code'];

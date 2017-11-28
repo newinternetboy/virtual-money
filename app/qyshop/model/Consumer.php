@@ -11,5 +11,7 @@ namespace app\qyshop\model;
 
 class Consumer extends Basic
 {
-
+    public function findInfo($where){
+        return $this->where($where)->find();
+    }
 }

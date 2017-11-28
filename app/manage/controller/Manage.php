@@ -34,12 +34,10 @@ class Manage extends Admin
         $companyService = new CompanyService();
         $where['status'] = COMPANY_STATUS_NORMAL;
         if( $company ){
-            $where['id'] = $company;
+            $where['company_name'] = $company;
         }
         $companys = $companyService->getInfoPaginate($where,'OPT_ID,company_name');
-        $companysAll = $companyService->selectInfo($where,'company_name');
         $this->assign('companys',$companys);
-        $this->assign('companysAll',$companysAll);
         $this->assign('company',$company);
         return view();
     }
