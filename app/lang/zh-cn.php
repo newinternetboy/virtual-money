@@ -353,8 +353,15 @@ return [
     'Operation state error'           => '操作方式状态有误',
     'Exectime Require'                => '执行时间必须',
 
+    //换表记录
+    'Exchange meter'                  => '换表',
+    'Records'                         => '记录',
 
+    //操作日志≥≥≥≥≥
+    'Logrecord search'                => '操作日志',
 
+    //统计报表
+    'Meterdata report'                => '统计报表',
 
     /******************************清分系统**************************/
     'Manage'                            => '管理',
