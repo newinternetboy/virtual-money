@@ -59,7 +59,7 @@
                             <div class="form-group">
                                 <label  class="col-sm-2 control-label"></label>
                                 <div class="col-sm-10">
-                                    <button style="float: right" class="btn btn-success" type="button" onclick="saveData()" >{:lang('Button')}</button>
+                                    <button style="float: right" class="btn btn-primary col-sm-1" type="button" onclick="saveData()" >{:lang('Button')}</button>
                                 </div>
                             </div>
                         </form>
@@ -113,7 +113,7 @@
                 $('#content_M').append(html_type_2);
                 break;
         }
-    })
+    });
 
     function saveData(){
         var valve_type = $('input:radio[name="valve_type"]:checked').val();

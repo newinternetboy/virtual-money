@@ -46,7 +46,7 @@ class Login extends Common
 		$postData = input('post.');
 		$captcha = $postData['captcha'];
 		if(!captcha_check($captcha)){
-			//return $this->error( lang('Captcha error') );
+			return $this->error( lang('Captcha error') );
 		};
 		$loginData = array(
 			'login_name'=>$postData['login_name'],

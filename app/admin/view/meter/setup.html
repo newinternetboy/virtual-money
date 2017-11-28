@@ -28,7 +28,6 @@
                         <!-- 表格数据 -->
 
                         <form id="save" action="{:url('admin/meter/saveData')}" method="post" class="form-horizontal" role="form" novalidate="novalidate">
-
                             <fieldset>
                                 <legend>{:lang('M_Code Resources')}</legend>
                                 <div class="form-group">
@@ -200,14 +199,6 @@
                 <div class="ibox float-e-margins" style="background: white; float: left; width: 100%;">
                     <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
                         <h5>{:lang('Meter')}{:lang('Setup')} - 打印</h5>
-                        <div class="ibox-tools">
-                            <!--<a class="collapse-link">-->
-                            <!--<i class="fa fa-chevron-up"></i>-->
-                            <!--</a>-->
-                            <!--<a class="close-link">-->
-                            <!--<i class="fa fa-times"></i>-->
-                            <!--</a>-->
-                        </div>
                     </div>
                     <div class="ibox-content">
                         <!-- 表格数据 -->
@@ -286,10 +277,8 @@
                                 <div class="col-sm-10">
                                     <button style="margin-right: 20px; float: right" class="btn btn-primary col-sm-1" onclick="refreshPage()" id="compeleteBtn" >完成</button>
                                     <button style="margin-right: 20px; float: right;" class="btn btn-primary col-sm-1" style="display:block;" id="jqprint" type="button" onclick="printInfo()">{:lang('Print')}</button>
-
                                 </div>
                             </div>
-
                         </form>
                     </div>
                 </div>
@@ -357,7 +346,6 @@
         errorPlacement: function(error, element) {
 
             // Append error within linked label
-
             $(element)
                     .closest( "form" )
                     .find( "label[for='" + element.attr( "id" ) + "']" )
@@ -366,9 +354,6 @@
                     .find( "label[for='" + element.attr( "id" ) + "']" )
                     .parent().addClass("has-error");
         },
-
-
-
 
         rules: {
             tel:{
@@ -383,6 +368,7 @@
             M_Type: "required",
             M_Code: "required",
             P_ID: "required",
+            username: "required",
             M_Address : "required",
             detail_address : "required"
         },
@@ -399,6 +385,7 @@
             M_Type: "请选择表具类型",
             M_Code: "请输入您的表号",
             P_ID: "请选择价格类型",
+            username: "请输入用户姓名",
             M_Address: "请选择区域",
             detail_address: "请输入详细地址"
         }
@@ -491,12 +478,8 @@
 //        if( !check(meter,consumer) ){
 //            return false;
 //        }
-
         console.log(P_ID);
-
         getPrintInfo(M_Type,M_Code,P_ID,username,tel,identity,M_Address,detail_address,family_num,building_area,income_peryear);
-
-
 
         $.ajax({
             url:"{:url('admin/meter/binding')}",
@@ -509,26 +492,24 @@
                 if( res.code == 200 ){
 //                    setTimeout(function(){window.location.href = ''},1500);
                     setTimeout(function(){window.location.href="{:url('admin/meter/setup')}?M_Code="+res.meter},2000);
+
+                    $("#submitBtn").removeAttrs("disabled");
+                    $("#submitBtn").html("提交");
+
+                    //隐藏提交界面,显示打印界面
+                    $("#content").hide();
+                    $("#contentPrint").show();
                 }
-
-                $("#submitBtn").removeAttrs("disabled");
-                $("#submitBtn").html("提交");
-
-                //隐藏提交界面,显示打印界面
-                $("#content").hide();
-                $("#contentPrint").show();
             },
             error:function(){
                 alertMsg("操作失败！",5);
                 $("#submitBtn").removeAttrs("disabled");
                 $("#submitBtn").html("提交");
             }
-        })
-
-
-
+        });
+        $("#submitBtn").removeAttrs("disabled");
+        $("#submitBtn").html("提交");
     }
-
 //    $('#jqprint').click(function(){
 //        $(".ibox-content").jqprint();
 //    });
@@ -575,9 +556,4 @@
     //        return true;
     //    }
 
-</script>
-<script>
-//    if({$consumer ?? ''}){
-//        $('#jqprint').show();
-//    }
 </script>
