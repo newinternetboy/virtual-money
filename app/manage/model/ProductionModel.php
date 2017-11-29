@@ -23,11 +23,11 @@ class ProductionModel extends BasicModel
     }
 
     public function setSdlpriceAttr($value){
-        return intval($value);
+        return floatval($value);
     }
 
     public function setRmbpriceAttr($value){
-        return intval($value);
+        return floatval($value);
     }
 
 }
