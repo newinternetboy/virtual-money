@@ -143,7 +143,7 @@ class Manage extends Admin
             $companyInfo = $companyService->findInfo($where);
             $userService = new UserService();
             $users = $userService->selectInfo(['company_id' => $companyInfo['id'],'type' => PLATFORM_ADMIN, 'delete_time' => null]);
-            $roles = model('app\admin\model\role')->getList(['company_id' => $companyInfo['id'],'status' => 1]);
+            $roles = model('app\admin\model\Role')->getList(['company_id' => $companyInfo['id'],'status' => 1]);
         }
         $this->assign('company_name',$company_name);
         $this->assign('address',$address);

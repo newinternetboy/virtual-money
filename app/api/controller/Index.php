@@ -114,11 +114,11 @@ class Index extends Controller
      * @param $M_Code
      */
     private function setOldMetersInactive($M_Code){
-        if( model('app\admin\model\meter')->getAllMeterInfo(['M_Code' => $M_Code],'find') ){
+        if( model('app\admin\model\Meter')->getAllMeterInfo(['M_Code' => $M_Code],'find') ){
             $setOldMetersWhere['M_Code'] = $M_Code;
             $setOldMetersData['meter_life'] = METER_LIFE_INACTIVE;
-            if( !model('app\admin\model\meter')->updateMeter($setOldMetersData,'Meter.init_old',$setOldMetersWhere) ){
-                $error = model('app\admin\model\meter')->getError();
+            if( !model('app\admin\model\Meter')->updateMeter($setOldMetersData,'Meter.init_old',$setOldMetersWhere) ){
+                $error = model('app\admin\model\Meter')->getError();
                 Log::record(['更新旧表生命周期字段失败' => $error,'data' => $setOldMetersData]);
                 exception('更新旧表生命周期字段失败: '.$error,ERROR_CODE_DATA_ILLEGAL);
             }
@@ -135,8 +135,8 @@ class Index extends Controller
         $newMeterData['balance_deli'] = 0;
         $newMeterData['balance_rmb'] = 0;
         $newMeterData['company_id'] = SHUANGDELI_ID;
-        if( !$newMeterId = model('app\admin\model\meter')->InitMeter($newMeterData,'Meter.init_new') ){
-            $error = model('app\admin\model\meter')->getError();
+        if( !$newMeterId = model('app\admin\model\Meter')->InitMeter($newMeterData,'Meter.init_new') ){
+            $error = model('app\admin\model\Meter')->getError();
             Log::record(['新表初始化失败' => $error,'data' => $newMeterData]);
             exception('新表初始化失败: '.$error,ERROR_CODE_DATA_ILLEGAL);
         }
@@ -171,8 +171,8 @@ class Index extends Controller
                 }
                 break;
         }
-        if( !model('app\admin\model\meterData')->upsert($data['M_Code'],$data,'report') ){
-            $error = model('app\admin\model\meterData')->getError();
+        if( !model('app\admin\model\MeterData')->upsert($data['M_Code'],$data,'report') ){
+            $error = model('app\admin\model\MeterData')->getError();
             Log::record(['上报数据入库失败' => $error,'data' => $data]);
             exception('上报数据入库失败: '.$error,ERROR_CODE_DATA_ILLEGAL);
         }
@@ -200,7 +200,7 @@ class Index extends Controller
         $where['M_Code'] = $M_Code;
         $where['meter_life'] = METER_LIFE_ACTIVE;
         $field = 'M_Code,U_ID,company_id,totalCube,totalCost';
-        if( !$meterInfo = model('app\admin\model\meter')->getMeterInfo($where,'find',$field) ){
+        if( !$meterInfo = model('app\admin\model\Meter')->getMeterInfo($where,'find',$field) ){
             Log::record(['没有符合上报数据表号的数据' => $M_Code],'error');
             exception('没有符合上报数据表号的数据',ERROR_CODE_DATA_ILLEGAL);
         }
@@ -218,8 +218,8 @@ class Index extends Controller
         $meterData['totalCube'] = $data['totalCube'];
         $meterData['balance'] = $data['balance'];
         $meterData['totalCost'] = $data['totalCost'];
-        if( !model('app\admin\model\meter')->updateMeter($meterData,'Meter.report') ){
-            Log::record(['同步表具信息失败' => model('app\admin\model\meter')->getError(),'data' => $data],'error');
+        if( !model('app\admin\model\Meter')->updateMeter($meterData,'Meter.report') ){
+            Log::record(['同步表具信息失败' => model('app\admin\model\Meter')->getError(),'data' => $data],'error');
             exception('同步表具信息失败',ERROR_CODE_DATA_ILLEGAL);
         }
     }
@@ -389,7 +389,7 @@ class Index extends Controller
      * @param $meter_id
      */
     private function checkBalance($data, $meter_id){
-        $dict_threshold_value = db('Dict')->where('type',DICT_BALANCE_THRESHOLD_VALUE)->order('create_time','asc')->find();
+        $dict_threshold_value = db('Dict')->where('type',DICT_BALANCE_THRESHOLD_VALUE)->order('create_time')->find();
         $threshold_value = $dict_threshold_value['value'];
         if($data['balance'] < $threshold_value){
             $url = config('notificationUrl');

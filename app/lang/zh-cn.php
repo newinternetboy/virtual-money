@@ -492,6 +492,8 @@ return [
     'Cmd Charge'                        => '充值',
     'Cmd Deduct'                        => '扣款',
     'Cmd Price'                         => '修改价格',
+    'Cmd Turn On'                       => '开阀',
+    'Cmd Turn Off'                      => '关阀',
     'Task Not Found'                    => '任务不存在',
     'Confirm Resend Task'               => '确认重新发送任务?',
     'Task Status Illegal'               => '任务状态不合法',

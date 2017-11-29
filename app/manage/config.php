@@ -128,6 +128,8 @@ return [
         'charge'        => lang('Cmd Charge'),
         'deduct'        => lang('Cmd Deduct'),
         'changePrice'   => lang('Cmd Price'),
+        'turn_on'       => lang('Cmd Turn On'),
+        'turn_off'      => lang('Cmd Turn Off'),
     ],
     'dictType'=>[
         DICT_COMPANY_ELE_BUSINESS => lang('Company Ele_business Type'),
