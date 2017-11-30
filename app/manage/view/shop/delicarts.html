@@ -66,7 +66,7 @@
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
-                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Pay Time')}{:lang('From')}</label>
+                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Create Time')}{:lang('From')}</label>
                                     <div class="col-sm-6">
                                         <input id="start_datetimepicker" name="starttime" value="{$starttime ?? ''}" type="text" class="form-control">
                                     </div>
@@ -293,6 +293,12 @@
                         <p id="check_totalCost" class="form-control" style="border: none;"></p>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="check_create_time" class="col-md-2 control-label">{:lang('Create Time')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_create_time" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
@@ -385,6 +391,7 @@
         }
         $('#check_freeze').html(freeze)
         $('#check_totalCost').html(order.totalCost)
+        $('#check_create_time').html(order.create_time)
         $('#myModal3').modal('show');
     }
 

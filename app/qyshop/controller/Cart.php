@@ -29,7 +29,7 @@ class Cart extends Admin
         $starttime = input('starttime',date('Y-m-d',strtotime('-1 day')));
         $endtime = input('endtime',date('Y-m-d'));
         $where['sid'] = $this->shop_id;
-        $where['pay_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
+        $where['create_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
         if($order_number){
             $where['id'] = $order_number;
         }

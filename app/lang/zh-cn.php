@@ -40,7 +40,7 @@ return [
     'login_name require' => '登录名必须',
     'Operation fail'    => '操作失败 ',
     'Operation Success'    => '操作成功 ',
-    'show graph'      => '显示图形',
+    'show graph'           => '显示图形',
     'Please Search Year' => '请选择年份',
     'Execution time can not be earlier than current time'    => '执行时间不能早于当前时间',
     "Please enter the user's table number, use ；separation" => "请输入用户表号,用;号分隔",

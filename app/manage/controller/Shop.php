@@ -292,7 +292,7 @@ class Shop extends Admin
         $status = input('status');
         $starttime = input('starttime',date('Y-m-d',strtotime('-1 month')));
         $endtime = input('endtime',date('Y-m-d'));
-        $where['pay_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
+        $where['create_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
         if($order_number){
             $where['id'] = $order_number;
         }
@@ -400,7 +400,7 @@ class Shop extends Admin
             $res = $shopService->columnInfo(['name'=>$shop_name],'id');
             $where['_id'] = ['$in'=>$res];
         }
-        $where['pay_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
+        $where['create_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
         $where['status']=['$in'=>[ORDER_SEED_WAITING_COMMENT,ORDER_OVER]];
         $where['money_type'] = MONEY_TYPE_RMB;
         $where['deli_settle_status'] = ORDER_NOT_ACCOUNT;
@@ -452,7 +452,7 @@ class Shop extends Admin
             $where['id'] = ['in',$res];
         }
         $where['sid'] = $sid;
-        $where['pay_time'] = ['between' , [strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
+        $where['create_time'] = ['between' , [strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
         $where['status']=['in',[ORDER_SEED_WAITING_COMMENT,ORDER_OVER]];
         $where['money_type'] = MONEY_TYPE_RMB;
         $where['deli_settle_status'] = ORDER_NOT_ACCOUNT;
@@ -478,7 +478,7 @@ class Shop extends Admin
             $res = $shopService->columnInfo(['name'=>$shop_name],'id');
             $where['_id'] = ['$in'=>$res];
         }
-        $where['pay_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
+        $where['create_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
         $where['status']=['$in'=>[ORDER_SEED_WAITING_COMMENT,ORDER_OVER]];
         $where['money_type'] = MONEY_TYPE_RMB;
         $where['deli_settle_status'] = ORDER_NOT_ACCOUNT;
@@ -859,7 +859,7 @@ class Shop extends Admin
         $status = input('status',ORDER_WAITING_SEED);
         $starttime = input('starttime',date('Y-m-d',strtotime('-1 month')));
         $endtime = input('endtime',date('Y-m-d'));
-        $where['pay_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
+        $where['create_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
         $where['shopType'] = DELI_ELE_BUSINESS_TYPE;
         if($order_number){
             $where['id'] = $order_number;
