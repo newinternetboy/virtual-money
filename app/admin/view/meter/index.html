@@ -13,20 +13,33 @@
                         <!-- 表格数据 -->
 
                         <div class="form-group">
-                            <div class="col-lg-6" style="float: right">
+                            <div class="col-md-10" style="margin-bottom: 15px">
                                 <div class="input-group">
                                     <input id="M_Code_S" type="text" class="form-control" placeholder="{:lang('Please enter M_Code')}">
-                                        <span class="input-group-btn">
-                                            <button id="search" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> </button>
-                                        </span>
-                                </div><!-- /input-group -->
+                                        <span class="input-group-addon">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                </div><!-- /form-group -->
                             </div><!-- /.col-lg-6 -->
+                            <!--<div class="col-lg-6" style="float: right">-->
+                                <!--<div class="input-group">-->
+                                    <!--<input id="M_Code_S" type="text" class="form-control" placeholder="{:lang('Please enter M_Code')}">-->
+                                        <!--<span class="input-group-btn">-->
+                                            <!--<button id="search" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> </button>-->
+                                        <!--</span>-->
+                                <!--</div>&lt;!&ndash; /input-group &ndash;&gt;-->
+                            <!--</div>&lt;!&ndash; /.col-lg-6 &ndash;&gt;-->
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-12">
+                                <button id="search" style="float: right" class="btn btn-primary col-sm-1" type="button" onclick="searchmeter()">{:lang('Search')}</button>
+                            </div>
                         </div>
                         <div style="clear: both"></div>
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 
-
-                        <table id="table" data-toggle="gridview" class="table table-bordered" data-show-refresh="false" >
+                        <table id="table" class="table table-bordered" data-show-refresh="false" >
                             <thead>
                             <tr>
                                 <th data-width="50"  >{:lang('M_Code')}</th>
@@ -44,9 +57,8 @@
     </div>
 </div>
 
-<script type="text/javascript">
-
-    $('#search').click(function(){
+<script>
+    function searchmeter () {
         var M_Code = $('#M_Code_S').val();
         if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
             $.ajax({
@@ -69,7 +81,32 @@
         }else{
             alertMsg("{:lang('Please fill in the form M_Code first')}");
         }
-    })
+    }
+
+//    $('#search').click(function(){
+//        var M_Code = $('#M_Code_S').val();
+//        if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
+//            $.ajax({
+//                url:"{:url('admin/meter/getMeterData')}",
+//                method:'post',
+//                dataType:'json',
+//                data:{M_Code: M_Code},
+//                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+//                success: function(res){
+//                    if(res.code != 200){
+//                        alertMsg(res.msg);
+//                    }else{
+//                        fillTable(res);
+//                    }
+//                },
+//                error:function(){
+//                    alertMsg("{:lang('Operation fail')}");
+//                }
+//            })
+//        }else{
+//            alertMsg("{:lang('Please fill in the form M_Code first')}");
+//        }
+//    });
 
     function fillTable(res){
         $("#table  tr:not(:first)").empty("");

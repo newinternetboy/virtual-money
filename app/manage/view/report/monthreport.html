@@ -4,77 +4,80 @@
 {js href="__JS__/echarts.js" /}
 {js href="__JS__/jquery.jqprint-0.3.js" /}
 {css href="__CSS__/bootstrap-datetimepicker.min.css" /}
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class=" table-responsive">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单内容 -->
-                <div class="ibox-title">
-                    <h5>{:lang('Month Report')}</h5>
-                </div>
-                <div class="ibox-content">
-                    <!-- 搜索条件 -->
-                    <form action="" method="post" class="form-horizontal" onsubmit="return check();">
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="company_name" class="col-sm-2 control-label">{:lang('Company')}</label>
-                                    <div class="col-sm-6">
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <div class="ibox float-e-margins" style="background: white; float: left;">
+                    <!-- 表单内容 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Month Report')}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <!-- 搜索条件 -->
+                        <form action="" method="post" class="form-horizontal" onsubmit="return check();">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <!--<div class="form-group">-->
+                                    <label for="company_name" class="col-sm-4 control-label">{:lang('Company')}</label>
+                                    <div class="col-sm-8">
                                         <input id="company_name" name="company_name" value="{$company_name ?? ''}" type="text" placeholder="{:lang('Please Input The Company Name')}" autocomplete="off" data-provide="typeahead"  class="form-control">
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="year" class="col-sm-2 control-label">{:lang('Search Year')}</label>
-                                    <div class="col-sm-6">
+                                    <!--</div>-->
+                                </div><!-- /.col-lg-6 -->
+                                <div class="col-md-4">
+                                    <!--<div class="form-group">-->
+                                    <label for="year" class="col-sm-4 control-label">{:lang('Search Year')}</label>
+                                    <div class="col-sm-8">
                                         <input id="year" name="year" value="{$year ?? ''}" type="text" class="form-control">
                                     </div>
+                                    <!--</div>-->
+                                </div><!-- /.col-lg-6 -->
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
-                            <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
-                            </div>
-                        </div>
-                    </form>
-                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
-                    <!--报表-->
-                    <div id="table">
-                        <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
-                            <thead>
-                            <tr>
-                                <th>{:lang('months')}</th>
-                                <th>{:lang('User Number')}</th>
-                                <th>{:lang('The amount of this month')}</th>
-                                <th>{:lang('Amount of the month(yuan)')}</th>
-                            </tr>
-                            </thead>
-                            {foreach $report as $month => $item}
+                        </form>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;"/>
+                        <!--报表-->
+                        <div id="table">
+                            <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th>{:lang('months')}</th>
+                                    <th>{:lang('User Number')}</th>
+                                    <th>{:lang('The amount of this month')}</th>
+                                    <th>{:lang('Amount of the month(yuan)')}</th>
+                                </tr>
+                                </thead>
+                                {foreach $report as $month => $item}
                                 <tr>
                                     <td>{$month}</td>
                                     <td>{$item.consumers}</td>
                                     <td>{$item.cube}</td>
                                     <td>{$item.cost}</td>
                                 </tr>
-                            {/foreach}
-                            <tr>
-                                <td>总计</td>
-                                <td></td>
-                                <td>{$report|array_column=###,'cube'|array_sum=###}</td>
-                                <td>{$report|array_column=###,'cost'|array_sum=###}</td>
-                            </tr>
-                        </table>
+                                {/foreach}
+                                <tr>
+                                    <td>总计</td>
+                                    <td></td>
+                                    <td>{$report|array_column=###,'cube'|array_sum=###}</td>
+                                    <td>{$report|array_column=###,'cost'|array_sum=###}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="chart" style="width: 800px;height:400px;display:none"></div>
+                        <button id="print" style="float: right;margin-left: 1vw" class="btn btn-success" type="button" >{:lang('Print')}</button>
+                        <button id="switch" style="float: right" class="btn btn-success" type="button" >{:lang('show graph')}</button>
                     </div>
-                    <div id="chart" style="width: 800px;height:400px;display:none"></div>
-                    <button id="print" style="float: right;margin-left: 1vw" class="btn btn-success" type="button" >{:lang('Print')}</button>
-                    <button id="switch" style="float: right" class="btn btn-success" type="button" >{:lang('show graph')}</button>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
 </div>
 <script>
     $("#year").datetimepicker({

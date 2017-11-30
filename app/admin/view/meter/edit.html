@@ -13,14 +13,14 @@
                         <div class="form-group" style="margin-bottom: 50px">
                             <div class="col-md-10">
                                 <div class="input-group">
-                                    <input class="form-control" type="text" placeholder="{:lang('Please enter M_Code')}" name="M_Code" id="M_Code">
+                                    <input class="form-control" type="text" placeholder="{:lang('Please enter M_Code')}" name="M_Code" id="M_Code_S">
                                             <span class="input-group-addon">
                                                 <i class="fa fa-search"></i>
                                             </span>
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <button id="search" class="btn btn-primary" type="button" style="width: 100%;">{:lang('Search')}</button>
+                                <button id="search" class="btn btn-primary" type="button" style="width: 100%;" onclick="searchMeters()">{:lang('Search')}</button>
                             </div>
                         </div>
 
@@ -33,16 +33,6 @@
                                     <input class="form-control"  name="M_Code" id="M_Code" disabled="disabled" >
                                 </div>
                             </div>
-                            <!--<div class="form-group">-->
-                                <!--<label for="M_Code" class="col-sm-2 control-label">价格类型</label>-->
-                                <!--<div class="col-sm-10">-->
-                                    <!--<select class="form-control"  name="P_ID" id="P_ID" >-->
-                                        <!--{foreach $prices as $price }-->
-                                        <!--<option value="{$price.id}">{$price.name}</option>-->
-                                        <!--{/foreach}-->
-                                    <!--</select>-->
-                                <!--</div>-->
-                            <!--</div>-->
                             <legend>{:lang('Personal Profile')}</legend>
                             <div class="form-group">
                                 <label for="username" class="col-md-2 control-label">{:lang('Name')}</label>
@@ -66,26 +56,6 @@
                                     </div>
                                 </div>
                             </div>
-                                <!--<div class="form-group">-->
-                                    <!--<label for="tel" class="col-sm-2 control-label">{:lang('Contact Number')}</label>-->
-                                    <!--<div class="col-sm-10">-->
-                                        <!--<input class="form-control" name="tel" id="tel"  >-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="form-group">-->
-                                    <!--<label for="M_Address" class="col-sm-2 control-label">{:lang('Installation Address')}</label>-->
-                                    <!--<div class="col-sm-4">-->
-                                        <!--<select class="form-control"  name="M_Address" id="M_Address"  >-->
-                                            <!--{foreach $areas as $area }-->
-                                            <!--<option value="{$area.id}">{$area.name}</option>-->
-                                            <!--{/foreach}-->
-                                        <!--</select>-->
-                                    <!--</div>-->
-                                    <!--<div class="col-sm-6">-->
-                                        <!--<input class="form-control"  name="detail_address" id="detail_address" placeholder="{:lang('Please enter')}{:lang('Area Address')}"  >-->
-                                    <!--</div>-->
-                                <!--</div>-->
-
                             <div class="form-group col col-md-6">
                                 <label for="M_Address" class="col-md-4 control-label">{:lang('Installation Address')}</label>
                                 <!--<label for="detail_address" class="display:none"></label>-->
@@ -99,7 +69,6 @@
                                         </select>
                                     </div>
                                 </div>
-
                             </div>
                             <div class="form-group col col-md-6">
                                 <label for="detail_address" style="display: none"></label>
@@ -112,9 +81,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
                             </div>
                         <div style="clear: both;"></div>
                             <legend>{:lang('Additional Resources')}</legend>
@@ -159,7 +125,7 @@
 </div>
 
 <script>
-    $('#search').click(function(){
+    function searchMeters () {
         var M_Code = $('#M_Code_S').val();
         if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
             $.ajax({
@@ -183,7 +149,7 @@
         }else{
             alertMsg("{:lang('Please fill in the form M_Code first')}");
         }
-    });
+    }
 
     $.validator.setDefaults({
         submitHandler: function() {
