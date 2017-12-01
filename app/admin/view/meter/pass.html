@@ -22,7 +22,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <button id="search" class="btn btn-primary" type="button" style="width: 100%;">查询
+                                    <button id="search" class="btn btn-primary" type="button" style="width: 100%;" onclick="searchMeters()">查询
                                     </button>
                                 </div>
                             </div>
@@ -208,7 +208,7 @@
 </div>
 
 <script>
-    $('#search').click(function () {
+    function searchMeters () {
         var M_Code = $('#M_Code').val();
         if (M_Code != 'undefined' && M_Code != '' && M_Code != null) {
             $.ajax({
@@ -233,8 +233,7 @@
         } else {
             alertMsg("{:lang('Please fill in the form M_Code first')}");
         }
-
-    });
+    }
 
     $.validator.setDefaults({
         submitHandler: function() {

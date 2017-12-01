@@ -73,9 +73,8 @@
 	{/if}
 	{/foreach}
 	console.log(content);
-
 </script>
-<body class="smart-style-0 desktop-detected">
+<body class="smart-style-0 desktop-detected" style="background-color: #e6e6e6">
 <header id="header" style="width: 100%; height: 100px; background-color: white; position: fixed; background-image: none; padding: 0; box-shadow: 0 3px 5px rgba(84,84,84,0.3)">
 	<div style="width: 40%; height: 60px; display: table; margin: 0 0 0 5%;">
 		<span class="m-r-sm text-muted welcome-message" style="display: table-cell; height: 100%; vertical-align: middle">{$companyName}</span>
@@ -90,7 +89,6 @@
 	</div>
 	<div style="clear: both;"></div>
 	<div id="main_menu" style="width: 100%; height: 40px; background-color: #2D8CC1;">
-
 
 		{foreach $menus as $menu}
 		{if condition="$menu.display eq 1"}
@@ -110,13 +108,13 @@
 	</nav>
 </aside>
 
-<div id="main" role="main" style="padding-bottom: 0; padding-top: 100px;;">
+<div id="main" role="main" style="padding-bottom: 0; padding-top: 100px;">
 	<div>
 		{__CONTENT__}
 	</div>
 </div>
 
-<div class="page-footer" style="position: initial;">
+<div class="page-footer" style="border: 0; padding-top: 0; height: 40px; position: fixed; bottom: 0;">
 	{include file="./_layout/footer" /}
 </div>
 
@@ -151,6 +149,16 @@
 		case "m6" :
 			$("#main_menu").children().removeClass("active");
 			$("#system").addClass("active");
+			break;
+
+		case "m7" :
+			$("#main_menu").children().removeClass("active");
+			$("#reconcile").addClass("active");
+			break;
+
+		case "m8" :
+			$("#main_menu").children().removeClass("active");
+			$("#shop").addClass("active");
 			break;
 	}
 
@@ -207,6 +215,24 @@
 					subtitle =  subtitle +
 							"<li>" +
 							"<a href='/" + content.系统管理[index].url + "#m6'>" + content.系统管理[index].title + "</a>" +
+							"</li>";
+				});
+				break;
+
+			case "对账":
+				$(content.对账).each(function(index) {
+					subtitle =  subtitle +
+							"<li>" +
+							"<a href='/" + content.对账[index].url + "#m7'>" + content.对账[index].title + "</a>" +
+							"</li>";
+				});
+				break;
+
+			case "电商管理":
+				$(content.电商管理).each(function(index) {
+					subtitle =  subtitle +
+							"<li>" +
+							"<a href='/" + content.电商管理[index].url + "#m8'>" + content.电商管理[index].title + "</a>" +
 							"</li>";
 				});
 				break;

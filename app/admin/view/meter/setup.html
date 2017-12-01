@@ -184,6 +184,7 @@
                         <label  class="col-sm-2 control-label"></label>
                         <div class="col-sm-10">
                             <button style="float: right" class="btn btn-primary col-sm-1" onclick="saveData()" type="submit" id="submitBtn" >{:lang('Button')}</button>
+                            <button onclick="refreshPage()">refresh</button>
                         </div>
                     </div>
                 </div>
@@ -428,6 +429,7 @@
     }
 
     function refreshPage () {
+        console.log('refresh');
         window.location.reload();
     }
 
@@ -475,10 +477,6 @@
         var income_peryear = $('#income_peryear').val();
         var meter = {M_Type: M_Type, M_Code: M_Code, P_ID: P_ID, M_Address: M_Address, detail_address: detail_address};
         var consumer = {username: username, tel: tel, identity: identity, family_num: family_num, building_area: building_area, income_peryear: income_peryear};
-//        if( !check(meter,consumer) ){
-//            return false;
-//        }
-        console.log(P_ID);
         getPrintInfo(M_Type,M_Code,P_ID,username,tel,identity,M_Address,detail_address,family_num,building_area,income_peryear);
 
         $.ajax({
@@ -510,50 +508,5 @@
         $("#submitBtn").removeAttrs("disabled");
         $("#submitBtn").html("提交");
     }
-//    $('#jqprint').click(function(){
-//        $(".ibox-content").jqprint();
-//    });
-    //    function check(meter,consumer){
-    //        if( meter.M_Type == "" || meter.M_Type == null || meter.M_Type == "undefined"){
-    //            alertMsg("请先选择表具类型");
-    //            return false;
-    //        }
-    //        if( meter.M_Code == "" || meter.M_Code == null || meter.M_Code == "undefined"){
-    //            alertMsg("请先填写表号");
-    //            return false;
-    //        }
-    //        if( meter.P_ID == "" || meter.P_ID == null || meter.P_ID == "undefined"){
-    //            alertMsg("请先选择价格类型");
-    //            return false;
-    //        }
-    //        if( meter.M_Address == "" || meter.M_Address == null || meter.M_Address == "undefined"){
-    //            alertMsg("请先选择安装地址");
-    //            return false;
-    //        }
-    //        if( meter.detail_address == "" || meter.detail_address == null || meter.detail_address == "undefined"){
-    //            alertMsg("请先填写详细地址");
-    //            return false;
-    //        }
-    //        if( consumer.username == "" || consumer.username == null || consumer.username == "undefined"){
-    //            alertMsg("请先填写姓名");
-    //            return false;
-    //        }
-    //        if( consumer.telephone == "" || consumer.telephone == null || consumer.telephone == "undefined"){
-    //            alertMsg("请先填写电话");
-    //            return false;
-    //        }
-    //        if(!checkTelephone(consumer.telephone)){
-    //            return false;
-    //        }
-    //        if( consumer.identity == "" || consumer.identity == null || consumer.identity == "undefined"){
-    //            alertMsg("请先填写身份证号");
-    //            return false;
-    //        }
-    //        if (!checkCard(consumer.identity)) {
-    //            alertMsg("请输入正确的身份证号码");
-    //            return false;
-    //        }
-    //        return true;
-    //    }
 
 </script>

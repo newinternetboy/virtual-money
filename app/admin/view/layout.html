@@ -84,10 +84,9 @@
 		{/if}
 	{/if}
 	{/foreach}
-	console.log(content);
 
 </script>
-<body class="smart-style-0 desktop-detected" style="background-color: #e6e6e6">
+<body class="smart-style-0 desktop-detected">
 	<header id="header" style="width: 100%; height: 100px; background-color: white; position: fixed; background-image: none; padding: 0; box-shadow: 0 3px 5px rgba(84,84,84,0.3); z-index: 999;">
 		<div style="width: 40%; height: 60px; display: table; margin: 0 0 0 5%;">
 			<span class="m-r-sm text-muted welcome-message" style="display: table-cell; height: 100%; vertical-align: middle">{$company.company_name}</span>
@@ -102,8 +101,6 @@
 		</div>
 		<div style="clear: both;"></div>
 		<div id="main_menu" style="width: 100%; height: 40px; background-color: #2D8CC1;">
-
-
 			{foreach $menus as $menu}
 				{if condition="$menu.display eq 1"}
 				<div class="menu-cell" id="{$menu.rule_val}" onclick="checkActive(this)">
@@ -164,6 +161,16 @@
 				$("#main_menu").children().removeClass("active");
                 $("#system").addClass("active");
 				break;
+
+			case "m7" :
+				$("#main_menu").children().removeClass("active");
+				$("#reconcile").addClass("active");
+				break;
+
+			case "m8" :
+				$("#main_menu").children().removeClass("active");
+				$("#shop").addClass("active");
+				break;
 		}
 
 		function ShowSubmenu () {
@@ -222,6 +229,24 @@
 								"</li>";
 					});
 					break;
+
+				case "对账":
+					$(content.对账).each(function(index) {
+						subtitle =  subtitle +
+								"<li>" +
+								"<a href='/" + content.对账[index].url + "#m7'>" + content.对账[index].title + "</a>" +
+								"</li>";
+					});
+					break;
+
+				case "电商管理":
+					$(content.电商管理).each(function(index) {
+						subtitle =  subtitle +
+								"<li>" +
+								"<a href='/" + content.电商管理[index].url + "#m8'>" + content.电商管理[index].title + "</a>" +
+								"</li>";
+					});
+					break;
 			}
 			$("#side-menu").append(subtitle);
 		};
@@ -245,6 +270,7 @@
 		}
 
 		window.onload = function() {
+			console.log('showsubmenu');
 			ShowSubmenu();
 		};
 	</script>
