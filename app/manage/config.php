@@ -145,5 +145,6 @@ return [
     'fixstatus' => [
         FIX_STATUS_WAITING => lang('Fix Waiting'),
         FIX_STATUS_DEAL => lang('Fix Deal'),
-    ]
+    ],
+    'grImgPath' => '114.113.90.9:10086',
 ];

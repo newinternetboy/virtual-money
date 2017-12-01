@@ -418,10 +418,18 @@ class Shop extends Admin
         $shop =  $paginate[0]->result;
         foreach($shop as & $value){
             $shop_one = $shopService->findInfo(['id'=>$value->_id->sid]);
-            $value->shopname = $shop_one['name'];
-            $value->personName = $shop_one['personName'];
-            $value->bank = $shop_one['bank'];
-            $value->cardNumber = $shop_one['cardNumber'];
+            if(isset($shop_one['name'])){
+                $value->shopname = $shop_one['name'];
+            }
+            if(isset($shop_one['personName'])){
+                $value->personName = $shop_one['personName'];
+            }
+            if(isset($shop_one['bank'])){
+                $value->bank = $shop_one['bank'];
+            }
+            if(isset($shop_one['cardNumber'])){
+                $value->cardNumber = $shop_one['cardNumber'];
+            }
         }
         //根据条件做group求总个数；
         $res = $cartService->getAllGroupByShop('cart',$where);
@@ -502,10 +510,18 @@ class Shop extends Admin
             $totalOrder+=$value->count;
             $totalMoney+=$value->sum;
             $shop_one = $shopService->findInfo(['id'=>$value->_id->sid]);
-            $value->shopname = $shop_one['name'];
-            $value->personName = $shop_one['personName'];
-            $value->bank = $shop_one['bank'];
-            $value->cardNumber = strval($shop_one['cardNumber']);
+            if(isset($shop_one['name'])){
+                $value->shopname = $shop_one['name'];
+            }
+            if(isset($shop_one['personName'])){
+                $value->personName = $shop_one['personName'];
+            }
+            if(isset($shop_one['bank'])){
+                $value->bank = $shop_one['bank'];
+            }
+            if(isset($shop_one['cardNumber'])){
+                $value->cardNumber = $shop_one['cardNumber'];
+            }
         }
         $filename = '订单结算'.date('YmdHi');
         $title = '订单结算Excel';
