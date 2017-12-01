@@ -722,6 +722,22 @@ return [
     'String Param'                      => '字符参数',
     'Number Param'                      => '数字参数',
 
+    //表具报修
+    'Fix List'                          => '表具报修列表',
+    'Fix Status'                        => '状态',
+    'Fix Waiting'                       => '待处理',
+    'Fix Deal'                          => '已处理',
+    'Fix Deal Desc'                     => '处理结果',
+    'Choose Fix Status'                 => '请选择状态',
+    'Fix Addr'                          => '详细地址',
+    'Fix Desc'                          => '描述',
+    'Fix Contact'                       => '联系人',
+    'Fix Tel'                           => '联系电话',
+    'Fix CreateTime'                    => '报修时间',
+    'Fix Id Require'                    => '表具报修id必须',
+    'Fix Not Exists'                    => '表具报修记录不存在',
+    'Please Input Deal Desc'            => '请输入处理结果...',
+
     /******************************企业店铺系统**************************/
     //店铺信息
     'Manage Shop'                       => '店铺管理',
