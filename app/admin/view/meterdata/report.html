@@ -1,6 +1,7 @@
 {js href="__JS__/bootstrap-datetimepicker.min.js" /}
 {js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
 {css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+{js href="__JS__/jquery.jqprint-0.3.js" /}
 <div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
     <section id="widget-grid">
         <div class="row">
@@ -10,7 +11,7 @@
                         <h5>{:lang('Meterdata report')}</h5>
                     </div>
                     <!-- 表单内容 -->
-                    <div class="ibox-content">
+                    <div class="ibox-content" style="float: left;">
                         <!-- 搜索条件 -->
                         <form data-method="post" method="" class="form-horizontal">
                             <div class="form-group" style="margin-bottom: 15px">
@@ -46,7 +47,8 @@
                         </form>
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
                         <!--报表-->
-                        <div>
+                        <div id="result">
+                            <p id="searchRange">{:lang('Start Time')}:{$startTime} -- {:lang('End Time')}{$endTime} </p>
                             <table id="reportTable" class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
                                 <thead>
                                 <tr>
@@ -54,13 +56,13 @@
                                     <th>{:lang('Dosage Of Meter')}</th>
                                     <th>{:lang('Used Amount')}</th>
                                     <th>{:lang('Acquisition Time')}</th>
-                                    <th>{:lang('Operate')}</th>
                                 </tr>
                                 </thead>
                                 <!--<tbody>-->
                                 <!--</tbody>-->
                             </table>
                         </div>
+                        <div><button style="float: right" class="btn btn-success col-sm-1" type="button" onclick="printTable();" >{:lang('Print')}</button></div>
                     </div>
                 </div>
             </div>
@@ -102,20 +104,20 @@
         }
         var data = {M_Code: M_Code, startTime: startTime, endTime: endTime};
         $.ajax({
-            url:"{:url('admin/meterData/getReport')}",
+            url:"{:url('admin/meterdata/getReport')}",
             method:'post',
             dataType:'json',
             data: data,
             beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
             success: function(res){
                 if( res.code == 200 ){
-                    $("#report  tr:not(:first)").empty("");
+                    $("#reportTable  tr:not(:first)").empty("");
+                    $('#searchRange').html('{:lang("Start Time")}'+':'+$('#startTime').val()+'--'+'{:lang("End Time")}'+':'+$('#endTime').val());
                     var html = '<tbody><tr>' +
                                     '<td>'+res.data.M_Code+'</td>'+
                                     '<td>'+res.data.cube+'</td>'+
                                     '<td>'+res.data.cost+'</td>'+
                                     '<td>'+res.data.date+'</td>'+
-                                    '<td>'+'<button>打印</button>'+'</td>'+
                                 '</tr></tbody>';
                     $('#reportTable').append(html);
                 }else{
@@ -127,5 +129,9 @@
             }
         })
 
+    }
+
+    function printTable(){
+        $('#result').jqprint();
     }
 </script>
