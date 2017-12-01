@@ -349,7 +349,7 @@
     }
     function checkOrder(order){
         var shopType=''
-        switch(order.money_type){
+        switch(order.shopType){
             case {$Think.const.COMPANY_ELE_BUSINESS}:shopType="{:lang('Order Company')}";break;
             case {$Think.const.DELI_ELE_BUSINESS_TYPE}:shopType="{:lang('Order Deli')}";break;
         default:shopType="{:lang('Order Person')}";break;

@@ -253,6 +253,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="check_type" class="col-md-2 control-label">{:lang('Order Type')}:</label>
+                    <div class="col-md-10">
+                        <p id="check_type" class="form-control" style="border: none;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="check_status" class="col-md-2 control-label">{:lang('Order Status')}:</label>
                     <div class="col-md-10">
                         <p id="check_status" class="form-control" style="border: none;"></p>
@@ -405,7 +411,7 @@
 
     function checkOrder(order){
         var shopType=''
-        switch(order.money_type){
+        switch(order.shopType){
             case {$Think.const.COMPANY_ELE_BUSINESS}:shopType="{:lang('Order Company')}";break;
             case {$Think.const.DELI_ELE_BUSINESS_TYPE}:shopType="{:lang('Order Deli')}";break;
             default:shopType="{:lang('Order Person')}";break;
@@ -418,7 +424,7 @@
             default:money_type="{:lang('Not Choose Money_Type')}";break;
         }
         $('#check_money_type').html(money_type)
-        var status=''
+        var status=0
         switch(order.status){
             case {$Think.const.ORDER_UNPAID}:status="{:lang('Unpaid')}";break;
             case {$Think.const.ORDER_WAITING_SEED}:status="{:lang('Waiting Seed')}";break;
@@ -427,6 +433,13 @@
             default:status="{:lang('Order Finish')}";break;
         }
         $('#check_status').html(status)
+        var type=''
+        switch(order.type){
+            case {$Think.const.CART_TYPE_RECHARGE_PAYMENT}:type="{:lang('Recharge payment')}";break;
+            case {$Think.const.CART_TYPE_BUSINDESS_CONSUME}:type="{:lang('Business Consume')}";break;
+            default:'';break;
+        }
+        $('#check_type').html(type)
         $('#check_id').html(order.id)
         $('#check_shop_name').html(order.shop_name)
         $('#check_consumer_username').html(order.consumer_username)
