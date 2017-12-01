@@ -25,7 +25,7 @@ class Production extends Validate
     ];
 
     protected $scene = [
-        'editProduction'      =>      ['name','sdlenable','rmbenable','desc','status'],
+        'editProduction'      =>      ['name','sdlenable','desc','status'],
     ];
 
 }

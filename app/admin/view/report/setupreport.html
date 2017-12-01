@@ -132,9 +132,11 @@
         if($('#table').css('display') === 'none'){
             $('#table').show();
             $('#chart').hide();
+            $('#switch').html("{:lang('show graph')}");
         }else{
             $('#table').hide();
             $('#chart').show();
+            $('#switch').html("{:lang('show table')}");
         }
     })
 

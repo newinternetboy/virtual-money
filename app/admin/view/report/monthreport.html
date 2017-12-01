@@ -40,7 +40,7 @@
                                 <thead>
                                 <tr>
                                     <th>{:lang('months')}</th>
-                                    <th>{:lang('User Number')}</th>
+                                    <th>{:lang('Month User Number')}</th>
                                     <th>{:lang('The amount of this month')}</th>
                                     <th>{:lang('Amount of the month(yuan)')}</th>
                                 </tr>
@@ -167,9 +167,11 @@
         if ($('#table').css('display') === 'none') {
             $('#table').show();
             $('#chart').hide();
+            $('#switch').html("{:lang('show graph')}");
         } else {
             $('#table').hide();
             $('#chart').show();
+            $('#switch').html("{:lang('show table')}")
         }
     })
 

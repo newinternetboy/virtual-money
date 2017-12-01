@@ -40,20 +40,21 @@
                                     <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
                                 </div>
                             </div>
-                        </form>
-                        <hr style="height:1px;border:none;border-top:1px solid #555555;"/>
-                        <!--报表-->
-                        <div id="table">
-                            <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
-                                <thead>
-                                <tr>
-                                    <th>{:lang('months')}</th>
-                                    <th>{:lang('User Number')}</th>
-                                    <th>{:lang('The amount of this month')}</th>
-                                    <th>{:lang('Amount of the month(yuan)')}</th>
-                                </tr>
-                                </thead>
-                                {foreach $report as $month => $item}
+                        </div>
+                    </form>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <!--报表-->
+                    <div id="table">
+                        <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>{:lang('months')}</th>
+                                <th>{:lang('Month User Number')}</th>
+                                <th>{:lang('The amount of this month')}</th>
+                                <th>{:lang('Amount of the month(yuan)')}</th>
+                            </tr>
+                            </thead>
+                            {foreach $report as $month => $item}
                                 <tr>
                                     <td>{$month}</td>
                                     <td>{$item.consumers}</td>

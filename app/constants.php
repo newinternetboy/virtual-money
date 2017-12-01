@@ -141,6 +141,9 @@ define('ORDER_OVER',5);//订单完成
 //订单结算状态 deli_settle_status
 define('ORDER_ALREADY_ACCOUNT',1);//已结算
 define('ORDER_NOT_ACCOUNT',0);//未结算
+//订单类型 type
+define('CART_TYPE_RECHARGE_PAYMENT',1);//充值缴费;
+define('CART_TYPE_BUSINDESS_CONSUME',2);//商城消费;
 
 /***************dict表***************/
 //类型 type

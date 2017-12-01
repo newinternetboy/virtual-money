@@ -315,10 +315,14 @@ class Shop extends Admin
         $orders = $cartService->getInfoPaginate($where,$param);
         foreach($orders as & $order){
             $order['consumer_username'] = $order->consumer['username'];
-            if($order['sid'] == PRODUCTION_ID_DELI){
-                $order['shop_name'] = '--';
+            if($order['type'] ==CART_TYPE_BUSINDESS_CONSUME){
+                if($order['sid'] == PRODUCTION_ID_DELI){
+                    $order['shop_name'] = '--';
+                }else{
+                    $order['shop_name'] = $order->shop['name'];
+                }
             }else{
-                $order['shop_name'] = $order->shop['name'];
+                $order['shop_name'] = '--';
             }
             unset($order['consumer']);
             unset($order['shop']);
@@ -402,7 +406,9 @@ class Shop extends Admin
         }
         $where['create_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
         $where['status']=['$in'=>[ORDER_SEED_WAITING_COMMENT,ORDER_OVER]];
+        $where['shopType']=['$in'=>[PERSONAL_ELE_BUSINESS,COMPANY_ELE_BUSINESS]];
         $where['money_type'] = MONEY_TYPE_RMB;
+        $where['type'] = CART_TYPE_BUSINDESS_CONSUME;
         $where['deli_settle_status'] = ORDER_NOT_ACCOUNT;
         $where['freeze'] = ORDER_NORMAL;
         $page_size = 10;
@@ -454,7 +460,9 @@ class Shop extends Admin
         $where['sid'] = $sid;
         $where['create_time'] = ['between' , [strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
         $where['status']=['in',[ORDER_SEED_WAITING_COMMENT,ORDER_OVER]];
+        $where['shopType']=['in',[PERSONAL_ELE_BUSINESS,COMPANY_ELE_BUSINESS]];
         $where['money_type'] = MONEY_TYPE_RMB;
+        $where['type'] = CART_TYPE_BUSINDESS_CONSUME;
         $where['deli_settle_status'] = ORDER_NOT_ACCOUNT;
         $where['freeze'] = ORDER_NORMAL;
         $change['deli_settle_status'] = ORDER_ALREADY_ACCOUNT;
@@ -480,7 +488,9 @@ class Shop extends Admin
         }
         $where['create_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
         $where['status']=['$in'=>[ORDER_SEED_WAITING_COMMENT,ORDER_OVER]];
+        $where['shopType']=['$in'=>[PERSONAL_ELE_BUSINESS,COMPANY_ELE_BUSINESS]];
         $where['money_type'] = MONEY_TYPE_RMB;
+        $where['type'] = CART_TYPE_BUSINDESS_CONSUME;
         $where['deli_settle_status'] = ORDER_NOT_ACCOUNT;
         $where['freeze'] = ORDER_NORMAL;
         $cartService = new CartService();
@@ -725,10 +735,7 @@ class Shop extends Admin
             $desc = input('desc');
             $category = input('category');
             $sdlprice = input('sdlprice');
-            $rmbprice = input('rmbprice');
             $status = input('status');
-            $sdlenable = input('sdlenable');
-            $rmbenable = input('rmbenable');
             $img = request()->file('img');
             if ($img) {
                 $oriPath = DS . 'productionCover' . DS . 'origin';
@@ -739,25 +746,11 @@ class Shop extends Admin
             //添加商铺
             $data['desc'] = $desc;
             $data['category'] = $category;
-            if($rmbprice){
-                $data['rmbprice'] = $rmbprice;
-            }
-            if($sdlprice){
-                $data['sdlprice'] = $sdlprice;
-            }
+            $data['sdlprice'] = $sdlprice;
             $data['status'] = $status;
             $data['name'] = $name;
             $data['sid'] = PRODUCTION_ID_DELI;
-            if($rmbenable=='true'){
-                $data['rmbenable'] = true;
-            }else{
-                $data['rmbenable'] = false;
-            }
-            if($sdlenable=='true'){
-                $data['sdlenable'] = true;
-            }else{
-                $data['sdlenable'] = false;
-            }
+            $data['sdlenable'] = true;
             if($id){
                 $data['id'] = $id;
             }
