@@ -303,7 +303,7 @@
         var consumer = data['consumer'];
         $('#M_Code_P').text(meter.M_Code);
 
-        if (meter.meter_status == "undefined" || meter.meter_status == null || meter.meter_status == '') {
+        if (meter.meter_status == {$Think.const.METER_STATUS_NEW}) {
             $('#username').text('');
             $('#tel').text('');
             $('#family_num_P').text('');
@@ -311,13 +311,14 @@
             $('#income_peryear_P').text('');
             $('#address').text('');
             $('#M_Type').text("");
+            $('#left').text('');
         } else {
             $('#username').text(consumer.username);
             $('#tel').text(consumer.tel);
             $('#family_num_P').text(consumer.family_num);
             $('#building_area_P').text(consumer.building_area);
             $('#income_peryear_P').text(consumer.income_peryear);
-            //$('#left').text(consumer.left);
+            $('#left').text(meter.balance);
             $('#address').text(meter.area + ' ' + meter.detail_address);
             if (meter.M_Type == "{$Think.const.METER_TYPE_WATER}") {
                 $('#M_Type').text("{:lang('Water Code')}");
