@@ -140,4 +140,10 @@ return [
     //商铺封面图压缩尺寸限制
     'thumbMaxWidth' => 250,
     'thumbMaxHeight' => 250,
+
+    //表具报修 状态
+    'fixstatus' => [
+        FIX_STATUS_WAITING => lang('Fix Waiting'),
+        FIX_STATUS_DEAL => lang('Fix Deal'),
+    ]
 ];

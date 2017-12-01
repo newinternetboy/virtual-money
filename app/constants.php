@@ -155,3 +155,7 @@ define('DICT_BALANCE_THRESHOLD_VALUE',4); //表具余额阀值
 /***************通知类型***************/
 define('NOTICE_TYPE_LOW_BALANCE',1); //提醒充值
 define('NOTICE_TYPE_CART_STATUS_CHANGE',2); //订单状态变更
+
+/***************表具报修状态***************/
+define('FIX_STATUS_WAITING',1);//待处理
+define('FIX_STATUS_DEAL',2);   //已处理

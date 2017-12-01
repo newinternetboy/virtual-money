@@ -10,6 +10,7 @@ namespace app\manage\controller;
 
 use app\manage\service\CompanyService;
 use app\manage\service\ConsumerService;
+use app\manage\service\FixService;
 use app\manage\service\MeterService;
 use app\manage\service\MoneyLogService;
 use app\manage\service\UserService;
@@ -666,6 +667,56 @@ class Manage extends Admin
                 exception(lang('Task Status Illegal'),ERROR_CODE_DATA_ILLEGAL);
             }
             model('app\admin\model\LogRecord')->record( 'Handle Task',['id' => $id,'status' => $status,'ignore_reason' => $ignore_reason]);
+        }catch (\Exception $e){
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    /**
+     *表具报修
+     */
+    public function fixList(){
+        $status = input('status/d');
+        $startDate = input('startDate',date('Y-m-d',strtotime('-7 days')));
+        $endDate = input('endDate',date('Y-m-d'));
+        if($status){
+            $where['status'] = $status;
+        }
+        $where['create_time'] = ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
+        $fixlist = (new FixService())->getInfoPaginate($where,['status' => $status,'startDate' => $startDate,'endDate' => $endDate]);
+        $this->assign('fixlist',$fixlist);
+        $this->assign('fixstatus',config('fixstatus'));
+        $this->assign('status',$status);
+        $this->assign('startDate',$startDate);
+        $this->assign('endDate',$endDate);
+        return view();
+    }
+
+    /**
+     * 处理报修
+     */
+    public function dealFix(){
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try{
+            $data = input('data');
+            $data = json_decode($data,true);
+            if(!isset($data['id'])){
+                exception(lang('Fix Id Require'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            $fixService = new FixService();
+            if(!$fix = $fixService->findInfo(['id' => $data['id']])){
+                exception(lang('Fix Not Exists'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            $data['status'] = FIX_STATUS_DEAL;
+            if(!$fixService->upsert($data,false)){
+                $error = $fixService->getError();
+                Log::record(['处理表具报修失败:' => $error,'data' => $data],'error');
+                exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record( 'Deal Fix',$data);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
