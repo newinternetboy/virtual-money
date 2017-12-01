@@ -735,10 +735,7 @@ class Shop extends Admin
             $desc = input('desc');
             $category = input('category');
             $sdlprice = input('sdlprice');
-            $rmbprice = input('rmbprice');
             $status = input('status');
-            $sdlenable = input('sdlenable');
-            $rmbenable = input('rmbenable');
             $img = request()->file('img');
             if ($img) {
                 $oriPath = DS . 'productionCover' . DS . 'origin';
@@ -749,25 +746,11 @@ class Shop extends Admin
             //添加商铺
             $data['desc'] = $desc;
             $data['category'] = $category;
-            if($rmbprice){
-                $data['rmbprice'] = $rmbprice;
-            }
-            if($sdlprice){
-                $data['sdlprice'] = $sdlprice;
-            }
+            $data['sdlprice'] = $sdlprice;
             $data['status'] = $status;
             $data['name'] = $name;
             $data['sid'] = PRODUCTION_ID_DELI;
-            if($rmbenable=='true'){
-                $data['rmbenable'] = true;
-            }else{
-                $data['rmbenable'] = false;
-            }
-            if($sdlenable=='true'){
-                $data['sdlenable'] = true;
-            }else{
-                $data['sdlenable'] = false;
-            }
+            $data['sdlenable'] = true;
             if($id){
                 $data['id'] = $id;
             }
