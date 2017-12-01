@@ -180,7 +180,7 @@
                 </div>
                 <div class="modal-body-content">
                     <div class="form-group must">
-                        <label for="sms_tel" class="col-md-2 control-label">{:lang('SMS Tel')}<span class="glyphicon glyphicon-asterisk" style="color:red"></span></label>
+                        <label for="sms_tel" class="col-md-2 control-label">{:lang('SMS Tel')}</label>
                         <div class="col-md-10">
                             <input class="form-control" name="sms_tel" id="sms_tel" required>
                         </div>
@@ -225,7 +225,7 @@
                     <div class="form-group must">
                         <label for="limit_times" class="col-md-2 control-label">{:lang('Limit Times')}<span class="glyphicon glyphicon-asterisk" style="color:red"></span></label>
                         <div class="col-md-10">
-                            <input class="form-control" type="number" name="limit_times" id="limit_times" required>
+                            <input class="form-control" type="number"  name="limit_times" id="limit_times" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" required>
                         </div>
                     </div>
                 </div>
@@ -233,7 +233,7 @@
                     <div class="form-group must">
                         <label for="left_times" class="col-md-2 control-label">{:lang('Left Times')}<span class="glyphicon glyphicon-asterisk" style="color:red"></span></label>
                         <div class="col-md-10">
-                            <input class="form-control" type="number" name="left_times" id="left_times" required>
+                            <input class="form-control" type="number" name="left_times" id="left_times" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" required>
                         </div>
                     </div>
                 </div>
@@ -369,10 +369,10 @@
             alertMsg("{:lang('Tax Code Require')}");
             return false;
         }
-        if( sms_tel == '' || sms_tel == null || sms_tel == 'undefined' ){
-            alertMsg("{:lang('SMS Tel Require')}");
-            return false;
-        }
+//        if( sms_tel == '' || sms_tel == null || sms_tel == 'undefined' ){
+//            alertMsg("{:lang('SMS Tel Require')}");
+//            return false;
+//        }
         if( secret_key_url == '' || secret_key_url == null || secret_key_url == 'undefined' ){
             alertMsg("{:lang('Secret Key URL Require')}");
             return false;
@@ -475,6 +475,8 @@
         $('input:checkbox[name="company_type"]:checked').each(function(){
             $(this).prop('checked',false);
         })
+        $('#limit_times').val('0');
+        $('#left_times').val('0');
     }
 
     function delCompany(OPT_ID,name){
