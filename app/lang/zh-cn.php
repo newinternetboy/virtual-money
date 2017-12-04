@@ -743,6 +743,19 @@ return [
     'Fix Not Exists'                    => '表具报修记录不存在',
     'Please Input Deal Desc'            => '请输入处理结果...',
 
+    //留言建议
+    'Advice List'                       => '留言建议列表',
+    'Advice Waiting'                    => '待处理',
+    'Advice Deal'                       => '已处理',
+    'Advice Contact'                    => '联系人',
+    'Advice Tel'                        => '联系电话',
+    'Advice Desc'                       => '描述',
+    'Advice Status'                     => '状态',
+    'Advice Deal Desc'                  => '处理结果',
+    'Advice CreateTime'                 => '提交时间',
+    'Advice Id Require'                 => '留言id必须',
+    'Advice Not Exists'                 => '留言记录不存在',
+
     /******************************企业店铺系统**************************/
     //店铺信息
     'Manage Shop'                       => '店铺管理',

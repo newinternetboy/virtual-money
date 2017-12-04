@@ -26,7 +26,7 @@ class Company extends Validate
         'bank_name'         => 'require',
         'bank_card'         => 'require',
         'tax_code'          => 'require',
-        'sms_tel'           => 'require',
+//        'sms_tel'           => 'require',
         'secret_key_url'    => 'require',
 //        'secret_key'        => 'require',
         'charge_status'     => 'require',
@@ -52,7 +52,7 @@ class Company extends Validate
         'bank_name.require'        => '{%Bank Name Require}',
         'bank_card.require'        => '{%Bank Card Require}',
         'tax_code.require'         => '{%Tax Code Require}',
-        'sms_tel.require'          => '{%SMS Tel Require}',
+//        'sms_tel.require'          => '{%SMS Tel Require}',
         'secret_key_url.require'   => '{%Secret Key URL Require}',
 //        'secret_key.require'       => '{%Secret Key Require}',
         'charge_status.require'    => '{%Charge Status Require}',
@@ -65,8 +65,8 @@ class Company extends Validate
     ];
 
     protected $scene = [
-        'add'   => ['company_name','company_type','OPT_ID','address','quality','contacts_tel','contacts_name','fax','legal_person','bank_name','bank_card','tax_code','sms_tel','secret_key_url','charge_status','charge_date','limit_times','left_times','status'],
-        'edit'  => ['company_name','company_type','address','quality','contacts_tel','contacts_name','fax','legal_person','bank_name','bank_card','tax_code','sms_tel','secret_key_url','charge_status','charge_date','limit_times','left_times'],
+        'add'   => ['company_name','company_type','OPT_ID','address','quality','contacts_tel','contacts_name','fax','legal_person','bank_name','bank_card','tax_code','secret_key_url','charge_status','charge_date','limit_times','left_times','status'],
+        'edit'  => ['company_name','company_type','address','quality','contacts_tel','contacts_name','fax','legal_person','bank_name','bank_card','tax_code','secret_key_url','charge_status','charge_date','limit_times','left_times'],
         'del'   => ['status'],
     ];
 }
