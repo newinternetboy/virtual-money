@@ -113,7 +113,7 @@
                             <div class="form-group">
                                 <label  class="col-sm-2 control-label"></label>
                                 <div class="col-sm-10">
-                                    <button style="float: right" class="btn btn-primary col-sm-1" type="button" onclick="editMeter()" >{:lang('Edit')}</button>
+                                    <button style="float: right" class="btn btn-primary col-sm-1" type="button" onclick="editMeter()" >{:lang('save')}</button>
                                 </div>
                             </div>
                         </div>
@@ -277,7 +277,7 @@
             success: function(res){
                 alertMsg(res.msg);
                 if( res.code == 200 ){
-                    setTimeout(function(){window.location.href = ''},1500);
+                    setTimeout(function(){removedInput();},1500);
                     $("#submitBtn").removeAttrs("disabled");
                     $("#submitBtn").html("提交");
                 }

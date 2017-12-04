@@ -201,7 +201,7 @@
                 success: function(res){
                     alertMsg(res.msg);
                     if( res.code == 200 ){
-                        setTimeout(function(){window.location.href = ''},1500);
+                        setTimeout(function(){removedInput();},1500);
                         $("#submitBtn").removeAttrs("disabled");
                         $("#submitBtn").html("提交");
                     }

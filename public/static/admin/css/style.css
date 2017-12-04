@@ -7529,3 +7529,8 @@ body.skin-3 {
 #content {
   border: 0 !important;
 }
+
+.ibox-content {
+  float: left;
+  width: 100%;
+}

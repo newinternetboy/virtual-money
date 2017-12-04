@@ -368,7 +368,7 @@
                     alertMsg(res.msg);
                     if (res.code == 200) {
                         setTimeout(function () {
-                            window.location.href = ''
+                            removedInput();
                         }, 1500);
 
                         $("#submitBtn").removeAttrs("disabled");
