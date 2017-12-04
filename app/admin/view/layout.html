@@ -87,7 +87,6 @@
 				{if condition='$children.display eq 1'}
 					GetUrl.push(['{$children.rule_val}','{$menu.rule_val}']);
 					listContent = listContent + "<li><a href='/"+ '{$children.rule_val}' +"'>" + '{$children.title}' + "</a></li>";
-
 					//content['{$menu.title}'].push({title:'{$children.title}',url:'{$children.rule_val}'});
 				{/if}
 			{/foreach}
@@ -95,7 +94,8 @@
 		{/if}
 	{/if}
 	{/foreach}
-	console.log(GetList);
+	GetUrl.push(["qyshop/shop/index","shop"],["qyshop/production/index","shop"],["qyshop/cart/index","shop"],["qyshop/user/index","userinfo"]);
+	GetList.push(["shop","<li><a href='/qyshop/shop/index'>店铺管理</a></li><li><a href='/qyshop/production/index'>商品管理</a></li><li><a href='/qyshop/cart/index'>订单管理</a></li>"],["userinfo","<li><a href='/qyshop/user/index'>订单管理</a></li>"]);
 
 </script>
 <body class="smart-style-0 desktop-detected">
@@ -142,48 +142,6 @@
 	</div>
 
 	<script>
-
-		switch (STR) {
-			case "m1" :
-				$("#main_menu").children().removeClass("active");
-				$("#business").addClass("active");
-				break;
-
-			case "m2" :
-				$("#main_menu").children().removeClass("active");
-                $("#manage").addClass("active");
-				break;
-
-			case "m3" :
-				$("#main_menu").children().removeClass("active");
-                $("#report").addClass("active");
-				break;
-
-			case "m4" :
-				$("#main_menu").children().removeClass("active");
-                $("#search").addClass("active");
-				break;
-
-			case "m5" :
-				$("#main_menu").children().removeClass("active");
-                $("#operate").addClass("active");
-				break;
-
-			case "m6" :
-				$("#main_menu").children().removeClass("active");
-                $("#system").addClass("active");
-				break;
-
-			case "m7" :
-				$("#main_menu").children().removeClass("active");
-				$("#reconcile").addClass("active");
-				break;
-
-			case "m8" :
-				$("#main_menu").children().removeClass("active");
-				$("#shop").addClass("active");
-				break;
-		}
 
 		function ShowSubmenu () {
 

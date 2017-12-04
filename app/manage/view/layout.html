@@ -54,25 +54,36 @@
 	}
 </style>
 <script>
+	var GetUrl = [];
+	var GetList = [];
+	var listContent = '';
+	var URL;
+	var ActiveMenu;
+
 	var HREF = window.location.href;
 	var i = HREF.indexOf("#");
 	var STR = HREF.substring(i+1);
 
 	var content ={};
+
 	{foreach $menus as $menu}
 	{if condition='$menu.display eq 1'}
+	listContent = '';
 	content['{$menu.title}'] = [];
 	{if condition='isset($menu.children)'}
 	{foreach $menu.children as $children}
 	{if condition='$children.display eq 1'}
-	content['{$menu.title}'].push({title:'{$children.title}',url:'{$children.rule_val}'});
+	GetUrl.push(['{$children.rule_val}','{$menu.rule_val}']);
+	listContent = listContent + "<li><a href='/"+ '{$children.rule_val}' +"'>" + '{$children.title}' + "</a></li>";
+	//content['{$menu.title}'].push({title:'{$children.title}',url:'{$children.rule_val}'});
 	{/if}
 	{/foreach}
-
+	GetList.push(['{$menu.rule_val}',listContent]);
 	{/if}
 	{/if}
 	{/foreach}
-	console.log(content);
+	GetUrl.push(["qyshop/shop/index","shop"],["qyshop/production/index","shop"],["qyshop/cart/index","shop"],["qyshop/user/index","userinfo"]);
+	GetList.push(["shop","<li><a href='/qyshop/shop/index'>店铺管理</a></li><li><a href='/qyshop/production/index'>商品管理</a></li><li><a href='/qyshop/cart/index'>订单管理</a></li>"],["userinfo","<li><a href='/qyshop/user/index'>订单管理</a></li>"]);
 </script>
 <body class="smart-style-0 desktop-detected" style="background-color: #e6e6e6">
 <header id="header" style="width: 100%; height: 100px; background-color: white; position: fixed; background-image: none; padding: 0; box-shadow: 0 3px 5px rgba(84,84,84,0.3)">
@@ -119,7 +130,6 @@
 </div>
 
 <script>
-
 	switch (STR) {
 		case "m1" :
 			$("#main_menu").children().removeClass("active");
