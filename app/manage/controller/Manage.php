@@ -15,6 +15,7 @@ use app\manage\service\MeterService;
 use app\manage\service\MoneyLogService;
 use app\manage\service\UserService;
 use app\manage\service\TaskService;
+use app\manage\service\AdviceService;
 use think\Loader;
 use think\Log;
 
@@ -717,6 +718,56 @@ class Manage extends Admin
                 exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
             }
             model('app\admin\model\LogRecord')->record( 'Deal Fix',$data);
+        }catch (\Exception $e){
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    /**
+     *留言建议
+     */
+    public function adviceList(){
+        $status = input('status/d');
+        $startDate = input('startDate',date('Y-m-d',strtotime('-7 days')));
+        $endDate = input('endDate',date('Y-m-d'));
+        if($status){
+            $where['status'] = $status;
+        }
+        $where['create_time'] = ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
+        $advicelist = (new AdviceService())->getInfoPaginate($where,['status' => $status,'startDate' => $startDate,'endDate' => $endDate]);
+        $this->assign('advicelist',$advicelist);
+        $this->assign('advicestatus',config('advicestatus'));
+        $this->assign('status',$status);
+        $this->assign('startDate',$startDate);
+        $this->assign('endDate',$endDate);
+        return view();
+    }
+
+    /**
+     * 留言建议处理
+     */
+    public function dealAdvice(){
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try{
+            $data = input('data');
+            $data = json_decode($data,true);
+            if(!isset($data['id'])){
+                exception(lang('Advice Id Require'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            $adviceService = new AdviceService();
+            if(!$advice = $adviceService->findInfo(['id' => $data['id']])){
+                exception(lang('Advice Not Exists'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            $data['status'] = ADVICE_STATUS_DEAL;
+            if(!$adviceService->upsert($data,false)){
+                $error = $adviceService->getError();
+                Log::record(['处理留言建议失败:' => $error,'data' => $data],'error');
+                exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record( 'Deal Advice',$data);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();

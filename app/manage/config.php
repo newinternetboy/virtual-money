@@ -147,4 +147,10 @@ return [
         FIX_STATUS_DEAL => lang('Fix Deal'),
     ],
     'grImgPath' => '114.113.90.9:10086',
+
+    //留言建议 状态
+    'advicestatus' => [
+        ADVICE_STATUS_WAITING => lang('Advice Waiting'),
+        ADVICE_STATUS_DEAL => lang('Advice Deal'),
+    ],
 ];

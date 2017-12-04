@@ -159,3 +159,7 @@ define('NOTICE_TYPE_CART_STATUS_CHANGE',2); //订单状态变更
 /***************表具报修状态***************/
 define('FIX_STATUS_WAITING',1);//待处理
 define('FIX_STATUS_DEAL',2);   //已处理
+
+/***************留言建议状态***************/
+define('ADVICE_STATUS_WAITING',1);//待处理
+define('ADVICE_STATUS_DEAL',2);   //已处理
