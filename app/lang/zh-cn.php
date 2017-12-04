@@ -200,7 +200,7 @@ return [
     'Price'        => '价格',
     'Price Name'   => '价格名称',
     'Price Type'   => '类型',
-    'Price Period' => '周期',
+    'Price Period' => '周期(单位:月)',
     'Price Basic Price'  => '基础价格',
     'Price First Price'  => '第一阶梯价格',
     'Price First Value'  => '第一阶梯量',
