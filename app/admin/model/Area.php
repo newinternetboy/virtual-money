@@ -8,17 +8,21 @@
 
 namespace app\admin\model;
 
+use traits\model\SoftDelete;
 
 class Area extends Admin
 {
+
+    use SoftDelete;
+    protected $deleteTime = 'delete_time';
 
     public function getList( $request )
     {
         $request = $this->fmtRequest( $request );
         if( $request['offset'] == 0 && $request['limit'] == 0 ){
-            return $this->order('create_time desc')->where( $request['map'] )->select();
+            return $this->order('create_time desc')->where( $request['map'] )->where(['delete_time'=> null])->select();
         }
-        return $this->order('create_time desc')->where( $request['map'] )->limit($request['offset'], $request['limit'])->select();
+        return $this->order('create_time desc')->where( $request['map'] )->where(['delete_time'=> null])->limit($request['offset'], $request['limit'])->select();
     }
 
     public function saveData( $data )

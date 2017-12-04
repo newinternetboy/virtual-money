@@ -298,7 +298,7 @@ $(function() {
 
                 //toolbar中默认事件类型的按钮 如删除、搜索等
                 if (eventName.substr(0, 6) == 'delete') {
-                    $this.deleteModal(eventName)
+                        $this.deleteModal(eventName)
                 } else {
                     $this.$table.triggerHandler(eventName, [$this, params]);
                 }
@@ -364,7 +364,7 @@ $(function() {
             backdrop: true,
             title: '提示',
             message: '确定要删除选中的' + rows.length + '项吗？',
-            okValue: '确定',
+            okValue: '确认并删除',
             cancelValue: '取消',
             ajaxMsg: '正在删除中...',
             data: null,
@@ -412,15 +412,30 @@ $(function() {
             return;
         }
         // 弹出删除提示
-        alertConfirm({
-            title: params.title,
-            content: params.message,
-            okValue: params.okValue,
-            cancelValue: params.cancelValue,
-            ok: params.ok,
-            cancel: params.cancel,
-            backdrop: params.backdrop
-        }); //删除 ok
+        if(window.deleteAreaFlag){ //删除区域额外弹出框
+            alertConfirm('请确认要删除区域无已安装的表具',function(){
+                alertConfirm({
+                    title: params.title,
+                    content: params.message,
+                    okValue: params.okValue,
+                    cancelValue: params.cancelValue,
+                    ok: params.ok,
+                    cancel: params.cancel,
+                    backdrop: params.backdrop
+                });
+            }) //删除 ok})
+        }else{
+            alertConfirm({
+                title: params.title,
+                content: params.message,
+                okValue: params.okValue,
+                cancelValue: params.cancelValue,
+                ok: params.ok,
+                cancel: params.cancel,
+                backdrop: params.backdrop
+            });
+        }
+
     }
 
     GridView.prototype.resetForm = function() {

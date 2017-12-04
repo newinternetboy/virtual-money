@@ -103,7 +103,7 @@ class Area extends Admin
             Log::record(['删除区域失败' => model('Role')->getError(),'data' => $id],'error');
             $this->error('操作失败');
         }
-        Loader::model('LogRecord')->record( 'Delete Area',$id );
+        model('LogRecord')->record( 'Delete Area',$id );
         $this->success(lang('Delete succeed'));
     }
 }
