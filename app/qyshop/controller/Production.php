@@ -62,6 +62,9 @@ class Production extends Admin
             if (!model('production')->upsert($data, false)) {
                 exception(model('production')->getError(), ERROR_CODE_DATA_ILLEGAL);
             }
+            if(!model('shop')->where(['id' => $this->shop_id])->setInc('productsCount',1)){
+                exception(model('shop')->getError(), ERROR_CODE_DATA_ILLEGAL);
+            }
             model('app\admin\model\LogRecord')->record('Edit QY Production', ['data' => $data]);
         } catch (\Exception $e) {
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
