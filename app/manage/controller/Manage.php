@@ -689,7 +689,7 @@ class Manage extends Admin
      *表具报修
      */
     public function fixList(){
-        $status = input('status/d');
+        $status = input('status/d',FIX_STATUS_WAITING);
         $startDate = input('startDate',date('Y-m-d',strtotime('-7 days')));
         $endDate = input('endDate',date('Y-m-d'));
         if($status){
@@ -739,7 +739,7 @@ class Manage extends Admin
      *留言建议
      */
     public function adviceList(){
-        $status = input('status/d');
+        $status = input('status/d',ADVICE_STATUS_WAITING);
         $startDate = input('startDate',date('Y-m-d',strtotime('-7 days')));
         $endDate = input('endDate',date('Y-m-d'));
         if($status){
