@@ -42,7 +42,7 @@
                         <tr>
                             <th data-width="50" >{:lang('OPT_ID')}</th>
                             <th data-width="50" >{:lang('Company Name')}</th>
-                            <th data-width="50" >{:lang('Admin')}</th>
+                            <th data-width="50" >{:lang('Admin Operate')}</th>
                             <th data-width="50" >{:lang('Operation')}</th>
                         </tr>
                         </thead>
@@ -51,8 +51,8 @@
                             <tr>
                                 <th>{$company.OPT_ID}</th>
                                 <th>{$company.company_name}</th>
-                                <th><button class="btn btn-toolbar" onclick="editAdmin('{$company.OPT_ID}')">{:lang('Admin')}</button></th>
-                                <th><button class="btn btn-toolbar" onclick="editCompany('{$company.id}')">{:lang('Edit')}</button> <button class="btn btn-danger" onclick="delCompany('{$company.OPT_ID}','{$company.company_name}')">{:lang('Delete')}</button></th>
+                                <th><button class="btn btn-success" onclick="editAdmin('{$company.OPT_ID}')">{:lang('Admin')}</button></th>
+                                <th><button class="btn btn-info" onclick="editCompany('{$company.id}')">{:lang('Edit')}</button> <button class="btn btn-danger" onclick="delCompany('{$company.OPT_ID}','{$company.company_name}')">{:lang('Delete')}</button></th>
                             </tr>
                             {/foreach}
                         </tbody>

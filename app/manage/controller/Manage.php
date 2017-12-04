@@ -110,6 +110,16 @@ class Manage extends Admin
             if( !$companyInfo = $companyService->findInfo(['OPT_ID' => $OPT_ID],'id') ){
                 exception(lang('OPT_ID Not Exist'),ERROR_CODE_DATA_ILLEGAL);
             }
+            //标记运营商管理员为禁用状态
+            $where_user['company_id'] = $companyInfo['id'];
+            $where_user['status'] = 1;
+            if( !(new UserService())->disableUser($where_user) ){
+                $error = $companyService->getError();
+                Log::record(['禁用运营商账号失败:' => $error,'data' => $where_user],'error');
+                exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
+            }
+
+            //标记运营商删除状态
             $data['id'] = $companyInfo['id'];
             $data['OPT_ID'] = $OPT_ID;
             $data['status'] = COMPANY_STATUS_DEL;
