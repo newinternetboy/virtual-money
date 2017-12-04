@@ -424,6 +424,18 @@ $(function() {
                     backdrop: params.backdrop
                 });
             }) //删除 ok})
+        }else if(window.deletePriceFlag){
+            alertConfirm('请确认要删除价格无已安装的表具',function(){
+                alertConfirm({
+                    title: params.title,
+                    content: params.message,
+                    okValue: params.okValue,
+                    cancelValue: params.cancelValue,
+                    ok: params.ok,
+                    cancel: params.cancel,
+                    backdrop: params.backdrop
+                });
+            })
         }else{
             alertConfirm({
                 title: params.title,

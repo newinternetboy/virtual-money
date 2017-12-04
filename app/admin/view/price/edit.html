@@ -25,7 +25,7 @@
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Price Type')}</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" name="type"  required value="{$data.type ?? ''}">
+                                <input type="number" class="form-control" name="type"  required value="{$data.type ?? ''}" placeholder="{:lang('Please Input Number')}" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
                             </div>
                         </div>
 
@@ -34,7 +34,7 @@
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Price Period')}</label>
                             <div class="col-sm-7">
-                                <input type="number" class="form-control" name="period" required value="{$data.period ?? ''}">
+                                <input type="number" class="form-control" name="period" required value="{$data.period ?? ''}" placeholder="{:lang('Please Input Number')}" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" >
                             </div>
                         </div>
 

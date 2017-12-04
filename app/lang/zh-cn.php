@@ -220,6 +220,7 @@ return [
     'None'         => '无',
     'Confirm delete meter' => '确认删除表具',
     'total'        => '总计',
+    'Please Input Number'    => '请输入正整数...',
 
     //报表
     'Search Year' => '选择年份',
