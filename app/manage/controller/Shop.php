@@ -180,11 +180,7 @@ class Shop extends Admin
         $status = input('status');
         $start_time = input('start_time');
         $end_time = input('end_time');
-        if($id){
-            $where['sid'] = $id;
-        }else{
-            return false;
-        }
+        $where['sid'] = $id;
         if($name){
             $where['name'] = ['like',$name];
         }
@@ -225,6 +221,9 @@ class Shop extends Admin
             if( !$productionInfo = $productionService->findInfo(['id' => $id]) ){
                 exception(lang('Data ID exception'),ERROR_CODE_DATA_ILLEGAL);
             }
+            $shopService = new ShopService();
+            $shop = $shopService->findInfo(['id'=>$productionInfo['sid']]);
+            $productionInfo['shop_type'] = $shop['type'];
             $ret['data'] = $productionInfo;
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;

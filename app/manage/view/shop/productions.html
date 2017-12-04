@@ -129,14 +129,14 @@
                     <div id="preview" class="col-md-10"><img src="" alt=""/>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="img_div" style="display: none;" >
                     <label for="img" class="col-md-2 control-label">{:lang('Production Img')}</label>
                     <div class="col-md-10">
                         <input class="form-control" type="file"  accept=".png,.jpg" name="img" id="img" />
                         <span style="color:red">(支持格式：jpg、png，图片大小：10M)</span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="sdlenable_div" style="display: none;" >
                     <label for="sdlenable" class="col-md-2 control-label">{:lang('Support DeLi Money')}</label>
                     <div class="col-md-10">
                         <select name="sdlenable" id="sdlenable" class="form-control">
@@ -145,13 +145,13 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="sdlprice_div" style="display: none;">
                     <label for="sdlprice" class="col-md-2 control-label">{:lang('DeLi Price')}</label>
                     <div class="col-md-10">
                         <input class="form-control" type="number" name="sdlprice" id="sdlprice">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="rmbenable_div" style="display: none;" >
                     <label for="rmbenable" class="col-md-2 control-label">{:lang('Support RMB Money')}</label>
                     <div class="col-md-10">
                         <select name="rmbenable" id="rmbenable" class="form-control">
@@ -268,7 +268,19 @@
         $('#rmbprice').val(data.rmbprice);
         $('#edit_productionname').val(data.name);
         $('#desc').val(data.desc);
-        $('#preview').html("<img src="+data.img+" />");
+        if(data.shop_type == {$Think.const.COMPANY_ELE_BUSINESS}){
+            $('#sdlprice_div').hide();
+            $('#sdlenable_div').hide();
+            $('#rmbenable_div').hide();
+            $('#img_div').show();
+            $('#preview').html("<img src="+data.img+" />");
+        }else{
+            $('#sdlprice_div').show();
+            $('#sdlenable_div').show();
+            $('#rmbenable_div').show();
+            $('#img_div').hide();
+            $('#preview').html("<img src="+"{$Think.config.grImgPath}"+data.img+" />");
+        }
         $('#edit_status').find('option[value="'+data.status+'"]').prop("selected",true);
         $('#sdlenable').find('option[value='+data.sdlenable+']').prop("selected",true);
         $('#rmbenable').find('option[value='+data.rmbenable+']').prop("selected",true);
