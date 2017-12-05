@@ -302,10 +302,10 @@ class Shop extends Admin
         $starttime = input('starttime',date('Y-m-d',strtotime('-1 month')));
         $endtime = input('endtime',date('Y-m-d'));
         $where['create_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
+
         $where['type'] =CART_TYPE_BUSINDESS_CONSUME;
-        if($order_number){
+        if($order_number && strlen($order_number) == 24){ //订单号长度必须符合MongoDB _id 的长度,否则不允许按id查询
             $where['id'] = $order_number;
-//            $where['id'] = new ObjectId($order_number);
         }
         if($mobile){
             $where['contact_tel'] = $mobile;

@@ -52,4 +52,7 @@ class Basic extends Model
         }
     }
 
+    public function sums($where,$field){
+        return $this->where($where)->sum($field);
+    }
 }
