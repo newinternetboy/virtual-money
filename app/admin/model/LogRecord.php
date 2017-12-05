@@ -110,56 +110,75 @@ class LogRecord extends Admin
     {
         return $this->order('create_time')->where($where)->paginate()->appends($data);
     }
-    //解析修改密码
-    public function UpdatePasswd($data){
-        @$str  = '修改密码';
-        return $str;
+
+    //解析数据；
+    public function translate($data){
+        $arr=[];
+        foreach($data as $key=>$value){
+            foreach(config('changeDate') as $k=>$val){
+                if($key == $k ){
+                    $arr["$val"] = $value;
+                }
+            }
+
+        }
+        return $arr;
+    }
+    //公共的解析方法；
+    public function common_trans($data){
+        $datas = $this->translate($data);
+        return json_encode($datas,JSON_UNESCAPED_UNICODE);
     }
     //解析表具过户
     public function MeterPass($data){
-        $data = json_decode($data,true);
-        return "就表号是：".$data['old_M_Code']."；新表号是：".$data['new_M_Code']."；原因是：".$data['change_reason'];
+        $meter = $this->translate($data['meter']);
+        $consumer = $this->translate($data['consumer']);
+        $datas = array_merge($meter,$consumer);
+        return $datas;
     }
     //解析表具修改
     public function MeterUpdate($data){
-        return "修改后的表号是：".$data['meter']['M_Code']."；地址是：".$data['meter']['detail_address']."；用户是：".$data['consumer']['username'];
+        $meter = $this->translate($data['meter']);
+        $consumer = $this->translate($data['consumer']);
+        $datas = array_merge($meter,$consumer);
+        return $datas;
     }
     //解析表具报装
     public function MeterBinding($data){
-        return "报装的类型是：".$data['meter']['M_Type']."；表号是：".$data['meter']['M_Code']."；用户是：".$data['consumer']['username'];
-    }
-    //解析修改黑名单属性成功
-    public function UpdateBlacklistparam($data){
-        return "参数代号是：".$data['param_name']."；参数描述：".$data['desc']."；参数类型：".$data['param_type']."；参数：".$data['opt_id'];
-    }
-    //解析修改/添加权限
-    public function UpdateandAddauth($data){
-        return "修改或添加的标题为：".$data['title']."；路径是：".$data['rule_val'];
-    }
-    //解析添加/修改价格
-    public function UpdateandAddprice($data){
-        return "价格名称是：".$data['name'];
-    }
-    //解析修改权限
-    public function UpdateAuth($data){
-        $data = json_decode($data,true);
-        return "角色id：".$data['role_id'];
-    }
-    //解析修改/添加用户
-    public function UpdateandAdduser($data){
-        return "用户名为：".$data['username']."；号码是：".$data['login_name'];
-    }
-    //解析添加/修改区域
-    public function UpdateandAddarea($data){
-        return "区域名称为：".$data['name']."；所属区域为：".$data['belong']."；描述：".$data['desc']."；详细地址为：".$data['address'];
-    }
-    //解析修改运行参数；
-    public function UpdateMeterparam($data){
-        return "脉冲常量：".$data['pulseRatio']."；低剩余报警：".$data['lowLimit']."；透视限额：".$data['overdraftLimit']."；透支限制时间：".$data['overdraftTime']."；冻结时间：".$data['freezeTime']."；自动上报时间".$data['uploadTime']."；短信平台号码：".$data['SMSCode']."；开机脉冲数：".$data['transformerRatio']."；流量上限：".$data['overFlimit']."；参数名称：".$data['tag'];
+        $meter = $this->translate($data['meter']);
+        $consumer = $this->translate($data['consumer']);
+        $datas = array_merge($meter,$consumer);
+        return json_encode($datas,JSON_UNESCAPED_UNICODE);
     }
     //登录成功；
     public function LoginSucceed($data){
         return '登录成功';
+    }
+
+    //登出成功；
+    public function Loginout($data){
+        return '登出成功';
+    }
+
+    //删除区域；
+    public function deleteArea($data){
+        $arr['id'] = $data;
+        $datas = $this->translate($arr);
+        return json_encode($datas,JSON_UNESCAPED_UNICODE);
+    }
+
+    //删除权限；
+    public function deleteAuthRule($data){
+        $arr['id'] = $data;
+        $datas = $this->translate($arr);
+        return json_encode($datas,JSON_UNESCAPED_UNICODE);
+    }
+
+    //删除黑名单属性；
+    public function deleteBlacklistParam($data){
+        $arr['id'] = $data;
+        $datas = $this->translate($arr);
+        return json_encode($datas,JSON_UNESCAPED_UNICODE);
     }
 
 }
