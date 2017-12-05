@@ -174,7 +174,7 @@ class Meter extends Admin
             if( !$meter = model('Meter')->getMeterInfo($where,'find')){
                 exception("过户失败,表具不能过户",ERROR_CODE_DATA_ILLEGAL);
             }
-            $old_consumer = model('Consumer')->getConsumerById($meter['U_ID'],'identity');
+            $old_consumer = model('Consumer')->getConsumerById($meter['U_ID'],'identity,meter_id');
             if( $old_consumer['identity'] == $new_consumer['identity'] ){
                 exception('不能将表具过户给自己,如需修改表具信息,请在[表具修改]菜单操作',ERROR_CODE_DATA_ILLEGAL);
             }
@@ -190,7 +190,7 @@ class Meter extends Admin
             Loader::clearInstance(); //框架是单例模式,初始化更新旧用户时实例化的对象,否则插入新用户受干扰
             $new_consumer['M_Code'] = $M_Code;
             $new_consumer['meter_id'] = $old_consumer['meter_id'];
-            $data['consumer']['password'] = (new \bcrypt\Bcrypt())->hashPassword(substr($meter['M_Code'],-6));
+            $new_consumer['password'] = (new \bcrypt\Bcrypt())->hashPassword(substr($meter['M_Code'],-6));
             $new_consumer['consumer_state'] = CONSUMER_STATE_NORMAL;
             $new_consumer['company_id'] = $this->company_id;
             if( !$new_consumer_id = model('Consumer')->upsertConsumer($new_consumer,'Consumer.insert') ){
