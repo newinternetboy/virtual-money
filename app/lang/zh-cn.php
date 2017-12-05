@@ -200,7 +200,7 @@ return [
     'Price'        => '价格',
     'Price Name'   => '价格名称',
     'Price Type'   => '类型',
-    'Price Period' => '周期',
+    'Price Period' => '周期(单位:月)',
     'Price Basic Price'  => '基础价格',
     'Price First Price'  => '第一阶梯价格',
     'Price First Value'  => '第一阶梯量',
@@ -220,6 +220,7 @@ return [
     'None'         => '无',
     'Confirm delete meter' => '确认删除表具',
     'total'        => '总计',
+    'Please Input Number'    => '请输入正整数...',
 
     //报表
     'Search Year' => '选择年份',
@@ -375,9 +376,10 @@ return [
 
     //运营管理
     'Operation Management'              => '运营管理',
-    'Company Name'                      => '名称',
+    'Company Name'                      => '运营商名称',
     'Company Type'                      => '经营类型',
     'Admin'                             => '管理员',
+    'Admin Operate'                     => '管理员设置',
     'Company'                           => '运营商',
     'Please Choose Company'             => '请选择运营商',
     'OPT_ID'                            => '编号',
@@ -445,7 +447,7 @@ return [
     'UKEY Require'                      => 'UKEY必须',
     'User Status Require'               => '账号状态必须',
     'Role Require'                      => '账号角色必须',
-    'Login Name Exists'                 => '账号已存在',
+    'Login Name Exists'                 => '登录名已存在',
     'Password and Confirm Password inconsistent'    => '密码与确认密码不一致',
     'Production Name Require'           =>'商品名称必须',
     'Production List'                   =>'商品列表',

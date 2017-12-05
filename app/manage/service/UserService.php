@@ -15,4 +15,15 @@ class UserService extends BasicService
     public function __construct(){
         $this->dbModel = new UserModel();
     }
+
+    /**
+     * 禁用用户
+     * @param $where
+     * @param $data
+     * @return $this
+     */
+    public function disableUser($where){
+        $data['status'] = 0;
+        return $this->dbModel->where($where)->update($data);
+    }
 }

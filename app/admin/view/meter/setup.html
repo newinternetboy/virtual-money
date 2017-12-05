@@ -52,7 +52,7 @@
                                     <label for="M_Code" class="col-md-2 control-label">{:lang('M_Code')}</label>
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="{:lang('Please enter M_Code')}" name="M_Code" id="M_Code" value="{$meter.M_Code ?? ''}" required>
+                                            <input class="form-control inputOption" type="text" placeholder="{:lang('Please enter M_Code')}" name="M_Code" id="M_Code" value="{$meter.M_Code ?? ''}" required>
                                         <span class="input-group-addon">
                                             <i class="fa fa-warning"></i>
                                         </span>
@@ -65,7 +65,7 @@
                                     <label for="P_ID" class="col-md-2 control-label">{:lang('Price')}{:lang('Price Type')}</label>
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <select class="form-control" name="P_ID" id="P_ID" >
+                                            <select class="form-control selectOption" name="P_ID" id="P_ID" >
                                                 <option value="0" selected disabled>{:lang('Please Search')}{:lang('Price')}{:lang('Price Type')}</option>
                                                 {foreach $prices as $price }
                                                 <option value="{$price.id}" {if condition="(isset($meter.P_ID)) and ($price.id eq $meter.P_ID)"}selected{/if} >{$price.name}</option>
@@ -85,7 +85,7 @@
                                     <label for="username" class="col-md-2 control-label">{:lang('Name')}</label>
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="{:lang('Please enter username')}" name="username" value="{$consumer.username ?? ''}" id="username">
+                                            <input class="form-control inputOption" type="text" placeholder="{:lang('Please enter username')}" name="username" value="{$consumer.username ?? ''}" id="username">
                                         <span class="input-group-addon">
                                             <i class="fa fa-user fa-fw"></i>
                                         </span>
@@ -96,7 +96,7 @@
                                     <label for="tel" class="col-md-2 control-label">{:lang('Mobile Number')}</label>
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="{:lang('Please enter mobile')}" maxlength="11" name="tel" value="{$consumer.tel ?? ''}" id="tel">
+                                            <input class="form-control inputOption" type="text" placeholder="{:lang('Please enter mobile')}" maxlength="11" name="tel" value="{$consumer.tel ?? ''}" id="tel">
                                         <span class="input-group-addon">
                                             <i class="fa fa-phone fa-fw"></i>
                                         </span>
@@ -107,7 +107,7 @@
                                     <label for="identity" class="col-md-2 control-label">{:lang('PIN-codes')}</label>
                                     <div class="col-md-10">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="{:lang('Please enter')}{:lang('PIN-codes')}" name="identity" value="{$consumer.identity ?? ''}" id="identity">
+                                            <input class="form-control inputOption" type="text" placeholder="{:lang('Please enter')}{:lang('PIN-codes')}" name="identity" value="{$consumer.identity ?? ''}" id="identity">
                                         <span class="input-group-addon">
                                             <i class="fa fa-credit-card fa-fw"></i>
                                         </span>
@@ -120,7 +120,7 @@
                                     <!--<label for="detail_address" class="display:none"></label>-->
                                     <div class="col-md-8" style="padding-right: 0">
                                         <div class="input-group" style="width: 100%;">
-                                            <select class="form-control" style="width: 100%;" name="M_Address" id="M_Address" required>
+                                            <select class="form-control selectOption" style="width: 100%;" name="M_Address" id="M_Address" required>
                                                 <option value="0" selected disabled>{:lang('Please Search')}{:lang('Area')}</option>
                                                 {foreach $areas as $area }
                                                 <option value="{$area.id}" {if condition="(isset($meter.M_Address)) and ($area.id eq $meter.M_Address)"}selected{/if}>{$area.name}</option>
@@ -134,7 +134,7 @@
                                     <label for="detail_address" style="display: none"></label>
                                     <div class="col-md-12" style="padding-left: 0">
                                         <div class="input-group">
-                                            <input class="form-control" style="float: right" type="text" placeholder="{:lang('Please enter')}{:lang('detail address')}" value="{$meter.detail_address ?? ''}" name="detail_address" id="detail_address" >
+                                            <input class="form-control inputOption" style="float: right" type="text" placeholder="{:lang('Please enter')}{:lang('detail address')}" value="{$meter.detail_address ?? ''}" name="detail_address" id="detail_address" >
                                             <span class="input-group-addon">
                                                 <i class="fa fa-map-marker fa-fw"></i>
                                             </span>
@@ -149,7 +149,7 @@
                                     <label for="family_num" class="col-md-2 control-label">{:lang('Family Size')}</label>
                                     <div class="col-md-4">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="{:lang('Please enter')}{:lang('Family Size')}" name="family_num" value="{$consumer.family_num ?? ''}" id="family_num">
+                                            <input class="form-control inputOption" type="text" placeholder="{:lang('Please enter')}{:lang('Family Size')}" name="family_num" value="{$consumer.family_num ?? ''}" id="family_num">
                                         <span class="input-group-addon">
                                             <i class="fa">人</i>
                                         </span>
@@ -158,7 +158,7 @@
                                     <label for="building_area" class="col-md-2 control-label">{:lang('Residential Buildings')}</label>
                                     <div class="col-md-4">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入住宅面积" name="building_area" value="{$consumer.building_area ?? ''}" id="building_area">
+                                            <input class="form-control inputOption" type="text" placeholder="请输入住宅面积" name="building_area" value="{$consumer.building_area ?? ''}" id="building_area">
                                         <span class="input-group-addon">
                                             <i class="fa">平米</i>
                                         </span>
@@ -169,7 +169,7 @@
                                     <label for="income_peryear" class="col-md-2 control-label">{:lang('Annual Income')}</label>
                                     <div class="col-md-4">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="请输入年均收入" name="income_peryear" value="{$consumer.income_peryear ?? ''}" id="income_peryear">
+                                            <input class="form-control inputOption" type="text" placeholder="请输入年均收入" name="income_peryear" value="{$consumer.income_peryear ?? ''}" id="income_peryear">
                                         <span class="input-group-addon">
                                             <i class="fa">元</i>
                                         </span>
@@ -184,7 +184,6 @@
                         <label  class="col-sm-2 control-label"></label>
                         <div class="col-sm-10">
                             <button style="float: right" class="btn btn-primary col-sm-1" onclick="saveData()" type="submit" id="submitBtn" >{:lang('Button')}</button>
-                            <button onclick="refreshPage()">refresh</button>
                         </div>
                     </div>
                 </div>
@@ -276,7 +275,7 @@
                             <div class="form-group" style="float: left; width: 100%;">
                                 <label  class="col-sm-2 control-label"></label>
                                 <div class="col-sm-10">
-                                    <button style="margin-right: 20px; float: right" class="btn btn-primary col-sm-1" onclick="refreshPage()" id="compeleteBtn" >完成</button>
+                                    <button style="margin-right: 20px; float: right" class="btn btn-primary col-sm-1" onclick="finished()" id="compeleteBtn" >完成</button>
                                     <button style="margin-right: 20px; float: right;" class="btn btn-primary col-sm-1" style="display:block;" id="jqprint" type="button" onclick="printInfo()">{:lang('Print')}</button>
                                 </div>
                             </div>
@@ -290,7 +289,6 @@
 <!--</div>-->
 
 <script>
-
     $('#M_Code').change(function(){
 
         $('#jqprint').hide();
@@ -429,8 +427,14 @@
     }
 
     function refreshPage () {
-        console.log('refresh');
         window.location.reload();
+    }
+
+    function finished () {
+        removedInput();
+        $("#contentPrint").hide();
+        $("#content").show();
+
     }
 
     function getPrintInfo (M_Type,M_Code,P_ID,username,tel,identity,M_Address,detail_address,family_num,building_area,income_peryear) {
@@ -489,7 +493,7 @@
                 alertMsg(res.msg,5);
                 if( res.code == 200 ){
 //                    setTimeout(function(){window.location.href = ''},1500);
-                    setTimeout(function(){window.location.href="{:url('admin/meter/setup')}?M_Code="+res.meter},2000);
+//                    setTimeout(function(){window.location.href="{:url('admin/meter/setup')}?M_Code="+res.meter},2000);
 
                     $("#submitBtn").removeAttrs("disabled");
                     $("#submitBtn").html("提交");

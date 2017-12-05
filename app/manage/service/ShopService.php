@@ -23,6 +23,7 @@ class ShopService extends BasicService
 
     public function insertQYShop($data,$scene = true){
         $data['type'] = COMPANY_ELE_BUSINESS;
+        $data['productsCount'] = 0;
         return $this->upsert($data,$scene);
     }
 }

@@ -54,25 +54,34 @@
 	}
 </style>
 <script>
+	var GetUrl = [];
+	var GetList = [];
+	var listContent = '';
+	var URL;
+	var ActiveMenu;
+
 	var HREF = window.location.href;
 	var i = HREF.indexOf("#");
 	var STR = HREF.substring(i+1);
 
 	var content ={};
+
 	{foreach $menus as $menu}
 	{if condition='$menu.display eq 1'}
+	listContent = '';
 	content['{$menu.title}'] = [];
 	{if condition='isset($menu.children)'}
 	{foreach $menu.children as $children}
 	{if condition='$children.display eq 1'}
-	content['{$menu.title}'].push({title:'{$children.title}',url:'{$children.rule_val}'});
+	GetUrl.push(['{$children.rule_val}','{$menu.rule_val}']);
+	listContent = listContent + "<li><a href='/"+ '{$children.rule_val}' +"'>" + '{$children.title}' + "</a></li>";
+	//content['{$menu.title}'].push({title:'{$children.title}',url:'{$children.rule_val}'});
 	{/if}
 	{/foreach}
-
+	GetList.push(['{$menu.rule_val}',listContent]);
 	{/if}
 	{/if}
 	{/foreach}
-	console.log(content);
 </script>
 <body class="smart-style-0 desktop-detected" style="background-color: #e6e6e6">
 <header id="header" style="width: 100%; height: 100px; background-color: white; position: fixed; background-image: none; padding: 0; box-shadow: 0 3px 5px rgba(84,84,84,0.3)">
@@ -119,125 +128,20 @@
 </div>
 
 <script>
-
-	switch (STR) {
-		case "m1" :
-			$("#main_menu").children().removeClass("active");
-			$("#business").addClass("active");
-			break;
-
-		case "m2" :
-			$("#main_menu").children().removeClass("active");
-			$("#manage").addClass("active");
-			break;
-
-		case "m3" :
-			$("#main_menu").children().removeClass("active");
-			$("#report").addClass("active");
-			break;
-
-		case "m4" :
-			$("#main_menu").children().removeClass("active");
-			$("#search").addClass("active");
-			break;
-
-		case "m5" :
-			$("#main_menu").children().removeClass("active");
-			$("#operate").addClass("active");
-			break;
-
-		case "m6" :
-			$("#main_menu").children().removeClass("active");
-			$("#system").addClass("active");
-			break;
-
-		case "m7" :
-			$("#main_menu").children().removeClass("active");
-			$("#reconcile").addClass("active");
-			break;
-
-		case "m8" :
-			$("#main_menu").children().removeClass("active");
-			$("#shop").addClass("active");
-			break;
-	}
-
 	function ShowSubmenu () {
-		var Index = $("#main_menu").children(".active").children("span").html();
-		switch (Index) {
-			case "业务":
-				$(content.业务).each(function(index) {
-					subtitle =  subtitle +
-							"<li>" +
-							"<a href='/" + content.业务[index].url + "#m1'>" + content.业务[index].title + "</a>" +
-							"</li>";
-				});
-				break;
-
-			case "管理":
-				$(content.管理).each(function(index) {
-					subtitle =  subtitle +
-							"<li>" +
-							"<a href='/" + content.管理[index].url + "#m2'>" + content.管理[index].title + "</a>" +
-							"</li>";
-				});
-				break;
-
-			case "报表":
-				$(content.报表).each(function(index) {
-					subtitle =  subtitle +
-							"<li>" +
-							"<a href='/" + content.报表[index].url + "#m3'>" + content.报表[index].title + "</a>" +
-							"</li>";
-				});
-				break;
-
-			case "查询":
-				$(content.查询).each(function(index) {
-					subtitle =  subtitle +
-							"<li>" +
-							"<a href='/" + content.查询[index].url + "#m4'>" + content.查询[index].title + "</a>" +
-							"</li>";
-				});
-				break;
-
-			case "职能权限":
-				$(content.职能权限).each(function(index) {
-					subtitle =  subtitle +
-							"<li>" +
-							"<a href='/" + content.职能权限[index].url + "#m5'>" + content.职能权限[index].title + "</a>" +
-							"</li>";
-				});
-				break;
-
-			case "系统管理":
-				$(content.系统管理).each(function(index) {
-					subtitle =  subtitle +
-							"<li>" +
-							"<a href='/" + content.系统管理[index].url + "#m6'>" + content.系统管理[index].title + "</a>" +
-							"</li>";
-				});
-				break;
-
-			case "对账":
-				$(content.对账).each(function(index) {
-					subtitle =  subtitle +
-							"<li>" +
-							"<a href='/" + content.对账[index].url + "#m7'>" + content.对账[index].title + "</a>" +
-							"</li>";
-				});
-				break;
-
-			case "电商管理":
-				$(content.电商管理).each(function(index) {
-					subtitle =  subtitle +
-							"<li>" +
-							"<a href='/" + content.电商管理[index].url + "#m8'>" + content.电商管理[index].title + "</a>" +
-							"</li>";
-				});
-				break;
+		for ( var i = 0; i < GetUrl.length; i++) {
+			if ( HREF.indexOf(GetUrl[i][0]) > 1 ) {
+				ActiveMenu = GetUrl[i][1];
+			}
 		}
-		$("#side-menu").append(subtitle);
+
+		for ( var j = 0; j < GetList.length; j ++) {
+			if (GetList[j][0] == ActiveMenu) {
+				$("#side-menu").append(GetList[j][1]);
+			}
+		}
+
+		$("#"+ ActiveMenu+"").addClass('active');
 	};
 
 	var Title = "";
@@ -251,10 +155,16 @@
 			return false;
 		} else {
 			$(e).addClass('active');
+			var ID = $(e).attr('id');
 			$(e).siblings().removeClass('active');
 			Title = $(e).children("span").html();
 			$("#side-menu").empty();
-			ShowSubmenu();
+			for ( var i=0; i<GetList.length; i++) {
+				if ($.inArray(ID,GetList[i])>-1) {
+//					if ( ID == GetList[i][0]) {
+					$("#side-menu").append(GetList[i][1]);
+				}
+			}
 		}
 	}
 

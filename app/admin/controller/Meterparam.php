@@ -101,7 +101,7 @@ class MeterParam extends Admin
             Log::record(['删除运行参数失败' => model('Role')->getError(),'data' => $id],'error');
             $this->error('操作失败');
         }
-        Loader::model('LogRecord')->record( 'Delete MeterParam',$id );
+        model('LogRecord')->record( 'Delete MeterParam',$id );
         $this->success(lang('Delete succeed'));;
     }
     /**

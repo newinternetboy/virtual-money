@@ -807,8 +807,24 @@ function addLoadEvent(func){
 		window.onload = func;
 	}else{
 		window.onload = function(){
-			oldonload()
+			oldonload();
 			func();
 		}
 	}
 }
+
+//运营商页面中业务菜单下,提交后清除当前所有填写信息内容
+function removedInput () {
+    $('.radiobox').removeAttr("checked");
+    var selector = $('.selectOption');
+    for ( var i = 0; i < selector.length; i ++) {
+        for ( var j = 0; j< selector[i].options.length; j ++) {
+            if ( j == 0 ) {
+                selector[i].options[j].selected = true;
+            } else {
+                selector[i].options[j].selected = null;
+            }
+        }
+    }
+    $('.inputOption').val('');
+};
