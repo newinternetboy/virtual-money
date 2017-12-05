@@ -112,6 +112,10 @@ class Shop extends Admin
         $ret['msg'] = lang('Operation Success');
         try{
             $shopService = new ShopService();
+            $shop = $shopService->findInfo(['id'=>$data['id']]);
+            if((isset($data['stick'])&&!isset($shop['stick']))||(isset($shop['stick'])&&$shop['stick'] != $data['stick'])){
+                $data['update_stick_time']= time();
+            }
             $scene = "Shop.updateGrshop";
             if( !$shopService->upsert($data,$scene) ){
                 $error = $shopService->getError();
@@ -144,12 +148,18 @@ class Shop extends Admin
             $sdl_preference = input('sdl_preference/d');
             $health_auth = input('health_auth/d');
             $sdl_auth = input('sdl_auth/d');
+            $stick = input('stick');
             $img = request()->file('img');
             if ($img) {
                 $oriPath = DS . 'shopCover' . DS . 'origin';
                 $thumbPath = DS . 'shopCover' . DS . 'thumb';
                 $savedthumbFilePath = saveImg($img,$oriPath,$thumbPath);
                 $data['img'] = $savedthumbFilePath;
+            }
+            $shop = $shopService->findInfo(['id'=>$id]);
+            if((isset($stick)&&!isset($shop['stick']))||(isset($shop['stick'])&&$shop['stick'] != $stick)){
+                $data['stick'] = $stick;
+                $data['update_stick_time']= time();
             }
             $data['id'] = $id;
             $data['name'] = $name;
@@ -292,6 +302,8 @@ class Shop extends Admin
         $starttime = input('starttime',date('Y-m-d',strtotime('-1 month')));
         $endtime = input('endtime',date('Y-m-d'));
         $where['create_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
+
+        $where['type'] =CART_TYPE_BUSINDESS_CONSUME;
         if($order_number && strlen($order_number) == 24){ //订单号长度必须符合MongoDB _id 的长度,否则不允许按id查询
             $where['id'] = $order_number;
         }
@@ -314,14 +326,10 @@ class Shop extends Admin
         $orders = $cartService->getInfoPaginate($where,$param);
         foreach($orders as & $order){
             $order['consumer_username'] = $order->consumer['username'];
-            if($order['type'] ==CART_TYPE_BUSINDESS_CONSUME){
-                if($order['sid'] == PRODUCTION_ID_DELI){
-                    $order['shop_name'] = '--';
-                }else{
-                    $order['shop_name'] = $order->shop['name'];
-                }
-            }else{
+            if($order['sid'] == PRODUCTION_ID_DELI){
                 $order['shop_name'] = '--';
+            }else{
+                $order['shop_name'] = $order->shop['name'];
             }
             unset($order['consumer']);
             unset($order['shop']);
@@ -429,6 +437,16 @@ class Shop extends Admin
             if(isset($shop_one['cardNumber'])){
                 $value->cardNumber = $shop_one['cardNumber'];
             }
+            $value->type = $shop_one['type'];
+            if($shop_one['type']==COMPANY_ELE_BUSINESS){
+                $userService = new UserService();
+                $user_one = $userService->findInfo(['id'=>$shop_one['uid']]);
+                $value->tel = $user_one['tel'];
+            }else{
+                $consumerService = new ConsumerService();
+                $consumer_one = $consumerService->findInfo(['id'=>$shop_one['uid']]);
+                $value->tel = $consumer_one['tel'];
+            }
         }
         //根据条件做group求总个数；
         $res = $cartService->getAllGroupByShop('cart',$where);
@@ -473,7 +491,6 @@ class Shop extends Admin
         $where['deli_settle_status'] = ORDER_NOT_ACCOUNT;
         $where['freeze'] = ORDER_NORMAL;
         $change['deli_settle_status'] = ORDER_ALREADY_ACCOUNT;
-
         $cartService = new CartService();
         if(!$cartService ->updateCart($where,$change)){
             $returnAjax['code'] = 201;
@@ -511,15 +528,42 @@ class Shop extends Admin
             $shop_one = $shopService->findInfo(['id'=>$value->_id->sid]);
             if(isset($shop_one['name'])){
                 $value->shopname = $shop_one['name'];
+            }else{
+                $value->shopname = '';
             }
             if(isset($shop_one['personName'])){
                 $value->personName = $shop_one['personName'];
+            }else{
+                $value->personName = '';
             }
             if(isset($shop_one['bank'])){
                 $value->bank = $shop_one['bank'];
+            }else{
+                $value->bank = '';
             }
             if(isset($shop_one['cardNumber'])){
                 $value->cardNumber = $shop_one['cardNumber'];
+            }else{
+                $value->cardNumber = '';
+            }
+            switch ($shop_one['type']){
+                case COMPANY_ELE_BUSINESS:
+                    $value->type= lang('Order Company');
+                    break;
+                case PERSONAL_ELE_BUSINESS:
+                    $value->type = lang('Order Person');
+                    break;
+                default:
+                    break;
+            }
+            if($shop_one['type']==COMPANY_ELE_BUSINESS){
+                $userService = new UserService();
+                $user_one = $userService->findInfo(['id'=>$shop_one['uid']]);
+                $value->tel = $user_one['tel'];
+            }else{
+                $consumerService = new ConsumerService();
+                $consumer_one = $consumerService->findInfo(['id'=>$shop_one['uid']]);
+                $value->tel = $consumer_one['tel'];
             }
         }
         $filename = '订单结算'.date('YmdHi');
@@ -738,6 +782,23 @@ class Shop extends Admin
         $this->assign('status',$status);
         $this->assign('productions',$productions);
         return $this->fetch();
+    }
+    //获取单条得利商品信息；
+    public function getDeliProductionInfoById(){
+        $id = input('id');
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try{
+            $productionService = new ProductionService();
+            if( !$productionInfo = $productionService->findInfo(['id' => $id]) ){
+                exception(lang('Data ID exception'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            $ret['data'] = $productionInfo;
+        }catch (\Exception $e){
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
     }
     //保存得利商品
     public function saveDeliProduction(){

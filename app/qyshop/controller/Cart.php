@@ -29,6 +29,7 @@ class Cart extends Admin
         $starttime = input('starttime',date('Y-m-d',strtotime('-1 day')));
         $endtime = input('endtime',date('Y-m-d'));
         $where['sid'] = $this->shop_id;
+        $where['type'] =CART_TYPE_BUSINDESS_CONSUME;
         $where['create_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
         if($order_number && strlen($order_number) == 24){ //订单号长度必须符合MongoDB _id 的长度,否则不允许按id查询
             $where['id'] = $order_number;
@@ -109,6 +110,7 @@ class Cart extends Admin
         $searchDate = input('searchDate',date('Y-m'));
         $settle = input('settle');
         $where['sid'] = $this->shop_id;
+        $where['type'] =CART_TYPE_BUSINDESS_CONSUME;
         $where['create_time'] = ['between',[strtotime($searchDate."-01 00:00:00"),strtotime('+1 month',strtotime($searchDate."-01 00:00:00"))-1]];
         if($settle != 'all'){
             $where['deli_settle_status'] = intval($settle);

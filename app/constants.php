@@ -120,7 +120,9 @@ define('DELI_ELE_BUSINESS_TYPE',2); //得利电商
 //店铺状态 status
 define('SHOP_STATUS_CLOSE',0); //关闭
 define('SHOP_STATUS_OPEN',1); //打开
-
+//店铺是否置顶 stick
+define('SHOP_NOT_STICK',0); //未置顶
+define('SHOP_STICK',1); //置顶
 /***************production表***************/
 //商品状态  status
 define('PRODUCTION_SHELVES',1); //上架

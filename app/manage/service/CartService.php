@@ -81,10 +81,12 @@ class CartService extends BasicService
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
-        $objPHPExcel->getActiveSheet()->mergeCells('A2:F2');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:H1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:H2');
         $objPHPExcel->getActiveSheet()->setCellValue('A1',$title);
         $objPHPExcel->getActiveSheet()->getDefaultStyle()->getFont()->setSize(18);
         $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setName('宋体') //字体
@@ -97,23 +99,27 @@ class CartService extends BasicService
         $objPHPExcel->getActiveSheet()->setCellValue('A2', '(导出日期：'.date('Y-m-d',time()).')');
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A3', '商铺名称')
-            ->setCellValue('B3', '订单数量')
-            ->setCellValue('C3', '总金额')
-            ->setCellValue('D3', '开户银行')
-            ->setCellValue('E3', '银行卡号')
-            ->setCellValue('F3', '持卡人姓名');
+            ->setCellValue('B3', '商铺类型')
+            ->setCellValue('C3', '订单数量')
+            ->setCellValue('D3', '总金额')
+            ->setCellValue('E3', '开户银行')
+            ->setCellValue('F3', '银行卡号')
+            ->setCellValue('G3', '持卡人姓名')
+            ->setCellValue('H3', '联系电话');
         $count = count($data);
         for ($i = 4; $i <= $count+3; $i++) {
             $objPHPExcel->getActiveSheet()->setCellValue('A' . $i, $data[$i-4]->shopname);
-            $objPHPExcel->getActiveSheet()->setCellValue('B' . $i, $data[$i-4]->count);
-            $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $data[$i-4]->sum);
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]->bank);
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $data[$i-4]->cardNumber);
-            $objPHPExcel->getActiveSheet()->setCellValue('F' . $i, $data[$i-4]->personName);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $i, $data[$i-4]->type);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $data[$i-4]->count);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]->sum);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $data[$i-4]->bank);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . $i, $data[$i-4]->cardNumber);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . $i, $data[$i-4]->personName);
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . $i, $data[$i-4]->tel);
         }
         $last = $count + 4;
         $objPHPExcel->getActiveSheet()->setCellValue('A'.$last,$total);
-        $objPHPExcel->getActiveSheet()->mergeCells('A'.$last.':F'.$last);
+        $objPHPExcel->getActiveSheet()->mergeCells('A'.$last.':H'.$last);
         $objPHPExcel->getActiveSheet()->getStyle('A'.$last)->getFont()->setName('宋体') //字体
             ->setSize(16) //字体大小
             ->setBold(true); //字体加粗
