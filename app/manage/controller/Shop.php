@@ -783,6 +783,23 @@ class Shop extends Admin
         $this->assign('productions',$productions);
         return $this->fetch();
     }
+    //获取单条得利商品信息；
+    public function getDeliProductionInfoById(){
+        $id = input('id');
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try{
+            $productionService = new ProductionService();
+            if( !$productionInfo = $productionService->findInfo(['id' => $id]) ){
+                exception(lang('Data ID exception'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            $ret['data'] = $productionInfo;
+        }catch (\Exception $e){
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
     //保存得利商品
     public function saveDeliProduction(){
         $ret['code'] = 200;
