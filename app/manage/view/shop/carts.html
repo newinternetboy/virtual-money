@@ -12,7 +12,7 @@
                 </div>
                 <div class="ibox-content">
                     <!-- 表格数据 -->
-                    <form  method="" class="form-horizontal">
+                    <form  method="" class="form-horizontal" onsubmit="return checkOrder()">
                         <div class="form-group">
                             <div class="col-lg-6" style="float: left">
                                 <div class="form-group">
@@ -497,6 +497,14 @@
                 alertMsg("{:lang('Operation fail')}");
             }
         })
+    }
+
+    function checkOrder(){
+        var order_number = $('#order_number').val();
+        if(order_number.length != 24 ){
+            alertMsg("{:lang('Order Number Not Illegal')}",3);
+            return false;
+        }
     }
 </script>
 

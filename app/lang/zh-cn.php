@@ -775,6 +775,13 @@ return [
     'Shop Admin Id Require'             => '企业管理员id必须',
     //订单管理
     'No Qualified Cart Exists'          => '没有符合条件的订单',
+    'Order Number Not Illegal'          => '订单号不合法,请输入正确的订单号',
+    //结算管理
+    'Order Settle Status'               => '结算状态',
+    'Order Settle Status Settled'       => '已结算',
+    'Order Settle Status Unsettle'      => '未结算',
+    'yuan'                              => '(元)',
+    'Search By Month'                   => '选择月份',
 
     /******************************表具上报api**************************/
     'Low Balance Title'                 => '余额过低提醒',

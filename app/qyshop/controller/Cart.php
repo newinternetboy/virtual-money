@@ -30,7 +30,7 @@ class Cart extends Admin
         $endtime = input('endtime',date('Y-m-d'));
         $where['sid'] = $this->shop_id;
         $where['create_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
-        if($order_number){
+        if($order_number && strlen($order_number) == 24){ //订单号长度必须符合MongoDB _id 的长度,否则不允许按id查询
             $where['id'] = $order_number;
         }
         if($mobile){
@@ -103,5 +103,22 @@ class Cart extends Admin
         $post_data['M_Code'] = $consumer['M_Code'];
         $post_data['type'] = NOTICE_TYPE_CART_STATUS_CHANGE;
         send_post($url,$post_data);
+    }
+
+    public function settleList(){
+        $searchDate = input('searchDate',date('Y-m'));
+        $settle = input('settle');
+        $where['sid'] = $this->shop_id;
+        $where['create_time'] = ['between',[strtotime($searchDate."-01 00:00:00"),strtotime('+1 month',strtotime($searchDate."-01 00:00:00"))-1]];
+        if($settle != 'all'){
+            $where['deli_settle_status'] = intval($settle);
+        }
+        $orders = model('Cart')->paginateInfo($where,['searchDate' => $searchDate,'settle' => $settle]);
+        $totalCost = model('Cart')->sums($where,'totalCost');
+        $this->assign('searchDate',$searchDate);
+        $this->assign('settle_status',$settle);
+        $this->assign('orders',$orders);
+        $this->assign('totalCost',$totalCost);
+        return view();
     }
 }
