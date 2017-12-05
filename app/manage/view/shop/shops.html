@@ -114,6 +114,7 @@
                                    <th>{:lang('Username')}</th>
                                    <th>{:lang('M_Code')}</th>
                                    <th>{:lang('Shop Status')}</th>
+                                   <th>{:lang('First Page Sticky')}</th>
                                    <th>{:lang('Production Number')}</th>
                                    <th>{:lang('Operate')}</th>
                                    <th>{:lang('Operate')}</th>
@@ -137,6 +138,16 @@
                                        {case $Think.SHOP_STATUS_OPEN}{:lang('Open')}{/case}
                                        {default /}{:lang('Close')}
                                        {/switch}
+                                   </td>
+                                   <td>
+                                       {if condition="isset($vo.stick)"}
+                                       {switch name="vo.stick"}
+                                       {case $Think.SHOP_STICK}<font style="color:green;">{:lang('Yes')}</font>{/case}
+                                       {default /}{:lang('No')}
+                                       {/switch}
+                                       {else /}
+                                       {:lang('No')}
+                                       {/if}
                                    </td>
                                    <td>{$vo.productsCount ?? ''}</td>
                                    <td>{switch name="vo.type"}
@@ -220,6 +231,13 @@
                             <option value="0">{:lang('Close')}</option>
                             <option value="1">{:lang('Open')}</option>
                         </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">{:lang('First Page Sticky')}</label>
+                    <div class="col-md-10" id="edit_stick">
+                        <input type="radio" name="stick" value="0" >{:lang('No')} &nbsp;
+                        <input type="radio" name="stick" value="1" >{:lang('Yes')}
                     </div>
                 </div>
                 <div class="form-group">
@@ -347,6 +365,13 @@
                         </select>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">{:lang('First Page Sticky')}</label>
+                    <div class="col-md-10" id="edit_stick_qy">
+                        <input type="radio" name="stick" value="0" >{:lang('No')} &nbsp;
+                        <input type="radio" name="stick" value="1" >{:lang('Yes')}
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
@@ -417,6 +442,7 @@
         $('#edit_create_time').val(data.create_time);
         $('#edit_update_time').val(data.update_time);
         $('#preview').html("<img src="+"{$Think.config.grImgPath}"+data.img+" />");
+        $('#edit_stick').find("input[value="+data.stick+"]").prop("checked",true);
         $('#sdl_preference_gr').find("option[value="+data.sdl_preference+"]").prop("selected",true);
         $('#health_auth_gr').find("option[value="+data.health_auth+"]").prop("selected",true);
         $('#sdl_auth_gr').find("option[value="+data.sdl_auth+"]").prop("selected",true);
@@ -430,11 +456,12 @@
         var sdl_preference = $('#sdl_preference_gr').val();
         var health_auth = $('#health_auth_gr').val();
         var sdl_auth = $('#sdl_auth_gr').val();
+        var stick = $('#edit_stick').find('input:radio[name="stick"]:checked').val();
         if( name == '' || name == 'undefined' || name == null ){
             alertMsg("{:lang('Production Name Require')}");
             return false;
         }
-        var data = {id: id, name: name, status: status , sdl_preference: sdl_preference, health_auth: health_auth,sdl_auth: sdl_auth};
+        var data = {id: id, name: name, status: status , sdl_preference: sdl_preference, health_auth: health_auth,sdl_auth: sdl_auth,stick: stick};
         $.ajax({
             url:"{:url('manage/shop/saveGrshop')}",
             method:'post',
@@ -486,6 +513,7 @@
         $('#personName_qy').val(data.personName);
         $('#bank_qy').val(data.bank);
         $('#cardNumber_qy').val(data.cardNumber);
+        $('#edit_stick_qy').find("input[value="+data.stick+"]").prop("checked",true);
         $('#sdl_preference_qy').find("option[value="+data.sdl_preference+"]").prop("selected",true);
         $('#health_auth_qy').find("option[value="+data.health_auth+"]").prop("selected",true);
         $('#sdl_auth_qy').find("option[value="+data.sdl_auth+"]").prop("selected",true);
@@ -508,6 +536,7 @@
         var sdl_preference =$('#sdl_preference_qy').val();
         var health_auth =$('#health_auth_qy').val();
         var sdl_auth =$('#sdl_auth_qy').val();
+        var stick = $('#edit_stick_qy').find('input:radio[name="stick"]:checked').val();
         if(name == ''|| name =='undefined'||name==null){
             alertMsg('{:lang("Shop Name Require")}',2);
             $('#sub').prop('disabled',false);
@@ -552,6 +581,7 @@
         formData.append('health_auth',health_auth);
         formData.append('sdl_auth',sdl_auth);
         formData.append('img',img);
+        formData.append('stick',stick);
         $.ajax({
             url: "{:url('manage/shop/saveQyshop')}",
             type: "POST",

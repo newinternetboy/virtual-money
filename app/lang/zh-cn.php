@@ -710,6 +710,7 @@ return [
     'Shop Admin ShopId Require'         => '店铺id必须',
     'Shop Admin Not Exist'              => '店铺管理员不存在',
     'Shop Admin'                        => '企业店铺管理员',
+    'First Page Sticky'                 => '首页展示置顶',
     //得力商品管理
     'Production Dict'                   => '所属分类',
     'Company Ele_business Type'         => '企业电商类别',
