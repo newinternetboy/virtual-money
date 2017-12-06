@@ -8,7 +8,7 @@
 
 namespace app\manage\service;
 
-use app\manage\model\MeterdataModel;
+use app\manage\model\MeterDataModel;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Style_Alignment;
