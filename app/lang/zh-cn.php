@@ -263,7 +263,7 @@ return [
     'Info'    => '信息',
 
     //黑名单属性
-    'Update Blacklist Param'  => '修改黑名单属性',
+    'Update Blacklist Param'  => '修改/添加黑名单属性',
     'Delete Blacklist Param'  => '删除黑名单属性',
     'Blacklist Param'         => '黑名单属性',
     'Param Mark'              => '参数代号',
@@ -365,8 +365,49 @@ return [
     'Exchange meter'                  => '换表',
     'Records'                         => '记录',
 
-    //操作日志≥≥≥≥≥
+    //操作日志
     'Logrecord search'                => '操作日志',
+    'log_M_Type'           => '表具类型',
+    'log_M_Code'           => '表号',
+    'log_P_ID'             => '价格ID',
+    'log_M_Address'        => '区域ID',
+    'log_detail_address'   => '详细地址',
+    'log_U_ID'             => '用户ID',
+    'log_id'               => 'ID',
+    'log_company_id'       => '公司ID',
+    'log_meter_status'     => '表具状态',
+    'log_setup_time'       => '报装时间',
+    'log_username'         => '用户名称',
+    'log_tel'              => '电话',
+    'log_identity'         => '身份证号',
+    'log_family_num'       => '家庭人数',
+    'log_building_area'    => '住宅面积',
+    'log_income_peryear'   => '年收入',
+    'log_consumer_state'   => '用户状态',
+    'log_role_id'          => '角色ID',
+    'log_login_name'       => '登录名',
+    'log_status'           => '状态',
+    'log_name'             => '名称',
+    'log_remark'           => '记录',
+    'log_title'            => '名称',
+    'log_pid'              => '父级ID',
+    'log_rule_val'         => '路径',
+    'log_display'          => '是否可见',
+    'log_glyphicon'        => '图标',
+    'log_sortnum'          => '排序',
+    'log_type'             => '类型',
+    'log_period'           => '周期',
+    'log_first_price'      => '第一阶梯价格',
+    'log_first_val'        => '第一阶梯量',
+    'log_second_price'     => '第二阶梯价格',
+    'log_second_val'       => '第二阶梯量',
+    'log_third_price'      => '第三阶梯价格',
+    'log_third_val'        => '第三阶梯量',
+    'log_fourth_price'     => '第四阶梯价格',
+    'log_endtime'          => '结束时间',
+    'log_belong'           => '所属地',
+    'log_desc'             => '描述',
+    'log_address'          => '地址',
 
     //统计报表
     'Meterdata report'                => '统计报表',
@@ -720,6 +761,7 @@ return [
     'Shop Admin ShopId Require'         => '店铺id必须',
     'Shop Admin Not Exist'              => '店铺管理员不存在',
     'Shop Admin'                        => '企业店铺管理员',
+    'First Page Sticky'                 => '首页展示置顶',
     //得力商品管理
     'Production Dict'                   => '所属分类',
     'Company Ele_business Type'         => '企业电商类别',
@@ -783,6 +825,13 @@ return [
     'Shop Admin Id Require'             => '企业管理员id必须',
     //订单管理
     'No Qualified Cart Exists'          => '没有符合条件的订单',
+    'Order Number Not Illegal'          => '订单号不合法,请输入正确的订单号',
+    //结算管理
+    'Order Settle Status'               => '结算状态',
+    'Order Settle Status Settled'       => '已结算',
+    'Order Settle Status Unsettle'      => '未结算',
+    'yuan'                              => '(元)',
+    'Search By Month'                   => '选择月份',
 
     /******************************表具上报api**************************/
     'Low Balance Title'                 => '余额过低提醒',
