@@ -198,6 +198,7 @@ return [
     //价格维护
     'Price List'   => '价格列表',
     'Price'        => '价格',
+    'Maintenance'  => '维护',
     'Price Name'   => '价格名称',
     'Price Type'   => '类型',
     'Price Period' => '周期(单位:月)',
@@ -249,6 +250,7 @@ return [
     'true'         => '正确的',
     'Save Area'    => '添加/修改区域',
     'Delete Area'  => '删除区域',
+    'Area Manage'  => '区域管理',
 
     //业务
     'Meter'   => '表具',
@@ -258,6 +260,7 @@ return [
     //'Edit'  => '修改',
     'Index'   => '信息维护',
     'Update Reason' => '修改原因',
+    'Info'    => '信息',
 
     //黑名单属性
     'Update Blacklist Param'  => '修改黑名单属性',
@@ -267,6 +270,7 @@ return [
     'Param Description'       => '参数描述',
     'Param Type'              => '参数类型',
     'Param'                   => '参数',
+    'Blacklist'               => '黑名单',
 
     //记录日志
     'record Content'          => '记录内容',
@@ -367,6 +371,12 @@ return [
     //统计报表
     'Meterdata report'                => '统计报表',
 
+    //表具安装统计表
+    'Meter Setup Static'              => '表具安装统计表',
+
+    //用户列表
+    'User List'                       => '用户列表',
+
     /******************************清分系统**************************/
     'Manage'                            => '管理',
     'Require'                           => '必须',
@@ -376,10 +386,9 @@ return [
 
     //运营管理
     'Operation Management'              => '运营管理',
-    'Company Name'                      => '运营商名称',
+    'Company Name'                      => '名称',
     'Company Type'                      => '经营类型',
     'Admin'                             => '管理员',
-    'Admin Operate'                     => '管理员设置',
     'Company'                           => '运营商',
     'Please Choose Company'             => '请选择运营商',
     'OPT_ID'                            => '编号',
@@ -447,7 +456,7 @@ return [
     'UKEY Require'                      => 'UKEY必须',
     'User Status Require'               => '账号状态必须',
     'Role Require'                      => '账号角色必须',
-    'Login Name Exists'                 => '登录名已存在',
+    'Login Name Exists'                 => '账号已存在',
     'Password and Confirm Password inconsistent'    => '密码与确认密码不一致',
     'Production Name Require'           =>'商品名称必须',
     'Production List'                   =>'商品列表',
@@ -530,7 +539,6 @@ return [
     'Year'                              => '年',
     'Month'                             => '月',
     'Total'                             => '总计',
-
     //表具用量
     'Total Usage'                       => '表具用量',
     'Setup Time'                        => '安装时间',
@@ -566,8 +574,8 @@ return [
     'Deli Authentication'               =>'得利认证',
     'Balance Statistics'                =>'表具余额统计表',
     'Meter Balance Table'               =>'表具余额明细表',
-    'Month Report'                      =>'用量月报',
-    'Year Report'                       =>'用量年报',
+    'Month Report'                      =>'用量月报表',
+    'Year Report'                       =>'用量年报表',
     'Meter Message'                     =>'表具信息',
     'Detail Message'                    =>'详细信息',
     'Deduct Balance'                    =>'扣除金额',

@@ -1,38 +1,44 @@
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class=" table-responsive">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <div class="ibox-content">
-                    <form id="commentForm" class="form-horizontal">
-                        <div class="form-group">
-                            <label for="oldpasswd" class="col-sm-2 control-label">{:lang('Old Password')}:</label>
-                            <div class="col-sm-6">
-                                <input type="password" class="form-control" name="oldpasswd" id="oldpasswd"  >
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <div class="ibox float-e-margins" style="background: white; float: left; width: 100%">
+                    <!-- 表单标题概要 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Update Password')}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form id="commentForm" class="form-horizontal">
+                            <div class="form-group">
+                                <label for="oldpasswd" class="col-sm-2 control-label">{:lang('Old Password')}:</label>
+                                <div class="col-sm-6">
+                                    <input type="password" class="form-control" name="oldpasswd" id="oldpasswd"  >
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="newpasswd" class="col-sm-2 control-label">{:lang('New Password')}:</label>
-                            <div class="col-sm-6">
-                                <input type="password" class="form-control" name="newpasswd" id="newpasswd"  >
+                            <div class="form-group">
+                                <label for="newpasswd" class="col-sm-2 control-label">{:lang('New Password')}:</label>
+                                <div class="col-sm-6">
+                                    <input type="password" class="form-control" name="newpasswd" id="newpasswd"  >
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="surepasswd" class="col-sm-2 control-label">{:lang('Sure Password')}:</label>
-                            <div class="col-sm-6">
-                                <input type="password" class="form-control"  name="surepasswd" id="surepasswd" >
+                            <div class="form-group">
+                                <label for="surepasswd" class="col-sm-2 control-label">{:lang('Sure Password')}:</label>
+                                <div class="col-sm-6">
+                                    <input type="password" class="form-control"  name="surepasswd" id="surepasswd" >
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
-                            <div class="col-sm-7">
-                                <button style="float: right" class="btn btn-primary col-sm-2" type="button" onclick="saveData()" >{:lang('Button')}</button>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label"></label>
+                                <div class="col-sm-12">
+                                    <button style="float: right" class="btn btn-primary col-sm-1" type="button" onclick="saveData()" >{:lang('Button')}</button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 <script type="text/javascript">
@@ -77,7 +83,7 @@
                 }
             }
         });
-    })
+    });
     function saveData(){
         var flag = $("#commentForm").valid();
         if(!flag){

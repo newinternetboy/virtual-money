@@ -53,11 +53,13 @@
                             <thead>
                                 <tr>
                                    <th>{:lang('Shop Name')}</th>
+                                   <th>{:lang('Shop Type')}</th>
                                    <th>{:lang('Order Count')}</th>
                                    <th>{:lang('Total Price')}</th>
                                    <th>{:lang('Bank Of Deposit')}</th>
                                    <th>{:lang('Code Of Bank')}</th>
                                    <th>{:lang('Name On Card')}</th>
+                                   <th>{:lang('Order Tel')}</th>
                                    <th>{:lang('Paid')}</th>
                                 </tr>
                             </thead>
@@ -65,11 +67,19 @@
                             {volist name='shop' id='vo'}
                                 <tr>
                                    <td>{$vo->shopname ?? ''}</td>
+                                   <td>
+                                       {switch name="vo->type"}
+                                       {case $Think.COMPANY_ELE_BUSINESS}{:lang('Order Company')}{/case}
+                                       {case $Think.PERSONAL_ELE_BUSINESS}{:lang('Order Person')}{/case}
+                                       {default /}
+                                       {/switch}
+                                   </td>
                                    <td>{$vo->count ?? ''}</td>
                                    <td>{$vo->sum ?? ''}</td>
                                    <td>{$vo->bank ?? ''}</td>
                                    <td>{$vo->cardNumber ?? ''}</td>
                                    <td>{$vo->personName ?? ''}</td>
+                                   <td>{$vo->tel ?? ''}</td>
                                     <td><button class="btn btn-primary" onclick='moneyPay("{$vo->_id->sid}",{$data|json_encode})'>{:lang('Pay')}</button></td>
                                 </tr>
                             {/volist}

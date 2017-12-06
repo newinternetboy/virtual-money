@@ -28,11 +28,8 @@ class Production extends Admin
             $id = input('id');
             $name = input('name');
             $desc = input('desc');
-            $sdlprice = input('sdlprice/f');
             $rmbprice = input('rmbprice/f');
             $status = input('status/d');
-            $sdlenable = input('sdlenable');
-            $rmbenable = input('rmbenable');
             $img = request()->file('img');
             if ($img) {
                 $oriPath = DS . 'productionCover' . DS . 'origin';
@@ -41,21 +38,11 @@ class Production extends Admin
                 $data['img'] = $savedthumbFilePath;
             }
             $data['desc'] = $desc;
-            $data['sdlprice'] = $sdlprice;
             $data['rmbprice'] = $rmbprice;
             $data['status'] = $status;
             $data['name'] = $name;
             $data['sid'] = $this->shop_id;
-            if($rmbenable=='true'){
-                $data['rmbenable'] = true;
-            }else{
-                $data['rmbenable'] = false;
-            }
-            if($sdlenable=='true'){
-                $data['sdlenable'] = true;
-            }else{
-                $data['sdlenable'] = false;
-            }
+            $data['rmbenable'] = true;
             if($id){
                 $data['id'] = $id;
             }

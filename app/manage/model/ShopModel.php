@@ -34,6 +34,10 @@ class ShopModel extends BasicModel
         return intval($value);
     }
 
+    public function setStickAttr($value){
+        return intval($value);
+    }
+
     public function setSdlPreferenceAttr($value){
         return intval($value);
     }

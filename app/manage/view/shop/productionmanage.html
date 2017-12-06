@@ -237,7 +237,7 @@
 
     function production_eidt(production_id){
         $.ajax({
-            url:"{:url('manage/shop/getProductionInfoById')}",
+            url:"{:url('manage/shop/getDeliProductionInfoById')}",
             method:'post',
             dataType:'json',
             data: {id: production_id},

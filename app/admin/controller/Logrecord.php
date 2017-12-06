@@ -37,12 +37,10 @@ class Logrecord extends Admin
         $data['start_time'] = $start_time;
         $data['end_time']   = $end_time;
         $logrecord = model('LogRecord')->getLogrecord( $where , $data);
+//        var_dump($logrecord[0]);die;
         //对取出来的数据按照remark字段的值进行解析；返回的结果重新赋值给$logrecord;
         foreach($logrecord as & $vol){
             switch($vol['remark']){
-                case 'Update Password':
-                    $vol['data'] = model('LogRecord')->UpdatePasswd($vol['data']);
-                    break;
                 case 'Pass Meter':
                     $vol['data'] = model('LogRecord')->MeterPass($vol['data']);
                     break;
@@ -52,29 +50,23 @@ class Logrecord extends Admin
                 case 'Save Meter':
                     $vol['data'] = model('LogRecord')->MeterBinding($vol['data']);
                     break;
-                case 'Update Blacklist Param':
-                    $vol['data'] = model('LogRecord')->UpdateBlacklistparam($vol['data']);
+                case 'Delete Area':
+                    $vol['data'] = model('LogRecord')->deleteArea($vol['data']);
                     break;
-                case 'Save AuthRule':
-                    $vol['data'] = model('LogRecord')->UpdateandAddauth($vol['data']);
+                case 'Delete AuthRule':
+                    $vol['data'] = model('LogRecord')->deleteAuthRule($vol['data']);
                     break;
-                case 'Save Price':
-                    $vol['data'] = model('LogRecord')->UpdateandAddprice($vol['data']);
-                    break;
-                case 'Save AuthAccess':
-                    $vol['data'] = model('LogRecord')->UpdateAuth($vol['data']);
-                    break;
-                case 'Save User':
-                    $vol['data'] = model('LogRecord')->UpdateandAdduser($vol['data']);
-                    break;
-                case 'Save Area':
-                    $vol['data'] = model('LogRecord')->UpdateandAddarea($vol['data']);
-                    break;
-                case 'Edit MeterParam':
-                    $vol['data'] = model('LogRecord')->UpdateMeterparam($vol['data']);
+                case 'Delete Blacklist Param':
+                    $vol['data'] = model('LogRecord')->deleteBlacklistParam($vol['data']);
                     break;
                 case 'Login succeed':
                     $vol['data'] = model('LogRecord')->LoginSucceed($vol['data']);
+                    break;
+                case 'Logout succeed':
+                    $vol['data'] = model('LogRecord')->Loginout($vol['data']);
+                    break;
+                default:
+                    $vol['data'] = model('LogRecord')->common_trans($vol['data']);
                     break;
             }
         }

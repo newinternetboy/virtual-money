@@ -8,7 +8,7 @@
     <section id="widget-grid">
         <div class="row">
             <div class="col-lg-12 table-responsive">
-                <div class="ibox float-e-margins" style="background: white; float: left;">
+                <div class="ibox float-e-margins" style="background: white; float: left; width: 100%;">
                     <!-- 表单内容 -->
                     <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
                         <h5>{:lang('Month Report')}</h5>
@@ -40,39 +40,39 @@
                                     <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
-                    <!--报表-->
-                    <div id="table">
-                        <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
-                            <thead>
-                            <tr>
-                                <th>{:lang('months')}</th>
-                                <th>{:lang('Month User Number')}</th>
-                                <th>{:lang('The amount of this month')}</th>
-                                <th>{:lang('Amount of the month(yuan)')}</th>
-                            </tr>
-                            </thead>
-                            {foreach $report as $month => $item}
-                                <tr>
-                                    <td>{$month}</td>
-                                    <td>{$item.consumers}</td>
-                                    <td>{$item.cube}</td>
-                                    <td>{$item.cost}</td>
-                                </tr>
-                                {/foreach}
-                                <tr>
-                                    <td>总计</td>
-                                    <td></td>
-                                    <td>{$report|array_column=###,'cube'|array_sum=###}</td>
-                                    <td>{$report|array_column=###,'cost'|array_sum=###}</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div id="chart" style="width: 800px;height:400px;display:none"></div>
-                        <button id="print" style="float: right;margin-left: 1vw" class="btn btn-success" type="button" >{:lang('Print')}</button>
-                        <button id="switch" style="float: right" class="btn btn-success" type="button" >{:lang('show graph')}</button>
+                            <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                            <!--报表-->
+                            <div id="table">
+                                <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
+                                    <thead>
+                                    <tr>
+                                        <th>{:lang('months')}</th>
+                                        <th>{:lang('Month User Number')}</th>
+                                        <th>{:lang('The amount of this month')}</th>
+                                        <th>{:lang('Amount of the month(yuan)')}</th>
+                                    </tr>
+                                    </thead>
+                                    {foreach $report as $month => $item}
+                                    <tr>
+                                        <td>{$month}</td>
+                                        <td>{$item.consumers}</td>
+                                        <td>{$item.cube}</td>
+                                        <td>{$item.cost}</td>
+                                    </tr>
+                                    {/foreach}
+                                    <tr>
+                                        <td>总计</td>
+                                        <td></td>
+                                        <td>{$report|array_column=###,'cube'|array_sum=###}</td>
+                                        <td>{$report|array_column=###,'cost'|array_sum=###}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div id="chart" style="width: 800px;height:400px;display:none"></div>
+                            <button id="print" style="float: right;margin-left: 1vw" class="btn btn-success" type="button" >{:lang('Print')}</button>
+                            <button id="switch" style="float: right" class="btn btn-success" type="button" >{:lang('show graph')}</button>
+                        </form>
+
                     </div>
                 </div>
             </div>

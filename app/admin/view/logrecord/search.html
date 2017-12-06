@@ -1,6 +1,5 @@
 {js href="__JS__/bootstrap-datetimepicker.min.js" /}
 {js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
-{js href="__JS__/layer/layer.js" /}
 {css href="__CSS__/bootstrap-datetimepicker.min.css" /}
 <div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
     <section id="widget-grid">
@@ -128,6 +127,26 @@
         </div>
     </section>
 </div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{:lang('record Content')}</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+
+                <div id="log_content">
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $("#start_datetimepicker").datetimepicker({
         language:"zh-CN",
@@ -159,14 +178,8 @@
     });
     $('.record').click(function(){
         var record=$(this).parent().prev().prev().html();
-        layer.open({
-            type: 1 //Page层类型
-            ,area: ['400px', '160px']
-            ,title: '记录内容'
-            ,shade: 0.6 //遮罩透明度
-            ,anim: 1 //0-6的动画形式，-1不开启
-            ,content: '<div style="padding:20px;">'+record+'</div>'
-        });
+        $('#log_content').html(record);
+        $('#myModal').modal('show');
     })
 </script>
 
