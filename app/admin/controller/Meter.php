@@ -212,7 +212,7 @@ class Meter extends Admin
             $meterInfo['U_ID'] = $new_consumer_id;
             $meterInfo['id'] = $meter['id'];
             $meterInfo['pass_time'] = time();
-            if( !$new_consumer_id = model('Meter')->updateMeter($meterInfo,'Meter.pass') ){
+            if( !$new_meter_id = model('Meter')->updateMeter($meterInfo,'Meter.pass') ){
                 $error = model('Meter')->getError();
                 Log::record(['过户表具失败' => $error,'data' => $meterInfo],'error');
                 exception("更新表具失败:".$error,ERROR_CODE_DATA_ILLEGAL);
@@ -229,7 +229,7 @@ class Meter extends Admin
                 Log::record(['过户数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入过户记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
-            model('LogRecord')->record( 'Pass Meter','M_Code: '.$M_Code.', ori_consumer: '.$meter['U_ID'].', new_consumer: '.$new_consumer_id );
+            model('LogRecord')->record( 'Pass Meter',['M_Code'=>$M_Code,'ori_consumer'=>$meter['U_ID'],'new_consumer'=>$new_consumer_id]);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
