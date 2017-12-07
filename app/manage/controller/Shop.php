@@ -122,7 +122,7 @@ class Shop extends Admin
                 Log::record(['添加失败:' => $error,'data' => $data],'error');
                 exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
             }
-            model('app\admin\model\LogRecord')->record('Save Shop',$data);
+            model('app\admin\model\LogRecord')->record('Save Grshop',$data);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
@@ -262,7 +262,6 @@ class Shop extends Admin
                 $savedthumbFilePath = saveImg($img,$oriPath,$thumbPath);
                 $data['img'] = $savedthumbFilePath;
             }
-            //添加商铺
             $data['desc'] = $desc;
             if($rmbprice){
                 $data['rmbprice'] = $rmbprice;
@@ -286,7 +285,7 @@ class Shop extends Admin
             if (!$productionService->upsert($data, 'Production.editProduction')) {
                 exception($productionService->getError(), ERROR_CODE_DATA_ILLEGAL);
             }
-            model('app\admin\model\LogRecord')->record('Edit Deli Production', ['data' => $data]);
+            model('app\admin\model\LogRecord')->record('Edit Gr/Qy Production', $data);
         } catch (\Exception $e) {
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
@@ -386,7 +385,7 @@ class Shop extends Admin
                 Log::record(['修改失败:' => $error,'data' => $update],'error');
                 exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
             }
-            model('app\admin\model\LogRecord')->record('Freeze/Not Freeze Cart',$update);
+            model('app\admin\model\LogRecord')->record('Freeze Cart',$update);
             $post_data['title'] = '订单被冻结';
             $post_data['content'] = '你的订单因为一些原因已经被冻结';
             $post_data['cartid'] = $cart['id'];
@@ -660,7 +659,7 @@ class Shop extends Admin
                 if (!$shopService->insertQYShop($data, 'Shop.insertQYShop')) {
                     exception($shopService->getError(), ERROR_CODE_DATA_ILLEGAL);
                 }
-                model('app\admin\model\LogRecord')->record('Insert QYShop', ['data' => $data]);
+                model('app\admin\model\LogRecord')->record('Insert QYShop',$data);
             }
         } catch (\Exception $e) {
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
@@ -713,7 +712,7 @@ class Shop extends Admin
             if(!$userService->upsert($data,$scene)){
                 exception($userService->getError(),ERROR_CODE_DATA_ILLEGAL);
             }
-            model('app\admin\model\LogRecord')->record('Save ShopAdmin', ['data' => $data]);
+            model('app\admin\model\LogRecord')->record('Save ShopAdmin', $data);
         } catch (\Exception $e) {
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
@@ -833,7 +832,7 @@ class Shop extends Admin
             if (!$productionService->upsert($data, 'Production.editProduction')) {
                 exception($productionService->getError(), ERROR_CODE_DATA_ILLEGAL);
             }
-            model('app\admin\model\LogRecord')->record('Edit Deli Production', ['data' => $data]);
+            model('app\admin\model\LogRecord')->record('Edit Deli Production',$data);
         } catch (\Exception $e) {
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
@@ -901,7 +900,7 @@ class Shop extends Admin
             if (!$dictService->upsert($data, false)) {
                 exception($dictService->getError(), ERROR_CODE_DATA_ILLEGAL);
             }
-            model('app\admin\model\LogRecord')->record('Save Dict', ['data' => $data]);
+            model('app\admin\model\LogRecord')->record('Save Dict',$data);
         } catch (\Exception $e) {
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();

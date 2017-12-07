@@ -300,7 +300,7 @@ class Manage extends Admin
             if($info){
                 $localfile = ROOT_PATH . 'public' . DS . 'uploads'. DS .$info->getSaveName();
                 if($filedata=$this->getFileData($localfile)){
-                    $diff = $this->checkFileData($filedata);
+                    $diff = $this->checkFileData($filedata); //check 表号
                     if(!empty($diff)){
                         foreach($diff as $key=>$value){
                             $arr[$key]['code']=$value;
@@ -308,6 +308,13 @@ class Manage extends Admin
                         }
                         $ajaxReturn['status'] = 202;
                         $ajaxReturn['msg'] = $arr;
+                    }elseif(!empty($wrongNumberTypes = $this->checkNumberType($filedata))){ //check 扣除金额 是否都是数字
+                            foreach($wrongNumberTypes as $key=>$value){
+                                $arr[$key]['code']=$value['M_Code'];
+                                $arr[$key]['reson'] = "扣除金额:".$value['number']." 必须是数字";
+                            }
+                            $ajaxReturn['status'] = 202;
+                            $ajaxReturn['msg'] = $arr;
                     }else{
                         $result = $this->addAllTask($filedata);
                         model('app\admin\model\LogRecord')->record( 'Deduct',['source' => $localfile,'faildata' => $result]);
@@ -320,7 +327,6 @@ class Manage extends Admin
                     $ajaxReturn['status'] = 402;
                     $ajaxReturn['msg'] = '上传excel数据为空，请重试！';
                 }
-
             }else{
                 $ajaxReturn['status'] = 400;
                 $ajaxReturn['msg'] = $file->getError();
@@ -351,7 +357,7 @@ class Manage extends Admin
                 $number = is_object($number) ? $number->__toString() : $number; //避免导入的value是object
                 $remark = $sheet->getCellByColumnAndRow(2,$row)->getValue();
                 $remark = is_object($remark) ? $remark->__toString() : $remark; //避免导入的value是object
-                $data[] = ['M_Code' => strval($M_Code),'number'=> $number,'remark' => strval($remark)];
+                $data[] = ['M_Code' => trim(strval($M_Code)),'number'=> $number,'remark' => strval($remark)];
             }
         }
         return $data;
@@ -364,7 +370,7 @@ class Manage extends Admin
      */
     public function checkFileData($filedata){
         foreach($filedata as $item){
-            $codes[] = trim($item['M_Code']);
+            $codes[] = $item['M_Code'];
         }
         $where['M_Code'] = ['in',$codes];
         $where['meter_life'] = METER_LIFE_ACTIVE;
@@ -372,6 +378,19 @@ class Manage extends Admin
         $meterService = new MeterService();
         $meters = $meterService->columnInfo($where,'M_Code');
         return array_diff($codes,$meters);
+    }
+
+    public function checkNumberType($filedata){
+        $wrongNumberTypes = [];
+        foreach($filedata as $index => $item){
+            if(!is_numeric($item['number'])){
+                $wrongNumberTypes[$index] = [
+                    'M_Code' => $item['M_Code'],
+                    'number' => $item['number']
+                ];
+            }
+        }
+        return $wrongNumberTypes;
     }
 
     /**
@@ -784,4 +803,5 @@ class Manage extends Admin
         }
         return json($ret);
     }
+
 }

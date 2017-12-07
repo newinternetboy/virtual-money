@@ -115,12 +115,11 @@ class LogRecord extends Admin
     public function translate($data){
         $arr=[];
         foreach($data as $key=>$value){
-            foreach(config('changeDate') as $k=>$val){
+            foreach(config('extra_config.changeData') as $k=>$val){
                 if($key == $k ){
-                    $arr["$val"] = $value;
+                    $arr[lang($val)] = $value;
                 }
             }
-
         }
         return $arr;
     }
@@ -129,19 +128,12 @@ class LogRecord extends Admin
         $datas = $this->translate($data);
         return json_encode($datas,JSON_UNESCAPED_UNICODE);
     }
-    //解析表具过户
-    public function MeterPass($data){
-        $meter = $this->translate($data['meter']);
-        $consumer = $this->translate($data['consumer']);
-        $datas = array_merge($meter,$consumer);
-        return $datas;
-    }
     //解析表具修改
     public function MeterUpdate($data){
         $meter = $this->translate($data['meter']);
         $consumer = $this->translate($data['consumer']);
         $datas = array_merge($meter,$consumer);
-        return $datas;
+        return json_encode($datas,JSON_UNESCAPED_UNICODE);
     }
     //解析表具报装
     public function MeterBinding($data){
@@ -150,34 +142,50 @@ class LogRecord extends Admin
         $datas = array_merge($meter,$consumer);
         return json_encode($datas,JSON_UNESCAPED_UNICODE);
     }
-    //登录成功；
+    //解析登录成功；
     public function LoginSucceed($data){
         return '登录成功';
     }
 
-    //登出成功；
+    //解析登出成功；
     public function Loginout($data){
         return '登出成功';
     }
 
-    //删除区域；
-    public function deleteArea($data){
+    //解析删除公共的方法；
+    public function commonDeleteTrans($data){
         $arr['id'] = $data;
         $datas = $this->translate($arr);
         return json_encode($datas,JSON_UNESCAPED_UNICODE);
     }
 
-    //删除权限；
-    public function deleteAuthRule($data){
-        $arr['id'] = $data;
+    //解析表具删除；
+    public function MeterDelete($data){
+        $arr['M_Code'] = $data;
         $datas = $this->translate($arr);
         return json_encode($datas,JSON_UNESCAPED_UNICODE);
     }
-
-    //删除黑名单属性；
-    public function deleteBlacklistParam($data){
-        $arr['id'] = $data;
-        $datas = $this->translate($arr);
+    /********以下未清分平台的解析***********/
+    //解析扣除余额；
+    public function deduct($data){
+        if(is_array($data['source'])){
+            foreach($data['source'] as & $value){
+            $value = $this->translate($value);
+            }
+            $source = $data['source'];
+        }else{
+            $arr=['excel_file_path'=>$data['source']];
+            $source = $this->translate($arr);
+        }
+        if(empty($data['faildata'])){
+            $faildata = [];
+        }else{
+            foreach($data['faildata'] as & $value){
+                $value = $this->translate($value);
+            }
+            $faildata = $data['faildata'];
+        }
+        $datas = array_merge($source,$faildata);
         return json_encode($datas,JSON_UNESCAPED_UNICODE);
     }
 

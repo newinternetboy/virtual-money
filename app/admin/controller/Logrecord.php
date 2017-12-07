@@ -37,27 +37,27 @@ class Logrecord extends Admin
         $data['start_time'] = $start_time;
         $data['end_time']   = $end_time;
         $logrecord = model('LogRecord')->getLogrecord( $where , $data);
-//        var_dump($logrecord[0]);die;
+//        var_dump($logrecord[0]['data']);die;
         //对取出来的数据按照remark字段的值进行解析；返回的结果重新赋值给$logrecord;
         foreach($logrecord as & $vol){
             switch($vol['remark']){
-                case 'Pass Meter':
-                    $vol['data'] = model('LogRecord')->MeterPass($vol['data']);
-                    break;
                 case 'Edit Meter':
                     $vol['data'] = model('LogRecord')->MeterUpdate($vol['data']);
                     break;
                 case 'Save Meter':
                     $vol['data'] = model('LogRecord')->MeterBinding($vol['data']);
                     break;
+                case 'Delete Meter':
+                    $vol['data'] = model('LogRecord')->MeterDelete($vol['data']);
+                    break;
                 case 'Delete Area':
-                    $vol['data'] = model('LogRecord')->deleteArea($vol['data']);
-                    break;
                 case 'Delete AuthRule':
-                    $vol['data'] = model('LogRecord')->deleteAuthRule($vol['data']);
-                    break;
                 case 'Delete Blacklist Param':
-                    $vol['data'] = model('LogRecord')->deleteBlacklistParam($vol['data']);
+                case 'Delete MeterParam':
+                case 'Delete Price':
+                case 'Delete Role':
+                case 'Delete User':
+                    $vol['data'] = model('LogRecord')->commonDeleteTrans($vol['data']);
                     break;
                 case 'Login succeed':
                     $vol['data'] = model('LogRecord')->LoginSucceed($vol['data']);
