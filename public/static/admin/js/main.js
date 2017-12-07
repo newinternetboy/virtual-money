@@ -827,4 +827,5 @@ function removedInput () {
         }
     }
     $('.inputOption').val('');
+    $('.InfoOption').html('');
 };

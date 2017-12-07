@@ -192,7 +192,7 @@
     </section>
 </div>
 
-<div id="contentPrint" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px; padding: 10px 14px; position: relative; display: none">
+<div id="contentPrint"  style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px; padding: 10px 14px; position: relative; display: none">
     <section id="widget-grid">
         <div class="row">
             <div class="col-lg-12">
@@ -204,79 +204,81 @@
                         <!-- 表格数据 -->
 
                         <form id="save" method="post" class="form-horizontal" role="form" novalidate="novalidate">
+                            <div id="contentPrintPage" >
+                                <fieldset>
+                                    <legend>{:lang('M_Code Resources')}</legend>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">{:lang('Meter Type')}</label>
+                                        <div class="col-md-10 control-label col-md-10-P" style="text-align: left" id="M_Type_P">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="M_Code" class="col-md-2 control-label">{:lang('M_Code')}</label>
+                                        <div class="col-md-10 control-label col-md-10-P" style="text-align: left" id="M_Code_P">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="P_ID" class="col-md-2 control-label">{:lang('Price')}{:lang('Price Type')}</label>
+                                        <div class="col-md-10 control-label col-md-10-P" id="P_ID_P">
 
-                            <fieldset>
-                                <legend>{:lang('M_Code Resources')}</legend>
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">{:lang('Meter Type')}</label>
-                                    <div class="col-md-10 control-label col-md-10-P" style="text-align: left" id="M_Type_P">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="M_Code" class="col-md-2 control-label">{:lang('M_Code')}</label>
-                                    <div class="col-md-10 control-label col-md-10-P" style="text-align: left" id="M_Code_P">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="P_ID" class="col-md-2 control-label">{:lang('Price')}{:lang('Price Type')}</label>
-                                    <div class="col-md-10 control-label col-md-10-P" id="P_ID_P">
+                                </fieldset>
 
+                                <fieldset id="consumerinfo">
+                                    <legend>{:lang('Personal Profile')}</legend>
+                                    <div class="form-group">
+                                        <label for="username" class="col-md-2 control-label">{:lang('Name')}</label>
+                                        <div class="col-md-10 control-label col-md-10-P" id="username_P">
+                                        </div>
                                     </div>
-                                </div>
-                            </fieldset>
+                                    <div class="form-group">
+                                        <label for="tel" class="col-md-2 control-label">{:lang('Mobile Number')}</label>
+                                        <div class="col-md-10 control-label col-md-10-P" id="tel_P">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="identity" class="col-md-2 control-label">{:lang('PIN-codes')}</label>
+                                        <div class="col-md-10 control-label col-md-10-P" id="identity_P">
+                                        </div>
+                                    </div>
 
-                            <fieldset id="consumerinfo">
-                                <legend>{:lang('Personal Profile')}</legend>
-                                <div class="form-group">
-                                    <label for="username" class="col-md-2 control-label">{:lang('Name')}</label>
-                                    <div class="col-md-10 control-label col-md-10-P" id="username_P">
+                                    <div class="form-group col col-md-6">
+                                        <label for="M_Address" class="col-md-4 control-label">{:lang('Installation Address')}</label>
+                                        <!--<label for="detail_address" class="display:none"></label>-->
+                                        <div class="col-md-8 control-label col-md-10-P" style="padding-right: 0" id="M_Address_P">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="tel" class="col-md-2 control-label">{:lang('Mobile Number')}</label>
-                                    <div class="col-md-10 control-label col-md-10-P" id="tel_P">
+                                    <div class="form-group col col-md-6">
+                                        <label for="detail_address" style="display: none"></label>
+                                        <div class="col-md-12 control-label col-md-10-P" style="padding-left: 0" id="detail_address_P">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="identity" class="col-md-2 control-label">{:lang('PIN-codes')}</label>
-                                    <div class="col-md-10 control-label col-md-10-P" id="identity_P">
-                                    </div>
-                                </div>
+                                </fieldset>
 
-                                <div class="form-group col col-md-6">
-                                    <label for="M_Address" class="col-md-4 control-label">{:lang('Installation Address')}</label>
-                                    <!--<label for="detail_address" class="display:none"></label>-->
-                                    <div class="col-md-8 control-label col-md-10-P" style="padding-right: 0" id="M_Address_P">
+                                <fieldset id="addtion">
+                                    <legend>{:lang('Additional Resources')}</legend>
+                                    <div class="form-group">
+                                        <label for="family_num" class="col-md-2 control-label">{:lang('Family Size')}</label>
+                                        <div class="col-md-4 control-label col-md-10-P" id="family_num_P">
+                                        </div>
+                                        <label for="building_area" class="col-md-2 control-label">{:lang('Residential Buildings')}</label>
+                                        <div class="col-md-4 control-label col-md-10-P" id="building_area_P">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group col col-md-6">
-                                    <label for="detail_address" style="display: none"></label>
-                                    <div class="col-md-12 control-label col-md-10-P" style="padding-left: 0" id="detail_address_P">
+                                    <div class="form-group">
+                                        <label for="income_peryear" class="col-md-2 control-label">{:lang('Annual Income')}</label>
+                                        <div class="col-md-4 control-label col-md-10-P" id="income_peryear_P">
+                                        </div>
                                     </div>
-                                </div>
-                            </fieldset>
+                                </fieldset>
+                            </div>
 
-                            <fieldset id="addtion">
-                                <legend>{:lang('Additional Resources')}</legend>
-                                <div class="form-group">
-                                    <label for="family_num" class="col-md-2 control-label">{:lang('Family Size')}</label>
-                                    <div class="col-md-4 control-label col-md-10-P" id="family_num_P">
-                                    </div>
-                                    <label for="building_area" class="col-md-2 control-label">{:lang('Residential Buildings')}</label>
-                                    <div class="col-md-4 control-label col-md-10-P" id="building_area_P">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="income_peryear" class="col-md-2 control-label">{:lang('Annual Income')}</label>
-                                    <div class="col-md-4 control-label col-md-10-P" id="income_peryear_P">
-                                    </div>
-                                </div>
-                            </fieldset>
                             <div class="form-group" style="float: left; width: 100%;">
                                 <label  class="col-sm-2 control-label"></label>
                                 <div class="col-sm-10">
                                     <button style="margin-right: 20px; float: right" class="btn btn-primary col-sm-1" onclick="finished()" id="compeleteBtn" >完成</button>
-                                    <button style="margin-right: 20px; float: right;" class="btn btn-primary col-sm-1" style="display:block;" id="jqprint" type="button" onclick="printInfo()">{:lang('Print')}</button>
+                                    <button style="margin-right: 20px; float: right; display: block !important;" class="btn btn-primary col-sm-1" id="jqprint" type="button" onclick="printInfo()">{:lang('Print')}</button>
                                 </div>
                             </div>
                         </form>
@@ -291,7 +293,7 @@
 <script>
     $('#M_Code').change(function(){
 
-        $('#jqprint').hide();
+        //$('#jqprint').hide();
 
         $('#warning').html('');
         var M_Code = $('#M_Code').val().trim('');
@@ -423,18 +425,17 @@
     });
 
     function printInfo () {
-        $("#contentPrint").jqprint();
+        $("#contentPrintPage").jqprint();
     }
 
-    function refreshPage () {
-        window.location.reload();
-    }
+//    function refreshPage () {
+//        window.location.reload();
+//    }
 
     function finished () {
         removedInput();
         $("#contentPrint").hide();
         $("#content").show();
-
     }
 
     function getPrintInfo (M_Type,M_Code,P_ID,username,tel,identity,M_Address,detail_address,family_num,building_area,income_peryear) {
@@ -454,7 +455,7 @@
         $("#username_P").html(username);
         $("#tel_P").html(tel);
         $("#identity_P").html(identity);
-        $("#M_address_P").html(M_Address);
+        $("#M_Address_P").html(M_Address);
         $("#detail_address_P").html(detail_address);
         $("#family_num_P").html(family_num);
         $("#building_area_P").html(building_area);
@@ -471,17 +472,19 @@
         var M_Type = $('input:radio[name="M_Type"]:checked').val();
         var M_Code = $('#M_Code').val();
         var P_ID = $('#P_ID').val();
+        var P_ID_printInfo = $('#P_ID option:selected').text();
         var username = $('#username').val();
         var tel = $('#tel').val();
         var identity  =  $('#identity').val();
         var M_Address = $('#M_Address').val();
+        var M_address_printInfo = $('#M_Address option:selected').text();
         var detail_address = $('#detail_address').val();
         var family_num = $('#family_num').val();
         var building_area = $('#building_area').val();
         var income_peryear = $('#income_peryear').val();
         var meter = {M_Type: M_Type, M_Code: M_Code, P_ID: P_ID, M_Address: M_Address, detail_address: detail_address};
         var consumer = {username: username, tel: tel, identity: identity, family_num: family_num, building_area: building_area, income_peryear: income_peryear};
-        getPrintInfo(M_Type,M_Code,P_ID,username,tel,identity,M_Address,detail_address,family_num,building_area,income_peryear);
+        getPrintInfo(M_Type,M_Code,P_ID_printInfo,username,tel,identity,M_address_printInfo,detail_address,family_num,building_area,income_peryear);
 
         $.ajax({
             url:"{:url('admin/meter/binding')}",

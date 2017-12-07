@@ -10,6 +10,7 @@ namespace app\admin\controller;
 
 use think\Loader;
 use think\Log;
+use MongoDB\BSON\ObjectID;
 
 /**
  * 业务
@@ -195,6 +196,14 @@ class Meter extends Admin
                 $error = model('Consumer')->getError();
                 Log::record(['过户旧用户失败' => $error,'data' => $updateOldData],'error');
                 exception("更新旧用户失败:".$error,ERROR_CODE_DATA_ILLEGAL);
+            }
+            //关闭旧用户的个人店铺
+            if($shopInfo = model('Shop')->where(['uid' => (new ObjectID($meter['U_ID'])),'status' => SHOP_STATUS_OPEN])->find()){
+                if(!model('Shop')->where(['id' => $shopInfo['id']])->update(['status' => SHOP_STATUS_CLOSE,'update_time' => time()])){
+                    $error = model('Shop')->getError();
+                    Log::record(['过户时关闭旧用户个人商铺失败' => $error,'data' => $shopInfo['id']],'error');
+                    exception("过户时关闭旧用户个人商铺失败:".$error,ERROR_CODE_DATA_ILLEGAL);
+                }
             }
             //插入新用户
             Loader::clearInstance(); //框架是单例模式,初始化更新旧用户时实例化的对象,否则插入新用户受干扰
