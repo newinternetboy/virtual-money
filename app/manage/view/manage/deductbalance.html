@@ -1,89 +1,92 @@
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单标题概要 -->
-                <div class="ibox-title">
-                    <h5>{:lang('Deduct Balance')}</h5>
-                </div>
-                <!-- 表单内容 -->
-                <div class="ibox-content">
-                    <form id="companySelect" action=""  method="post" class="form-horizontal">
-                        <div class="col-lg-8" >
-                            <div class="form-group">
-                                <label for="M_Code" class="col-md-2 control-label">{:lang('M_Code')}:</label>
-                                <div class="col-md-10">
-                                    <input id="M_Code" placeholder="表号之间用英文下分号隔开,如:12364577;12364578;12364579" type="text" class="form-control" />
-                                </div>
-                            </div><!-- /form-group -->
-                        </div><!-- /.col-lg-6 -->
-                        <div class="col-lg-8" >
-                            <div class="form-group">
-                                <label for="money" class="col-md-2 control-label">{:lang('Deduct Balance')}:</label>
-                                <div class="col-md-10">
-                                    <input id="money" placeholder="请输入扣除的金额" type="number" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-8" >
-                            <div class="form-group">
-                                <label for="message" class="col-md-2 control-label">{:lang('Delete Reson')}:</label>
-                                <div class="col-md-10">
-                                    <input id="message" type="text" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="col-lg-4" >
-                        <div style="float: right">
-                            <button style="margin-right: 1vw" id="tijiao" class="btn btn-success">{:lang('Sure')}</button>
-                        </div>
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <div class="ibox float-e-margins" style="background: white; float: left; width: 100%;">
+                    <!-- 表单标题概要 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Deduct Balance')}</h5>
                     </div>
-                    <div style="clear: both"></div>
-                    <div id="sure" class="form-group" style="display: none;">
+                    <!-- 表单内容 -->
+                    <div class="ibox-content">
+                        <form id="companySelect" action=""  method="post" class="form-horizontal">
+                            <div class="col-lg-8" >
+                                <div class="form-group">
+                                    <label for="M_Code" class="col-md-2 control-label">{:lang('M_Code')}:</label>
+                                    <div class="col-md-10">
+                                        <input id="M_Code" placeholder="表号之间用英文下分号隔开,如:12364577;12364578;12364579" type="text" class="form-control" />
+                                    </div>
+                                </div><!-- /form-group -->
+                            </div><!-- /.col-lg-6 -->
+                            <div class="col-lg-8" >
+                                <div class="form-group">
+                                    <label for="money" class="col-md-2 control-label">{:lang('Deduct Balance')}:</label>
+                                    <div class="col-md-10">
+                                        <input id="money" placeholder="请输入扣除的金额" type="number" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8" >
+                                <div class="form-group">
+                                    <label for="message" class="col-md-2 control-label">{:lang('Delete Reson')}:</label>
+                                    <div class="col-md-10">
+                                        <input id="message" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="col-lg-4" >
+                            <div style="float: right">
+                                <button style="margin-right: 1vw" id="tijiao" class="btn btn-success">{:lang('Sure')}</button>
+                            </div>
+                        </div>
+                        <div style="clear: both"></div>
+                        <div id="sure" class="form-group" style="display: none;">
+                            <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
+                            <div id="s_data" class="col-sm-10">
+
+                            </div>
+                        </div>
+                        <div style="clear: both"></div>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Deduct Balance')}(批量扣款)</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form action=""  method="post" class="form-horizontal">
+                            <div class="col-lg-8" >
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="uploadexcel">请上传excel,支持格式xls/xlsx,最大10M,模板可通过右侧下载模板获取</label>
+                                        <input id="uploadexcel" name="uploadexcel" type="file" class="form-control" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <button  class="btn btn-success" id="excelupload" type="button" onclick="ajaxFileUploadForType()">{:lang('Button')}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="col-lg-4" >
+                            <div style="float: right">
+                                <button style="margin-right: 1vw" class="btn btn-primary" id="download">{:lang('Download Template')}</button>
+                            </div>
+                        </div>
+                        <div style="clear: both"></div>
+                    </div>
+                    <div id="prompt" class="form-group" style="display: none;">
                         <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
-                        <div id="s_data" class="col-sm-10">
+                        <div id="p_data" class="col-sm-10">
 
                         </div>
                     </div>
-                    <div style="clear: both"></div>
-                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 
                 </div>
-                <div class="ibox-title">
-                    <h5>{:lang('Deduct Balance')}(批量扣款)</h5>
-                </div>
-                <div class="ibox-content">
-                    <form action=""  method="post" class="form-horizontal">
-                        <div class="col-lg-8" >
-                            <div class="form-group">
-                                <div class="col-md-4">
-                                    <label for="uploadexcel">请上传excel,支持格式xls/xlsx,最大10M,模板可通过右侧下载模板获取</label>
-                                    <input id="uploadexcel" name="uploadexcel" type="file" class="form-control" />
-                                </div>
-                                <div class="col-md-8">
-                                    <button  class="btn btn-success" id="excelupload" type="button" onclick="ajaxFileUploadForType()">{:lang('Button')}</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="col-lg-4" >
-                        <div style="float: right">
-                            <button style="margin-right: 1vw" class="btn btn-primary" id="download">{:lang('Download Template')}</button>
-                        </div>
-                    </div>
-                    <div style="clear: both"></div>
-                </div>
-                <div id="prompt" class="form-group" style="display: none;">
-                    <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
-                    <div id="p_data" class="col-sm-10">
-
-                    </div>
-                </div>
-
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 

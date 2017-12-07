@@ -2,142 +2,123 @@
 {js href="__JS__/bootstrap-typeahead.js" /}
 {js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
 {css href="__CSS__/bootstrap-datetimepicker.min.css" /}
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class=" table-responsive">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单内容 -->
-                <div class="ibox-title">
-                    <h5>{:lang('Charge Detail')}</h5>
-                </div>
-                <div class="ibox-content">
-                    <!-- 搜索条件 -->
-                    <form action="" method="get" class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="company_name" class="col-sm-2 control-label">{:lang('Company')}</label>
-                                    <div class="col-sm-6">
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <div class="ibox float-e-margins" style="background: white; float: left; width: 100%;">
+                    <!-- 表单内容 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Charge Detail')}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <!-- 搜索条件 -->
+                        <form action="" method="get" class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label for="company_name" class="col-sm-4 control-label">{:lang('Company')}</label>
+                                    <div class="col-sm-8">
                                         <input id="company_name" name="company_name" value="{$company_name ?? ''}" type="text" placeholder="{:lang('Please Input The Company Name')}" autocomplete="off" data-provide="typeahead"  class="form-control">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="M_Code" class="col-sm-2 control-label">{:lang('M_Code')}</label>
-                                    <div class="col-sm-6">
+                                <div class="col-md-6">
+                                    <label for="M_Code" class="col-sm-4 control-label">{:lang('M_Code')}</label>
+                                    <div class="col-sm-8">
                                         <input id="M_Code" name="M_Code" value="{$M_Code ?? ''}" type="text" autocomplete="off" data-provide="typeahead"  class="form-control">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="channel" class="col-sm-2 control-label">{:lang('Channel Type')}</label>
-                                    <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label for="channel" class="col-sm-4 control-label">{:lang('Channel Type')}</label>
+                                    <div class="col-sm-8">
                                         <select class="form-control" id="channel" name="channel">
                                             <option value="">--{:lang('Choose Channel Type')}--</option>
                                             {foreach $channels as $index => $item}
-                                                <option value="{$index}" {if condition="$index eq $channel"}selected{/if}>{$item}</option>
+                                            <option value="{$index}" {if condition="$index eq $channel"}selected{/if}>{$item}</option>
                                             {/foreach}
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            <!--<div class="col-lg-6" style="float: left">-->
-                                <!--<div class="form-group">-->
-                                    <!--<label for="money_type" class="col-sm-2 control-label">{:lang('Money Type')}</label>-->
-                                    <!--<div class="col-sm-6">-->
-                                        <!--<select class="form-control" id="money_type" name="money_type">-->
-                                            <!--<option value="">&#45;&#45;{:lang('Choose Money Type')}&#45;&#45;</option>-->
-                                            <!--{foreach $moneytypes as $index => $item}-->
-                                            <!--<option value="{$index}" {if condition="$index eq $money_type"}selected{/if}>{$item}</option>-->
-                                            <!--{/foreach}-->
-                                        <!--</select>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="startDate" class="col-sm-2 control-label">{:lang('Start Time')}</label>
-                                    <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label for="startDate" class="col-sm-4 control-label">{:lang('Start Time')}</label>
+                                    <div class="col-sm-8">
                                         <input id="startDate" name="startDate" value="{$startDate ?? ''}" type="text" class="form-control">
                                     </div>
                                 </div>
-                            </div><!-- /.col-lg-6 -->
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="endDate" class="col-sm-2 control-label">{:lang('End Time')}</label>
-                                    <div class="col-sm-6">
+                                <div class="col-md-6">
+                                    <label for="endDate" class="col-sm-4 control-label">{:lang('End Time')}</label>
+                                    <div class="col-sm-8">
                                         <input id="endDate" name="endDate" value="{$endDate ?? ''}" type="text" class="form-control">
                                     </div>
                                 </div>
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
-                            <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
-                                <button style="float: right" class="btn btn-danger" type="button" onclick="download()" >{:lang('Download')}</button>
                             </div>
-                        </div>
-                    </form>
-                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
-                    <!--报表-->
-                    <div id="table">
-                        <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
-                            <thead>
-                            <tr>
-                                <th>{:lang('M_Code')}</th>
-                                <th>{:lang('Name')}</th>
-                                <th>{:lang('Money')}</th>
-                                <!--<th>{:lang('Money Type')}</th>-->
-                                <th>{:lang('Channel Type')}</th>
-                                <th>{:lang('Date')}</th>
-                            </tr>
-                            </thead>
-                            {foreach $moneylogs as $moneylog }
-                            <tr>
-                                <td>{$moneylog.meter.M_Code}</td>
-                                <td>{$moneylog.meter.consumer.username}</td>
-                                <td>{$moneylog.money}</td>
-                                <!--<td>-->
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button style="float: right; margin-left: 10px" class="btn btn-success" type="submit" >{:lang('Search')}</button>
+                                    <button style="float: right" class="btn btn-danger" type="button" onclick="download()" >{:lang('Download')}</button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <!--报表-->
+                        <div id="table">
+                            <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
+                                <thead>
+                                <tr>
+                                    <th>{:lang('M_Code')}</th>
+                                    <th>{:lang('Name')}</th>
+                                    <th>{:lang('Money')}</th>
+                                    <!--<th>{:lang('Money Type')}</th>-->
+                                    <th>{:lang('Channel Type')}</th>
+                                    <th>{:lang('Date')}</th>
+                                </tr>
+                                </thead>
+                                {foreach $moneylogs as $moneylog }
+                                <tr>
+                                    <td>{$moneylog.meter.M_Code}</td>
+                                    <td>{$moneylog.meter.consumer.username}</td>
+                                    <td>{$moneylog.money}</td>
+                                    <!--<td>-->
                                     <!--{if condition="$moneylog.money_type eq $Think.const.MONEY_TYPE_RMB"}-->
                                     <!--{:lang('Rmb')}-->
                                     <!--{else /}-->
                                     <!--{:lang('Deli')}-->
                                     <!--{/if}-->
-                                <!--</td>-->
-                                <td>{if condition="$moneylog.channel eq $Think.const.MONEY_CHANNEL_WEIXIN"}
+                                    <!--</td>-->
+                                    <td>{if condition="$moneylog.channel eq $Think.const.MONEY_CHANNEL_WEIXIN"}
                                         {:lang('Wei Xin')}
-                                    {else /}
+                                        {else /}
                                         {:lang('Manage Platform')}
-                                    {/if}
-                                </td>
-                                <td>{$moneylog.create_time}</td>
-                            </tr>
-                            {/foreach}
-                            <tr>
-                                <td>{:lang('total')}</td>
-                                <td>{foreach $total as $item}
-                                    <div>
-                                        {if condition="$item.money_type eq $Think.const.MONEY_TYPE_RMB"}
-                                            {:lang('Rmb')}:
-                                        {else/}
-                                            {:lang('Deli')}:
                                         {/if}
-                                        {$item.total}
-                                    </div>
-                                    {/foreach}
-                                </td>
-                            </tr>
-                        </table>
+                                    </td>
+                                    <td>{$moneylog.create_time}</td>
+                                </tr>
+                                {/foreach}
+                                <tr>
+                                    <td>{:lang('total')}</td>
+                                    <td>{foreach $total as $item}
+                                        <div>
+                                            {if condition="$item.money_type eq $Think.const.MONEY_TYPE_RMB"}
+                                            {:lang('Rmb')}:
+                                            {else/}
+                                            {:lang('Deli')}:
+                                            {/if}
+                                            {$item.total}
+                                        </div>
+                                        {/foreach}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 <div>
     {$moneylogs->render()}

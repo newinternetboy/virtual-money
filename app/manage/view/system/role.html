@@ -101,7 +101,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
-                <button type="button" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
+                <button id="finished" type="button" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
             </div>
         </div>
     </div>
@@ -114,6 +114,7 @@
     }
 
     function sub(){
+        $('#finished').attr('disabled',true);
         var id = $('#id').val();
         var name = $('#name').val();
         var status = $('#status').val();
@@ -138,6 +139,7 @@
             success: function(res){
                 if(res.code != 200){
                     alertMsg(res.msg);
+                    $('#finished').attr('disabled',false);
                 }else{
                     alertMsg(res.msg);
                     setTimeout(function(){window.location.href = '';},3000);
@@ -145,8 +147,9 @@
             },
             error:function(){
                 alertMsg("{:lang('Operation fail')}");
+                $('#finished').attr('disabled',false);
             }
-        })
+        });
     }
 
     function edit(id){
