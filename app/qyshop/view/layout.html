@@ -80,16 +80,16 @@
 	GetList.push(["shopManage","<li><a href='/qyshop/shop/index'>店铺管理</a></li><li><a href='/qyshop/production/index'>商品管理</a></li><li><a href='/qyshop/cart/index'>订单管理</a></li><li><a href='/qyshop/cart/settlelist'>结算管理</a></li>"],["userInfo","<li><a href='/qyshop/user/index'>个人信息</a></li>"]);
 	console.log(GetUrl);
 </script>
-<body class="smart-style-0 desktop-detected">
+<body class="smart-style-0 desktop-detected" style="background-color: #e6e6e6">
 <header id="header" style="width: 100%; height: 100px; background-color: white; position: fixed; background-image: none; padding: 0; box-shadow: 0 3px 5px rgba(84,84,84,0.3)">
 	<div style="width: 40%; height: 60px; display: table; margin: 0 0 0 5%;">
-		<span class="m-r-sm text-muted welcome-message" style="display: table-cell; height: 100%; vertical-align: middle">{$shopName}</span>
+		<span class="m-r-sm text-muted welcome-message" style="display: table-cell; height: 100%; vertical-align: middle; font-size: 16px">{$shopName}</span>
 	</div>
-	<div style="height: 60px; display: table; margin: 0 5% 0 0; float: right;">
-		<span class="m-r-sm text-muted welcome-message" style="display: table-cell; height: 100%; vertical-align: middle">{$username}</span>
-			<span class="m-r-sm text-muted welcome-message" style="display: table-cell; height: 100%; vertical-align: middle; margin: 0 0 0 5%;">
+	<div style="width: 15%; height: 60px; display: table; margin: 0 5% 0 0; float: right;">
+		<span class="m-r-sm text-muted welcome-message" style="display: table-cell; height: 100%; vertical-align: middle; padding: 0 5%;">{$username}</span>
+			<span class="m-r-sm text-muted welcome-message" style="display: table-cell; height: 100%; vertical-align: middle; margin: 0 0 0 5%; padding: 0 5%;">
 				<a href="{:url('Admin/Login/out');}">
-					<i class="fa fa-sign-out"></i> Log out
+					<i class="fa fa-sign-out"></i> 退出
 				</a>
 			</span>
 	</div>
@@ -119,7 +119,7 @@
 	</div>
 </div>
 
-<div class="page-footer" style="position: initial;">
+<div class="page-footer" style="border: 0; padding-top: 0; height: 40px; position: fixed; bottom: 0;">
 	{include file="./_layout/footer" /}
 </div>
 
