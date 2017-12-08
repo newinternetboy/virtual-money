@@ -1,95 +1,90 @@
 {js href="__JS__/bootstrap-datetimepicker.min.js" /}
 {js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
 {css href="__CSS__/bootstrap-datetimepicker.min.css" /}
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class=" table-responsive">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单内容 -->
-                <div class="ibox-title">
-                    <h5>{:lang('Order Account List')}</h5>
-                </div>
-                <div class="ibox-content">
-                    <!-- 表格数据 -->
-                    <form  method="" class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="shop_name" class="col-sm-2 control-label">{:lang('Shop Name')}:</label>
-                                    <div class="col-sm-6">
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class=" table-responsive">
+                <div class="ibox float-e-margins" style="padding: 10px">
+                    <!-- 表单内容 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Order Account List')}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <!-- 表格数据 -->
+                        <form  method="" class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label for="shop_name" class="col-sm-4 control-label">{:lang('Shop Name')}:</label>
+                                    <div class="col-sm-8">
                                         <input name="shop_name" id="shop_name" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('Shop Name')}..." value="{$data['shop_name'] ?? ''}">
                                     </div>
-                                </div><!-- /form-group -->
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Pay Time')}{:lang('From')}</label>
-                                    <div class="col-sm-6">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label for="start_datetimepicker" class="col-sm-4 control-label">{:lang('Pay Time')}{:lang('From')}</label>
+                                    <div class="col-sm-8">
                                         <input id="start_datetimepicker" name="startDate" value="{$data['startDate'] ?? ''}" type="text" class="form-control">
                                     </div>
                                 </div>
-                            </div><!-- /.col-lg-6 -->
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="end_datetimepicker" class="col-sm-2 control-label">{:lang('To')}:</label>
-                                    <div class="col-sm-6">
+                                <div class="col-md-6">
+                                    <label for="end_datetimepicker" class="col-sm-4 control-label">{:lang('To')}:</label>
+                                    <div class="col-sm-8">
                                         <input id="end_datetimepicker" name="endDate" value="{$data['endDate'] ?? ''}" type="text" class="form-control">
                                     </div>
                                 </div>
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
-                            <div class="col-sm-10">
-                                <button style="float: left" class="btn btn-success" type="button" onclick='exportExcel()'  >{:lang('Export Excel')}</button>
-                                <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
                             </div>
-                        </div>
-                    </form>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <button style="float: left" class="btn btn-success" type="button" onclick='exportExcel()'  >{:lang('Export Excel')}</button>
+                                    <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
+                                </div>
+                            </div>
+                        </form>
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
-                        <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                        <div>
+                            <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
                             <thead>
-                                <tr>
-                                   <th>{:lang('Shop Name')}</th>
-                                   <th>{:lang('Shop Type')}</th>
-                                   <th>{:lang('Order Count')}</th>
-                                   <th>{:lang('Total Price')}</th>
-                                   <th>{:lang('Bank Of Deposit')}</th>
-                                   <th>{:lang('Code Of Bank')}</th>
-                                   <th>{:lang('Name On Card')}</th>
-                                   <th>{:lang('Order Tel')}</th>
-                                   <th>{:lang('Paid')}</th>
-                                </tr>
+                            <tr>
+                                <th>{:lang('Shop Name')}</th>
+                                <th>{:lang('Shop Type')}</th>
+                                <th>{:lang('Order Count')}</th>
+                                <th>{:lang('Total Price')}</th>
+                                <th>{:lang('Bank Of Deposit')}</th>
+                                <th>{:lang('Code Of Bank')}</th>
+                                <th>{:lang('Name On Card')}</th>
+                                <th>{:lang('Order Tel')}</th>
+                                <th>{:lang('Paid')}</th>
+                            </tr>
                             </thead>
                             <tbody>
                             {volist name='shop' id='vo'}
-                                <tr>
-                                   <td>{$vo->shopname ?? ''}</td>
-                                   <td>
-                                       {switch name="vo->type"}
-                                       {case $Think.COMPANY_ELE_BUSINESS}{:lang('Order Company')}{/case}
-                                       {case $Think.PERSONAL_ELE_BUSINESS}{:lang('Order Person')}{/case}
-                                       {default /}
-                                       {/switch}
-                                   </td>
-                                   <td>{$vo->count ?? ''}</td>
-                                   <td>{$vo->sum ?? ''}</td>
-                                   <td>{$vo->bank ?? ''}</td>
-                                   <td>{$vo->cardNumber ?? ''}</td>
-                                   <td>{$vo->personName ?? ''}</td>
-                                   <td>{$vo->tel ?? ''}</td>
-                                    <td><button class="btn btn-primary" onclick='moneyPay("{$vo->_id->sid}",{$data|json_encode})'>{:lang('Pay')}</button></td>
-                                </tr>
+                            <tr>
+                                <td>{$vo->shopname ?? ''}</td>
+                                <td>
+                                    {switch name="vo->type"}
+                                    {case $Think.COMPANY_ELE_BUSINESS}{:lang('Order Company')}{/case}
+                                    {case $Think.PERSONAL_ELE_BUSINESS}{:lang('Order Person')}{/case}
+                                    {default /}
+                                    {/switch}
+                                </td>
+                                <td>{$vo->count ?? ''}</td>
+                                <td>{$vo->sum ?? ''}</td>
+                                <td>{$vo->bank ?? ''}</td>
+                                <td>{$vo->cardNumber ?? ''}</td>
+                                <td>{$vo->personName ?? ''}</td>
+                                <td>{$vo->tel ?? ''}</td>
+                                <td><button class="btn btn-primary" onclick='moneyPay("{$vo->_id->sid}",{$data|json_encode})'>{:lang('Pay')}</button></td>
+                            </tr>
                             {/volist}
                             </tbody>
                         </table></div>
-                       <div>
                         <div>
-                            {$str}
+                            <div>
+                                {$str}
+                            </div>
                         </div>
-                       </div>
                         <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
                         <div class="form-group" style="color:red">
                             <label  class="col-sm-2 control-label">{:lang('Operation hints')}:</label>
@@ -97,10 +92,11 @@
                                 <p class="form-control" style="border: none">{:lang('Please in the search box enter the query query, return the result')}</p>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 <script>
     $("#start_datetimepicker").datetimepicker({

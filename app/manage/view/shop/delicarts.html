@@ -2,53 +2,46 @@
 {js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
 {js href="__JS__/layer/layer.js" /}
 {css href="__CSS__/bootstrap-datetimepicker.min.css" /}
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class=" table-responsive">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单内容 -->
-                <div class="ibox-title">
-                    <h5>{:lang('Delis')}{:lang('Order List')}</h5>
-                </div>
-                <div class="ibox-content">
-                    <!-- 表格数据 -->
-                    <form  method="" class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="order_number" class="col-sm-2 control-label">{:lang('Order Number')}:</label>
-                                    <div class="col-sm-6">
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class=" table-responsive">
+                <div class="ibox float-e-margins" style="padding: 10px">
+                    <!-- 表单内容 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Delis')}{:lang('Order List')}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <!-- 表格数据 -->
+                        <form  method="" class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label for="order_number" class="col-sm-4 control-label">{:lang('Order Number')}:</label>
+                                    <div class="col-sm-8">
                                         <input name="order_number" id="order_number" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('Order Number')}..." value="{$order_number ?? ''}">
                                     </div>
-                                </div><!-- /form-group -->
-                            </div><!-- /.col-lg-6 -->
-                            <div class="col-lg-6" style="float: right">
-                                <div class="form-group">
-                                    <label for="mobile" class="col-sm-2 control-label">{:lang('Buyer Tel')}:</label>
-                                    <div class="col-sm-6">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="mobile" class="col-sm-4 control-label">{:lang('Buyer Tel')}:</label>
+                                    <div class="col-sm-8">
                                         <input name="mobile" id="mobile" type="text" class="form-control" placeholder="{:lang('Please enter')}{:lang('Mobile Number')}..." value="{$mobile ?? ''}">
                                     </div>
-                                </div><!-- /form-group -->
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                        <div class="form-group">
-                             <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="freeze" class="col-sm-2 control-label">{:lang('Order Freeze Status')}:</label>
-                                    <div class="col-sm-6">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label for="freeze" class="col-sm-4 control-label">{:lang('Order Freeze Status')}:</label>
+                                    <div class="col-sm-8">
                                         <select name="freeze" id="freeze" class="form-control">
                                             <option value="all">{:lang('Search All')}</option>
                                             <option value="{$Think.ORDER_NORMAL}" {if condition="$freeze === strval($Think.ORDER_NORMAL) "}selected{/if}>{:lang('Normal')}</option>
                                             <option value="{$Think.ORDER_FREEZE}" {if condition="$freeze === strval($Think.ORDER_FREEZE) "}selected{/if}>{:lang('Already Freeze')}</option>
                                         </select>
                                     </div>
-
                                 </div>
-                             </div>
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="status" class="col-sm-2 control-label">{:lang('Order Status')}:</label>
-                                    <div class="col-sm-6">
+                                <div class="col-md-6">
+                                    <label for="status" class="col-sm-4 control-label">{:lang('Order Status')}:</label>
+                                    <div class="col-sm-8">
                                         <select name="status" id="status" class="form-control">
                                             <option value="" >{:lang('Search All')}</option>
                                             <option value="{$Think.ORDER_UNPAID}" {if condition="(isset($status)) and ($status eq $Think.ORDER_UNPAID)"}selected{/if}>{:lang('Unpaid')}</option>
@@ -58,88 +51,82 @@
                                             <option value="{$Think.ORDER_OVER}" {if condition="(isset($status)) and ($status eq $Think.ORDER_OVER)"}selected{/if}>{:lang('Order Finish')}</option>
                                         </select>
                                     </div>
-
                                 </div>
                             </div>
-
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Create Time')}{:lang('From')}</label>
-                                    <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label for="start_datetimepicker" class="col-sm-4 control-label">{:lang('Create Time')}{:lang('From')}</label>
+                                    <div class="col-sm-8">
                                         <input id="start_datetimepicker" name="starttime" value="{$starttime ?? ''}" type="text" class="form-control">
                                     </div>
                                 </div>
-                            </div><!-- /.col-lg-6 -->
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="end_datetimepicker" class="col-sm-2 control-label">{:lang('To')}:</label>
-                                    <div class="col-sm-6">
+                                <div class="col-md-6">
+                                    <label for="end_datetimepicker" class="col-sm-4 control-label">{:lang('To')}:</label>
+                                    <div class="col-sm-8">
                                         <input id="end_datetimepicker" name="endtime" value="{$endtime  ?? ''}" type="text" class="form-control">
                                     </div>
                                 </div>
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
-                            <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
                             </div>
-                        </div>
-                    </form>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button style="float: right" class="btn btn-success" type="submit"  >{:lang('Search')}</button>
+                                </div>
+                            </div>
+                        </form>
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
-                        <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                        <div>
+                            <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
                             <thead>
-                                <tr>
-                                   <th style="width:200px;">{:lang('Order Number')}</th>
-                                   <th>{:lang('Buyer Name')}</th>
-                                   <th>{:lang('Contact Name')}</th>
-                                   <th>{:lang('Contact Tel')}</th>
-                                   <th>{:lang('Contact Address')}</th>
-                                   <th>{:lang('Total Cost')}</th>
-                                   <th>{:lang('Pay Time')}</th>
-                                   <th>{:lang('Order Freeze Status')}</th>
-                                    <th>{:lang('Order Status')}</th>
-                                   <th>{:lang('Operate')}</th>
-                                    <th style="width: 200px;">{:lang('Detail Message')}</th>
-                                </tr>
+                            <tr>
+                                <th style="width:200px;">{:lang('Order Number')}</th>
+                                <th>{:lang('Buyer Name')}</th>
+                                <th>{:lang('Contact Name')}</th>
+                                <th>{:lang('Contact Tel')}</th>
+                                <th>{:lang('Contact Address')}</th>
+                                <th>{:lang('Total Cost')}</th>
+                                <th>{:lang('Pay Time')}</th>
+                                <th>{:lang('Order Freeze Status')}</th>
+                                <th>{:lang('Order Status')}</th>
+                                <th>{:lang('Operate')}</th>
+                                <th style="width: 200px;">{:lang('Detail Message')}</th>
+                            </tr>
                             </thead>
                             <tbody>
                             {volist name='orders' id='vo'}
-                                <tr>
-                                   <td>{$vo.id}</td>
-                                   <td>{$vo.consumer_username ?? ''}</td>
-                                   <td>{$vo.contact_name ?? ''}</td>
-                                   <td>{$vo.contact_tel ?? ''}</td>
-                                   <td>{$vo.contact_address ?? ''}</td>
-                                   <td>{$vo.totalCost ?? ''}</td>
-                                   <td>{if condition="isset($vo.pay_time)"}{$vo.pay_time|date="Y-m-d H:i:s",###}{/if}</td>
-                                   <td>
-                                       {if condition="isset($vo.freeze)"}
-                                       {switch name="vo.freeze" }
-                                       {case $Think.ORDER_FREEZE}<font style="color: red;">{:lang('Already Freeze')}</font>{/case}
-                                       {default /}{:lang('Normal')}
-                                       {/switch}
-                                       {/if}
-                                   </td>
-                                   <td>
-                                       {switch name="vo.status"}
-                                       {case $Think.ORDER_UNPAID}{:lang('Unpaid')}{/case}
-                                       {case $Think.ORDER_WAITING_SEED}{:lang('Waiting Seed')}{/case}
-                                       {case $Think.ORDRE_WAITING_TASK}{:lang('Waiting Task')}{/case}
-                                       {case $Think.ORDER_SEED_WAITING_COMMENT}{:lang('Received goods to be evaluated ')}{/case}
-                                       {case $Think.ORDER_OVER}{:lang('Order Finish')}{/case}
-                                       {default /}
-                                       {/switch}
-                                   </td>
-                                   <td>
-                                       {if condition="$vo.status == $Think.ORDER_WAITING_SEED"}
-                                      <button class="btn btn-primary" onclick="changeStatus('{$vo.id}')">{:lang('Delivery')}</button>
-                                       {/if}
-                                   </td>
-                                    <td><button class="btn btn-success" onclick='checkProduction({$vo.products|json_encode})'>{:lang('Production Detail')}</button> &nbsp;<button class="btn btn-success" onclick='checkOrder({$vo|json_encode})'>{:lang('Order Detail')}</button></td>
-                                </tr>
+                            <tr>
+                                <td>{$vo.id}</td>
+                                <td>{$vo.consumer_username ?? ''}</td>
+                                <td>{$vo.contact_name ?? ''}</td>
+                                <td>{$vo.contact_tel ?? ''}</td>
+                                <td>{$vo.contact_address ?? ''}</td>
+                                <td>{$vo.totalCost ?? ''}</td>
+                                <td>{if condition="isset($vo.pay_time)"}{$vo.pay_time|date="Y-m-d H:i:s",###}{/if}</td>
+                                <td>
+                                    {if condition="isset($vo.freeze)"}
+                                    {switch name="vo.freeze" }
+                                    {case $Think.ORDER_FREEZE}<font style="color: red;">{:lang('Already Freeze')}</font>{/case}
+                                    {default /}{:lang('Normal')}
+                                    {/switch}
+                                    {/if}
+                                </td>
+                                <td>
+                                    {switch name="vo.status"}
+                                    {case $Think.ORDER_UNPAID}{:lang('Unpaid')}{/case}
+                                    {case $Think.ORDER_WAITING_SEED}{:lang('Waiting Seed')}{/case}
+                                    {case $Think.ORDRE_WAITING_TASK}{:lang('Waiting Task')}{/case}
+                                    {case $Think.ORDER_SEED_WAITING_COMMENT}{:lang('Received goods to be evaluated ')}{/case}
+                                    {case $Think.ORDER_OVER}{:lang('Order Finish')}{/case}
+                                    {default /}
+                                    {/switch}
+                                </td>
+                                <td>
+                                    {if condition="$vo.status == $Think.ORDER_WAITING_SEED"}
+                                    <button class="btn btn-primary" onclick="changeStatus('{$vo.id}')">{:lang('Delivery')}</button>
+                                    {/if}
+                                </td>
+                                <td><button class="btn btn-success" onclick='checkProduction({$vo.products|json_encode})'>{:lang('Production Detail')}</button> &nbsp;<button class="btn btn-success" onclick='checkOrder({$vo|json_encode})'>{:lang('Order Detail')}</button></td>
+                            </tr>
                             {/volist}
                             </tbody>
                         </table></div>
@@ -153,10 +140,11 @@
                                 <p class="form-control" style="border: none">{:lang('Please in the search box enter the query query, return the result')}</p>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
