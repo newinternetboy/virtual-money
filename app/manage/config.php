@@ -183,4 +183,7 @@ return [
         'Delete User',
         'Save AuthAccess',
     ],
+
+    //充值日/月/年报 旧系统api
+    'old_system_url' => 'http://10.101.138.154:8088/api/values',
 ];

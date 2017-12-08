@@ -301,7 +301,7 @@ class System extends Admin
     /*
  * 操作日志的查询功能
  * */
-    function logSearch(){
+    public function logSearch(){
         $user_name  = input( 'user_name' );
         $remark     = input( 'remark' );
         $start_time = input( 'start_time' );
