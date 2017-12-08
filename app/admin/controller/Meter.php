@@ -57,6 +57,7 @@ class Meter extends Admin
             //检查用户能否查看该表具
             $where['M_Code'] = $M_Code;
             $where['meter_life'] = METER_LIFE_ACTIVE;
+            $where['meter_status'] = ['in',[METER_STATUS_BIND,METER_STATUS_NEW]];
             $where['company_id'] = ['in',[SHUANGDELI_ID,$this->company_id]];
             if( !$meter = model('Meter')->getMeterInfo($where,'find') ){
                 exception("表具不存在或已报装,请检查表号",ERROR_CODE_DATA_ILLEGAL);
