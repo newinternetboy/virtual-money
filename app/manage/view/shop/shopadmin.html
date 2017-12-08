@@ -1,52 +1,55 @@
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class=" table-responsive">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单内容 -->
-                <div class="ibox-title">
-                    <h5>{:lang('Shop Admin')}</h5>
-                </div>
-                <div class="ibox-content">
-                    <!-- 表格数据 -->
-                    <div style="float: left">
-                        <button style="margin-right: 1vw" class="btn btn-success" onclick="add()">{:lang('Add')}</button>
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <div class="ibox float-e-margins" style="background: white; float: left; width: 100%;">
+                    <!-- 表单内容 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Shop Admin')}</h5>
                     </div>
-                    <div style="clear: both"></div>
-                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
-                    <!--原表信息-->
-                    <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
-                        <thead>
-                        <tr>
-                            <th>{:lang('Shop Admin Name')}</th>
-                            <th>{:lang('Shop Admin LoginName')}</th>
-                            <th>{:lang('Shop Admin Tel')}</th>
-                            <th>{:lang('Shop Admin Status')}</th>
-                            <th>{:lang('Create time')}</th>
-                            <th>{:lang('Operate')}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {volist name='shopAdmins' id='vo'}
-                        <tr>
-                            <td>{$vo.username}</td>
-                            <td>{$vo.login_name}</td>
-                            <td>{$vo.tel}</td>
-                            <td>{if condition="$vo.status eq 1"}
-                                {:lang('Start')}
-                                {else /}
-                                {:lang('Off')}
-                                {/if}
-                            </td>
-                            <td>{$vo.create_time}</td>
-                            <td><button class="btn btn-success" onclick="edit('{$vo.id}')">{:lang('Edit')}</button></td>
-                        </tr>
-                        {/volist}
-                        </tbody>
-                    </table></div>
+                    <div class="ibox-content">
+                        <!-- 表格数据 -->
+                        <div style="float: left">
+                            <button style="margin-right: 1vw" class="btn btn-success" onclick="add()">{:lang('Add')}</button>
+                        </div>
+                        <div style="clear: both"></div>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <!--原表信息-->
+                        <div>
+                            <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
+                            <thead>
+                            <tr>
+                                <th>{:lang('Shop Admin Name')}</th>
+                                <th>{:lang('Shop Admin LoginName')}</th>
+                                <th>{:lang('Shop Admin Tel')}</th>
+                                <th>{:lang('Shop Admin Status')}</th>
+                                <th>{:lang('Create time')}</th>
+                                <th>{:lang('Operate')}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {volist name='shopAdmins' id='vo'}
+                            <tr>
+                                <td>{$vo.username}</td>
+                                <td>{$vo.login_name}</td>
+                                <td>{$vo.tel}</td>
+                                <td>{if condition="$vo.status eq 1"}
+                                    {:lang('Start')}
+                                    {else /}
+                                    {:lang('Off')}
+                                    {/if}
+                                </td>
+                                <td>{$vo.create_time}</td>
+                                <td><button class="btn btn-success" onclick="edit('{$vo.id}')">{:lang('Edit')}</button></td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
