@@ -121,20 +121,20 @@ class MoneyLogService extends BasicService
             ->setCellValue('F3', '日期');
         $count = count($data);
         for ($i = 4; $i <= $count+3; $i++) {
-            $objPHPExcel->getActiveSheet()->setCellValue('A' . $i, $data[$i-4]->meter['M_Code']);
-            $objPHPExcel->getActiveSheet()->setCellValue('B' . $i, $data[$i-4]->meter->consumer['username']);
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $i, isset($data[$i-4]->meter) ? $data[$i-4]->meter['M_Code'] : $data[$i-4]['meter']['M_Code']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $i,  isset($data[$i-4]->meter) ? $data[$i-4]->meter->consumer['username'] : $data[$i-4]['meter']['consumer']['username']);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $data[$i-4]['money']);
 //            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]['money_type'] == MONEY_TYPE_RMB ? '人民币' : '得力币');
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $data[$i-4]['channel'] == MONEY_CHANNEL_WEIXIN ? '微信' : '清分');
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, in_array($data[$i-4]['channel'],[MONEY_SYSTEM_DELI,MONEY_TYPE_RMB]) ? ($data[$i-4]['channel'] == MONEY_CHANNEL_WEIXIN ? '微信' : '清分') : $data[$i-4]['channel'] );
             $objPHPExcel->getActiveSheet()->setCellValue('F' . $i, $data[$i-4]['create_time']);
         }
         $last = $count + 4;
         $objPHPExcel->getActiveSheet()->setCellValue('A'.$last,'总计');
         $total_str = '';
         foreach($total as $item){
-            $total_str .= ($item['money_type'] == MONEY_TYPE_RMB ? '人民币' : '得力币').$item['total']." ";
+            $total_str .= $item['total'];
         }
-        $objPHPExcel->getActiveSheet()->setCellValue('B'.$last,$total_str);
+        $objPHPExcel->getActiveSheet()->setCellValue('C'.$last,$total_str);
         $objPHPExcel->getActiveSheet()->getStyle('A'.$last)->getFont()->setName('宋体') //字体
 //        ->setSize(20) //字体大小
         ->setBold(true); //字体加粗

@@ -15,6 +15,17 @@
                         <!-- 搜索条件 -->
                         <form action="" method="get" class="form-horizontal">
                             <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="source" class="col-sm-4 control-label">{:lang('Choose System')}</label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" id="source" name="source" value="new" {if condition="$source eq 'new'"}checked{/if}> {:lang('New System')}
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="source" value="old" {if condition="$source eq 'old'"}checked{/if}> {:lang('Old System')}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-md-6">
                                     <label for="company_name" class="col-sm-4 control-label">{:lang('Company')}</label>
                                     <div class="col-sm-8">
@@ -32,7 +43,7 @@
                                 <div class="col-md-6">
                                     <label for="channel" class="col-sm-4 control-label">{:lang('Channel Type')}</label>
                                     <div class="col-sm-8">
-                                        <select class="form-control" id="channel" name="channel">
+                                        <select class="form-control" id="channel" name="channel" {if condition="$source eq 'old'"}disabled{/if}>
                                             <option value="">--{:lang('Choose Channel Type')}--</option>
                                             {foreach $channels as $index => $item}
                                             <option value="{$index}" {if condition="$index eq $channel"}selected{/if}>{$item}</option>
@@ -72,7 +83,6 @@
                                     <th>{:lang('M_Code')}</th>
                                     <th>{:lang('Name')}</th>
                                     <th>{:lang('Money')}</th>
-                                    <!--<th>{:lang('Money Type')}</th>-->
                                     <th>{:lang('Channel Type')}</th>
                                     <th>{:lang('Date')}</th>
                                 </tr>
@@ -82,17 +92,12 @@
                                     <td>{$moneylog.meter.M_Code}</td>
                                     <td>{$moneylog.meter.consumer.username}</td>
                                     <td>{$moneylog.money}</td>
-                                    <!--<td>-->
-                                    <!--{if condition="$moneylog.money_type eq $Think.const.MONEY_TYPE_RMB"}-->
-                                    <!--{:lang('Rmb')}-->
-                                    <!--{else /}-->
-                                    <!--{:lang('Deli')}-->
-                                    <!--{/if}-->
-                                    <!--</td>-->
                                     <td>{if condition="$moneylog.channel eq $Think.const.MONEY_CHANNEL_WEIXIN"}
                                         {:lang('Wei Xin')}
-                                        {else /}
+                                        {elseif condition="$moneylog.channel eq $Think.const.MONEY_CHANNEL_MANAGE"}
                                         {:lang('Manage Platform')}
+                                        {else /}
+                                        {$moneylog.channel}
                                         {/if}
                                     </td>
                                     <td>{$moneylog.create_time}</td>
@@ -100,17 +105,15 @@
                                 {/foreach}
                                 <tr>
                                     <td>{:lang('total')}</td>
+                                    <td></td>
                                     <td>{foreach $total as $item}
                                         <div>
-                                            {if condition="$item.money_type eq $Think.const.MONEY_TYPE_RMB"}
-                                            {:lang('Rmb')}:
-                                            {else/}
-                                            {:lang('Deli')}:
-                                            {/if}
                                             {$item.total}
                                         </div>
                                         {/foreach}
                                     </td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                             </table>
                         </div>
@@ -121,7 +124,7 @@
     </section>
 </div>
 <div>
-    {$moneylogs->render()}
+    {if condition="$source eq 'new'"}}{$moneylogs->render()}{/if}
 </div>
 <script>
     $("#startDate").datetimepicker({
@@ -147,7 +150,7 @@
     });
 
     function download(){
-        window.location.href="{:url('manage/reconcile/downloadChargeDetail',['company_name' => $company_name,'M_Code' => $M_Code,'money_type' => $money_type,'channel' => $channel,'startDate' => $startDate,'endDate' => $endDate])}"
+        window.location.href="{:url('manage/reconcile/downloadChargeDetail',['company_name' => $company_name,'M_Code' => $M_Code,'source' => $source,'money_type' => $money_type,'channel' => $channel,'startDate' => $startDate,'endDate' => $endDate])}"
     }
 </script>
 <script>
@@ -179,4 +182,13 @@
             })
         },
     });
+
+    $('input:radio').click(function(){
+        var val = $('input:radio:checked').val();
+        if(val == 'new'){
+            $('#channel').prop('disabled',false)
+        }else{
+            $('#channel').prop('disabled',true)
+        }
+    })
 </script>
