@@ -26,9 +26,9 @@ class Reconcile extends Admin
      */
     public function clearDayReport(){
         $date = input('date',date('Y-m-d'));
-        $startTime = strtotime($date.' 00:00:00');
-        $endTime = strtotime('+1 day',$startTime)-1;
-        $this->clearReportCommon($date,$startTime,$endTime);
+        $source = input('source','new');
+        $this->clearReportCommon($source,$date,$date,$date);
+        $this->assign('source',$source);
         return view();
     }
 
@@ -37,10 +37,9 @@ class Reconcile extends Admin
      */
     public function downloadDayReport(){
         $date = input('date',date('Y-m-d'));
-        $startTime = strtotime($date.' 00:00:00');
-        $endTime = strtotime('+1 day',$startTime)-1;
-        $result = $this->downloadReportCommon($startTime,$endTime);
-        (new moneyLogService())->downloadClearReport($result['companys'],'充值日报'.$date,'充值日报',$date,$result['totalChargeTimes_rmb'],$result['totalChargeMoney_rmb'],$result['totalChargeTimes_deli'],$result['totalChargeMoney_deli']);
+        $source = input('source','new');
+        $result = $this->downloadReportCommon($source,$date,$date);
+        (new moneyLogService())->downloadClearReport($result['companys'],"充值日报($source)".$date,"充值日报($source)",$date,$result['totalChargeTimes_rmb'],$result['totalChargeMoney_rmb'],$result['totalChargeTimes_deli'],$result['totalChargeMoney_deli']);
     }
 
     /**
@@ -49,9 +48,11 @@ class Reconcile extends Admin
      */
     public function clearMonthReport(){
         $date = input('date',date('Y-m'));
-        $startTime = strtotime($date.'-01 00:00:00');
-        $endTime = strtotime('+1 month',$startTime)-1;
-        $this->clearReportCommon($date,$startTime,$endTime);
+        $source = input('source','new');
+        $startDate = $date.'-01';
+        $endDate = date('Y-m-t',strtotime($startDate));
+        $this->clearReportCommon($source,$date,$startDate,$endDate);
+        $this->assign('source',$source);
         return view();
     }
 
@@ -60,10 +61,11 @@ class Reconcile extends Admin
      */
     public function downloadMonthReport(){
         $date = input('date',date('Y-m'));
-        $startTime = strtotime($date.'-01 00:00:00');
-        $endTime = strtotime('+1 month',$startTime)-1;
-        $result = $this->downloadReportCommon($startTime,$endTime);
-        (new moneyLogService())->downloadClearReport($result['companys'],'充值月报'.$date,'充值月报',$date,$result['totalChargeTimes_rmb'],$result['totalChargeMoney_rmb'],$result['totalChargeTimes_deli'],$result['totalChargeMoney_deli']);
+        $source = input('source','new');
+        $startDate = $date.'-01';
+        $endDate = date('Y-m-t',strtotime($startDate));
+        $result = $this->downloadReportCommon($source,$startDate,$endDate);
+        (new moneyLogService())->downloadClearReport($result['companys'],"充值月报($source)".$date,"充值月报($source)",$date,$result['totalChargeTimes_rmb'],$result['totalChargeMoney_rmb'],$result['totalChargeTimes_deli'],$result['totalChargeMoney_deli']);
     }
 
     /**
@@ -72,9 +74,11 @@ class Reconcile extends Admin
      */
     public function clearYearReport(){
         $date = input('date',date('Y'));
-        $startTime = strtotime($date.'-01-01 00:00:00');
-        $endTime = strtotime('+1 year',$startTime)-1;
-        $this->clearReportCommon($date,$startTime,$endTime);
+        $source = input('source','new');
+        $startDate = $date.'-01-01';
+        $endDate = date('Y-12-t',strtotime($startDate));
+        $this->clearReportCommon($source,$date,$startDate,$endDate);
+        $this->assign('source',$source);
         return view();
     }
 
@@ -83,112 +87,155 @@ class Reconcile extends Admin
      */
     public function downloadYearReport(){
         $date = input('date',date('Y'));
-        $startTime = strtotime($date.'-01-01 00:00:00');
-        $endTime = strtotime('+1 year',$startTime)-1;
-        $result = $this->downloadReportCommon($startTime,$endTime);
-        (new moneyLogService())->downloadClearReport($result['companys'],'充值年报'.$date,'充值年报',$date,$result['totalChargeTimes_rmb'],$result['totalChargeMoney_rmb'],$result['totalChargeTimes_deli'],$result['totalChargeMoney_deli']);
+        $source = input('source','new');
+        $startDate = $date.'-01-01';
+        $endDate = date('Y-12-t',strtotime($startDate));
+        $result = $this->downloadReportCommon($source,$startDate,$endDate);
+        (new moneyLogService())->downloadClearReport($result['companys'],"充值年报($source)".$date,"充值年报($source)",$date,$result['totalChargeTimes_rmb'],$result['totalChargeMoney_rmb'],$result['totalChargeTimes_deli'],$result['totalChargeMoney_deli']);
     }
 
     /**
      * 清分报表 获取运营商充值数据公共方法
+     * @param $source 数据源标识 new:新系统  old:旧系统
      * @param $date
-     * @param $startTime
-     * @param $endTime
+     * @param $startdate
+     * @param $enddate
      */
-    private function clearReportCommon($date, $startTime, $endTime){
-        $companyService = new CompanyService();
-        $companys = $companyService->getInfoPaginate(['status' => COMPANY_STATUS_NORMAL],['date' => $date],'company_name,desc');
-        $moneyLogService = new MoneyLogService();
-        foreach($companys as & $company){
-            $rmb_where = [
-                'company_id' => $company['id'],
-                'to'    => null, //to字段不存在是充值记录
+    private function clearReportCommon($source,$date,$startdate,$enddate){
+        if($source == 'new') {
+            $startTime = strtotime($startdate.' 00:00:00');
+            $endTime = strtotime($enddate.' 23:59:59');
+            $companyService = new CompanyService();
+            $companys = $companyService->getInfoPaginate(['status' => COMPANY_STATUS_NORMAL], ['date' => $date], 'company_name');
+            $moneyLogService = new MoneyLogService();
+            foreach ($companys as & $company) {
+                $rmb_where = [
+                    'company_id' => $company['id'],
+                    'to' => null, //to字段不存在是充值记录
+                    'type' => MONEY_PAY,
+                    'money_type' => MONEY_TYPE_RMB,
+                    'channel' => ['in', [MONEY_CHANNEL_WEIXIN]],
+                    'create_time' => ['between', [$startTime, $endTime]]
+                ];
+                //            $deli_where = [
+                //                'company_id' => $company['id'],
+                //                'to'    => null, //to字段不存在是充值记录
+                //                'type' => MONEY_PAY,
+                //                'money_type' => MONEY_TYPE_DELI,
+                //                'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
+                //                'create_time' => ['between',[$startTime,$endTime]]
+                //            ];
+                $company['chargeTimes_rmb'] = $moneyLogService->counts($rmb_where);
+                //            $company['chargeTimes_deli'] = $moneyLogService->counts($deli_where);
+                $company['chargeMoney_rmb'] = $moneyLogService->sums($rmb_where, 'money');
+                //            $company['chargeMoney_deli'] = $moneyLogService->sums($deli_where,'money');
+            }
+
+            //获取汇总数据
+            $companysAll = $companyService->selectInfo(['status' => COMPANY_STATUS_NORMAL], 'company_name');
+            $rmb_where_all = [
+                'company_id' => ['in', array_column(array_map(function ($item) {
+                    return $item->toArray();
+                }, $companysAll), 'id')],
+                'to' => null, //to字段不存在是充值记录
                 'type' => MONEY_PAY,
                 'money_type' => MONEY_TYPE_RMB,
-                'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
-                'create_time' => ['between',[$startTime,$endTime]]
+                'channel' => ['in', [MONEY_CHANNEL_WEIXIN]],
+                'create_time' => ['between', [$startTime, $endTime]]
             ];
-//            $deli_where = [
-//                'company_id' => $company['id'],
-//                'to'    => null, //to字段不存在是充值记录
-//                'type' => MONEY_PAY,
-//                'money_type' => MONEY_TYPE_DELI,
-//                'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
-//                'create_time' => ['between',[$startTime,$endTime]]
-//            ];
-            $company['chargeTimes_rmb'] = $moneyLogService->counts($rmb_where);
-//            $company['chargeTimes_deli'] = $moneyLogService->counts($deli_where);
-            $company['chargeMoney_rmb'] = $moneyLogService->sums($rmb_where,'money');
-//            $company['chargeMoney_deli'] = $moneyLogService->sums($deli_where,'money');
+            //        $deli_where_all = [
+            //            'company_id' => ['in',array_column(array_map(function($item){return $item->toArray();},$companysAll),'id')],
+            //            'to'    => null, //to字段不存在是充值记录
+            //            'type' => MONEY_PAY,
+            //            'money_type' => MONEY_TYPE_DELI,
+            //            'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
+            //            'create_time' => ['between',[$startTime,$endTime]]
+            //        ];
+            $all['chargeTimes_rmb'] = $moneyLogService->counts($rmb_where_all);
+            //        $all['chargeTimes_deli'] = $moneyLogService->counts($deli_where_all);
+            $all['chargeMoney_rmb'] = $moneyLogService->sums($rmb_where_all, 'money');
+            //        $all['chargeMoney_deli'] = $moneyLogService->sums($deli_where_all,'money');
+        }else{
+            $old_system_url = config('old_system_url');
+            $url = $old_system_url."?startDate=$startdate&endDate=$enddate";
+            $result = send_get($url);
+            $result = json_decode($result,true);
+            $companys = [];
+            foreach($result as $item){
+                $companys[] =[
+                    'company_name' => $item[0],
+                    'chargeTimes_rmb' => $item[1],
+                    'chargeMoney_rmb' => $item[2],
+                ];
+            }
+            $all['chargeTimes_rmb'] = array_sum(array_column($companys,'chargeTimes_rmb'));
+            $all['chargeMoney_rmb'] = array_sum(array_column($companys,'chargeMoney_rmb'));
         }
-        $this->assign('date',$date);
-        $this->assign('companys',$companys);
-
-        //获取汇总数据
-        $companysAll = $companyService->selectInfo(['status' => COMPANY_STATUS_NORMAL],'company_name,desc');
-        $rmb_where_all = [
-            'company_id' => ['in',array_column(array_map(function($item){return $item->toArray();},$companysAll),'id')],
-            'to'    => null, //to字段不存在是充值记录
-            'type' => MONEY_PAY,
-            'money_type' => MONEY_TYPE_RMB,
-            'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
-            'create_time' => ['between',[$startTime,$endTime]]
-        ];
-//        $deli_where_all = [
-//            'company_id' => ['in',array_column(array_map(function($item){return $item->toArray();},$companysAll),'id')],
-//            'to'    => null, //to字段不存在是充值记录
-//            'type' => MONEY_PAY,
-//            'money_type' => MONEY_TYPE_DELI,
-//            'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
-//            'create_time' => ['between',[$startTime,$endTime]]
-//        ];
-        $all['chargeTimes_rmb'] = $moneyLogService->counts($rmb_where_all);
-//        $all['chargeTimes_deli'] = $moneyLogService->counts($deli_where_all);
-        $all['chargeMoney_rmb'] = $moneyLogService->sums($rmb_where_all,'money');
-//        $all['chargeMoney_deli'] = $moneyLogService->sums($deli_where_all,'money');
-        $this->assign('all',$all);
+        $this->assign('companys', $companys);
+        $this->assign('all', $all);
+        $this->assign('date', $date);
     }
 
     /**
      * 清分报表导出功能 获取运营商充值数据公共方法
-     * @param $startTime
-     * @param $endTime
+     * @param $source
+     * @param $startdate
+     * @param $endTdate
      * @return array
      */
-    private function downloadReportCommon($startTime, $endTime){
-        $companyService = new CompanyService();
-        $companys = $companyService->selectInfo(['status' => COMPANY_STATUS_NORMAL],'company_name,desc');
-        $moneyLogService = new MoneyLogService();
+    private function downloadReportCommon($source ,$startdate, $enddate){
         $totalChargeTimes_rmb = 0;
         $totalChargeMoney_rmb = 0;
         $totalChargeTimes_deli = 0;
         $totalChargeMoney_deli = 0;
-        foreach($companys as & $company){
-            $rmb_where = [
-                'company_id' => $company['id'],
-                'to'    => null, //to字段不存在是充值记录
-                'type' => MONEY_PAY,
-                'money_type' => MONEY_TYPE_RMB,
-                'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
-                'create_time' => ['between',[$startTime,$endTime]]
-            ];
-//            $deli_where = [
-//                'company_id' => $company['id'],
-//                'to'    => null, //to字段不存在是充值记录
-//                'type' => MONEY_PAY,
-//                'money_type' => MONEY_TYPE_DELI,
-//                'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
-//                'create_time' => ['between',[$startTime,$endTime]]
-//            ];
-            $company['chargeTimes_rmb'] = $moneyLogService->counts($rmb_where);
-//            $company['chargeTimes_deli'] = $moneyLogService->counts($deli_where);
-            $company['chargeMoney_rmb'] = $moneyLogService->sums($rmb_where,'money');
-//            $company['chargeMoney_deli'] = $moneyLogService->sums($deli_where,'money');
+        if($source == 'new'){
+            $startTime = strtotime($startdate.' 00:00:00');
+            $endTime = strtotime($enddate.' 23:59:59');
+            $companyService = new CompanyService();
+            $companys = $companyService->selectInfo(['status' => COMPANY_STATUS_NORMAL],'company_name');
+            $moneyLogService = new MoneyLogService();
+            foreach($companys as & $company){
+                $rmb_where = [
+                    'company_id' => $company['id'],
+                    'to'    => null, //to字段不存在是充值记录
+                    'type' => MONEY_PAY,
+                    'money_type' => MONEY_TYPE_RMB,
+                    'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
+                    'create_time' => ['between',[$startTime,$endTime]]
+                ];
+    //            $deli_where = [
+    //                'company_id' => $company['id'],
+    //                'to'    => null, //to字段不存在是充值记录
+    //                'type' => MONEY_PAY,
+    //                'money_type' => MONEY_TYPE_DELI,
+    //                'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
+    //                'create_time' => ['between',[$startTime,$endTime]]
+    //            ];
+                $company['chargeTimes_rmb'] = $moneyLogService->counts($rmb_where);
+    //            $company['chargeTimes_deli'] = $moneyLogService->counts($deli_where);
+                $company['chargeMoney_rmb'] = $moneyLogService->sums($rmb_where,'money');
+    //            $company['chargeMoney_deli'] = $moneyLogService->sums($deli_where,'money');
 
-            $totalChargeTimes_rmb += $company['chargeTimes_rmb'];
-//            $totalChargeMoney_deli += $company['chargeMoney_deli'];
-//            $totalChargeTimes_deli += $company['chargeTimes_deli'];
-            $totalChargeMoney_rmb += $company['chargeMoney_rmb'];
+                $totalChargeTimes_rmb += $company['chargeTimes_rmb'];
+    //            $totalChargeMoney_deli += $company['chargeMoney_deli'];
+    //            $totalChargeTimes_deli += $company['chargeTimes_deli'];
+                $totalChargeMoney_rmb += $company['chargeMoney_rmb'];
+            }
+        }else{
+            $old_system_url = config('old_system_url');
+            $url = $old_system_url."?startDate=$startdate&endDate=$enddate";
+            $result = send_get($url);
+            $result = json_decode($result,true);
+            $companys = [];
+            foreach($result as $item){
+                $companys[] =[
+                    'company_name' => $item[0],
+                    'chargeTimes_rmb' => $item[1],
+                    'chargeMoney_rmb' => $item[2],
+                ];
+            }
+            $totalChargeTimes_rmb = array_sum(array_column($companys,'chargeTimes_rmb'));
+            $totalChargeMoney_rmb = array_sum(array_column($companys,'chargeMoney_rmb'));
         }
         return [
             'companys' => $companys,
@@ -377,5 +424,18 @@ class Reconcile extends Admin
         $this->assign('endDate',$endDate);
         $this->assign('reports',$reports);
         return view();
+    }
+
+    public function test(){
+        $data = [
+            'startDate' => '2014-01-01',
+            'endDate'   => '2017-01-01',
+            'page'      => 1,
+            'pageSize'  => 10,
+        ];
+        $url = 'http://10.101.138.154:8088/api/values?startDate=2014-01-01&endDate=2017-01-01&M_Code=&page=0&pageSize=10';
+        $result = send_get($url);
+        $result = json_decode($result,true);
+        print_r( $result);
     }
 }

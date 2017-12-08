@@ -59,11 +59,10 @@ class MoneyLogService extends BasicService
         $objPHPExcel->getActiveSheet()->setCellValue('A2', "(日期： $date)");
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A3', '名称')
-            ->setCellValue('B3', '人民币充值次数')
-            ->setCellValue('C3', '人民币充值金额')
+            ->setCellValue('B3', '充值次数')
+            ->setCellValue('C3', '充值金额');
 //            ->setCellValue('D3', '得力币充值次数')
 //            ->setCellValue('E3', '得力币充值金额')
-            ->setCellValue('F3', '备注');
         $count = count($data);
         for ($i = 4; $i <= $count+3; $i++) {
             $objPHPExcel->getActiveSheet()->setCellValue('A' . $i, $data[$i-4]['company_name']);
@@ -71,7 +70,6 @@ class MoneyLogService extends BasicService
             $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $data[$i-4]['chargeMoney_rmb']);
 //            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]['chargeTimes_deli']);
 //            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $data[$i-4]['chargeMoney_deli']);
-            $objPHPExcel->getActiveSheet()->setCellValue('F' . $i, $data[$i-4]['desc']);
         }
         $last = $count + 4;
         $objPHPExcel->getActiveSheet()->setCellValue('A'.$last,'总计');

@@ -705,6 +705,9 @@ return [
 
     //对账
     //充值日报
+    'Choose System'                     => '选择系统',
+    'New System'                        => '新系统',
+    'Old System'                        => '旧系统',
     'Day Report'                        => '充值日报',
     'RMB Charge Times'                  => '人民币充值次数',
     'DELI Charge Times'                 => '得力币充值次数',

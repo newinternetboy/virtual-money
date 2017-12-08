@@ -15,6 +15,17 @@
                         <form action="" method="post" class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-md-4">
+                                    <label for="date" class="col-sm-4 control-label">{:lang('Choose System')}</label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="source" value="new" {if condition="$source eq 'new'"}checked{/if}> {:lang('New System')}
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="source" value="old" {if condition="$source eq 'old'"}checked{/if}> {:lang('Old System')}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <label for="date" class="col-sm-4 control-label">{:lang('Date')}</label>
                                     <div class="col-sm-8">
                                         <input id="date" name="date" value="{$date ?? ''}" type="text" class="form-control">
@@ -36,11 +47,11 @@
                                 <thead>
                                 <tr>
                                     <th>{:lang('Company Name')}</th>
-                                    <th>{:lang('RMB Charge Times')}</th>
-                                    <th>{:lang('RMB Charge Money')}</th>
+                                    <th>{if condition="$source eq 'new'"}{:lang('RMB Charge Times')}{else/}{:lang('Charge Times')}{/if}</th>
+                                    <th>{if condition="$source eq 'new'"}{:lang('RMB Charge Money')}{else/}{:lang('Charge Money')}{/if}</th>
                                     <!--<th>{:lang('DELI Charge Times')}</th>-->
                                     <!--<th>{:lang('DELI Charge Money')}</th>-->
-                                    <th>{:lang('Desc')}</th>
+
                                 </tr>
                                 </thead>
                                 {foreach $companys as $company }
@@ -50,7 +61,7 @@
                                     <td>{$company.chargeMoney_rmb}</td>
                                     <!--<td>{$company.chargeTimes_deli ?? '0'}</td>-->
                                     <!--<td>{$company.chargeMoney_deli ?? '0'}</td>-->
-                                    <td>{$company.desc}</td>
+
                                 </tr>
                                 {/foreach}
                                 <tr>
@@ -59,7 +70,6 @@
                                     <td>{$all.chargeMoney_rmb}</td>
                                     <!--<td>{$all.chargeTimes_deli ?? '0'}</td>-->
                                     <!--<td>{$all.chargeMoney_deli ?? '0'}</td>-->
-                                    <td></td>
                                 </tr>
                             </table>
                         </div>
@@ -70,7 +80,7 @@
     </section>
 </div>
 <div>
-    {$companys->render()}
+    {if condition="$source eq 'new'"}}{$companys->render()}{/if}
 </div>
 <script>
     $("#date").datetimepicker({
@@ -85,6 +95,6 @@
     });
 
     function download(){
-        window.location.href="{:url('manage/reconcile/downloadyearreport',['date' => $date])}"
+        window.location.href="{:url('manage/reconcile/downloadyearreport',['source' => $source,'date' => $date])}"
     }
 </script>
