@@ -254,35 +254,86 @@ class Reconcile extends Admin
         $company_name = input('company_name');
         $M_Code = input('M_Code');
         $channel = input('channel/d');
+        $source = input('source','new');
         //$money_type = input('money_type/d');
         $money_type = MONEY_TYPE_RMB; //现在只能查人民币
         $endDate = input('endDate',date('Y-m-d'));
         $startDate = input('startDate',date('Y-m-d'));
-        if( $company_name ){
-            $company = (new CompanyService())->findInfo(['status' => COMPANY_STATUS_NORMAL,'company_name' => $company_name],'company_name,desc');
-            $meter_where['company_id'] = $company['id'];
 
+        if($source == 'new'){
+            if( $company_name ){
+                $company = (new CompanyService())->findInfo(['status' => COMPANY_STATUS_NORMAL,'company_name' => $company_name],'company_name,desc');
+                $meter_where['company_id'] = $company['id'];
+
+            }
+            if( $M_Code ){
+                $meter_where['M_Code'] = $M_Code;
+            }
+            if(isset($meter_where)){
+                $meter_where['meter_life'] = METER_LIFE_ACTIVE;
+                $meters = (new MeterService())->selectInfo($meter_where,'id');
+                $meterIds = array_column(array_map(function($item){return $item->toArray();},$meters),'id');
+                $moneylog_where['from'] = ['in',$meterIds];
+            }
+            $moneyLogService = new MoneyLogService();
+            $moneylog_where['type'] = MONEY_PAY;
+            $moneylog_where['to'] = null;
+            if($channel){
+                $moneylog_where['channel'] = $channel;
+            }
+            if($money_type){
+                $moneylog_where['money_type'] = $money_type;
+            }
+            $moneylog_where['create_time'] = ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
+            $moneylogs = $moneyLogService->getInfoPaginate($moneylog_where,['company_name' => $company_name,'M_Code' => $M_Code,'channel' => $channel,'startDate' => $startDate,'endDate' => $endDate]);
+
+            //汇总数据
+            if($money_type){
+                $moneyall = $moneyLogService->sums($moneylog_where,'money');
+                $total = [
+                    [
+                        'money_type' => $money_type,
+                        'total'     => $moneyall
+                    ]
+                ];
+            }else{
+                $moneylogAll_deli_where = $moneylog_where;
+                $moneylogAll_deli_where['money_type'] = MONEY_TYPE_DELI;
+                $moneylogsAll_deli = $moneyLogService->sums($moneylogAll_deli_where,'money');
+                $moneylogAll_rmb_where = $moneylog_where;
+                $moneylogAll_rmb_where['money_type'] = MONEY_TYPE_RMB;
+                $moneylogsAll_rmb = $moneyLogService->sums($moneylogAll_rmb_where,'money');
+                $total = [
+                    [
+                        'money_type' => MONEY_TYPE_RMB,
+                        'total'     => $moneylogsAll_rmb
+                    ],
+                    [
+                        'money_type' => MONEY_TYPE_DELI,
+                        'total'     => $moneylogsAll_deli
+                    ],
+                ];
+            }
+        }else{
+            $old_system_url = config('old_system_url');
+            $url = $old_system_url."?company=$company_name&M_Code=$M_Code&startDate=$startDate&endDate=$endDate&page=-1&pagesize=10";
+            $result = send_get($url);
+            $result = json_decode($result,true);
+            $moneylogs = [];
+            foreach($result as $item){
+                $moneylogs[] = [
+                    'meter' => ['M_Code' => $item[1],'consumer' => ['username' => $item[2]]],
+                    'money' => $item[3],
+                    'channel' => $item[4],
+                    'create_time' => $item[6]
+                ];
+            }
+
+            $total[] = [
+                'total' => array_sum(array_column($moneylogs,'money'))
+            ];
         }
-        if( $M_Code ){
-            $meter_where['M_Code'] = $M_Code;
-        }
-        if(isset($meter_where)){
-            $meter_where['meter_life'] = METER_LIFE_ACTIVE;
-            $meters = (new MeterService())->selectInfo($meter_where,'id');
-            $meterIds = array_column(array_map(function($item){return $item->toArray();},$meters),'id');
-            $moneylog_where['from'] = ['in',$meterIds];
-        }
-        $moneyLogService = new MoneyLogService();
-        $moneylog_where['type'] = MONEY_PAY;
-        $moneylog_where['to'] = null;
-        if($channel){
-            $moneylog_where['channel'] = $channel;
-        }
-        if($money_type){
-            $moneylog_where['money_type'] = $money_type;
-        }
-        $moneylog_where['create_time'] = ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
-        $moneylogs = $moneyLogService->getInfoPaginate($moneylog_where,['company_name' => $company_name,'M_Code' => $M_Code,'channel' => $channel,'startDate' => $startDate,'endDate' => $endDate]);
+
         $this->assign('moneylogs',$moneylogs);
         $this->assign('company_name',$company_name);
         $this->assign('M_Code',$M_Code);
@@ -290,39 +341,12 @@ class Reconcile extends Admin
         $this->assign('money_type',$money_type);
         $this->assign('startDate',$startDate);
         $this->assign('endDate',$endDate);
+        $this->assign('source',$source);
 
         $channels = config('channels');
         $this->assign('channels',$channels);
         $moneytypes = config('moneytypes');
         $this->assign('moneytypes',$moneytypes);
-
-        //汇总数据
-        if($money_type){
-            $moneyall = $moneyLogService->sums($moneylog_where,'money');
-            $total = [
-                [
-                    'money_type' => $money_type,
-                    'total'     => $moneyall
-                ]
-            ];
-        }else{
-            $moneylogAll_deli_where = $moneylog_where;
-            $moneylogAll_deli_where['money_type'] = MONEY_TYPE_DELI;
-            $moneylogsAll_deli = $moneyLogService->sums($moneylogAll_deli_where,'money');
-            $moneylogAll_rmb_where = $moneylog_where;
-            $moneylogAll_rmb_where['money_type'] = MONEY_TYPE_RMB;
-            $moneylogsAll_rmb = $moneyLogService->sums($moneylogAll_rmb_where,'money');
-            $total = [
-                [
-                    'money_type' => MONEY_TYPE_RMB,
-                    'total'     => $moneylogsAll_rmb
-                ],
-                [
-                    'money_type' => MONEY_TYPE_DELI,
-                    'total'     => $moneylogsAll_deli
-                ],
-            ];
-        }
         $this->assign('total',$total);
         return view();
     }
@@ -334,63 +358,84 @@ class Reconcile extends Admin
         $company_name = input('company_name');
         $M_Code = input('M_Code');
         $channel = input('channel/d');
+        $source = input('source','new');
         //$money_type = input('money_type/d');
         $money_type = MONEY_TYPE_RMB; //现在只能查人民币
         $endDate = input('endDate',date('Y-m-d'));
         $startDate = input('startDate',date('Y-m-d'));
-        if( $company_name ){
-            $company = (new CompanyService())->findInfo(['status' => COMPANY_STATUS_NORMAL,'company_name' => $company_name],'company_name,desc');
-            $meter_where['company_id'] = $company['id'];
+        if($source == 'new'){
+            if( $company_name ){
+                $company = (new CompanyService())->findInfo(['status' => COMPANY_STATUS_NORMAL,'company_name' => $company_name],'company_name,desc');
+                $meter_where['company_id'] = $company['id'];
 
-        }
-        if( $M_Code ){
-            $meter_where['M_Code'] = $M_Code;
-        }
-        if(isset($meter_where)){
-            $meter_where['meter_life'] = METER_LIFE_ACTIVE;
-            $meters = (new MeterService())->selectInfo($meter_where,'id');
-            $meterIds = array_column(array_map(function($item){return $item->toArray();},$meters),'id');
-            $moneylog_where['from'] = ['in',$meterIds];
-        }
-        $moneyLogService = new MoneyLogService();
-        $moneylog_where['type'] = MONEY_PAY;
-        $moneylog_where['to'] = null;
-        if($channel){
-            $moneylog_where['channel'] = $channel;
-        }
-        if($money_type){
-            $moneylog_where['money_type'] = $money_type;
-        }
-        $moneylog_where['create_time'] = ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
-        $moneylogs = $moneyLogService->selectInfo($moneylog_where,'from,money_type,channel,type,money,create_time');
-        //汇总数据
-        if($money_type){
-            $moneyall = $moneyLogService->sums($moneylog_where,'money');
-            $total = [
-                [
-                    'money_type' => $money_type,
-                    'total'     => $moneyall
-                ]
-            ];
+            }
+            if( $M_Code ){
+                $meter_where['M_Code'] = $M_Code;
+            }
+            if(isset($meter_where)){
+                $meter_where['meter_life'] = METER_LIFE_ACTIVE;
+                $meters = (new MeterService())->selectInfo($meter_where,'id');
+                $meterIds = array_column(array_map(function($item){return $item->toArray();},$meters),'id');
+                $moneylog_where['from'] = ['in',$meterIds];
+            }
+            $moneyLogService = new MoneyLogService();
+            $moneylog_where['type'] = MONEY_PAY;
+            $moneylog_where['to'] = null;
+            if($channel){
+                $moneylog_where['channel'] = $channel;
+            }
+            if($money_type){
+                $moneylog_where['money_type'] = $money_type;
+            }
+            $moneylog_where['create_time'] = ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
+            $moneylogs = $moneyLogService->selectInfo($moneylog_where,'from,money_type,channel,type,money,create_time');
+            //汇总数据
+            if($money_type){
+                $moneyall = $moneyLogService->sums($moneylog_where,'money');
+                $total = [
+                    [
+                        'money_type' => $money_type,
+                        'total'     => $moneyall
+                    ]
+                ];
+            }else{
+                $moneylogAll_deli_where = $moneylog_where;
+                $moneylogAll_deli_where['money_type'] = MONEY_TYPE_DELI;
+                $moneylogsAll_deli = $moneyLogService->sums($moneylogAll_deli_where,'money');
+                $moneylogAll_rmb_where = $moneylog_where;
+                $moneylogAll_rmb_where['money_type'] = MONEY_TYPE_RMB;
+                $moneylogsAll_rmb = $moneyLogService->sums($moneylogAll_rmb_where,'money');
+                $total = [
+                    [
+                        'money_type' => MONEY_TYPE_RMB,
+                        'total'     => $moneylogsAll_rmb
+                    ],
+                    [
+                        'money_type' => MONEY_TYPE_DELI,
+                        'total'     => $moneylogsAll_deli
+                    ],
+                ];
+            }
         }else{
-            $moneylogAll_deli_where = $moneylog_where;
-            $moneylogAll_deli_where['money_type'] = MONEY_TYPE_DELI;
-            $moneylogsAll_deli = $moneyLogService->sums($moneylogAll_deli_where,'money');
-            $moneylogAll_rmb_where = $moneylog_where;
-            $moneylogAll_rmb_where['money_type'] = MONEY_TYPE_RMB;
-            $moneylogsAll_rmb = $moneyLogService->sums($moneylogAll_rmb_where,'money');
-            $total = [
-                [
-                    'money_type' => MONEY_TYPE_RMB,
-                    'total'     => $moneylogsAll_rmb
-                ],
-                [
-                    'money_type' => MONEY_TYPE_DELI,
-                    'total'     => $moneylogsAll_deli
-                ],
+            $old_system_url = config('old_system_url');
+            $url = $old_system_url."?company=$company_name&M_Code=$M_Code&startDate=$startDate&endDate=$endDate&page=-1&pagesize=10";
+            $result = send_get($url);
+            $result = json_decode($result,true);
+            $moneylogs = [];
+            foreach($result as $item){
+                $moneylogs[] = [
+                    'meter' => ['M_Code' => $item[1],'consumer' => ['username' => $item[2]]],
+                    'money' => $item[3],
+                    'channel' => $item[4],
+                    'create_time' => $item[6]
+                ];
+            }
+
+            $total[] = [
+                'total' => array_sum(array_column($moneylogs,'money'))
             ];
         }
-       (new MoneyLogService())->downloadChargeDetail($moneylogs,$company_name.$M_Code.'充值明细'.date('Y-m-d'),$company_name.$M_Code.'充值明细',$startDate,$endDate,$total);
+       (new MoneyLogService())->downloadChargeDetail($moneylogs,$company_name.$M_Code."充值明细($source)".date('Y-m-d'),$company_name.$M_Code."充值明细($source)",$startDate,$endDate,$total);
     }
 
     /**
