@@ -196,6 +196,7 @@
 
 <script>
     function searchMeters () {
+        $('.InfoOption').html('');
         var M_Code = $('#M_Code').val();
         if (M_Code != 'undefined' && M_Code != '' && M_Code != null) {
             $.ajax({
@@ -355,7 +356,6 @@
                     alertMsg(res.msg);
                     if (res.code == 200) {
                         setTimeout(function () {
-                            debugger;
                             removedInput();
                         }, 1500);
 
