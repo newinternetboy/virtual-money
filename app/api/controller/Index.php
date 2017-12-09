@@ -114,13 +114,39 @@ class Index extends Controller
      * @param $M_Code
      */
     private function setOldMetersInactive($M_Code){
-        if( model('app\admin\model\Meter')->getAllMeterInfo(['M_Code' => $M_Code],'find') ){
+        $oldMeters = model('app\admin\model\Meter')->getAllMeterInfo(['M_Code' => $M_Code,'meter_life' => METER_LIFE_ACTIVE],'select');
+        if( !empty($oldMeters) ){
+            //活跃表生命周期置为结束
             $setOldMetersWhere['M_Code'] = $M_Code;
+            $setOldMetersWhere['meter_life'] = METER_LIFE_ACTIVE;
             $setOldMetersData['meter_life'] = METER_LIFE_INACTIVE;
             if( !model('app\admin\model\Meter')->updateMeter($setOldMetersData,'Meter.init_old',$setOldMetersWhere) ){
                 $error = model('app\admin\model\Meter')->getError();
-                Log::record(['更新旧表生命周期字段失败' => $error,'data' => $setOldMetersData]);
+                Log::record(['更新旧表生命周期字段失败' => $error,'data' => $oldMeters]);
                 exception('更新旧表生命周期字段失败: '.$error,ERROR_CODE_DATA_ILLEGAL);
+            }
+            //如果表具绑定了用户和开店,则通通关闭
+            foreach($oldMeters as $oldMeter){
+                if(isset($oldMeter['U_ID'])){
+                    //更新用户状态
+                    if(model('app\admin\model\Consumer')->where(['consumer_state' => CONSUMER_STATE_NORMAL,'id' => $oldMeter['U_ID']])->find()){
+                        $updateOldData['id'] = $oldMeter['U_ID'];
+                        $updateOldData['consumer_state'] = CONSUMER_STATE_DISABLE;
+                        if( !model('app\admin\model\Consumer')->upsertConsumer($updateOldData,'Consumer.setOld') ){
+                            $error = model('app\admin\model\Consumer')->getError();
+                            Log::record(['表具初始化更新旧用户状态失败' => $error,'data' => $updateOldData],'error');
+                            exception("表具初始化更新旧用户状态失败:".$error,ERROR_CODE_DATA_ILLEGAL);
+                        }
+                    }
+                    //关闭用户的个人店铺
+                    if($shopInfo = model('app\admin\model\Shop')->where(['uid' => $oldMeter['U_ID'],'status' => SHOP_STATUS_OPEN])->find()){
+                        if(!model('app\admin\model\Shop')->where(['id' => $shopInfo['id']])->update(['status' => SHOP_STATUS_CLOSE,'update_time' => time()])){
+                            $error = model('app\admin\model\Shop')->getError();
+                            Log::record(['表具初始化更新用户店铺状态失败' => $error,'data' => $shopInfo['id']],'error');
+                            exception("表具初始化更新用户店铺状态失败:".$error,ERROR_CODE_DATA_ILLEGAL);
+                        }
+                    }
+                }
             }
         }
     }
