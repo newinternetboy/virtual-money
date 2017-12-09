@@ -16,6 +16,17 @@
                         <!-- 搜索条件 -->
                         <form action="" method="get" class="form-horizontal">
                             <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="source" class="col-sm-4 control-label">{:lang('Choose System')}</label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" id="source" name="source" value="new" {if condition="$source eq 'new'"}checked{/if}> {:lang('New System')}
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="source" value="old" {if condition="$source eq 'old'"}checked{/if}> {:lang('Old System')}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-md-6">
                                     <label for="company_name" class="col-sm-4 control-label">{:lang('Company')}</label>
                                     <div class="col-sm-8">
@@ -47,7 +58,7 @@
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
                         <!--报表-->
                         <div id="table">
-                            <p style="font-size: 13px">{:lang('Charge Type Report')}<span style="float: right">{:lang('Start Time')}{$startDate}{:lang('End Time')}{$endDate}</span></p>
+                            <p style="font-size: 13px">{:lang('Charge Type Report',[$source])}<span style="float: right">{:lang('Start Time')}{$startDate}{:lang('End Time')}{$endDate}</span></p>
                             <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
                                 <thead>
                                 <tr>
