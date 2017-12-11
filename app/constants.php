@@ -34,6 +34,11 @@ define('METER_STATUS_NEW',5); //新表
 define('METER_LIFE_ACTIVE',1); //活跃表具
 define('METER_LIFE_INACTIVE',2); //表具停止使用
 
+//表具统计
+define('NEW_STATISTICS',1); //新表统计；
+define('SETUP_STATISTICS',2); //报装统计；
+define('CHANGE_STATISTICS',3); //换表统计；
+
 /*************表具上报记录表*************/
 //source_type字段
 define('BUSINESS',1);   //业务

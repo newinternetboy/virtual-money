@@ -155,6 +155,13 @@ return [
         ADVICE_STATUS_WAITING => lang('Advice Waiting'),
         ADVICE_STATUS_DEAL => lang('Advice Deal'),
     ],
+
+    //表具统计
+    'meterstatistics'=>[
+        NEW_STATISTICS=>lang('New Statistics'),
+        SETUP_STATISTICS=>lang('Setup Statistics'),
+        CHANGE_STATISTICS=>lang('Change Statistics')
+    ],
     'logtypes'    =>[
         'Add/Edit Company',
         'Del Company',
