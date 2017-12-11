@@ -9,7 +9,7 @@
 namespace app\manage\controller;
 
 use app\manage\service\CompanyService;
-use app\manage\service\MeterdataService;
+use app\manage\service\MeterDataService;
 use app\manage\service\MeterService;
 use think\Controller;
 

@@ -120,7 +120,7 @@ class MeterDataService extends BasicService
             'consumer_tel' => $meter->consumer->tel,
             'detail_address' => $meter['detail_address'],
             'diffUsage' => $diffUsage,
-            'setup_time' => isset($meter['setup_time']) ? date('Y-m-d',$meter['setup_time']) : date('Y-m-d',$meter['change_time']),
+            'setup_time' => isset($meter['setup_time']) ? date('Y-m-d',$meter['setup_time']) : (isset($meter['change_time']) ? date('Y-m-d',$meter['change_time']) : '-'),
         ];
         return $usage;
     }
@@ -137,7 +137,6 @@ class MeterDataService extends BasicService
         $objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
         $objPHPExcel->getActiveSheet()->mergeCells('A2:F2');
         $objPHPExcel->getActiveSheet()->setCellValue('A1',$title);
-        $objPHPExcel->getActiveSheet()->getDefaultStyle()->getFont()->setSize(18);
         $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setName('宋体') //字体
         ->setSize(20) //字体大小
         ->setBold(true); //字体加粗

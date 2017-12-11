@@ -12,7 +12,7 @@
                     </div>
                     <div class="ibox-content">
                         <!-- 表格数据 -->
-                        <form  method="" class="form-horizontal" onsubmit="return checkOrder()">
+                        <form  method="" class="form-horizontal" onsubmit="return checkOrderNumber()">
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <label for="order_number" class="col-sm-4 control-label">{:lang('Order Number')}:</label>
@@ -395,7 +395,7 @@
         })
     }
 
-    function checkOrder(){
+    function checkOrderNumber(){
         var order_number = $('#order_number').val();
         if(order_number.length != 24 ){
             alertMsg("{:lang('Order Number Not Illegal')}",3);
