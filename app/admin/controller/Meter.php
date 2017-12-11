@@ -10,7 +10,7 @@ namespace app\admin\controller;
 
 use think\Loader;
 use think\Log;
-use MongoDB\BSON\ObjectID;
+
 
 /**
  * 业务
@@ -454,6 +454,7 @@ class Meter extends Admin
             $where['M_Code'] = $M_Code;
             $where['company_id'] = ['eq',$this->company_id];
             $where['meter_status'] = ['eq',METER_STATUS_BIND];
+            $where['meter_life'] = METER_LIFE_ACTIVE;
             if( !$meter = model('Meter')->getMeterInfo($where,'find')){
                 exception("删除失败,表具不能删除",ERROR_CODE_DATA_ILLEGAL);
             }
@@ -466,6 +467,25 @@ class Meter extends Admin
                 Log::record(['删除表具失败' => $error,'data' => $updateData],'error');
                 exception('操作失败: '.$error,ERROR_CODE_DATA_ILLEGAL);
             };
+
+            //更新用户状态
+            if(model('Consumer')->where(['consumer_state' => CONSUMER_STATE_NORMAL,'id' => $meter['U_ID']])->find()){
+                $updateOldData['id'] = $meter['U_ID'];
+                $updateOldData['consumer_state'] = CONSUMER_STATE_DISABLE;
+                if( !model('Consumer')->upsertConsumer($updateOldData,'Consumer.setOld') ){
+                    $error = model('Consumer')->getError();
+                    Log::record(['删除表具更新用户状态失败' => $error,'data' => $updateOldData],'error');
+                    exception("删除表具更新用户状态失败:".$error,ERROR_CODE_DATA_ILLEGAL);
+                }
+            }
+            //关闭用户的个人店铺
+            if($shopInfo = model('Shop')->where(['uid' => $meter['U_ID'],'status' => SHOP_STATUS_OPEN])->find()){
+                if(!model('Shop')->where(['id' => $shopInfo['id']])->update(['status' => SHOP_STATUS_CLOSE,'update_time' => time()])){
+                    $error = model('Shop')->getError();
+                    Log::record(['删除表具更新用户店铺状态失败' => $error,'data' => $shopInfo['id']],'error');
+                    exception("删除表具更新用户店铺状态失败:".$error,ERROR_CODE_DATA_ILLEGAL);
+                }
+            }
             //记录入表具上报数据表
             $meterData['M_Code'] =  $meter['M_Code'];
             $meterData['meter_id'] = $meter['id'];

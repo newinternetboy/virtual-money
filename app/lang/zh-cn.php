@@ -493,10 +493,11 @@ return [
 
 
     //运营管理
-    'Operation Management'              => '运营管理',
+    'Operation Management'              => '运营商管理',
     'Company Name'                      => '名称',
     'Company Type'                      => '经营类型',
     'Admin'                             => '管理员',
+    'Admin Operate'                     => '操作管理员',
     'Company'                           => '运营商',
     'Please Choose Company'             => '请选择运营商',
     'OPT_ID'                            => '编号',
@@ -740,7 +741,7 @@ return [
     'Charge Type'                       => '充值类型',
     'Charge Times'                      => '充值次数',
     'Charge Money'                      => '充值金额',
-    'Charge Type Report'                => '运营商充值类型统计表',
+    'Charge Type Report'                => '运营商(%s)充值类型统计表',
     'Please Input The Company Name'     => '请输入运营商名称',
 
     //订单管理；

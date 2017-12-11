@@ -431,24 +431,24 @@ function saveImg($img, $oriPath, $thumbPath){
 
 
 function send_post($url, $data){
+    $data = json_encode($data);
     $curl = curl_init();
     //设置提交的url
     curl_setopt($curl, CURLOPT_URL, $url);
     //设置头文件的信息作为数据流输出
-    curl_setopt($curl, CURLOPT_HEADER, 0);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Content-Length: ' . strlen($data)]); //api接收的json格式
     //设置获取的信息以文件流的形式返回，而不是直接输出。
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     //设置post方式提交
     curl_setopt($curl, CURLOPT_POST, 1);
     //设置post数据
-    $post_data = $data;
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
     //执行命令
-    $data = curl_exec($curl);
+    $result = curl_exec($curl);
     //关闭URL请求
     curl_close($curl);
     //获得数据并返回
-    return $data;
+    return $result;
 }
 
 function send_get($url){

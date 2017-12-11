@@ -52,7 +52,7 @@ class Meter extends Validate
         //表具修改
         'edit' => ['M_Address','detail_address'],
         //表具信息维护
-        'delete' => ['meter_status','meter_life'],
+        'delete' => ['meter_status'],
         //初始化新表时,旧表具生命周期结束
         'init_old' => ['meter_life'],
         //初始化新表具

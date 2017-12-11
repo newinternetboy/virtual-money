@@ -160,6 +160,7 @@ class Reconcile extends Admin
             $url = $old_system_url."?startDate=$startdate&endDate=$enddate";
             $result = send_get($url);
             $result = json_decode($result,true);
+            $result = is_array($result) ? $result : [];
             $companys = [];
             foreach($result as $item){
                 $companys[] =[
@@ -226,6 +227,7 @@ class Reconcile extends Admin
             $url = $old_system_url."?startDate=$startdate&endDate=$enddate";
             $result = send_get($url);
             $result = json_decode($result,true);
+            $result = is_array($result) ? $result : [];
             $companys = [];
             foreach($result as $item){
                 $companys[] =[
@@ -319,6 +321,7 @@ class Reconcile extends Admin
             $url = $old_system_url."?company=$company_name&M_Code=$M_Code&startDate=$startDate&endDate=$endDate&page=-1&pagesize=10";
             $result = send_get($url);
             $result = json_decode($result,true);
+            $result = is_array($result) ? $result : [];
             $moneylogs = [];
             foreach($result as $item){
                 $moneylogs[] = [
@@ -421,6 +424,7 @@ class Reconcile extends Admin
             $url = $old_system_url."?company=$company_name&M_Code=$M_Code&startDate=$startDate&endDate=$endDate&page=-1&pagesize=10";
             $result = send_get($url);
             $result = json_decode($result,true);
+            $result = is_array($result) ? $result : [];
             $moneylogs = [];
             foreach($result as $item){
                 $moneylogs[] = [
@@ -444,43 +448,48 @@ class Reconcile extends Admin
      */
     public function chargeTypeReport(){
         $company_name = input('company_name');
+        $source = input('source','new');
         $startDate = input('startDate',date('Y-m-d',strtotime('-1 day')));
         $endDate = input('endDate',date('Y-m-d'));
-        if( $company_name ){
-            $company = (new CompanyService())->findInfo(['status' => COMPANY_STATUS_NORMAL,'company_name' => $company_name],'id');
-            $where['company_id'] = $company['id'];
-        }
-        $where['create_time'] = ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
-        $moneyLogService = new MoneyLogService();
-        foreach(config('chargeTypes') as $channel){
-            $where['channel'] = $channel['channel'];
-            $where['money_type'] = $channel['money_type'];
-            $where['type'] = $channel['type'];
-            $chargeTimes = $moneyLogService->counts($where);
-            $chargeMoney = $moneyLogService->sums($where,'money');
-            $reports[] = [
-                'typeName'  => $channel['channelName'],
-                'times' => $chargeTimes,
-                'money' => $chargeMoney,
-            ];
+        if($source == 'new'){
+            if( $company_name ){
+                $company = (new CompanyService())->findInfo(['status' => COMPANY_STATUS_NORMAL,'company_name' => $company_name],'id');
+                $where['company_id'] = $company['id'];
+            }
+            $where['create_time'] = ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
+            $moneyLogService = new MoneyLogService();
+            foreach(config('chargeTypes') as $channel){
+                $where['channel'] = $channel['channel'];
+                $where['money_type'] = $channel['money_type'];
+                $where['type'] = $channel['type'];
+                $chargeTimes = $moneyLogService->counts($where);
+                $chargeMoney = $moneyLogService->sums($where,'money');
+                $reports[] = [
+                    'typeName'  => $channel['channelName'],
+                    'times' => $chargeTimes,
+                    'money' => $chargeMoney,
+                ];
+            }
+        }else{
+            $old_system_url = config('old_system_url');
+            $url = $old_system_url."?company=$company_name&startDate=$startDate&endDate=$endDate";
+            $result = send_get($url);
+            $result = json_decode($result,true);
+            $result = is_array($result) ? $result : [];
+            $reports = [];
+            foreach($result as $item){
+                $reports[] = [
+                    'typeName' => $item[0],
+                    'times' => $item[1],
+                    'money' => $item[2],
+                ];
+            }
         }
         $this->assign('company_name',$company_name);
+        $this->assign('source',$source);
         $this->assign('startDate',$startDate);
         $this->assign('endDate',$endDate);
         $this->assign('reports',$reports);
         return view();
-    }
-
-    public function test(){
-        $data = [
-            'startDate' => '2014-01-01',
-            'endDate'   => '2017-01-01',
-            'page'      => 1,
-            'pageSize'  => 10,
-        ];
-        $url = 'http://10.101.138.154:8088/api/values?startDate=2014-01-01&endDate=2017-01-01&M_Code=&page=0&pageSize=10';
-        $result = send_get($url);
-        $result = json_decode($result,true);
-        print_r( $result);
     }
 }
