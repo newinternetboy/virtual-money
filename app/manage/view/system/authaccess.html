@@ -5,14 +5,6 @@
                 <!-- 表单标题概要 -->
                 <div class="ibox-title">
                     <h5>{:lang('Access_menu')}</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
                 </div>
                 <!-- 表单内容 -->
                 <form method="post" action="{:url('manage/system/saveAuthAccess')}" >
@@ -40,7 +32,7 @@
                                 {/notempty}
                             </div>
                             <div class="col-md-12 btn-group-footer">
-                                <button type="button" class="btn btn-default">{:lang('Cancel')}</button>
+                                <button type="button" onclick="history.back(-1)" class="btn btn-default">{:lang('Cancel')}</button>
                                 <button type="button" class="btn btn-primary" onclick="sub()">{:lang('Save')}</button>
                             </div>
                         </div>

@@ -262,8 +262,47 @@ class Manage extends Admin
         return $this->fetch();
     }
 
+    /*
+  * @表具统计；
+  *
+  */
+    public function meterStatistics(){
+        $statistics = input('statistics',SETUP_STATISTICS);
+        $starttime = input('starttime',date('Y-m-d',strtotime('-1 month')));
+        $endtime = input('endtime',date('Y-m-d'));
+        if($statistics==NEW_STATISTICS){
+            $where['create_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
+        }elseif($statistics==SETUP_STATISTICS){
+            $where['setup_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
+        }else{
+            $where['meter_status'] = METER_STATUS_BIND;
+            $where['change_time'] = ['between',[strtotime($starttime." 00:00:00"),strtotime($endtime." 23:59:59")]];
+        }
+        $param['statistics'] = $statistics;
+        $param['starttime'] = $starttime;
+        $param['endtime'] = $endtime;
+        $meterService = new MeterService();
+        $meter = $meterService->getInfoPaginate($where,$param);
+//        var_dump($meter);die;
+        $meter_statistics = config('meterstatistics');
+        $this->assign('meter_statistics',$meter_statistics);
+        $this->assign('meter',$meter);
+        $this->assign('statistics',$statistics);
+        $this->assign('starttime',$starttime);
+        $this->assign('endtime',$endtime);
+        return $this->fetch();
+    }
+
     //获取单条表具信息；
     public function meterInfo(){
+        $id = input('id');
+        $meterService = new MeterService();
+        $meter = $meterService->findInfo(['id'=>$id,'meter_life'=>METER_LIFE_ACTIVE]);
+        $this->assign('meter',$meter);
+        return view();
+    }
+
+    public function meterStatisticsInfo(){
         $id = input('id');
         $meterService = new MeterService();
         $meter = $meterService->findInfo(['id'=>$id,'meter_life'=>METER_LIFE_ACTIVE]);

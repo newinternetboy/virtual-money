@@ -364,6 +364,8 @@ return [
     //换表记录
     'Exchange meter'                  => '换表',
     'Records'                         => '记录',
+    'Time'                            => '时间',
+    'Meter Statistics'                => '表具统计',
 
     //操作日志
     'Logrecord search'                => '操作日志',
@@ -472,6 +474,10 @@ return [
 
     //统计报表
     'Meterdata report'                => '统计报表',
+    'Change Time'                     => '换表时间',
+    'New Statistics'                  => '新表统计',
+    'Setup Statistics'                => '报装统计',
+    'Change Statistics'               => '换表统计',
 
     //表具安装统计表
     'Meter Setup Static'              => '表具安装统计表',

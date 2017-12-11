@@ -177,6 +177,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="contact_number" class="col-md-2 control-label">{:lang('Contact Number')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="number" name="tel" id="contact_number">
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="status" class="col-md-2 control-label">{:lang('Shop Status')}</label>
                     <div class="col-md-10">
                         <select name="status" id="status" class="form-control">
@@ -312,6 +318,7 @@
         var bank =$('#bank').val();
         var status =$('#status').val();
         var cardNumber =$('#cardNumber').val();
+        var tel = $('#contact_number').val();
         var sdl_preference =$('#sdl_preference').val();
         var health_auth =$('#health_auth').val();
         var sdl_auth =$('#sdl_auth').val();
@@ -327,6 +334,11 @@
         }
         if($('#img').val()==""){
             alertMsg('{:lang("Shop Img Require")}');
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        if(checkTelephone(tel) == false){
+            alertMsg('{:lang("Telephone Require")}');
             $('#sub').prop('disabled',false);
             return false;
         }
@@ -362,6 +374,7 @@
         formData.append('sdl_preference',sdl_preference);
         formData.append('health_auth',health_auth);
         formData.append('sdl_auth',sdl_auth);
+        formData.append('tel',tel);
         formData.append('img',img);
         $.ajax({
             url: "{:url('manage/shop/addQYShop')}",

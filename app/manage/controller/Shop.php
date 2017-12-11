@@ -53,7 +53,7 @@ class Shop extends Admin
         if($username){
             $consumerService = new ConsumerService();
             $uid = $consumerService->findInfo(['username'=>$username])['id'];
-            $where['uid'] = new ObjectId($uid);
+            $where['uid'] = $uid;
         }
         if($starttime){
             $where['create_time'] = ['>',strtotime($starttime.' 00:00:00')];
@@ -438,9 +438,7 @@ class Shop extends Admin
             }
             $value->type = $shop_one['type'];
             if($shop_one['type']==COMPANY_ELE_BUSINESS){
-                $userService = new UserService();
-                $user_one = $userService->findInfo(['id'=>$shop_one['uid']]);
-                $value->tel = $user_one['tel'];
+                $value->tel = $shop_one['tel'];
             }else{
                 $consumerService = new ConsumerService();
                 $consumer_one = $consumerService->findInfo(['id'=>$shop_one['uid']]);
@@ -632,6 +630,7 @@ class Shop extends Admin
             $personName = input('personName');
             $bank = input('bank');
             $cardNumber = input('cardNumber');
+            $tel = input('tel');
             $status = input('status/d');
             $sdl_preference = input('sdl_preference/d');
             $health_auth = input('health_auth/d');
@@ -653,6 +652,7 @@ class Shop extends Admin
                 $data['bank'] = $bank;
                 $data['cardNumber'] = $cardNumber;
                 $data['status'] = $status;
+                $data['tel'] = $tel;
                 $data['sdl_preference'] = $sdl_preference;
                 $data['health_auth'] = $health_auth;
                 $data['sdl_auth'] = $sdl_auth;

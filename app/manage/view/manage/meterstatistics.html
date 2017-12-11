@@ -1,0 +1,136 @@
+{js href="__JS__/bootstrap-datetimepicker.min.js" /}
+{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
+{js href="__JS__/layer/layer.js" /}
+{css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <div class="ibox float-e-margins" style="background: white; float: left; width: 100%;">
+                    <!-- 表单内容 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Meter Statistics')}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <!-- 搜索条件 -->
+                        <form action="" method="get" class="form-horizontal" onsubmit="return check();">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label for="statistics" class="col-sm-4 control-label">{:lang('Meter')}{:lang('Records')}:</label>
+                                    <div class="col-sm-8">
+                                        <select name="statistics" id="statistics"  class="form-control">
+                                            {volist name="meter_statistics" id="vo" key="k"}
+                                            <option value="{$k}" {if condition="$statistics eq $k "}selected{/if} >{$vo}</option>
+                                            {/volist}
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label for="start_datetimepicker" class="col-sm-4 control-label">{:lang('Time')}{:lang('From')}</label>
+                                    <div class="col-sm-8">
+                                        <input id="start_datetimepicker" name="starttime" value="{$starttime ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="end_datetimepicker" class="col-sm-4 control-label">{:lang('To')}:</label>
+                                    <div class="col-sm-8">
+                                        <input id="end_datetimepicker" name="endtime" value="{$endtime  ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <div id="table">
+                            <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
+                                <thead>
+                                <div style="margin:12px;color:#2b45b1;font-size:16px;">{$meter_statistics[$statistics]} 总数:{$meter->total()}</div>
+
+                                <tr>
+                                    <th>{:lang('M_Code')}</th>
+                                    <th>{:lang('Meter Type')}</th>
+                                    <th>{:lang('User Name')}</th>
+                                    <th>{:lang('Contact Number')}</th>
+                                    <th>{:lang('Installation Address')}</th>
+                                    <th>{$meter_statistics[$statistics]}{:lang('Time')}</th>
+                                    <th>{:lang('Operate')}</th>
+                                </tr>
+                                </thead>
+                                {volist name="meter" id="vo"}
+                                <tr>
+                                    <td>{$vo.M_Code}</td>
+                                    <td>
+                                        {if condition="isset($vo.M_Type)"}
+                                        {switch name="vo.M_Type" }
+                                        {case $Think.METER_TYPE_WATER}{:lang('Water Code')}{/case}
+                                        {case $Think.METER_TYPE_ELECTRICITY}{:lang('Electric Code')}{/case}
+                                        {case $Think.METER_TYPE_GAS}{:lang('Gas Code')}{/case}
+                                        {default /}{:lang('None')}
+                                        {/switch}
+                                        {/if}
+                                    </td>
+                                    <td>{$vo.U_ID?$vo.consumer.username : ''}</td>
+                                    <td>{$vo.U_ID?$vo.consumer.tel : ''}</td>
+                                    <td>{$vo.detail_address?? ''}</td>
+                                    <td>
+                                        {switch name="statistics" }
+                                        {case $Think.NEW_STATISTICS}{$vo.create_time}{/case}
+                                        {case $Think.SETUP_STATISTICS}{$vo.setup_time|date="Y-m-d H:i:s",###}{/case}
+                                        {case $Think.CHANGE_STATISTICS}{$vo.change_time|date="Y-m-d H:i:s",###}{/case}
+                                        {default /}
+                                        {/switch}
+                                    </td>
+                                    <td><button class="btn btn-primary" onclick="meterInfo('{$vo.id}')">{:lang('Detail Message')}</button></td>
+                                </tr>
+                                {/volist}
+                            </table>
+                        </div>
+                        <div>{$meter->render()}</div>
+                        <div id="chart" style="width: 800px;height:400px;display:none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    $("#start_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: "month"
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+                event.preventDefault();
+                event.stopPropagation();
+            });
+    $("#end_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: "month"
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+                event.preventDefault();
+                event.stopPropagation();
+            });
+    function meterInfo(id){
+        window.location.href="{:url('manage/manage/meterStatisticsInfo')}?id="+id;
+    }
+</script>
