@@ -24,7 +24,7 @@ class MeterData extends Admin
             if( !$M_Code ){
                 exception('请输入表号!',ERROR_CODE_DATA_ILLEGAL);
             }
-            if( !$meterInfo = model('Meter')->getMeterInfo(['M_Code' => $M_Code,'company_id' => $this->company_id,'meter_status' => METER_STATUS_BIND],'find') ){
+            if( !$meterInfo = model('Meter')->getMeterInfo(['M_Code' => $M_Code,'company_id' => $this->company_id],'find') ){
                 exception('表号不存在!',ERROR_CODE_DATA_ILLEGAL);
             }
             $where['meter_id'] = $meterInfo['id'];

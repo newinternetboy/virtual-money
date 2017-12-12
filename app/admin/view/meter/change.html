@@ -105,8 +105,8 @@
                 data:{M_Code: M_Code},
                 beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
                 success: function(res){
+                    $('#meterInfo P').each(function(){$(this).text('')});
                     if(res.code != 200){
-                        $('#meterInfo P').each(function(){$(this).text('')});
                         alertMsg(res.msg);
                     }else{
                         fillText(res);
@@ -167,12 +167,12 @@
         }else if(meter.M_Type == "{$Think.const.METER_TYPE_GAS}"){
             $('#M_Type').text("{:lang('Gas Code')}");
         }
+        $('#left').text(meter.balance);
         if( consumer == "undefined" || consumer == null || consumer == ''){
 
         }else{
             $('#username').text(consumer.username);
             $('#tel').text(consumer.tel);
-//            $('#left').text(meter.balance);
             $('#address').text(meter.area+' '+meter.detail_address);
         }
     }

@@ -58,26 +58,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-
-
-                                <!--<div class="col-lg-6" style="float: left">-->
-                                    <!--<div class="form-group">-->
-                                        <!--<label for="start_datetimepicker" class="col-sm-2 control-label">{:lang('Start Time')}:</label>-->
-                                        <!--<div class="col-sm-6">-->
-                                            <!--<input id="start_datetimepicker" name="start_time" value="{$start_time ?? ''}" type="text" class="form-control">-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>&lt;!&ndash; /.col-lg-6 &ndash;&gt;-->
-                                <!--<div class="col-lg-6" style="float: left">-->
-                                    <!--<div class="form-group">-->
-                                        <!--<label for="end_datetimepicker" class="col-sm-2 control-label">{:lang('End Time')}:</label>-->
-                                        <!--<div class="col-sm-6">-->
-                                            <!--<input id="end_datetimepicker" name="end_time" value="{$end_time ?? ''}" type="text" class="form-control">-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>&lt;!&ndash; /.col-lg-6 &ndash;&gt;-->
                             </div>
                             <div class="form-group">
                                 <label  class="col-sm-2 control-label"></label>
@@ -88,7 +68,8 @@
                         </form>
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
                         <!--原表信息-->
-                        <div><table class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                        <div>
+                            <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
                             <thead>
                             <tr>
                                 <th>{:lang('Record Type')}</th>

@@ -300,6 +300,7 @@ class Meter extends Admin
                 Log::record(['更换更新旧表失败' => $error,'data' => $old_meter_info],'error');
                 exception('更新旧表具失败:'.$error,ERROR_CODE_DATA_ILLEGAL);
             }
+            Loader::clearInstance();
             //更新新表状态
             $new_meter_data['id'] = $new_meter['id'];
             $new_meter_data['M_Type'] = $old_meter['M_Type'];

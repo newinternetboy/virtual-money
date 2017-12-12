@@ -652,6 +652,8 @@ return [
     'Total Usage'                       => '表具用量',
     'Setup Time'                        => '安装时间',
     'Download'                          => '导出',
+    //表具用量
+    'Meter Dosage'                      => '表具用量',
 
     //店铺; 商品
     'Upload'                            => '下载',
