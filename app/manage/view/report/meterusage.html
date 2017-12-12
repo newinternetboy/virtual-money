@@ -4,91 +4,96 @@
 {js href="__JS__/echarts.js" /}
 {js href="__JS__/jquery.jqprint-0.3.js" /}
 {css href="__CSS__/bootstrap-datetimepicker.min.css" /}
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class=" table-responsive">
-            <div class="ibox float-e-margins" style="background: white;padding: 10px">
-                <!-- 表单内容 -->
-                <div class="ibox-content">
-                    <!-- 搜索条件 -->
-                    <form action="" method="get" class="form-horizontal" onsubmit="return check();">
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="company_name" class="col-sm-2 control-label">{:lang('Company')}</label>
-                                    <div class="col-sm-6">
-                                        <input id="company_name" name="company_name" value="{$company_name ?? ''}" type="text" placeholder="{:lang('Please Input The Company Name')}" autocomplete="off" data-provide="typeahead"  class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="M_Code" class="col-sm-2 control-label">{:lang('Input Meter Code')}</label>
-                                    <div class="col-sm-6">
-                                        <input id="M_Code" name="M_Code" value="{$M_Code ?? ''}" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="startDate" class="col-sm-2 control-label">{:lang('Start Time')}</label>
-                                    <div class="col-sm-6">
-                                        <input id="startDate" name="startDate" value="{$startDate ?? ''}" type="text" class="form-control">
-                                    </div>
-                                </div>
-                            </div><!-- /.col-lg-6 -->
-                            <div class="col-lg-6" style="float: left">
-                                <div class="form-group">
-                                    <label for="endDate" class="col-sm-2 control-label">{:lang('End Time')}</label>
-                                    <div class="col-sm-6">
-                                        <input id="endDate" name="endDate" value="{$endDate ?? ''}" type="text" class="form-control">
-                                    </div>
-                                </div>
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
-                            <div class="col-sm-10">
-                                <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
-                                <button style="float: right" class="btn btn-danger" type="button" onclick="download()" >{:lang('Download')}</button>
-                            </div>
-                        </div>
-                    </form>
-                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
-                    <!--报表-->
-                    <div id="table">
-                        <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
-                            <thead>
-                            <tr>
-                                <th>{:lang('M_Code')}</th>
-                                <th>{:lang('Name')}</th>
-                                <th>{:lang('Installation Address')}</th>
-                                <th>{:lang('Contacts Tel')}</th>
-                                <th>{:lang('Total Usage')}</th>
-                                <th>{:lang('Setup Time')}</th>
-                            </tr>
-                            </thead>
-                            {foreach $usage as $item}
-                            <tr>
-                                <td>{$item.M_Code}</td>
-                                <td>{$item.consumer_name}</td>
-                                <td>{$item.detail_address}</td>
-                                <td>{$item.consumer_tel}</td>
-                                <td>{$item.diffUsage}</td>
-                                <td>{$item.setup_time}</td>
-                            </tr>
-                            {/foreach}
-                        </table>
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class=" table-responsive">
+                <div class="ibox float-e-margins" style="padding: 10px">
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Meter Dosage')}</h5>
                     </div>
-                    <div>
-                        {$meters->render()}
+                    <!-- 表单内容 -->
+                    <div class="ibox-content">
+                        <!-- 搜索条件 -->
+                        <form action="" method="get" class="form-horizontal" onsubmit="return check();">
+                            <div class="form-group">
+                                <div class="col-lg-6" style="float: left">
+                                    <div class="form-group">
+                                        <label for="company_name" class="col-sm-2 control-label">{:lang('Company')}</label>
+                                        <div class="col-sm-6">
+                                            <input id="company_name" name="company_name" value="{$company_name ?? ''}" type="text" placeholder="{:lang('Please Input The Company Name')}" autocomplete="off" data-provide="typeahead"  class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6" style="float: left">
+                                    <div class="form-group">
+                                        <label for="M_Code" class="col-sm-2 control-label">{:lang('Input Meter Code')}</label>
+                                        <div class="col-sm-6">
+                                            <input id="M_Code" name="M_Code" value="{$M_Code ?? ''}" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-6" style="float: left">
+                                    <div class="form-group">
+                                        <label for="startDate" class="col-sm-2 control-label">{:lang('Start Time')}</label>
+                                        <div class="col-sm-6">
+                                            <input id="startDate" name="startDate" value="{$startDate ?? ''}" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div><!-- /.col-lg-6 -->
+                                <div class="col-lg-6" style="float: left">
+                                    <div class="form-group">
+                                        <label for="endDate" class="col-sm-2 control-label">{:lang('End Time')}</label>
+                                        <div class="col-sm-6">
+                                            <input id="endDate" name="endDate" value="{$endDate ?? ''}" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div><!-- /.col-lg-6 -->
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button style="float: right; margin-left: 10px" class="btn btn-success" type="submit" >{:lang('Search')}</button>
+                                    <button style="float: right" class="btn btn-danger" type="button" onclick="download()" >{:lang('Download')}</button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <!--报表-->
+                        <div id="table">
+                            <table  class="table table-hover" style="table-layout:fixed" class="table table-condensed table-bordered table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th>{:lang('M_Code')}</th>
+                                    <th>{:lang('Name')}</th>
+                                    <th>{:lang('Installation Address')}</th>
+                                    <th>{:lang('Contacts Tel')}</th>
+                                    <th>{:lang('Total Usage')}</th>
+                                    <th>{:lang('Setup Time')}</th>
+                                </tr>
+                                </thead>
+                                {foreach $usage as $item}
+                                <tr>
+                                    <td>{$item.M_Code}</td>
+                                    <td>{$item.consumer_name}</td>
+                                    <td>{$item.detail_address}</td>
+                                    <td>{$item.consumer_tel}</td>
+                                    <td>{$item.diffUsage}</td>
+                                    <td>{$item.setup_time}</td>
+                                </tr>
+                                {/foreach}
+                            </table>
+                        </div>
+                        <div>
+                            {$meters->render()}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 <script>
     $("#startDate").datetimepicker({
