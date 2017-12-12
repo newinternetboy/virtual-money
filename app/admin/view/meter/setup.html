@@ -202,77 +202,40 @@
                     </div>
                     <div class="ibox-content">
                         <!-- 表格数据 -->
+                        <table id="table" class="table">
+                            <tr>
+                                <td style="text-align:center;">{:lang('Meter Type')}:</td>
+                                <td style="text-align:left;" id="M_Type_P" ></td>
+                                <td style="text-align:center;">{:lang('M_Code')}:</td>
+                                <td style="text-align:left;" id="M_Code_P"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;">{:lang('Price')}{:lang('Price Type')}:</td>
+                                <td style="text-align:left;" id="P_ID_P" ></td>
+                                <td style="text-align:center;">{:lang('Name')}:</td>
+                                <td style="text-align:left;" id="username_P"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;">{:lang('Mobile Number')}:</td>
+                                <td style="text-align:left;" id="tel_P" ></td>
+                                <td style="text-align:center;">{:lang('PIN-codes')}:</td>
+                                <td style="text-align:left;" id="identity_P"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;">{:lang('Installation Address')}:</td>
+                                <td style="text-align:left;" ><span id="M_Address_P"></span><span id="detail_address_P"></span></td>
+                                <td style="text-align:center;">{:lang('Family Size')}:</td>
+                                <td style="text-align:left;" id="family_num_P"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;">{:lang('Additional Resources')}:</td>
+                                <td style="text-align:left;" id="building_area_P" ></td>
+                                <td style="text-align:center;">{:lang('Annual Income')}:</td>
+                                <td style="text-align:left;" id="income_peryear_P"></td>
+                            </tr>
+                        </table>
 
                         <form id="save" method="post" class="form-horizontal" role="form" novalidate="novalidate">
-                            <div id="contentPrintPage" >
-                                <fieldset>
-                                    <legend>{:lang('M_Code Resources')}</legend>
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label">{:lang('Meter Type')}</label>
-                                        <div class="col-md-10 control-label col-md-10-P" style="text-align: left" id="M_Type_P">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="M_Code" class="col-md-2 control-label">{:lang('M_Code')}</label>
-                                        <div class="col-md-10 control-label col-md-10-P" style="text-align: left" id="M_Code_P">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="P_ID" class="col-md-2 control-label">{:lang('Price')}{:lang('Price Type')}</label>
-                                        <div class="col-md-10 control-label col-md-10-P" id="P_ID_P">
-
-                                        </div>
-                                    </div>
-                                </fieldset>
-
-                                <fieldset id="consumerinfo">
-                                    <legend>{:lang('Personal Profile')}</legend>
-                                    <div class="form-group">
-                                        <label for="username" class="col-md-2 control-label">{:lang('Name')}</label>
-                                        <div class="col-md-10 control-label col-md-10-P" id="username_P">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="tel" class="col-md-2 control-label">{:lang('Mobile Number')}</label>
-                                        <div class="col-md-10 control-label col-md-10-P" id="tel_P">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="identity" class="col-md-2 control-label">{:lang('PIN-codes')}</label>
-                                        <div class="col-md-10 control-label col-md-10-P" id="identity_P">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col col-md-6">
-                                        <label for="M_Address" class="col-md-4 control-label">{:lang('Installation Address')}</label>
-                                        <!--<label for="detail_address" class="display:none"></label>-->
-                                        <div class="col-md-8 control-label col-md-10-P" style="padding-right: 0" id="M_Address_P">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col col-md-6">
-                                        <label for="detail_address" style="display: none"></label>
-                                        <div class="col-md-12 control-label col-md-10-P" style="padding-left: 0" id="detail_address_P">
-                                        </div>
-                                    </div>
-                                </fieldset>
-
-                                <fieldset id="addtion">
-                                    <legend>{:lang('Additional Resources')}</legend>
-                                    <div class="form-group">
-                                        <label for="family_num" class="col-md-2 control-label">{:lang('Family Size')}</label>
-                                        <div class="col-md-4 control-label col-md-10-P" id="family_num_P">
-                                        </div>
-                                        <label for="building_area" class="col-md-2 control-label">{:lang('Residential Buildings')}</label>
-                                        <div class="col-md-4 control-label col-md-10-P" id="building_area_P">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="income_peryear" class="col-md-2 control-label">{:lang('Annual Income')}</label>
-                                        <div class="col-md-4 control-label col-md-10-P" id="income_peryear_P">
-                                        </div>
-                                    </div>
-                                </fieldset>
-                            </div>
 
                             <div class="form-group" style="float: left; width: 100%;">
                                 <label  class="col-sm-2 control-label"></label>
@@ -425,12 +388,9 @@
     });
 
     function printInfo () {
-        $("#contentPrintPage").jqprint();
+        $("#table").jqprint();
     }
 
-//    function refreshPage () {
-//        window.location.reload();
-//    }
 
     function finished () {
         removedInput();
