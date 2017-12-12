@@ -1,4 +1,5 @@
 {js href="__JS__/jquery.jqprint-0.3.js" /}
+{js href="__JS__/bootstrap-typeahead.js" /}
 <div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
     <section id="widget-grid">
         <div class="row">
@@ -18,16 +19,13 @@
                                         <input id="M_Code" name="M_Code" value="{$M_Code ?? ''}" type="text" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="company_id" class="col-sm-4 control-label">{:lang('Search company')}</label>
+                                <div class="col-sm-6">
+                                    <label for="company_name" class="col-sm-2 control-label">{:lang('Company')}</label>
                                     <div class="col-sm-6">
-                                        <select name="company_id" class="form-control" id="company_id">
-                                            {foreach name="companys" item="company"}
-                                            <option value="{$company.id}" {if condition="$company.id eq $company_id"}selected{/if} >{$company.company_name}</option>
-                                            {/foreach}
-                                        </select>
+                                        <input id="company_name" name="company_name" value="{$company_name ?? ''}" type="text" placeholder="{:lang('Please Input The Company Name')}" autocomplete="off" data-provide="typeahead"  class="form-control">
                                     </div>
                                 </div>
+
                             </div>
                             <div class="form-group">
                                 <label  class="col-sm-2 control-label"></label>
@@ -81,4 +79,33 @@
     $('#print').click(function(){
             $('#table').jqprint();
     })
+</script>
+<script>
+    $.fn.typeahead.Constructor.prototype.blur = function() {
+        var that = this;
+        setTimeout(function () { that.hide() }, 250);
+    };
+    $('#company_name').typeahead({
+        minLength: 0,
+        source: function (query, process) {
+            var company_name = $('#company_name').val();
+            var parameter = {company_name: company_name};
+            $.ajax({
+                url:"{:url('manage/report/getCompanyByName')}",
+                method:'post',
+                dataType:'json',
+                data: parameter,
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    var results = res.map(function (product) {
+                        return product.company_name;
+                    });
+                    process(results);
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
+                }
+            })
+        },
+    });
 </script>

@@ -56,20 +56,26 @@ class Report extends Admin
 
     //表具余额；
     public function meterBalance(){
-        $M_Code = input('M_Code') ? input('M_Code') : '';
-        $companyService = new CompanyService();
-        $companys   = $companyService->selectInfo([],'id,company_name');
-        $company_id = input('company_id') ? input('company_id') : $companys[0]['id'];
-        $where['company_id'] = $company_id;
-        $where['M_Code'] = empty($M_Code) ? ['neq',''] : $M_Code ;
+        $M_Code = input('M_Code');
+        $company_name = input('company_name');
         $where['meter_status'] = METER_STATUS_BIND;
         $where['meter_life'] = METER_LIFE_ACTIVE;
+        if($company_name){
+            $companyService = new CompanyService();
+            if( $company = $companyService->findInfo(['company_name' => $company_name,'status' => COMPANY_STATUS_NORMAL]) ){
+                $where['company_id'] = $company['id'];
+            }
+        }
+        if($M_Code){
+            $where['M_Code'] = $M_Code ;
+        }
         $param['M_Code'] = $M_Code;
-        $param['company_id'] = $company_id;
+        $param['company_name'] = $company_name;
         $meterService = new MeterService();
         $meter = $meterService->getInfoPaginate($where,$param,'detail_address,M_Address,U_ID,M_Code,totalCube,balance');
-        $totalbalance = array_sum(array_column($meter->toArray()['data'],'balance'));
-        $number = count($meter);
+        $allMeter = $meterService->selectInfo($where,'id,balance');
+        $totalbalance = array_sum(array_column(array_map(function($x){return $x->toArray();},$allMeter),'balance'));
+        $number = count($allMeter);
         if($number){
             $savbalance = round($totalbalance/$number,2);
         }else{
@@ -80,8 +86,7 @@ class Report extends Admin
         $this->assign('savbalance',$savbalance);
         $this->assign('meter',$meter);
         $this->assign('M_Code',$M_Code);
-        $this->assign('companys',$companys);
-        $this->assign('company_id',$company_id);
+        $this->assign('company_name',$company_name);
         return $this->fetch();
     }
 

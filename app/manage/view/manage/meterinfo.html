@@ -57,113 +57,74 @@
                     <hr style="height:1px;border:none;border-top:1px solid #555555;" />
                     <!--报表-->
                     <div id="print" class="form-horizontal">
-                        <fieldset>
-                            <legend>{:lang('Detail Message')}</legend>
-                            <div id="meterInfo" class="form-group">
-                                <label for="M_Code_P" class="col-sm-2 control-label">{:lang('M_Code')}</label>
-
-                                <div class="col-sm-4">
-                                    <p id="M_Code_P" class="form-control" style="border: none">{$meter.M_Code}</p>
-                                </div>
-
-                                <label for="M_Type" class="col-sm-2 control-label">{:lang('Meter Type')}</label>
-
-                                <div class="col-sm-4">
-                                    <p id="M_Type" class="form-control" style="border: none">
-                                        {if condition="isset($meter.M_Type)"}
-                                        {switch name="meter.M_Type" }
-                                        {case $Think.METER_TYPE_WATER}{:lang('Water Code')}{/case}
-                                        {case $Think.METER_TYPE_ELECTRICITY}{:lang('Electric Code')}{/case}
-                                        {case $Think.METER_TYPE_GAS}{:lang('Gas Code')}{/case}
-                                        {default /}{:lang('None')}
-                                        {/switch}
-                                        {/if}
-                                    </p>
-                                </div>
-
-                                <label for="username_c" class="col-sm-2 control-label">{:lang('User Name')}</label>
-
-                                <div class="col-sm-4">
-                                    <p id="username_c" class="form-control" style="border: none">{$meter.U_ID ?$meter.consumer.username : ''}</p>
-                                </div>
-
-                                <label for="tel" class="col-sm-2 control-label">{:lang('Contact Number')}</label>
-
-                                <div class="col-sm-4">
-                                    <p id="tel" class="form-control" style="border: none">{$meter.U_ID?$meter.consumer.tel : ''}</p>
-                                </div>
-
-                                <label for="identity" class="col-sm-2 control-label">{:lang('PIN-codes')}</label>
-
-                                <div class="col-sm-4">
-                                    <p id="identity" class="form-control" style="border: none">{$meter.U_ID?$meter.consumer.identity : ''}</p>
-                                </div>
-
-                                <label for="codenumber" class="col-sm-2 control-label">{:lang('M_Code Number')}</label>
-
-                                <div class="col-sm-4">
-                                    <p id="codenumber" class="form-control" style="border: none"></p>
-                                </div>
-
-                                <label for="company" class="col-sm-2 control-label">{:lang('Company')}</label>
-
-                                <div class="col-sm-4">
-                                    <p id="company" class="form-control" style="border: none">{$meter.company_id?$meter.company.company_name : ''}</p>
-                                </div>
-
-                                <label for="status" class="col-sm-2 control-label">{:lang('Status')}</label>
-
-                                <div class="col-sm-4">
-                                    <p id="status" class="form-control" style="border: none">
-
-                                        {switch name="meter.meter_status" }
-                                        {case $Think.METER_STATUS_CHANGED}{:lang('Replaced old M_Code')}{/case}
-                                        {case $Think.METER_STATUS_BIND}{:lang('Bound')}{/case}
-                                        {case $Think.METER_STATUS_DELETE}{:lang('Deleted')}{/case}
-                                        {case $Think.METER_STATUS_NEW}{:lang('New Meter')}{/case}
-                                        {default /}{:lang('None')}
-                                        {/switch}
-                                    </p>
-                                </div>
-
-                                <label for="totalcost" class="col-sm-2 control-label">{:lang('Total Cost')}</label>
-
-                                <div class="col-sm-4">
-                                    <p id="totalcost" class="form-control" style="border: none">{$meter.totalCost ?? ''}</p>
-                                </div>
-
-                                <label for="totalCube" class="col-sm-2 control-label">{:lang('Cumulative Amount')}</label>
-
-                                <div class="col-sm-4">
-                                    <p id="totalCube" class="form-control" style="border: none">{$meter.totalCost}</p>
-                                </div>
-
-                                <label for="address" class="col-sm-2 control-label">{:lang('Installation Address')}</label>
-
-                                <div class="col-sm-4">
-                                    <p id="address" class="form-control" style="border: none">{$meter.detail_address ?? ''}</p>
-                                </div>
-
-                                <label for="setup_time" class="col-sm-2 control-label">{:lang('Setup Time')}</label>
-
-                                <div class="col-sm-4">
-                                    <p id="setup_time" class="form-control" style="border: none">{if condition="isset($meter.setup_time)"}{$meter.setup_time|date="Y-m-d H:i:s",###}{/if}</p>
-                                </div>
-
-                                <label for="balance" class="col-sm-2 control-label">{:lang("Charge Balance")}</label>
-
-                                <div class="col-sm-4">
-                                    <p id="balance" class="form-control" style="border: none">{$meter.balance}</p>
-                                </div>
-
-                                <label for="building_area_P" class="col-sm-2 control-label">{:lang('Recharge times')}(㎡)</label>
-
-                                <div class="col-sm-4">
-                                    <p id="building_area_P" class="form-control" style="border: none"></p>
-                                </div>
-
-                            </div>
-                        </fieldset>
+                        <div style="margin:15px;font-size: 16px;">{:lang('Detail Message')}</div>
+                        <table id="table" class="table">
+                            <tr>
+                                <td style="text-align:center;">{:lang('M_Code')}:</td>
+                                <td style="text-align:left;">{$meter.M_Code}</td>
+                                <td style="text-align:center;">{:lang('Meter Type')}:</td>
+                                <td style="text-align:left;">
+                                    {if condition="isset($meter.M_Type)"}
+                                    {switch name="meter.M_Type" }
+                                    {case $Think.METER_TYPE_WATER}{:lang('Water Code')}{/case}
+                                    {case $Think.METER_TYPE_ELECTRICITY}{:lang('Electric Code')}{/case}
+                                    {case $Think.METER_TYPE_GAS}{:lang('Gas Code')}{/case}
+                                    {default /}{:lang('None')}
+                                    {/switch}
+                                    {/if}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;">{:lang('User Name')}:</td>
+                                <td style="text-align:left;">{$meter.U_ID ?$meter.consumer.username : ''}</td>
+                                <td style="text-align:center;">{:lang('Contact Number')}:</td>
+                                <td style="text-align:left;">{$meter.U_ID?$meter.consumer.tel : ''}</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;">{:lang('PIN-codes')}:</td>
+                                <td style="text-align:left;">{$meter.U_ID?$meter.consumer.identity : ''}</td>
+                                <td style="text-align:center;">{:lang('M_Code Number')}:</td>
+                                <td style="text-align:left;"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;">{:lang('Company')}:</td>
+                                <td style="text-align:left;">{$meter.company_id?$meter.company.company_name : ''}</td>
+                                <td style="text-align:center;">{:lang('Status')}:</td>
+                                <td style="text-align:left;">
+                                    {switch name="meter.meter_status" }
+                                    {case $Think.METER_STATUS_CHANGED}{:lang('Replaced old M_Code')}{/case}
+                                    {case $Think.METER_STATUS_BIND}{:lang('Bound')}{/case}
+                                    {case $Think.METER_STATUS_DELETE}{:lang('Deleted')}{/case}
+                                    {case $Think.METER_STATUS_NEW}{:lang('New Meter')}{/case}
+                                    {default /}{:lang('None')}
+                                    {/switch}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;">{:lang('Total Cost')}:</td>
+                                <td style="text-align:left;">{$meter.totalCost ?? ''}</td>
+                                <td style="text-align:center;">{:lang('Cumulative Amount')}:</td>
+                                <td style="text-align:left;">{$meter.totalCost}</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;">{:lang('Installation Address')}:</td>
+                                <td style="text-align:left;">{$meter.detail_address ?? ''}</td>
+                                <td style="text-align:center;">{:lang("Charge Balance")}:</td>
+                                <td style="text-align:left;">{$meter.balance}</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;">{:lang('Recharge times')}(㎡):</td>
+                                <td style="text-align:left;"></td>
+                                <td style="text-align:center;">{:lang('Create Time')}:</td>
+                                <td style="text-align:left;">{if condition="isset($meter.create_time)"}{$meter.create_time}{/if}</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;">{:lang('Setup Time')}:</td>
+                                <td style="text-align:left;">{if condition="isset($meter.setup_time)"}{$meter.setup_time|date="Y-m-d H:i:s",###}{/if}</td>
+                                <td style="text-align:center;">{:lang('Change Time')}:</td>
+                                <td style="text-align:left;">{if condition="isset($meter.change_time)"}{$meter.change_time|date="Y-m-d H:i:s",###}{/if}</td>
+                            </tr>
+                        </table>
                     </div>
                     <div id="chart" style="width: 800px;height:400px;display:none"></div>
                     <button style="float: right;margin-left: 1vw" onclick="javascript:history.back(-1)" class="btn btn-success" type="button" >{:lang('Back')}</button>
