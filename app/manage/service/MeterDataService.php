@@ -75,7 +75,6 @@ class MeterDataService extends BasicService
     }
 
     /**
-     * @deprecated  应甲方需求,查询逻辑变更,此方法废弃
      * 问题:
      * 1.因为是sum方法,会把起时间与它前一天的diff差值也算进去,所以有误差,但可以和month_flow表中数据保持一致
      * 2.如果表具在选定时间段未上报,此方法返回数据中则不包含该表具用量信息,因为时间段筛选时没有该表具的记录
@@ -95,7 +94,7 @@ class MeterDataService extends BasicService
             'aggregate' => $table,
             'pipeline' => [
                 ['$match' => $where],
-                ['$group' => ['_id' => ['meter_id' => '$meter_id','M_Code' => '$M_Code'],'sum' => ['$sum' => '$diffCube']]],
+                ['$group' => ['_id' => ['meter_id' => '$meter_id'],'max' => ['$max' => '$totalCube'],'min' => ['$min' => '$totalCube']]],
 
             ],
         ]);
@@ -131,7 +130,7 @@ class MeterDataService extends BasicService
      * @param $filename
      * @param $title
      */
-    public function downloadMeterUsageExcel($data, $filename, $title,$startDate,$endDate){
+    public function downloadMeterUsageExcel($data, $filename, $title,$startDate,$endDate,$type = PLATFORM_MANAGE){
         $filename=$filename.".xlsx";
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
@@ -145,21 +144,38 @@ class MeterDataService extends BasicService
         ->setBold(true); //字体加粗
         $objPHPExcel->getActiveSheet()->getStyle('A1:A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         $objPHPExcel->getActiveSheet()->setCellValue('A2', "开始日期: $startDate  结束日期: $endDate");
-        $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('A3', '表号')
-            ->setCellValue('B3', '姓名')
-            ->setCellValue('C3', '安装地址')
-            ->setCellValue('D3', '联系号码')
-            ->setCellValue('E3', '表具用量')
-            ->setCellValue('F3', '安装日期');
+        if($type == PLATFORM_MANAGE){
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A3', '表号')
+                ->setCellValue('B3', '姓名')
+                ->setCellValue('C3', '安装地址')
+                ->setCellValue('D3', '联系号码')
+                ->setCellValue('E3', '表具用量')
+                ->setCellValue('F3', '安装日期');
+        }else{
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A3', '表号')
+                ->setCellValue('B3', '姓名')
+                ->setCellValue('C3', '安装地址')
+                ->setCellValue('D3', '表具用量')
+                ->setCellValue('E3', '安装日期');
+        }
         $count = count($data);
         for ($i = 4; $i <= $count+3; $i++) {
-            $objPHPExcel->getActiveSheet()->setCellValueExplicit('A' . $i, $data[$i-4]['M_Code']);
-            $objPHPExcel->getActiveSheet()->setCellValueExplicit('B' . $i, $data[$i-4]['consumer_name']);
-            $objPHPExcel->getActiveSheet()->setCellValueExplicit('C' . $i, $data[$i-4]['detail_address']);
-            $objPHPExcel->getActiveSheet()->setCellValueExplicit('D' . $i, $data[$i-4]['consumer_tel']);
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $data[$i-4]['diffUsage']);
-            $objPHPExcel->getActiveSheet()->setCellValueExplicit('F' . $i, $data[$i-4]['setup_time']);
+            if($type == PLATFORM_MANAGE){
+                $objPHPExcel->getActiveSheet()->setCellValueExplicit('A' . $i, $data[$i-4]['M_Code']);
+                $objPHPExcel->getActiveSheet()->setCellValueExplicit('B' . $i, $data[$i-4]['consumer_name']);
+                $objPHPExcel->getActiveSheet()->setCellValueExplicit('C' . $i, $data[$i-4]['detail_address']);
+                $objPHPExcel->getActiveSheet()->setCellValueExplicit('D' . $i, $data[$i-4]['consumer_tel']);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $data[$i-4]['diffUsage']);
+                $objPHPExcel->getActiveSheet()->setCellValueExplicit('F' . $i, date('Y-m-d H:i:s',$data[$i-4]['setup_time']));
+            }else{
+                $objPHPExcel->getActiveSheet()->setCellValueExplicit('A' . $i, $data[$i-4]['M_Code']);
+                $objPHPExcel->getActiveSheet()->setCellValueExplicit('B' . $i, $data[$i-4]['consumer_name']);
+                $objPHPExcel->getActiveSheet()->setCellValueExplicit('C' . $i, $data[$i-4]['detail_address']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]['diffUsage']);
+                $objPHPExcel->getActiveSheet()->setCellValueExplicit('E' . $i, date('Y-m-d H:i:s',$data[$i-4]['setup_time']));
+            }
         }
 
         $objPHPExcel->getActiveSheet()->setTitle($title);      //设置sheet的名称
