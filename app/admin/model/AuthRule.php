@@ -74,9 +74,9 @@ class AuthRule extends Admin
      * 整理权限列表,找出子菜单,只支持二级菜单的整理
      * @return array|false|\PDOStatement|string|\think\Collection
      */
-    public function getLevelData()
+    public function getLevelData($where = [])
     {
-        $data = $this->where('type',PLATFORM_ADMIN)->order('pid asc')->order('sortnum','asc')->select();
+        $data = $this->where('type',PLATFORM_ADMIN)->where($where)->order('pid asc')->order('sortnum','asc')->select();
         if( empty($data) ) {
             return $data;
         }
