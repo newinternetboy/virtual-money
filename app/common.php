@@ -412,7 +412,7 @@ function upsertTask($data){
 function saveImg($img, $oriPath, $thumbPath){
     $publicPath =  ROOT_PATH . 'public' ;
     // 保存原图
-    $info = $img->validate(['size' => 10 * 1024 * 1024, 'ext' => 'jpg,png'])->rule('uniqid')->move($publicPath.$oriPath);
+    $info = $img->validate(['size' => 10 * 1024 * 1024, 'ext' => 'jpg,jpeg,png'])->rule('uniqid')->move($publicPath.$oriPath);
     if ($info) {
         $filename = $info->getSaveName();
         //保存缩略图
@@ -427,6 +427,17 @@ function saveImg($img, $oriPath, $thumbPath){
         exception($img->getError());
     }
     return $thumbPath . DS . $filename;
+}
+
+function saveVideo($video){
+    $savePath = ROOT_PATH . 'public' . DS .'productionCover' . DS . 'video';
+    $info = $video->validate(['size' => 20 * 1024 * 1024, 'ext' => 'mp4'])->rule('uniqid')->move($savePath);
+    if ($info) {
+        $filename = $info->getSaveName();
+    }else{
+        exception($video->getError());
+    }
+    return DS .'productionCover' . DS . 'video' . DS . $filename;
 }
 
 

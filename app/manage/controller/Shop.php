@@ -183,6 +183,7 @@ class Shop extends Admin
         }
         return json($ret);
     }
+
     //商品管理
     public function productions(){
         $id = input('id');
@@ -247,20 +248,38 @@ class Shop extends Admin
         $ret['msg'] = lang('Operation Success');
         try {
             $id = input('id');
-            $name = input('name');
             $productionService = new ProductionService();
+            if(!$production = $productionService->findInfo(['id' => $id],'video')){
+                exception(lang('Production Not Exists'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            $oldVideoPath = isset($production['video']) ? $production['video'] : null;
+            $name = input('name');
             $desc = input('desc');
             $sdlprice = input('sdlprice');
             $rmbprice = input('rmbprice');
             $status = input('status');
             $sdlenable = input('sdlenable');
             $rmbenable = input('rmbenable');
+            $delVideoCoverFlag = input('delVideoCoverFlag/d');
             $img = request()->file('img');
+            $video = request()->file('video');
             if ($img) {
                 $oriPath = DS . 'productionCover' . DS . 'origin';
                 $thumbPath = DS .'productionCover' . DS . 'thumb';
                 $savedthumbFilePath = saveImg($img,$oriPath,$thumbPath);
                 $data['img'] = $savedthumbFilePath;
+            }
+            if($video){
+                $videoPath = saveVideo($video);
+                $data['video'] = $videoPath;
+                if($oldVideoPath){
+                    @unlink(ROOT_PATH. DS.'public'.$oldVideoPath);
+                }
+            }elseif($delVideoCoverFlag){
+                $data['video'] = '';
+                if($oldVideoPath){
+                    @unlink(ROOT_PATH. DS.'public'.$oldVideoPath);
+                }
             }
             $data['desc'] = $desc;
             if($rmbprice){
@@ -805,18 +824,39 @@ class Shop extends Admin
         $ret['msg'] = lang('Operation Success');
         try {
             $id = input('id');
-            $name = input('name');
             $productionService = new ProductionService();
+            if($id){
+                $data['id'] = $id;
+                if(!$production = $productionService->findInfo(['id' => $id],'video')){
+                    exception(lang('Production Not Exists'),ERROR_CODE_DATA_ILLEGAL);
+                }
+            }
+            $oldVideoPath = isset($production['video']) ? $production['video']  : null;
+            $name = input('name');
             $desc = input('desc');
             $category = input('category');
             $sdlprice = input('sdlprice');
             $status = input('status');
             $img = request()->file('img');
+            $video = request()->file('video');
+            $delVideoCoverFlag = input('delVideoCoverFlag/d');
             if ($img) {
                 $oriPath = DS . 'productionCover' . DS . 'origin';
                 $thumbPath = DS .'productionCover' . DS . 'thumb';
                 $savedthumbFilePath = saveImg($img,$oriPath,$thumbPath);
                 $data['img'] = $savedthumbFilePath;
+            }
+            if($video){
+                $videoPath = saveVideo($video);
+                $data['video'] = $videoPath;
+                if($oldVideoPath){
+                    @unlink(ROOT_PATH. DS.'public'.$oldVideoPath);
+                }
+            }elseif($delVideoCoverFlag){
+                $data['video'] = '';
+                if($oldVideoPath){
+                    @unlink(ROOT_PATH. DS.'public'.$oldVideoPath);
+                }
             }
             //添加商铺
             $data['desc'] = $desc;
@@ -826,9 +866,6 @@ class Shop extends Admin
             $data['name'] = $name;
             $data['sid'] = PRODUCTION_ID_DELI;
             $data['sdlenable'] = true;
-            if($id){
-                $data['id'] = $id;
-            }
             if (!$productionService->upsert($data, 'Production.editProduction')) {
                 exception($productionService->getError(), ERROR_CODE_DATA_ILLEGAL);
             }

@@ -130,6 +130,18 @@
                         <span style="color:red">(支持格式：jpg、png，图片大小：10M)</span>
                     </div>
                 </div>
+                <div class="form-group" >
+                    <label id="lable_v"  for="preview" class="col-md-2 control-label">{:lang('Production Preview Video')}</label>
+                    <div id="preview_v" class="col-md-10" style="width: 250px">
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label  for="video" class="col-md-2 control-label">{:lang('Production Video')}</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="file"  accept=".mp4" name="video" id="video" />
+                        <span style="color:red">(支持格式：mp4，限制大小：20M)</span>
+                    </div>
+                </div>
                 <div class="form-group" id="sdlenable_div" style="display: none;" >
                     <label for="sdlenable" class="col-md-2 control-label">{:lang('Support DeLi Money')}</label>
                     <div class="col-md-10">
@@ -186,6 +198,7 @@
     </div>
 </div>
 <script>
+    var delVideoCoverFlag = 0;
     $("#start_datetimepicker").datetimepicker({
         language:"zh-CN",
         format: "yyyy-mm-dd",
@@ -216,13 +229,16 @@
     });
 
     function clearModal(){
+        delVideoCoverFlag = 0;
         $('#id').val('');
         $('#edit_productionname').val('');
         $('#sdlprice').val('');
         $('#rmbprice').val('');
         $('#desc').val('');
         $('#img').val('');
+        $('#video').val('');
         $('#preview').html('');
+        $('#preview_v').html('');
         $('#sdlenable').find('option').each(function(){
             $(this).prop("selected",false);
         });
@@ -262,6 +278,14 @@
         $('#rmbprice').val(data.rmbprice);
         $('#edit_productionname').val(data.name);
         $('#desc').val(data.desc);
+        var pre = "<video width='320' height='140'  controls='controls' ><source src='"+data.video+"' type='video/mp4'/>请确保浏览器ie9(含)以上,否则不能正常预览。</video>";
+        if(data.video != null && data.video != '' && data.video != 'undefined'){
+            $('#lable_v').html("{:lang('Production Preview Video')}")
+            pre = pre + "<button onclick=\"delCoverVideo('"+data.id+"',this)\" >删除视频封面</button>";;
+        }else{
+            $('#lable_v').html("{:lang('Production Preview Video Not Exists')}");
+        }
+        $('#preview_v').html(pre);
         if(data.shop_type == {$Think.const.COMPANY_ELE_BUSINESS}){
             $('#sdlprice_div').hide();
             $('#sdlenable_div').hide();
@@ -342,6 +366,7 @@
         var sdlenable = $('#sdlenable').val();
         var desc = $('#desc').val();
         var img = document.getElementById("img").files[0];
+        var video = document.getElementById("video").files[0];
         var rmbenable = $('#rmbenable').val();
         if($('#img').val()=="" && id==""){
             alertMsg('{:lang("Shop Img Require")}');
@@ -378,6 +403,8 @@
         formData.append('rmbenable',rmbenable);
         formData.append('desc',desc);
         formData.append('img',img);
+        formData.append('video',video);
+        formData.append('delVideoCoverFlag',delVideoCoverFlag);
         $.ajax({
             url: "{:url('manage/shop/saveProduction')}",
             type: "POST",
@@ -402,6 +429,21 @@
             }
         });
     }
+
+
+    function delCoverVideo(id,that){
+        $('#preview_v video').attr('src','');
+        $(that).css('display','none');
+        delVideoCoverFlag = 1;
+    }
+
+    $('#video').change(function(){
+        $('#preview_v').html('');
+        var video = document.getElementById("video").files[0];
+        if(video && video.size > 20*1024*1024){
+            alertMsg("{:lang('Video Beyond Max Size')}");
+        }
+    })
 </script>
 
                    
