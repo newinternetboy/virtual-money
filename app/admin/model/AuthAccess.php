@@ -17,7 +17,8 @@ class AuthAccess extends Admin
     public function getRuleVals( $uid )
     {
         $role_id = model('User')->where(['id'=>$uid])->value('role_id');
-        $rule_ids = array_values(model('AuthAccess')->where(['role_id'=>$role_id])->column('rule_id'))[0];
+        $authAccess = array_values(model('AuthAccess')->where(['role_id'=>$role_id])->column('rule_id'));
+        $rule_ids = !empty($authAccess) ? $authAccess[0] : [];
         $ret =  model('AuthRule')->where('id', 'in', $rule_ids)->field('id,title,rule_val,pid,display,glyphicon')->order('sortnum','asc')->select();
         foreach( $ret as & $item ){
             $item = $item->toArray();

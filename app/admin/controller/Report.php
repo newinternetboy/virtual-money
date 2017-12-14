@@ -9,6 +9,8 @@
 namespace app\admin\controller;
 
 use think\Db;
+use app\manage\service\MeterService;
+use app\manage\service\MeterDataService;
 
 /**
  * 报表
@@ -64,5 +66,105 @@ class Report extends Admin
         $this->assign('report',$report);
         $this->assign('year',$year);
         return view();
+    }
+
+    /**
+     *表具用量
+     */
+    public function meterUsage(){
+        $M_Code = input('M_Code');
+        $area = input('area');
+        $startDate = input('startDate',date('Y-m-d',strtotime('-1 day')));
+        $endDate = input('endDate',date('Y-m-d'));
+        $where = [
+            'meter_status' => ['neq',METER_STATUS_NEW],
+            'company_id'    => $this->company_id
+        ];
+        if($M_Code){
+            $where['M_Code'] = $M_Code;
+        }
+        if($area){
+            $where['M_Address'] = $area;
+        }
+        $usage = [];
+        $meters = (new MeterService())->getInfoPaginate($where,['M_Code' => $M_Code,'startDate' => $startDate,'endDate' => $endDate],'id,M_Code,U_ID,detail_address,setup_time,change_time');
+        $condition['create_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
+        $condition['meter_id'] = ['$in' => array_map(function($x){return $x['id'];},$meters->items())];
+        $condition['source_type'] = METER;
+        $table = 'meter_data';
+        $result  = (new MeterDataService())->getAllMeterUsageData($table,$condition);
+        foreach( $meters as $meter){
+            $tmp = [
+                'M_Code' => $meter['M_Code'],
+                'consumer_name' => $meter->consumer->username,
+                'detail_address' => $meter['detail_address'],
+                'diffUsage' => 0,
+                'setup_time' => isset($meter['setup_time']) ? $meter['setup_time'] : $meter['change_time'],
+            ];
+            foreach($result[0]->result as $index => $re){
+                if($meter['id'] == $re->_id->meter_id){
+                    $tmp['diffUsage'] = $re->max - $re->min;
+                    unset($result[0]->result[$index]);
+                    break;
+                }
+            }
+            $usage[] = $tmp;
+        }
+        $area_where['company_id'] = $this->company_id;
+        $areas = model('Area')->getList( $area_where );
+        $this->assign('usage',$usage);
+        $this->assign('M_Code',$M_Code);
+        $this->assign('startDate',$startDate);
+        $this->assign('endDate',$endDate);
+        $this->assign('meters',$meters);
+        $this->assign('areas',$areas);
+        $this->assign('area',$area);
+        return view();
+    }
+
+    /**
+     *下载表具用量excel
+     */
+    public function downloadMeterUsage(){
+        $M_Code = input('M_Code');
+        $area = input('area');
+        $startDate = input('startDate',date('Y-m-d',strtotime('-1 day')));
+        $endDate = input('endDate',date('Y-m-d'));
+        $where = [
+            'meter_status' => ['neq',METER_STATUS_NEW],
+            'company_id'    => $this->company_id
+        ];
+        if($M_Code){
+            $where['M_Code'] = $M_Code;
+        }
+        if($area){
+            $where['M_Address'] = $area;
+        }
+        $usage = [];
+        $meters = (new MeterService())->selectInfo($where,'id,M_Code,U_ID,detail_address,setup_time,change_time');
+        $condition['create_time'] = ['$gte' => strtotime($startDate.' 00:00:00'),'$lte' => strtotime($endDate.' 23:59:59')];
+        $condition['meter_id'] = ['$in' => array_map(function($x){return $x['id'];},$meters)];
+        $condition['source_type'] = METER;
+        $table = 'meter_data';
+        $result  = (new MeterDataService())->getAllMeterUsageData($table,$condition);
+        foreach( $meters as $meter){
+            $tmp = [
+                'M_Code' => $meter['M_Code'],
+                'consumer_name' => $meter->consumer->username,
+                'detail_address' => $meter['detail_address'],
+                'diffUsage' => 0,
+                'setup_time' => isset($meter['setup_time']) ? $meter['setup_time'] : $meter['change_time'],
+            ];
+            foreach($result[0]->result as $index => $re){
+                if($meter['id'] == $re->_id->meter_id){
+                    $tmp['diffUsage'] = $re->max - $re->min;
+                    unset($result[0]->result[$index]);
+                    break;
+                }
+            }
+            $usage[] = $tmp;
+        }
+
+        (new MeterDataService())->downloadMeterUsageExcel($usage,$this->company['company_name'].$M_Code.'表具用量',$this->company['company_name'].$M_Code.'表具用量',$startDate,$endDate,PLATFORM_ADMIN);
     }
 }

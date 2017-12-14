@@ -82,7 +82,12 @@ class Authrule extends Admin
 	public function setauth()
 	{
 		$role_id = input('role_id');
-		$levelData = model('AuthRule')->getLevelData();
+		if($this->administrator){
+			$levelData = model('AuthRule')->getLevelData();
+		}else{
+			$currentAuthRules  = model('AuthAccess')->getIds( $this->role_id );
+			$levelData = model('AuthRule')->getLevelData(['id' => ['in',$currentAuthRules]]);
+		}
 		$this->assign('data', $levelData);
 		$ids = model('AuthAccess')->getIds( $role_id );
 		$this->assign('rule_ids', $ids);

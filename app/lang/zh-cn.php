@@ -565,7 +565,7 @@ return [
     'UKEY Require'                      => 'UKEY必须',
     'User Status Require'               => '账号状态必须',
     'Role Require'                      => '账号角色必须',
-    'Login Name Exists'                 => '账号已存在',
+    'Login Name Exists'                 => '登录名已存在',
     'Password and Confirm Password inconsistent'    => '密码与确认密码不一致',
     'Production Name Require'           =>'商品名称必须',
     'Production Desc Require'           =>'商品描述必须',

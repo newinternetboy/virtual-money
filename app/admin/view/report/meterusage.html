@@ -1,8 +1,5 @@
 {js href="__JS__/bootstrap-datetimepicker.min.js" /}
-{js href="__JS__/bootstrap-typeahead.js" /}
 {js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
-{js href="__JS__/echarts.js" /}
-{js href="__JS__/jquery.jqprint-0.3.js" /}
 {css href="__CSS__/bootstrap-datetimepicker.min.css" /}
 <div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
     <section id="widget-grid">
@@ -18,15 +15,20 @@
                         <form action="" method="get" class="form-horizontal" onsubmit="return check();">
                             <div class="form-group">
                                 <div class="col-md-6">
-                                    <label for="company_name" class="col-sm-4 control-label">{:lang('Company')}</label>
-                                    <div class="col-sm-8">
-                                        <input id="company_name" name="company_name" value="{$company_name ?? ''}" type="text" placeholder="{:lang('Please Input The Company Name')}" autocomplete="off" data-provide="typeahead"  class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
                                     <label for="M_Code" class="col-sm-4 control-label">{:lang('Input Meter Code')}</label>
                                     <div class="col-sm-8">
                                         <input id="M_Code" name="M_Code" value="{$M_Code ?? ''}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="area" class="col-sm-4 control-label">{:lang('Installation Address')}</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control selectOption" style="width: 100%;" name="area" id="area" >
+                                            <option value="" selected >--{:lang('Please Search')}{:lang('Area')}--</option>
+                                            {foreach $areas as $item }
+                                            <option value="{$item.id}" {if condition="$area eq $item.id"}selected{/if}>{$item.name}</option>
+                                            {/foreach}
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -61,7 +63,6 @@
                                     <th>{:lang('M_Code')}</th>
                                     <th>{:lang('Name')}</th>
                                     <th>{:lang('Installation Address')}</th>
-                                    <th>{:lang('Contacts Tel')}</th>
                                     <th>{:lang('Total Usage')}</th>
                                     <th>{:lang('Setup Time')}</th>
                                 </tr>
@@ -71,7 +72,6 @@
                                     <td>{$item.M_Code}</td>
                                     <td>{$item.consumer_name}</td>
                                     <td>{$item.detail_address}</td>
-                                    <td>{$item.consumer_tel}</td>
                                     <td>{$item.diffUsage}</td>
                                     <td>{$item.setup_time|date='Y-m-d H:i:s',###}</td>
                                 </tr>
@@ -132,35 +132,7 @@
     };
 </script>
 <script>
-    $.fn.typeahead.Constructor.prototype.blur = function() {
-        var that = this;
-        setTimeout(function () { that.hide() }, 250);
-    };
-    $('#company_name').typeahead({
-        minLength: 0,
-        source: function (query, process) {
-            var company_name = $('#company_name').val();
-            var parameter = {company_name: company_name};
-            $.ajax({
-                url:"{:url('manage/report/getCompanyByName')}",
-                method:'post',
-                dataType:'json',
-                data: parameter,
-                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
-                success: function(res){
-                    var results = res.map(function (product) {
-                        return product.company_name;
-                    });
-                    process(results);
-                },
-                error:function(){
-                    alertMsg("{:lang('Operation fail')}");
-                }
-            })
-        },
-    });
-
     function download(){
-        window.location.href="{:url('manage/report/downloadMeterUsage',['company_name' => $company_name,'M_Code' => $M_Code,'startDate' => $startDate,'endDate' => $endDate])}"
+        window.location.href="{:url('admin/report/downloadMeterUsage',['area' => $area,'M_Code' => $M_Code,'startDate' => $startDate,'endDate' => $endDate])}"
     }
 </script>

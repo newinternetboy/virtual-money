@@ -38,6 +38,9 @@ class User extends Admin
         }
         $request = request()->param();
         $request['company_id'] = $this->company_id;
+        if(!$this->administrator){
+            $request['administrator'] = 0;
+        }
         $data = model('User')->getList( $request );
         foreach( $data as & $user ){
             if( !isset($user['administrator']) || !$user['administrator'] ){
