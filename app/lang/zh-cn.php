@@ -697,6 +697,12 @@ return [
     'Bound'                             =>'已绑定',
     'Deleted'                           =>'已删除',
     'New Meter'                         =>'新表',
+    'Please Confirm Delete Vedio Cover' => '请确认是否要删除封面视频?',
+    'Production Not Exists'             => '商品不存在',
+    'Production Preview Video'          => '视频预览',
+    'Production Preview Video Not Exists'          => '视频预览(未上传)',
+    'Production Video'                  => '视频封面',
+    'Video Beyond Max Size'             => '视频封面文件超过限制大小',
 
 
     //系统管理
@@ -806,7 +812,9 @@ return [
     'Shop Name Unique'                  => '店铺名称重复',
     'Shop Notify'                       => '店铺通知',
     'Shop Preview'                      => '封面预览',
+    'Shop Preview Video'                => '视频预览',
     'Shop Img'                          => '店铺封面',
+    'Shop Video'                        => '封面视频',
     'Shop Img Require'                  => '店铺封面必须',
     'Shop personName'                   => '持卡人姓名',
     'Shop personName Require'           => '持卡人姓名必须',
