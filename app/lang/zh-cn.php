@@ -692,7 +692,7 @@ return [
     'Detail Message'                    =>'详细信息',
     'Deduct Balance'                    =>'扣除金额',
     'Execution Time'                    =>'执行时间',
-    'Delete Reson'                      =>'扣款原因',
+    'Deduct Reason'                    =>'扣款原因',
     'Replaced old M_Code'               =>'被更换的旧表',
     'Bound'                             =>'已绑定',
     'Deleted'                           =>'已删除',

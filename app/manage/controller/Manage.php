@@ -561,7 +561,13 @@ class Manage extends Admin
     public function uploadData(){
         $M_Code = trim(input('M_Code'),';');
         $money = input('money');
-        $message = input('message');
+        $select_message = input('select_message');
+        $else_message = input('else_message');
+        if($select_message==1){
+            $message = $else_message;
+        }else{
+            $message = $select_message;
+        }
         $ajaxReturn['status'] = 200;
         $ajaxReturn['msg'] = lang('Operation Success');
         if(!$M_Code){

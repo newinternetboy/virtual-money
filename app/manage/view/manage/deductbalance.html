@@ -28,9 +28,22 @@
                             </div>
                             <div class="col-lg-8" >
                                 <div class="form-group">
-                                    <label for="message" class="col-md-2 control-label">{:lang('Delete Reson')}:</label>
+                                    <label for="message" class="col-md-2 control-label">{:lang('Deduct Reason')}:</label>
                                     <div class="col-md-10">
-                                        <input id="message" type="text" class="form-control" />
+                                        <select name="message" id="message" class="form-control">
+                                            <option value="补足最低消费">补足最低消费</option>
+                                            <option value="物业费">物业费</option>
+                                            <option value="垃圾清运费">垃圾清运费</option>
+                                            <option value="1">其它</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8" id="else" style="display: none;" >
+                                <div class="form-group">
+                                    <label for="else_message" class="col-md-2 control-label">其它扣款原因:</label>
+                                    <div class="col-md-10">
+                                        <input id="else_message" placeholder="请填写扣款原因"   type="text" class="form-control" />
                                     </div>
                                 </div>
                             </div>
@@ -91,14 +104,23 @@
 
 
 <script>
+    $('#message').change(function(){
+        if($('#message').val()==1){
+            $('#else').show();
+        }else{
+            $('#else').hide();
+            $('#else_message').val('');
+        }
+    })
    $('#tijiao').click(function(){
        $('#excelupload').prop('disabled',true);
        $('#s_data').html('');
        $('#sure').hide();
        var M_Code=$('#M_Code').val();
        var money = $('#money').val();
-       var message = $('#message').val();
-       data = {M_Code:M_Code,money:money,message:message}
+       var select_message = $('#message').val();
+       var else_message = $('#else_message').val();
+       data = {M_Code:M_Code,money:money,select_message:select_message,else_message:else_message}
        if( !checks(M_Code,money) ){
            $('#excelupload').prop('disabled',false);
             return false;
