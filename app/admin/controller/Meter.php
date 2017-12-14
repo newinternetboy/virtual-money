@@ -132,6 +132,9 @@ class Meter extends Admin
                 Log::record(['报装表具失败' => $error,'data' => $data],'error');
                 exception('更新表具失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
+
+            //todo:给表具添加下发价格配置和运行参数配置信息任务
+
             //记录入表具上报数据表
             $meterData['M_Code'] =  $meter['M_Code'];
             $meterData['meter_id'] = $meter['id'];
