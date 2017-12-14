@@ -43,7 +43,6 @@
                                     <div class="col-sm-8">
                                         <select name="status" id="status" class="form-control">
                                             <option value="" >{:lang('Search All')}</option>
-                                            <option value="{$Think.ORDER_UNPAID}" {if condition="(isset($status)) and ($status eq $Think.ORDER_UNPAID)"}selected{/if}>{:lang('Unpaid')}</option>
                                             <option value="{$Think.ORDER_WAITING_SEED}" {if condition="(isset($status)) and ($status eq $Think.ORDER_WAITING_SEED)"}selected{/if}>{:lang('Waiting Seed')}</option>
                                             <option value="{$Think.ORDRE_WAITING_TASK}" {if condition="(isset($status)) and ($status eq $Think.ORDRE_WAITING_TASK)"}selected{/if}>{:lang('Waiting Task')}</option>
                                             <option value="{$Think.ORDER_SEED_WAITING_COMMENT}" {if condition="(isset($status)) and ($status eq $Think.ORDER_SEED_WAITING_COMMENT)"}selected{/if}>{:lang('Received goods to be evaluated ')}</option>
@@ -397,7 +396,7 @@
 
     function checkOrderNumber(){
         var order_number = $('#order_number').val();
-        if(order_number.length != 24 ){
+        if(order_number!=""&&order_number.length != 24 ){
             alertMsg("{:lang('Order Number Not Illegal')}",3);
             return false;
         }
