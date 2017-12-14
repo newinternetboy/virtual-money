@@ -885,8 +885,8 @@ function InitialMap () {
                 $('#province').val(addComp.province);
                 $('#city').val(addComp.city);
                 $('#district').val(addComp.district);
-                $('#point_lng').val(rs.point.lng);
-                $('#point_lat').val(rs.point.lat);
+                $('#longitude').val(rs.point.lng);
+                $('#latitude').val(rs.point.lat);
             });
         },500);
     })
@@ -950,8 +950,8 @@ function InitialMap () {
             $('#province').val(addComp.province);
             $('#city').val(addComp.city);
             $('#district').val(addComp.district);
-            $('#point_lng').val(e.point.lng);
-            $('#point_lat').val(e.point.lat);
+            $('#longitude').val(e.point.lng);
+            $('#latitude').val(e.point.lat);
         });
     });
 }

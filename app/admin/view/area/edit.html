@@ -35,8 +35,8 @@
                                 <input type="hidden" id="province" name="province" value="{$data.province?? ''}" />
                                 <input type="hidden" id="city" name="city" value="{$data.city?? ''}" />
                                 <input type="hidden" id="district" name="district" value="{$data.district?? ''}" />
-                                <input type="hidden" id="point_lng" name="point_lng" value="{$data.point_lng?? ''}" />
-                                <input type="hidden" id="point_lat" name="point_lat" value="{$data.point_lat?? ''}" />
+                                <input type="hidden" id="longitude" name="longitude" value="{$data.longitude?? ''}" />
+                                <input type="hidden" id="latitude" name="latitude" value="{$data.latitude?? ''}" />
                             </div>
                         </div>
 
@@ -52,7 +52,7 @@
                     </div>
                     <div id="check_map" style="display:none;" >
                         <hr/>
-                        请输入：<input type="text" id="suggestId"  style="width:250px">
+                        请输入：<input type="text" id="suggestId" style="width:250px">
                         <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
                         <div id="l-map"></div>
                     </div>
