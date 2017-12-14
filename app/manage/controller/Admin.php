@@ -29,7 +29,7 @@ class Admin extends Common
 
         //判断是否已经登录
         if (!Session::has('userinfo', 'admin')) {
-            $this->error('Please login first', url('admin/Login/index'));
+            $this->error(lang('Please login first'), url('admin/Login/index'));
         }
 
         $userRow = Session::get('userinfo', 'admin');
