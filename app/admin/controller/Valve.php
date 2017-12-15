@@ -8,6 +8,8 @@
 
 namespace app\admin\controller;
 
+use think\Log;
+use think\Loader;
 
 /**
  * 远程阀门控制
@@ -40,15 +42,11 @@ class Valve extends Admin
             if( !$data ){
                 exception('操作失败,信息不完整',ERROR_CODE_DATA_ILLEGAL);
             }
-
-            //任务执行时间要大于当前时间
-            if( !isset($data['exectime']) || !$data['exectime'] ){
-                exception('请先填写任务执行时间',ERROR_CODE_DATA_ILLEGAL);
+            if(!isset($data['option']) || !in_array($data['option'],['turn_on','turn_off'])){
+                exception('操作失败,命令不合法',ERROR_CODE_DATA_ILLEGAL);
             }
-            if( time() >= strtotime($data['exectime']) ){
-                exception('任务执行时间要大于当前时间',ERROR_CODE_DATA_ILLEGAL);
-            }
-
+            $meters = [];
+            $fail = '';
             if( isset($data['valve_type']) && $data['valve_type'] == VALVE_USER ){ //指定用户控制
                 if( !isset($data['M_Codes']) || !$data['M_Codes'] ){
                     exception('请先输入表号',ERROR_CODE_DATA_ILLEGAL);
@@ -59,8 +57,9 @@ class Valve extends Admin
 
                 //检查填写的表号是否属于当前公司
                 $this->isBelongsToCompany($m_codes);
-
-                $valveData['data'] = $m_codes;
+                $meter_where['M_Code'] = ['in',$m_codes];
+                $meter_where['meter_status'] = METER_STATUS_BIND;
+                $meters = model('Meter')->getMeterInfo($meter_where,'select','id,M_Code');
 
             }elseif( isset($data['valve_type']) && $data['valve_type'] == VALVE_AREA ){ //地区用户控制
                 if( !isset($data['area']) || !$data['area'] ){
@@ -69,19 +68,26 @@ class Valve extends Admin
                 if( !model('Area')->getAreaInfo(['id' => $data['area'],'company_id' => $this->company_id],'find') ){
                     exception('您无权对该区域进行此操作',ERROR_CODE_DATA_ILLEGAL);
                 }
-                $valveData['data'] = $data['area'];
+                $meter_where['M_Address'] = $data['area'];
+                $meter_where['meter_status'] = METER_STATUS_BIND;
+                $meters = model('Meter')->getMeterInfo($meter_where,'select','id,M_Code');
             }else{
                 exception('方式选择不合法',ERROR_CODE_DATA_ILLEGAL);
             }
 
-            $valveData['valve_type'] = $data['valve_type'];
-            $valveData['option'] = $data['option'];
-            $valveData['exectime'] = $data['exectime'];
-            $valveData['valve_status'] = VALVE_WAITING;
-            $valveData['company_id'] = $this->company_id;
-            if( !model('Valve')->add($valveData,'Valve.add') ){
-                exception('操作失败: '.model('Valve')->getError(),ERROR_CODE_DATA_ILLEGAL);
+            $task['cmd'] = $data['option'];
+            foreach($meters as $meter){
+                $task['meter_id'] = $meter['id'];
+                if(true !== $result = upsertTask($task)){
+                    $failresult[] = $result;
+                    $fail .= $meter['M_Code'].';';
+                }
             }
+            if($fail){
+                Log::record(['阀门控制失败' => $fail,'data' => $failresult],'error');
+                exception('表号'.$fail.'执行失败!',ERROR_CODE_DATA_ILLEGAL);
+            }
+            Loader::model('LogRecord')->record( 'Valve Operation',$data );
         }catch (\Exception $e){
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
