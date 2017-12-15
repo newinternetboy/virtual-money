@@ -80,7 +80,7 @@
                                 <td>
                                     {$vo.create_time}
                                 </td>
-                                <td><button class="btn btn-primary" onclick="production_eidt('{$vo.id}')">{:lang('Edit')}</button></td>
+                                <td><button class="btn btn-primary" onclick="production_eidt('{$vo.id}')">{:lang('Edit')}</button><button class="btn btn-success" style="margin-left: 1vw" onclick="production_comment('{$vo.id}')">{:lang('Comment')}</button></td>
                             </tr>
                             {/volist}
                             </tbody>
@@ -415,6 +415,10 @@
             alertMsg("{:lang('Video Beyond Max Size')}");
         }
     })
+
+    function production_comment(pid){
+        window.location.href = "{:url('manage/shop/comments')}"+"?pid="+pid;
+    }
 </script>
 
                    

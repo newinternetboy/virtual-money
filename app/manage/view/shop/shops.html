@@ -428,7 +428,7 @@
         $('#edit_shopname_gr').val(data.name);
         $('#edit_create_time').val(data.create_time);
         $('#edit_update_time').val(data.update_time);
-        $('#preview').html("<img src="+"{$Think.config.grImgPath}"+data.img+" />");
+        $('#preview').html("<img src="+"{$Think.config.extra_config.grImgPath}"+data.img+" />");
         $('#edit_stick').find("input[value="+data.stick+"]").prop("checked",true);
         $('#sdl_preference_gr').find("option[value="+data.sdl_preference+"]").prop("selected",true);
         $('#health_auth_gr').find("option[value="+data.health_auth+"]").prop("selected",true);

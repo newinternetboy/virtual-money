@@ -297,7 +297,7 @@
             $('#sdlenable_div').show();
             $('#rmbenable_div').show();
             $('#img_div').hide();
-            $('#preview').html("<img src="+"{$Think.config.grImgPath}"+data.img+" />");
+            $('#preview').html("<img src="+"{$Think.config.extra_config.grImgPath}"+data.img+" />");
         }
         $('#edit_status').find('option[value="'+data.status+'"]').prop("selected",true);
         $('#sdlenable').find('option[value='+data.sdlenable+']').prop("selected",true);

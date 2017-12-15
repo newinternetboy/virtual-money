@@ -147,8 +147,6 @@ return [
         FIX_STATUS_DEAL => lang('Fix Deal'),
     ],
 
-    //定义个人商铺根路径；
-    'grImgPath' => 'http://114.113.90.9:10086/',
 
     //留言建议 状态
     'advicestatus' => [

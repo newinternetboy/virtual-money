@@ -112,4 +112,7 @@ return [
         'express_company'  => 'log_express_company',
         'express_number'   => 'log_express_number',
     ],
+
+    //定义个人商铺根路径；
+    'grImgPath' => 'http://114.113.90.9:10086/',
 ];

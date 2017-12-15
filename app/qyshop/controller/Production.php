@@ -8,6 +8,7 @@
 
 namespace app\qyshop\controller;
 
+use app\manage\service\CommentService;
 
 class Production extends Admin
 {
@@ -92,6 +93,85 @@ class Production extends Admin
             $ret['data'] = $production;
         } catch (\Exception $e) {
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    public function comments(){
+        $pid = input('pid');
+        $keyword = input('keyword');
+        $status = input('status/d',1);
+        $start_time = input('start_time');
+        $end_time = input('end_time');
+        $where['pid'] = $pid;
+        if($start_time){
+            $where['create_time'] = ['>',strtotime($start_time.' 00:00:00')];
+        }
+        if($end_time){
+            $where['create_time'] = ['<',strtotime($end_time.' 23:59:59')];
+        }
+        if($start_time&&$end_time){
+            $where['create_time'] = ['between',[strtotime($start_time." 00:00:00"),strtotime($end_time." 23:59:59")]];
+        }
+        if($keyword){
+            $where['content'] = ['like',$keyword];
+        }
+        if($status){
+            if($status == 1){
+                $where['reply_time'] = null;
+            }else{
+                $where['reply_time'] = ['neq',null];
+            }
+        }
+        $commentService = new CommentService();
+        $comments = $commentService->getInfoPaginate($where,['pid' => $pid,'keyword' => $keyword,'status' => $status,'start_time' => $start_time,'end_time' => $end_time]);
+        $this->assign('comments',$comments);
+        $this->assign('pid',$pid);
+        $this->assign('keyword',$keyword);
+        $this->assign('status',$status);
+        $this->assign('start_time',$start_time);
+        $this->assign('end_time',$end_time);
+        $this->assign('grImgPath',config('extra_config.grImgPath'));
+        return view();
+    }
+
+    public function replyComment(){
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try{
+            $id = input('id');
+            $reply_content = input('reply_content');
+            $commentService = new CommentService();
+            if( !$commentInfo = $commentService->findInfo(['id' => $id]) ){
+                exception(lang('Comment Not Exists'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            if(!$commentService->upsert(['id' => $id,'reply_content' => $reply_content,'reply_time' => time()],'Comment.reply')){
+                exception($commentService->getError(),ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record('Reply Comment',$id);
+        }catch (\Exception $e){
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    public function delComment(){
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try{
+            $id = input('id');
+            $commentService = new CommentService();
+            if( !$commentInfo = $commentService->findInfo(['id' => $id]) ){
+                exception(lang('Comment Not Exists'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            if(!$commentService->del($id)){
+                exception($commentService->getError(),ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record('Delete Comment',$id);
+        }catch (\Exception $e){
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
         }
         return json($ret);
