@@ -546,6 +546,13 @@ return [
     'Limit Times Require'                      => '限制次数必须',
     'Left Times Require'                       => '剩余次数必须',
     'Desc Require'                             => '备注必须',
+    'Percent'                                  => '佣金比例',
+    'Company Charge'                           => '运营商充值',
+    'Charge Limit'                             => '充值限额',
+    'Percent Require'                          => '佣金比例必须',
+    'Percent Illegal'                          => '佣金比例必须是[0~1]区间内的小数',
+    'Charge Limit Require'                     => '充值限额必须',
+    'Charge Limit Illegal'                     => '充值限额必须大于0',
     'Alarm Tel Require'                        => '报警电话必须',
     'Status Require'                           => '运营商状态必须',
     'Confirm Delete Company'                   => '请确认是否要删除运营商',
@@ -553,6 +560,9 @@ return [
     'Add/Edit Company'                         => '添加/编辑运营商',
     'Del Company'                              => '删除运营商',
     'Download Template'                        => '下载模板',
+    'Set'                                      => '设置佣金',
+    'Charge'                                   => '充值',
+    'Company Not Exists'                       => '公司不存在',
 
     //运营商管理
     'Company Management'                => '运营商管理',

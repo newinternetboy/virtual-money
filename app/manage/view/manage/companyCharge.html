@@ -1,0 +1,252 @@
+{js href="__JS__/bootstrap-typeahead.js" /}
+<style>
+    #addModal .form-group{
+        width: 100%;
+        float: left;
+    }
+
+    #addModal .control-label {
+        text-align: right;
+        margin-top: 6px;
+    }
+
+    .addModal .btn {
+        margin: 5px;
+    }
+</style>
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <div class="ibox float-e-margins" style="background: white; float: left; width: 100%;">
+                    <!-- 表单标题概要 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Company Charge')}</h5>
+                    </div>
+                    <!-- 表单内容 -->
+                    <div class="ibox-content">
+                        <form id="companySelect"  method="post" class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-8" style="float: left">
+                                    <div class="form-group">
+                                        <label for="company" class="col-sm-2 control-label">{:lang('Company')}:</label>
+                                        <div class="col-sm-10">
+                                            <input id="company" name="company" value="{$company ?? ''}" type="text" autocomplete="off" data-provide="typeahead"  class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="float: left">
+                                    <div class="form-group">
+                                        <!--<label  class="col-sm-2 control-label"></label>-->
+                                        <div class="col-sm-10">
+                                            <button style="float: left; margin: 0;" class="btn btn-primary" type="submit" >{:lang('Search')}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div style="clear: both"></div>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <!-- 表格数据 -->
+                        <table id="table" class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
+                            <thead>
+                            <tr>
+                                <th data-width="50" >{:lang('OPT_ID')}</th>
+                                <th data-width="50" >{:lang('Company Name')}</th>
+                                <th data-width="50" >{:lang('Percent')}</th>
+                                <th data-width="50" >{:lang('Charge Limit')}</th>
+                                <th data-width="50" >{:lang('Operation')}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {foreach $companys as $company}
+                            <tr>
+                                <th>{$company.OPT_ID}</th>
+                                <th>{$company.company_name}</th>
+                                <th>{$company.percent}</th>
+                                <th>{$company.charge_limit}</th>
+                                <th><button class="btn btn-info" onclick="setCompany('{$company.id}',{$company.percent})">{:lang('Set')}</button><button style="margin-left: 1vw" class="btn btn-success" onclick="chargeCompany('{$company.id}')">{:lang('Charge')}</button> </th>
+                            </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {$companys->render()}
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addModalLabel">{:lang('Set')}</h4>
+            </div>
+            <div class="modal-body" style="width: 100%; float: left;">
+                <input style="display: none" name="id" value="" id="id" />
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="percent" class="col-md-2 control-label">{:lang('Percent')}<span class="glyphicon glyphicon-asterisk" style="color:red"></span></label>
+                        <div class="col-md-10">
+                            <input class="form-control" type="number"  name="percent" id="percent"  required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="chargeModal" tabindex="-1" role="dialog" aria-labelledby="chargeModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="chargeModalLabel">{:lang('Charge')}</h4>
+            </div>
+            <div class="modal-body" style="width: 100%; float: left;">
+                <input style="display: none" name="cid" value="" id="cid" />
+                <div class="modal-body-content">
+                    <div class="form-group must">
+                        <label for="charge_limit" class="col-md-2 control-label">{:lang('Charge Money')}<span class="glyphicon glyphicon-asterisk" style="color:red"></span></label>
+                        <div class="col-md-10">
+                            <input class="form-control" type="number" value="0" name="charge_limit" id="charge_limit"  required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" class="btn btn-primary" onclick="charge();">{:lang('Save')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $.fn.typeahead.Constructor.prototype.blur = function() {
+        var that = this;
+        setTimeout(function () { that.hide() }, 250);
+    };
+    $('#company').typeahead({
+        minLength: 0,
+        source: function (query, process) {
+            var company_name = $('#company').val();
+            var parameter = {company_name: company_name};
+            $.ajax({
+                url:"{:url('manage/report/getCompanyByName')}",
+                method:'post',
+                dataType:'json',
+                data: parameter,
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    var results = res.map(function (product) {
+                        return product.company_name;
+                    });
+                    process(results);
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
+                }
+            })
+        }
+    });
+</script>
+<script>
+
+    function sub(){
+        var id = $('#id').val();
+        var percent = $('#percent').val();
+
+        if( percent == '' || percent == null || percent == 'undefined' ){
+            alertMsg("{:lang('Percent Require')}");
+            return false;
+        }
+        percent = Number(percent);
+        if(percent < 0 || percent > 1){
+            alertMsg("{:lang('Percent Illegal')}");
+            return false;
+        }
+        var data = {id: id, percent: percent};
+        $.ajax({
+            url:"{:url('manage/manage/setpercent')}",
+            method:'post',
+            dataType:'json',
+            data: {data: JSON.stringify(data)},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    alertMsg(res.msg);
+                    window.location.href = '';
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+    function showAddModal(){
+        $('#addModal').modal('show')
+    }
+
+    function showChargeModal(){
+        $('#chargeModal').modal('show')
+    }
+
+    function setCompany(id,percent){
+        $('#id').val(id);
+        $('#percent').val(percent)
+        showAddModal();
+    }
+
+    function chargeCompany(cid){
+        $('#cid').val(cid);
+        showChargeModal();
+    }
+
+    function charge(){
+        var cid = $('#cid').val();
+        var charge_limit = $('#charge_limit').val();
+
+        if( charge_limit == '' || charge_limit == null || charge_limit == 'undefined' ){
+            alertMsg("{:lang('Charge Limit Require')}");
+            return false;
+        }
+        charge_limit = Number(charge_limit);
+        if( charge_limit <= 0 ){
+            alertMsg("{:lang('Charge Limit Illegal')}");
+            return false;
+        }
+        var data = {id: cid, charge_limit: charge_limit};
+        $.ajax({
+            url:"{:url('manage/manage/charge')}",
+            method:'post',
+            dataType:'json',
+            data: {data: JSON.stringify(data)},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    alertMsg(res.msg);
+                    window.location.href = '';
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+</script>

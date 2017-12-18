@@ -67,4 +67,13 @@ class CompanyService extends BasicService
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $PHPWriter->save("php://output");
     }
+
+    /**
+     * 运营商充值
+     * @param $data
+     * @return int|true
+     */
+    public function charge($data){
+        return $this->dbModel->where(['id' => $data['id']])->setInc('charge_limit',$data['charge_limit']);
+    }
 }
