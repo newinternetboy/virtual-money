@@ -59,15 +59,15 @@ class Meter extends Admin
             $where['meter_life'] = METER_LIFE_ACTIVE;
             $where['meter_status'] = ['in',[METER_STATUS_BIND,METER_STATUS_NEW]];
             $where['company_id'] = ['in',[SHUANGDELI_ID,$this->company_id]];
-            if( !$meter = model('Meter')->getMeterInfo($where,'find') ){
+            if( !$meter = model('Meter')->getMeterInfo($where,'find','M_Code,M_Type,P_ID,U_ID,M_Address,meter_status,detail_address,balance') ){
                 exception("表具不存在或已报装,请检查表号",ERROR_CODE_DATA_ILLEGAL);
             }
             $ret['meter'] = $meter->toArray();
             //如果表具已绑定,返回绑定用户信息
             if( isset($meter['meter_status']) && $meter['meter_status'] == METER_STATUS_BIND && isset($meter['U_ID']) && $meter['U_ID'] ){
-                $consumer = model('Consumer')->getConsumerById($meter['U_ID']);
+                $consumer = model('Consumer')->getConsumerById($meter['U_ID'],'username,tel,identity,family_num,building_area,income_peryear');
                 $consumer = $consumer->toArray();
-                $area = model('Area')->getAreaById($meter['M_Address']);
+                $area = model('Area')->getAreaById($meter['M_Address'],'name,belong,desc,address');
                 $ret['consumer'] = $consumer;
                 $ret['meter']['area'] = $area['address'];
             }
@@ -580,5 +580,76 @@ class Meter extends Admin
         return $this->fetch();
     }
 
+    /**
+     *现金缴费
+     */
+    public function charge(){
+        $chargeList = config('chargeList');
+        $this->assign('chargeList',$chargeList);
+        return view();
+    }
+
+    /**
+     * 充值操作api
+     * @return \think\response\Json
+     */
+    public function doCharge(){
+        $this->mustCheckRule();
+        $data = input('data');
+        $data = json_decode($data,true);
+        $ret['code'] = 200;
+        $ret['msg'] = '操作成功';
+        try{
+            if(!$data){
+                exception(lang('Data Illegal'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            if(!is_numeric($data['money']) || $data['money'] <= 0){
+                exception(lang('Money Should Gt 0'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            //判断限额是否足够充值
+            $companyInfo = model('Company')->getCompany(['id' => $this->company_id],'charge_limit');
+            if($companyInfo['charge_limit'] < $data['money']){
+                exception(lang('Charge Limit Not Enough'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            if(!$meter = model('Meter')->getMeterInfo(['id' => $data['id'],'company_id' => $this->company_id,'meter_status' => METER_STATUS_BIND,'meter_life' => METER_LIFE_ACTIVE],'find')){
+                exception(lang('Without Permission'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            //添加moneylog
+            $moneylog_data['from'] = $data['id'];
+            $moneylog_data['money_type'] = MONEY_TYPE_RMB;
+            $moneylog_data['type'] = MONEY_PAY;
+            $moneylog_data['channel'] = MONEY_CHANNEL_MANAGE;
+            $moneylog_data['money'] = $data['money'];
+            $moneylog_data['company_id'] = $this->company_id;
+            $result = insertMoneyLog($moneylog_data);
+            if(is_array($result)){
+                Log::record(['充值缴费插入moneylog失败' => $result['msg'],'data' => $data,'moneylog_data' => $moneylog_data],'error');
+                exception($result['msg'],$result['code']);
+            }
+            //添加task
+            $task_data['meter_id'] = $data['id'];
+            $task_data['cmd'] = 'charge';
+            $task_data['param'] = strval($data['money']);
+            $task_data['balance_rmb'] = $data['money'];
+            $task_data['money_log_id'] = $result;
+            $task_result = upsertTask($task_data);
+            if(is_array($task_result)){
+                Log::record(['充值缴费插入task失败' => $result['msg'],'data' => $data,'task_data' => $task_data],'error');
+                exception($task_result['msg'],$task_result['code']);
+            }
+            //扣除运营商充值限额
+            if(!model('Company')->where(['id' => $this->company_id])->setDec('charge_limit',$data['money'])){
+                $error = model('Meter')->getError();
+                Log::record(['充值缴费扣除运营商限额失败' => $error,'data' => $data],'error');
+                exception('充值缴费失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('LogRecord')->record( 'Charge Meter',$data);
+        }catch (\Exception $e){
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+            Log::record(['充值缴费失败' => $ret['msg'],'data' => $data],'error');
+        }
+        return json($ret);
+    }
 
 }

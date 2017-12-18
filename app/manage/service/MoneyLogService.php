@@ -125,7 +125,7 @@ class MoneyLogService extends BasicService
             $objPHPExcel->getActiveSheet()->setCellValue('B' . $i,  isset($data[$i-4]->meter) ? $data[$i-4]->meter->consumer['username'] : $data[$i-4]['meter']['consumer']['username']);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $data[$i-4]['money']);
 //            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]['money_type'] == MONEY_TYPE_RMB ? '人民币' : '得力币');
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, in_array($data[$i-4]['channel'],[MONEY_SYSTEM_DELI,MONEY_TYPE_RMB]) ? ($data[$i-4]['channel'] == MONEY_CHANNEL_WEIXIN ? '微信' : '清分') : $data[$i-4]['channel'] );
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, config('extra_config.meter_charge_type')[$data[$i-4]['channel']] );
             $objPHPExcel->getActiveSheet()->setCellValue('F' . $i, $data[$i-4]['create_time']);
         }
         $last = $count + 4;
@@ -187,7 +187,7 @@ class MoneyLogService extends BasicService
             $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]['money']);
             $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $data[$i-4]['money_type'] == MONEY_TYPE_RMB ? lang('Rmb') : lang('Deli'));
             $objPHPExcel->getActiveSheet()->setCellValue('F' . $i, config('ordertypes')[$data[$i-4]['type']]);
-            $objPHPExcel->getActiveSheet()->setCellValue('G' . $i, config('channels')[$data[$i-4]['channel']]);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . $i, config('extra_config.meter_charge_type')[$data[$i-4]['channel']]);
             $objPHPExcel->getActiveSheet()->setCellValue('H' . $i, $data[$i-4]['create_time']);
         }
         $objPHPExcel->getActiveSheet()->setTitle($title);      //设置sheet的名称

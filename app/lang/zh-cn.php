@@ -485,6 +485,17 @@ return [
     //用户列表
     'User List'                       => '用户列表',
 
+    //现金缴费
+    'Meter Charge'                    => '现金缴费',
+    'Please Choose Charge Type'       => '请选择充值金额',
+    'Input Money'                      => '手动输入',
+    'Choose List'                      => '选择框',
+    'Please Search First'              => '请先查询表具',
+    'Data Illegal'                     => '数据不合法',
+    'Without Permission'               => '您无权进行此操作',
+    'Money Should Gt 0'                => '充值金额必须大于0',
+    'Charge Limit Not Enough'          => '您的充值限额不足!',
+
     /******************************清分系统**************************/
     'Manage'                            => '管理',
     'Require'                           => '必须',

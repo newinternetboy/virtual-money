@@ -443,11 +443,11 @@ class Manage extends Admin
         $order_id = input('order_id');
         $channel = input('channel/d');
         $type = input('type/d');
-        //$money_type = input('money_type/d');
-        $money_type = MONEY_TYPE_RMB; //现在只能查人民币
-        $where = [
-            'money_type' => $money_type
-        ];
+        $money_type = input('money_type/d');
+        $where = [];
+        if($money_type){
+            $where['money_type' ] = $money_type;
+        }
         $whereor = [];
         if($M_Code){
             $meter_id = (new MeterService())->findInfo(['M_Code' => $M_Code,'meter_life' => METER_LIFE_ACTIVE])['id'];
@@ -465,14 +465,17 @@ class Manage extends Admin
         if($order_id){
             $where['order_id'] = $order_id;
         }
-        $moneylogs = (new MoneyLogService())->getInfoPaginateWhereOr($where,$whereor,['M_Code' => $M_Code,'channel' => $channel,'type' => $type,'order_id' => $order_id]);
+        $moneylogs = (new MoneyLogService())->getInfoPaginateWhereOr($where,$whereor,['M_Code' => $M_Code,'channel' => $channel,'money_type' => $money_type,'type' => $type,'order_id' => $order_id]);
         $this->assign('M_Code',$M_Code);
         $this->assign('order_id',$order_id);
         $this->assign('channel',$channel);
         $this->assign('type',$type);
         $this->assign('moneylogs',$moneylogs);
-        $channels = config('channels');
+        $channels = config('extra_config.meter_charge_type');
+        $moneytypes = config('moneytypes');
         $this->assign('channels',$channels);
+        $this->assign('moneytypes',$moneytypes);
+        $this->assign('money_type',$money_type);
         $ordertypes = config('ordertypes');
         $this->assign('ordertypes',$ordertypes);
         return view();
@@ -486,11 +489,11 @@ class Manage extends Admin
         $order_id = input('order_id');
         $channel = input('channel/d');
         $type = input('type/d');
-        //$money_type = input('money_type/d');
-        $money_type = MONEY_TYPE_RMB; //现在只能查人民币
-        $where = [
-            'money_type' => $money_type
-        ];
+        $money_type = input('money_type/d');
+        $where = [];
+        if($money_type){
+            $where['money_type' ] = $money_type;
+        }
         $whereor = [];
         if($M_Code){
             $meter_id = (new MeterService())->findInfo(['M_Code' => $M_Code,'meter_life' => METER_LIFE_ACTIVE])['id'];
@@ -697,7 +700,7 @@ class Manage extends Admin
         $id = input('id');
         $moneyLog = (new MoneyLogService())->findInfo(['id' => $id]);
         $this->assign('moneyLog',$moneyLog);
-        $channels = config('channels');
+        $channels = config('extra_config.meter_charge_type');
         $this->assign('channels',$channels);
         $ordertypes = config('ordertypes');
         $this->assign('ordertypes',$ordertypes);
