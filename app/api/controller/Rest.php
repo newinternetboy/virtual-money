@@ -104,7 +104,6 @@ class Rest extends LanFilter
             $searchDate = $searchData['searchDate'];
             $meter_id = $searchData['meter_id'];
             $type = $searchData['type'];
-            $channel = $searchData['channel'];
             if(!$meter_id){
                 exception("请先提供表id",ERROR_CODE_DATA_ILLEGAL);
             }
@@ -117,7 +116,7 @@ class Rest extends LanFilter
             $searchDate .= '-01';
             $startDate = $searchDate.' 00:00:00';
             $endDate = date('Y-m-d H:i:s',strtotime('+1 month',strtotime($searchDate))-1);
-            $chargeLogs = $meterService->moneyLogs($meterInfo['id'],$startDate,$endDate,$type,$channel);
+            $chargeLogs = $meterService->moneyLogs($meterInfo['id'],$startDate,$endDate,$type);
             $ret['data'] = $chargeLogs;
         }catch (\Exception $e){
             $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
