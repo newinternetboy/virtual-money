@@ -165,6 +165,13 @@ class LogRecord extends Admin
         $datas = $this->translate($arr);
         return json_encode($datas,JSON_UNESCAPED_UNICODE);
     }
+
+    public function downloadTrans($data){
+        foreach($data as & $value){
+            $value=$this->translate($value);
+        }
+        return json_encode($data,JSON_UNESCAPED_UNICODE);
+    }
     /********以下未清分平台的解析***********/
     //解析扣除余额；
     public function deduct($data){

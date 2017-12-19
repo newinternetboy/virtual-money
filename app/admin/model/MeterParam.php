@@ -72,4 +72,18 @@ class MeterParam extends Admin
     public function getAllMeterParams($where){
         return $this->where($where)->paginate();
     }
+
+    public function findInfo($where=[],$field=''){
+        if($field==""){
+            return $this->where($where)->find();
+        }
+        return $this->field($field)->where($where)->find();
+    }
+
+    public function selectInfo($where=[],$field=''){
+        if($field==''){
+            return $this->where($where)->select();
+        }
+        return $this->field($field)->where($where)->select();
+    }
 }

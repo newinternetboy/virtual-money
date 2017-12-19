@@ -12,7 +12,7 @@
                     <div class="ibox-content">
                         <!-- 用户控件（操作） -->
                         {toolbar id="toolbar"}
-
+                        <button style="float: right;" class="btn btn-primary" type="button" id="meterparam_download" >运行参数下载</button>
                         {/toolbar}
                         <!-- 表格数据 -->
                         <table id="table" data-toggle="gridview" class="table table-bordered" data-url="{:url('admin/Meterparam/getList')}" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
@@ -65,4 +65,9 @@
 
         }
     };
+
+    $('#meterparam_download').click(function(){
+        window.location.href="{:url('admin/meterparam/download')}";
+    })
+
 </script>

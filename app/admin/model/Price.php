@@ -125,4 +125,15 @@ class Price extends Admin
     public function getAllPricesUsePaginate($where = []){
         return $this->where($where)->order('create_time desc')->paginate();
     }
+
+    public function findInfo($where=[],$field=''){
+        return $this->field($field)->where($where)->find();
+    }
+
+    public function selectInfo($where=[],$field=''){
+        if($field==''){
+            return $this->where($where)->select();
+        }
+        return $this->field($field)->where($where)->select();
+    }
 }

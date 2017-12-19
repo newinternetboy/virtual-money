@@ -53,7 +53,7 @@ class Area extends Admin
         if( !$field ){
             return $this->where($where)->$method();
         }
-        return $this->where($field)->$method();
+        return $this->field($field)->where($where)->$method();
     }
 
     public function getAreasById($id, $company_id)

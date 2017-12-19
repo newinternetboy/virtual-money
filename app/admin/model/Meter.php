@@ -108,4 +108,19 @@ class Meter extends Admin
     public function updateMoney($meter_id, $method, $field, $money){
         return $this->where('id', $meter_id)->$method($field, $money)->update([]);
     }
+
+    public function columnInfo($where=[],$field){
+        return $this->where($where)->column($field);
+    }
+
+    public function findInfo($where=[],$field=''){
+        return $this->field($field)->where($where)->find();
+    }
+
+    public function selectInfo($where=[],$field=''){
+        if($field==''){
+            return $this->where($where)->select();
+        }
+        return $this->field($field)->where($where)->select();
+    }
 }
