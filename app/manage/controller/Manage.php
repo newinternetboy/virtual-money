@@ -60,6 +60,8 @@ class Manage extends Admin
                 $scene = 'Company.edit';
             }else{
                 $data['status'] = COMPANY_STATUS_NORMAL;
+                $data['percent'] = 0;   //初始化佣金比例
+                $data['charge_limit'] = 0;  //初始化佣金限额
                 $scene = 'Company.add';
             }
             if( !$companyService->upsert($data,$scene) ){
@@ -441,11 +443,11 @@ class Manage extends Admin
         $order_id = input('order_id');
         $channel = input('channel/d');
         $type = input('type/d');
-        //$money_type = input('money_type/d');
-        $money_type = MONEY_TYPE_RMB; //现在只能查人民币
-        $where = [
-            'money_type' => $money_type
-        ];
+        $money_type = input('money_type/d');
+        $where = [];
+        if($money_type){
+            $where['money_type' ] = $money_type;
+        }
         $whereor = [];
         if($M_Code){
             $meter_id = (new MeterService())->findInfo(['M_Code' => $M_Code,'meter_life' => METER_LIFE_ACTIVE])['id'];
@@ -463,14 +465,17 @@ class Manage extends Admin
         if($order_id){
             $where['order_id'] = $order_id;
         }
-        $moneylogs = (new MoneyLogService())->getInfoPaginateWhereOr($where,$whereor,['M_Code' => $M_Code,'channel' => $channel,'type' => $type,'order_id' => $order_id]);
+        $moneylogs = (new MoneyLogService())->getInfoPaginateWhereOr($where,$whereor,['M_Code' => $M_Code,'channel' => $channel,'money_type' => $money_type,'type' => $type,'order_id' => $order_id]);
         $this->assign('M_Code',$M_Code);
         $this->assign('order_id',$order_id);
         $this->assign('channel',$channel);
         $this->assign('type',$type);
         $this->assign('moneylogs',$moneylogs);
-        $channels = config('channels');
+        $channels = config('extra_config.meter_charge_type');
+        $moneytypes = config('moneytypes');
         $this->assign('channels',$channels);
+        $this->assign('moneytypes',$moneytypes);
+        $this->assign('money_type',$money_type);
         $ordertypes = config('ordertypes');
         $this->assign('ordertypes',$ordertypes);
         return view();
@@ -484,11 +489,11 @@ class Manage extends Admin
         $order_id = input('order_id');
         $channel = input('channel/d');
         $type = input('type/d');
-        //$money_type = input('money_type/d');
-        $money_type = MONEY_TYPE_RMB; //现在只能查人民币
-        $where = [
-            'money_type' => $money_type
-        ];
+        $money_type = input('money_type/d');
+        $where = [];
+        if($money_type){
+            $where['money_type' ] = $money_type;
+        }
         $whereor = [];
         if($M_Code){
             $meter_id = (new MeterService())->findInfo(['M_Code' => $M_Code,'meter_life' => METER_LIFE_ACTIVE])['id'];
@@ -695,7 +700,7 @@ class Manage extends Admin
         $id = input('id');
         $moneyLog = (new MoneyLogService())->findInfo(['id' => $id]);
         $this->assign('moneyLog',$moneyLog);
-        $channels = config('channels');
+        $channels = config('extra_config.meter_charge_type');
         $this->assign('channels',$channels);
         $ordertypes = config('ordertypes');
         $this->assign('ordertypes',$ordertypes);
@@ -849,4 +854,81 @@ class Manage extends Admin
         return json($ret);
     }
 
+    /**
+     * 运营商充值
+     * @return \think\response\View
+     */
+    public function companyCharge(){
+        $company = input('company');
+        $companyService = new CompanyService();
+        $where['status'] = COMPANY_STATUS_NORMAL;
+        if( $company ){
+            $where['company_name'] = $company;
+        }
+        $companys = $companyService->getInfoPaginate($where,'OPT_ID,company_name,percent,charge_limit');
+        $this->assign('companys',$companys);
+        $this->assign('company',$company);
+        return view();
+    }
+
+    /**
+     * 设置佣金比例api
+     * @return \think\response\Json
+     */
+    public function setPercent(){
+        $data = input('data');
+        $data = json_decode($data,true);
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try{
+            $companyService = new CompanyService();
+            if(!isset($data['id']) || !$data['id'] || !$companyService->findInfo(['id' => $data['id'],'status' => COMPANY_STATUS_NORMAL])){
+                exception(lang('Company Not Exists'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            $setData['id'] = $data['id'];
+            $setData['percent'] = $data['percent'];
+            if( !$companyService->upsert($setData,'Company.setpercent') ){
+                $error = $companyService->getError();
+                Log::record(['设置佣金比例失败:' => $error,'data' => $data],'error');
+                exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record( 'set percent',$data);
+        }catch (\Exception $e){
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    /**
+     * 运营商充值api
+     * @return \think\response\Json
+     */
+    public function charge(){
+        $data = input('data');
+        $data = json_decode($data,true);
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try{
+            $companyService = new CompanyService();
+            if(!isset($data['id']) || !$data['id'] || !$companyService->findInfo(['id' => $data['id'],'status' => COMPANY_STATUS_NORMAL])){
+                exception(lang('Company Not Exists'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            $chargeData['id'] = $data['id'];
+            $chargeData['charge_limit'] = floatval($data['charge_limit']);
+            if($chargeData['charge_limit'] <= 0 ){
+                exception(lang('Charge Limit Illegal'),ERROR_CODE_DATA_ILLEGAL);
+            }
+            if( !$companyService->charge($chargeData) ){
+                $error = $companyService->getError();
+                Log::record(['运营商充值失败:' => $error,'data' => $data],'error');
+                exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
+            }
+            model('app\admin\model\LogRecord')->record( 'company charge',$data);
+        }catch (\Exception $e){
+            $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
 }

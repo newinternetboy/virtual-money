@@ -33,7 +33,9 @@ class Company extends Validate
         'charge_date'       => 'require',
         'limit_times'       => 'require',
         'left_times'        => 'require',
-        'desc'              => 'require',
+        'percent'           => 'require|between:0,1',
+        'charge_limit'      => 'require|gt:0',
+//        'desc'              => 'require',
 //        'alarm_tel'         => 'require',
 //        'status'            => 'require',
     ];
@@ -59,7 +61,11 @@ class Company extends Validate
         'charge_date.require'      => '{%Charge Date Require}',
         'limit_times.require'      => '{%Limit Times Require}',
         'left_times.require'       => '{%Left Times Require}',
-        'desc.require'             => '{%Desc Require}',
+        'percent.require'          => '{%Percent Require}',
+        'percent.between'          => '{%Percent Illegal}',
+        'charge_limit.require'     => '{%Charge Limit Require}',
+        'charge_limit.gt'         => '{%Charge Limit Illegal}',
+//        'desc.require'             => '{%Desc Require}',
 //        'alarm_tel.require'        => '{%Alarm Tel Require}',
 //        'status.require'           => '{%Status Require}',
     ];
@@ -68,5 +74,7 @@ class Company extends Validate
         'add'   => ['company_name','company_type','OPT_ID','address','quality','contacts_tel','contacts_name','fax','legal_person','bank_name','bank_card','tax_code','secret_key_url','charge_status','charge_date','limit_times','left_times','status'],
         'edit'  => ['company_name','company_type','address','quality','contacts_tel','contacts_name','fax','legal_person','bank_name','bank_card','tax_code','secret_key_url','charge_status','charge_date','limit_times','left_times'],
         'del'   => ['status'],
+        'setpercent'    => ['percent'],
+        'charge'        => ['charge_limit']
     ];
 }

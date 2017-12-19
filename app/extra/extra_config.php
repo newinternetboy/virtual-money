@@ -115,4 +115,12 @@ return [
 
     //定义个人商铺根路径；
     'grImgPath' => 'http://114.113.90.9:10086/',
+
+    //充值类型配置
+    'meter_charge_type' => [
+        MONEY_CHANNEL_WEIXIN => '微信',
+        MONEY_CHANNEL_MANAGE => '系统',
+        MONEY_CHANNEL_CARD => '充值卡',
+        //MONEY_CHANNEL_BANK => '银行卡',
+    ],
 ];

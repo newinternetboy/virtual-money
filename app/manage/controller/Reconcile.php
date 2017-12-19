@@ -114,7 +114,7 @@ class Reconcile extends Admin
                     'to' => null, //to字段不存在是充值记录
                     'type' => MONEY_PAY,
                     'money_type' => MONEY_TYPE_RMB,
-                    'channel' => ['in', [MONEY_CHANNEL_WEIXIN]],
+                    //'channel' => ['in', [MONEY_CHANNEL_WEIXIN]],
                     'create_time' => ['between', [$startTime, $endTime]]
                 ];
                 //            $deli_where = [
@@ -140,7 +140,7 @@ class Reconcile extends Admin
                 'to' => null, //to字段不存在是充值记录
                 'type' => MONEY_PAY,
                 'money_type' => MONEY_TYPE_RMB,
-                'channel' => ['in', [MONEY_CHANNEL_WEIXIN]],
+                //'channel' => ['in', [MONEY_CHANNEL_WEIXIN]],
                 'create_time' => ['between', [$startTime, $endTime]]
             ];
             //        $deli_where_all = [
@@ -201,7 +201,7 @@ class Reconcile extends Admin
                     'to'    => null, //to字段不存在是充值记录
                     'type' => MONEY_PAY,
                     'money_type' => MONEY_TYPE_RMB,
-                    'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
+                    //'channel'  => ['in',[MONEY_CHANNEL_WEIXIN]],
                     'create_time' => ['between',[$startTime,$endTime]]
                 ];
     //            $deli_where = [
@@ -346,7 +346,7 @@ class Reconcile extends Admin
         $this->assign('endDate',$endDate);
         $this->assign('source',$source);
 
-        $channels = config('channels');
+        $channels = config('extra_config.meter_charge_type');
         $this->assign('channels',$channels);
         $moneytypes = config('moneytypes');
         $this->assign('moneytypes',$moneytypes);
@@ -458,14 +458,15 @@ class Reconcile extends Admin
             }
             $where['create_time'] = ['between',[strtotime($startDate.' 00:00:00'),strtotime($endDate.' 23:59:59')]];
             $moneyLogService = new MoneyLogService();
-            foreach(config('chargeTypes') as $channel){
-                $where['channel'] = $channel['channel'];
-                $where['money_type'] = $channel['money_type'];
-                $where['type'] = $channel['type'];
+            $channels = config('extra_config.meter_charge_type');
+            foreach($channels as $index => $channel){
+                $where['channel'] = $index;
+                $where['money_type'] = MONEY_TYPE_RMB;
+                $where['type'] = MONEY_PAY;
                 $chargeTimes = $moneyLogService->counts($where);
                 $chargeMoney = $moneyLogService->sums($where,'money');
                 $reports[] = [
-                    'typeName'  => $channel['channelName'],
+                    'typeName'  => $channel,
                     'times' => $chargeTimes,
                     'money' => $chargeMoney,
                 ];

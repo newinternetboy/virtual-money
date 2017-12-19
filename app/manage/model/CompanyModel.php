@@ -29,4 +29,8 @@ class CompanyModel extends BasicModel
         return intval($value);
     }
 
+    public function setPercentAttr($value){
+        return floatval($value);
+    }
+
 }

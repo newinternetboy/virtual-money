@@ -87,23 +87,23 @@ return [
         'level' => ['error'],
     ],
     //对账-充值明细 类型下拉菜单
-    'channels'  => [
-        MONEY_CHANNEL_WEIXIN => lang('Wei Xin'),
-        MONEY_CHANNEL_MANAGE => lang('Manage Platform'),
-    ],
+//    'channels'  => [
+//        MONEY_CHANNEL_WEIXIN => lang('Wei Xin'),
+//        MONEY_CHANNEL_MANAGE => lang('Manage Platform'),
+//    ],
     'moneytypes' => [
         MONEY_TYPE_RMB => lang('Rmb'),
         MONEY_TYPE_DELI => lang('Deli'),
     ],
-    //对账-充值类型
-    'chargeTypes' => [
-        [
-            'channel' => MONEY_CHANNEL_WEIXIN,
-            'channelName' =>  lang('Wei Xin'),
-            'type' => MONEY_PAY,
-            'money_type' => MONEY_TYPE_RMB,
-        ],
-    ],
+//    //对账-充值类型
+//    'chargeTypes' => [
+//        [
+//            'channel' => MONEY_CHANNEL_WEIXIN,
+//            'channelName' =>  lang('Wei Xin'),
+//            'type' => MONEY_PAY,
+//            'money_type' => MONEY_TYPE_RMB,
+//        ],
+//    ],
     //订单类型
     'ordertypes' => [
         MONEY_PAY => lang('Order Pay'),

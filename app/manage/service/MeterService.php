@@ -46,10 +46,12 @@ class MeterService extends BasicService
      * @param $channel  充值类型
      * @return mixed
      */
-    public function moneyLogs($meter_id, $startDate, $endDate, $type, $channel){
+    public function moneyLogs($meter_id, $startDate, $endDate, $type, $channel = []){
         $where['from'] = $meter_id;
         $where['type'] = ['in',$type];
-        $where['channel'] = ['in',$channel];
+        if(!empty($channel)){
+            $where['channel'] = ['in',$channel];
+        }
         $where['create_time'] = ['between',[strtotime($startDate),strtotime($endDate)]];
         $moneyLogService = new MoneyLogService();
         return $moneyLogService->selectInfo($where);

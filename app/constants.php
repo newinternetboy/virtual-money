@@ -100,7 +100,10 @@ define('MONEY_DEDUCT',10); //清分扣除余额
 define('MONEY_SYSTEM_DELI',5); //系统赠送得力币
 //付费方式
 define('MONEY_CHANNEL_WEIXIN',1); //微信
-define('MONEY_CHANNEL_MANAGE',2); //清分后台
+define('MONEY_CHANNEL_MANAGE',2); //系统
+define('MONEY_CHANNEL_CARD',3); //充值卡
+define('MONEY_CHANNEL_BANK',4); //银行卡
+
 
 //task执行失败的记录处理状态
 define('MONEYLOG_FAIL_DEAL_STATUS_WAITING',1); //待处理
