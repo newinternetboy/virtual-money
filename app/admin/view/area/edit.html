@@ -9,7 +9,7 @@
                     <h3 class="modal-title">{$data['id']?lang('Edit'):lang('Add')}{:lang('Area')}</h3>
                 </div>
                 <input type="hidden" name="id" value="{$data.id ?? ''}">
-                <div class="modal-body">
+                <div class="modal-body"  id="add_area" >
                     <div class="modal-body-content">
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Area Name')}</label>
@@ -45,30 +45,71 @@
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Area Address')}</label>
                             <div class="col-sm-7">
-                                <input type="text" readonly id="address" class="form-control" name="address" required value="{$data.address??''}">
+                                <input type="text" id="address" class="form-control" name="address" required value="{$data.address??''}">
+                                <input type="hidden" id="map_address" name="map_address" value="{$data.map_address??''}">
                             </div>
+                            <button class="btn btn-primary" type="button" id="area" style="float:right;margin-right:10px;">选取坐标</button>
                         </div>
 
                     </div>
-                    <div id="check_map" style="display:none;" >
-                        <hr/>
-                        请输入：<input type="text" id="suggestId" style="width:250px">
-                        <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
-                        <div id="l-map"></div>
-                    </div>
+
 
                 <div class="modal-footer">
                     <button type="button" onclick="removemap()" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
                     <button type="submit" class="btn btn-primary">{:lang('Save')}</button>
                 </div>
             </div>
+                <div id="check_map" style="display:none;" >
+                    <div>
+                        请输入：<input type="text" id="suggestId" style="width:250px">
+                        <input type="hidden" id="province_s" value="{$data.province?? ''}" />
+                        <input type="hidden" id="city_s" value="{$data.city?? ''}" />
+                        <input type="hidden" id="district_s" value="{$data.district?? ''}" />
+                        <input type="hidden" id="longitude_s" value="{$data.longitude?? ''}" />
+                        <input type="hidden" id="latitude_s" value="{$data.latitude?? ''}" />
+                        <button type="button" onclick="suremap()" style="float: right;" class="btn btn-primary">保存位置</button>
+                        <button type="button" onclick="hidemap()" style="float: right;" class="btn btn-default">{:lang('Back')}</button>
+                    </div>
+                    <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:180px;height:auto; display:none;"></div>
+                    <div id="l-map"></div>
+                </div>
             </div>
         </div>
     </div>
 </form>
 <script>
-     $('#address').click(function(){
+     $('#area').click(function(){
+         $('#add_area').hide();
         $('#check_map').show();
          InitialMap();
+
     })
+     // 用经纬度设置地图中心点
+     function theLocation(){
+
+            map.clearOverlays();
+            var new_point = new BMap.Point(116.476912,116.476912);
+            var marker = new BMap.Marker(new_point);  // 创建标注
+            map.addOverlay(marker);              // 将标注添加到地图中
+            map.panTo(new_point);
+
+     }
+
+    function hidemap(){
+        $('#add_area').show();
+        $('#check_map').hide();
+    }
+     function suremap(){
+         $('#add_area').show();
+         $('#check_map').hide();
+         var address = $('#suggestId').val()
+         if(address!=''&&address!=null&&address!=undefined){
+             $('#address').val(address)
+         }
+         $('#province').val($('#province_s').val())
+         $('#city').val($('#city_s').val())
+         $('#district').val($('#district_s').val())
+         $('#longitude').val($('#longitude_s').val())
+         $('#latitude').val($('#latitude_s').val())
+     }
 </script>

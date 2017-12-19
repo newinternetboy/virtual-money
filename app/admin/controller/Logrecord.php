@@ -59,6 +59,10 @@ class Logrecord extends Admin
                 case 'Delete User':
                     $vol['data'] = model('LogRecord')->commonDeleteTrans($vol['data']);
                     break;
+                case 'Download Price':
+                case 'Download Meterparam':
+                $vol['data'] = model('LogRecord')->downloadTrans($vol['data']);
+                    break;
                 case 'Login succeed':
                     $vol['data'] = model('LogRecord')->LoginSucceed($vol['data']);
                     break;

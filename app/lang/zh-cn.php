@@ -290,6 +290,8 @@ return [
     'Boot Pulse Number'               => '开机脉冲数',
     'Upper limit of flow (ton / hour)'=> '流量上限(吨/小时)',
     'Reserve Field'                   => '备用字段',
+    'Download Meterparam'             => '运行参数下载',
+    'Download Price'                  => '价格下载',
 
     //阀门
     'Remote Valve Control'            => '远程阀门控制',

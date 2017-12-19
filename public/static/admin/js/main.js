@@ -835,9 +835,14 @@ function InitialMap () {
     function G(id) {
         return document.getElementById(id);
     }
-
+    var overlays = [];
     var map = new BMap.Map("l-map");
-    map.centerAndZoom("北京",12);                   // 初始化地图,设置城市和地图级别。
+    if($('#longitude').val()!=""){
+        map.centerAndZoom(new BMap.Point(parseFloat($('#longitude').val()),parseFloat($('#latitude').val())),11);
+    }else{
+        map.centerAndZoom("中国",12);
+    }
+
     function theLocation(){
         var city = document.getElementById("cityName").value;
         if(city != ""){
@@ -881,12 +886,13 @@ function InitialMap () {
             var geoc = new BMap.Geocoder();
             geoc.getLocation(point, function(rs){
                 var addComp = rs.addressComponents;
-                $('#address').val(addComp.province  + addComp.city  + addComp.district + addComp.street  + addComp.streetNumber);
-                $('#province').val(addComp.province);
-                $('#city').val(addComp.city);
-                $('#district').val(addComp.district);
-                $('#longitude').val(rs.point.lng);
-                $('#latitude').val(rs.point.lat);
+                $('#map_address').val(addComp.province  + addComp.city  + addComp.district + addComp.street  + addComp.streetNumber);
+                $('#suggestId').val(addComp.province  + addComp.city  + addComp.district + addComp.street  + addComp.streetNumber);
+                $('#province_s').val(addComp.province);
+                $('#city_s').val(addComp.city);
+                $('#district_s').val(addComp.district);
+                $('#longitude_s').val(rs.point.lng);
+                $('#latitude_s').val(rs.point.lat);
             });
         },500);
     })
@@ -903,10 +909,11 @@ function InitialMap () {
             onSearchComplete: myFun
         });
         local.search(myValue);
+        clearAll();
     }
 
 
-    var overlays = [];
+
     var overlaycomplete = function(e){
         map.removeOverlay(overlays[overlays.length-1]);
         overlays.push(e.overlay);
@@ -920,20 +927,10 @@ function InitialMap () {
         strokeStyle: 'solid' //边线的样式，solid或dashed。
     }
     //实例化鼠标绘制工具
-    var drawingManager = new BMapLib.DrawingManager(map, {
-        isOpen: true, //是否开启绘制模式
-        enableDrawingTool: false, //是否显示工具栏
-        drawingToolOptions: {
-            anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
-            offset: new BMap.Size(5, 5) //偏离值
-        },
-        circleOptions: styleOptions, //圆的样式
-        polylineOptions: styleOptions, //线的样式
-        polygonOptions: styleOptions, //多边形的样式
-        rectangleOptions: styleOptions //矩形的样式
-    });
+
+
     //添加鼠标绘制工具监听事件，用于获取绘制结果
-    drawingManager.addEventListener('overlaycomplete', overlaycomplete);
+
     function clearAll() {
         for(var i = 0; i < overlays.length; i++){
             map.removeOverlay(overlays[i]);
@@ -942,16 +939,45 @@ function InitialMap () {
     }
 
     var geoc = new BMap.Geocoder();
-    map.addEventListener("click", function(e){
-        var pt = e.point;
-        geoc.getLocation(pt, function(rs){
-            var addComp = rs.addressComponents;
-            $('#address').val(addComp.province  + addComp.city  + addComp.district + addComp.street  + addComp.streetNumber);
-            $('#province').val(addComp.province);
-            $('#city').val(addComp.city);
-            $('#district').val(addComp.district);
-            $('#longitude').val(e.point.lng);
-            $('#latitude').val(e.point.lat);
-        });
+        map.addEventListener("click", function(e){
+            if(overlays.length ==0){
+                map.clearOverlays();
+            }
+            var drawingManager = new BMapLib.DrawingManager(map, {
+                isOpen: true, //是否开启绘制模式
+                enableDrawingTool: false, //是否显示工具栏
+                drawingToolOptions: {
+                    anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
+                    offset: new BMap.Size(5, 5) //偏离值
+                },
+                circleOptions: styleOptions, //圆的样式
+                polylineOptions: styleOptions, //线的样式
+                polygonOptions: styleOptions, //多边形的样式
+                rectangleOptions: styleOptions //矩形的样式
+            });
+            drawingManager.addEventListener('overlaycomplete', overlaycomplete);
+            var pt = e.point;
+            geoc.getLocation(pt, function(rs){
+                var addComp = rs.addressComponents;
+                $('#map_address').val(addComp.province  + addComp.city  + addComp.district + addComp.street  + addComp.streetNumber);
+                $('#suggestId').val(addComp.province  + addComp.city  + addComp.district + addComp.street  + addComp.streetNumber);
+                $('#province_s').val(addComp.province);
+                $('#city_s').val(addComp.city);
+                $('#district_s').val(addComp.district);
+                $('#longitude_s').val(e.point.lng);
+                $('#latitude_s').val(e.point.lat);
+
+            });
     });
+
+   if($('#longitude').val()!=""){
+       map.enableScrollWheelZoom(true);
+       var new_point = new BMap.Point(parseFloat($('#longitude').val()),parseFloat($('#latitude').val()));
+       var marker = new BMap.Marker(new_point);  // 创建标注
+       map.addOverlay(marker);              // 将标注添加到地图中
+       map.panTo(new_point)
+   }
+
+
+
 }

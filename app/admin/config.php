@@ -127,7 +127,9 @@ return [
         'Delete Role',
         'Save User',
         'Delete User',
-        'Update Password'
+        'Update Password',
+        'Download Price',
+        'Download Meterparam'
     ],
 
     //统计报表默认查询时间差

@@ -73,6 +73,9 @@ class Area extends Admin
             return info(lang('Request type error'));
         }
         $data = input('post.');
+        if(!$data['longitude']){
+            $this->error('请再地图上选取坐标！');
+        }
         $data['company_id'] = $this->company_id;
         if(empty($data['id'])){
             unset($data['id']);

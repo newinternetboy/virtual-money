@@ -1,0 +1,136 @@
+<!-- Data Tables -->
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" style="background: white">
+                <!-- 表单标题概要 -->
+                <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                    <h5>{:lang('Price')}{:lang('Maintenance')}</h5>
+                </div>
+                <!-- 表单内容 -->
+                <div class="ibox-content">
+                    <!-- 用户控件（操作） -->
+                    <div style="margin: 50px;">
+                        <button  class="btn-lg aaa btn-primary" type="button" id="special_user" >指定用户下载</button>
+                        <button style="margin-left: 50px;" class="btn-lg aaa" type="button" id="area_user" >地区用户下载</button>
+                        <button  class="btn-lg aaa" style="margin-left: 50px;" type="button" id="all_user" >所有用户下载</button>
+                        <button  class="btn btn-primary" style="margin-right: 50px;float:right;" type="button" onclick="history.back(-1);" >返回</button>
+                    </div>
+                    <hr/>
+                    <!-- 表格数据 -->
+                    <div class="responsive">
+                        <div id="special_user_s">
+                            <div>
+                                <textarea id="spicial_val" placeholder="请输入表号用引文下的分号隔开 如:132465462545;25364564643;98765462312" cols="120" rows="10"></textarea>
+                            </div>
+                        </div >
+                        <div id="area_user_s" style="display:none;">
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label">{:lang('End Time')}:</label>
+                                <div class="col-sm-10">
+                                    <select id="area_val" class="form-control" style="width:500px;">
+                                        {volist  name="arealist" id="vo"}
+                                        <option value="{$vo.id}" >{$vo.name}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="all_user_s" style="display:none;">
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label">所有用户下载:</label>
+                                <div class="col-sm-10" id="all_val">
+                                    <input type="radio" name="all" value="1" />是 &nbsp;
+                                    <input type="radio" name="all" value="2" />否
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-right: 100px;">
+                            <button  class="btn btn-primary" onclick="Sub()" style="float: right;" type="button" >确认控制</button>
+                            <div style="display:none;color:red;" id="message"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#special_user').click(function(){
+        $('#special_user').addClass("btn-primary");
+        $('#area_user').removeClass("btn-primary");
+        $('#all_user').removeClass("btn-primary");
+        $('#special_user_s').show();
+        $('#area_user_s').hide();
+        $('#all_user_s').hide();
+        $('#message').hide();
+    })
+    $('#area_user').click(function(){
+        $('#special_user').removeClass("btn-primary");
+        $('#area_user').addClass("btn-primary");
+        $('#all_user').removeClass("btn-primary");
+        $('#special_user_s').hide();
+        $('#area_user_s').show();
+        $('#all_user_s').hide();
+        $('#message').hide();
+    })
+    $('#all_user').click(function(){
+        $('#special_user').removeClass("btn-primary");
+        $('#area_user').removeClass("btn-primary");
+        $('#all_user').addClass("btn-primary");
+        $('#special_user_s').hide();
+        $('#area_user_s').hide();
+        $('#all_user_s').show();
+        $('#message').hide();
+    })
+    function Sub(){
+        var type = $('.btn-lg.aaa.btn-primary').attr('id');
+        if(type=='special_user'){
+            var M_Code=$('#spicial_val').val();
+            if(M_Code==''||M_Code=='undifine'||M_Code==null){
+                alertMsg('表号不能为空')
+                return false
+            }
+        }else if(type=='area_user'){
+            var area_id = $('#area_val').val()
+        }else{
+            var radio_type = $('input:radio[name="all"]:checked').val();
+            if(radio_type!=1){
+                alertMsg('如要选择所有用户请选择 是！')
+                return false
+            }
+        }
+        var data={type:type,M_Code: M_Code,area_id:area_id,radio_type:radio_type}
+        $.ajax({
+            url:"{:url('Admin/Price/saveDownload')}",
+            method:'post',
+            dataType:'json',
+            data:{data: JSON.stringify(data)},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                alertMsg(res.msg)
+                if(res.code==300){
+                   var str='';
+                    $.each(res.data,function(i,n){
+                        str+="<p>第"+(parseInt(i)+1)+"个出错，出错表号为:"+n+"</p>";
+                    })
+                    $('#message').html(str);
+                    $('#message').show();
+                }
+                if(res.code==500){
+                    var str='';
+                    $.each(res.data,function(i,n){
+                        str+="<p>出错表号为:"+ n.code+"，出错原因为:"+ n.reason+"</p>";
+                    })
+                    $('#message').html(str);
+                    $('#message').show();
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+</script>
+
