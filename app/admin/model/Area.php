@@ -61,4 +61,12 @@ class Area extends Admin
         $ids = explode(',', $id);
         return $this->where('id', 'in', $ids)->where('company_id', $company_id)->select();
     }
+
+    public function selectInfo($where=[],$field=''){
+        if($field==''){
+            return $this->where($where)->select();
+        }
+        return $this->field($field)->where($where)->select();
+    }
+
 }
