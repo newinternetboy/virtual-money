@@ -1,0 +1,103 @@
+{js href="__JS__/bootstrap-datetimepicker.min.js" /}
+{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
+{css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+{js href="__JS__/jquery.jqprint-0.3.js" /}
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <div class="ibox float-e-margins" style="background: white; float: left; width: 100%;">
+                    <!-- 表单内容 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Day Report')}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <!-- 搜索条件 -->
+                        <form action="" method="post" class="form-horizontal">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        <label for="start_datetimepicker" class="col-sm-4 control-label">{:lang('Create Time')}{:lang('From')}</label>
+                                        <div class="col-sm-8">
+                                            <input id="start_datetimepicker" name="starttime" value="{$starttime ?? ''}" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="end_datetimepicker" class="col-sm-4 control-label">{:lang('To')}:</label>
+                                        <div class="col-sm-8">
+                                            <input id="end_datetimepicker" name="endtime" value="{$endtime  ?? ''}" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label"></label>
+                                    <div class="col-sm-10">
+                                        <button style="float: right; margin-left: 10px" class="btn btn-success" type="submit" >{:lang('Search')}</button>
+                                        <button style="float: right" class="btn btn-danger" type="button" onclick="javascript:$('#table').jqprint();" >{:lang('Print')}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <div id="table">
+                            <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
+                                <thead>
+                                <tr>
+                                    <th>{:lang('Company Name')}</th>
+                                    <th>{:lang('RMB Charge Times')}</th>
+                                    <th>{:lang('RMB Charge Money')}</th>
+                                </tr>
+                                </thead>
+                                {foreach $money_log as $vo }
+                                <tr>
+                                    <td>{$vo.day}</td>
+                                    <td>{$vo.chargeTimes_rmb}</td>
+                                    <td>{$vo.chargeMoney_rmb}</td>
+                                </tr>
+                                {/foreach}
+                                <tr>
+                                    <td>{:lang('total')}</td>
+                                    <td>{$money_log|array_column=###,'chargeTimes_rmb'|array_sum=###}</td>
+                                    <td>{$money_log|array_column=###,'chargeMoney_rmb'|array_sum=###}</td>
+                                    <!--<td>{$all.chargeTimes_deli ?? '0'}</td>-->
+                                    <!--<td>{$all.chargeMoney_deli ?? '0'}</td>-->
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    $("#start_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: "month"
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+                event.preventDefault();
+                event.stopPropagation();
+            });
+    $("#end_datetimepicker").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        minuteStep: 1,
+        bootcssVer:3,
+        minView: "month"
+//        startDate: new Date()
+    }).on('hide', function(event) { //防止时间选择完毕后造成modal取消的问题
+                event.preventDefault();
+                event.stopPropagation();
+            });
+
+</script>
