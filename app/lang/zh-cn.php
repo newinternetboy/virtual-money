@@ -653,6 +653,8 @@ return [
     'Cmd Price'                         => '修改价格',
     'Cmd Turn On'                       => '开阀',
     'Cmd Turn Off'                      => '关阀',
+    'Cmd downloadMeterparam'            => '区域下载',
+    'Cmd downloadPrice'                 => '价格下载',
     'Task Not Found'                    => '任务不存在',
     'Confirm Resend Task'               => '确认重新发送任务?',
     'Task Status Illegal'               => '任务状态不合法',

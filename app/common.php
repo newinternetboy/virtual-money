@@ -478,3 +478,10 @@ function send_get($url){
     //显示获得的数据
     return $data;
 }
+
+function fixString($arr){
+    foreach($arr as $key => & $value){
+        $arr[$key] = urlencode($value);
+    }
+    return $arr;
+}
