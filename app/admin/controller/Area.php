@@ -68,7 +68,6 @@ class Area extends Admin
      */
     public function saveData()
     {
-        $this->mustCheckRule();
         if(!request()->isAjax()) {
             return info(lang('Request type error'));
         }
@@ -93,7 +92,6 @@ class Area extends Admin
      * @param  string $id 数据ID（主键）
      */
     public function delete($id = 0){
-        $this->mustCheckRule();
         if(empty($id)) {
             return info(lang('Data ID exception'), 0);
         }

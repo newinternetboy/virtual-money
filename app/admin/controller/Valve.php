@@ -33,7 +33,6 @@ class Valve extends Admin
      * @return mixed
      */
     public function saveData(){
-        $this->mustCheckRule($this->company_id,'');
         $data = input('data');
         $data = json_decode($data,true);
         $ret['code'] = 200;

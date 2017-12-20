@@ -1032,7 +1032,7 @@ class Shop extends Admin
         return json($ret);
     }
 
-    public function sendApi($post_data){
+    private function sendApi($post_data){
         $url= config('notificationUrl');
         $consumerService = new ConsumerService();
         $consumer = $consumerService->findInfo(['id'=>$post_data['uid']]);

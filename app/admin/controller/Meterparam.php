@@ -66,7 +66,6 @@ class MeterParam extends Admin
      */
     public function saveData()
     {
-        $this->mustCheckRule();
         if(!request()->isAjax()) {
             return info(lang('Request type error'));
         }
@@ -92,7 +91,6 @@ class MeterParam extends Admin
      * @param  string $id 数据ID（主键）
      */
     public function delete($id = 0){
-        $this->mustCheckRule();
         if(empty($id)) {
             return info(lang('Data ID exception'), 0);
         }
@@ -114,7 +112,6 @@ class MeterParam extends Admin
      * @author ducongshu
      */
     public function search(){
-        $this->mustCheckRule();
         $meter_param = model('MeterParam')->getAllMeterParams(['company_id'=>$this->company_id]);
         $this->assign('meter_param',$meter_param);
         return $this->fetch();
@@ -130,7 +127,6 @@ class MeterParam extends Admin
 
     //指定用户下载
     public function saveDownload(){
-        $this->mustCheckRule();
         $data = input('data');
         $data = json_decode($data,true);
         $ret['code'] = 200;

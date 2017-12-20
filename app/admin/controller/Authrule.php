@@ -116,7 +116,6 @@ class Authrule extends Admin
 	 */
 	public function saveData()
 	{
-		$this->mustCheckRule();
 		if(!request()->isAjax()) {
 			return info(lang('Request type error'));
 		}
@@ -133,7 +132,6 @@ class Authrule extends Admin
 	 * 删除
 	 */
 	public function delete($id = 0){
-		$this->mustCheckRule();
 		if(empty($id)){
 			return info(lang('Data ID exception'), 0);
 		}
@@ -151,7 +149,6 @@ class Authrule extends Admin
      */
 	public function saveAuthAccess()
 	{
-		$this->mustCheckRule();
 		if(!request()->isAjax()) {
 			return info(lang('Request type error'));
 		}

@@ -90,7 +90,6 @@ class User extends Admin
      */
     public function saveData()
     {
-        $this->mustCheckRule();
         if(!request()->isAjax()) {
             return info(lang('Request type error'));
         }
@@ -122,7 +121,6 @@ class User extends Admin
      * @param  string $id 数据ID（主键）支持多个id删除,逗号分隔
      */
     public function delete($id = 0){
-        $this->mustCheckRule();
         if(empty($id)){
             return info(lang('Data ID exception'), 0);
         }
