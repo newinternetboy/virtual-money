@@ -73,7 +73,7 @@ class Shop extends Admin
         $param['starttime']  = $starttime;
         $param['endtime']    = $endtime;
         $shopService = new ShopService();
-        $shops = $shopService->getInfoPaginate($where,$param);
+        $shops = $shopService->getInfoPaginate($where,$param,'id,name,type,category,uid,status,stick,productsCount,type');
         $dictService = new DictService();
         $dictlist = $dictService->selectInfo(['type'=>DICT_COMPANY_ELE_BUSINESS]);
         $this->assign('dictlist',$dictlist);
@@ -214,7 +214,7 @@ class Shop extends Admin
         $param['end_time']   = $end_time;
         $param['status']     = $status;
         $productionService = new ProductionService();
-        $productions = $productionService->getInfoPaginate($where,$param);
+        $productions = $productionService->getInfoPaginate($where,$param,'sid,name,status,rmbprice,rmbenable,sdlprice,sdlenable,create_time');
         $this->assign('id',$id);
         $this->assign('name',$name);
         $this->assign('start_time',$start_time);
@@ -369,7 +369,7 @@ class Shop extends Admin
         $ret['msg'] = lang('Operation Success');
         try{
             $cartService = new CartService();
-            if( !$cartInfo = $cartService->findInfo(['id' => $id]) ){
+            if( !$cartInfo = $cartService->findInfo(['id' => $id],'id,freeze,freeze_msg') ){
                 exception(lang('Data ID exception'),ERROR_CODE_DATA_ILLEGAL);
             }
             $ret['data'] = $cartInfo;
@@ -791,7 +791,7 @@ class Shop extends Admin
         $param['end_time']   = $end_time;
         $param['status']     = $status;
         $productionService = new ProductionService();
-        $productions = $productionService->getInfoPaginate($where,$param);
+        $productions = $productionService->getInfoPaginate($where,$param,'name,status,sdlprice,create_time');
         $dictService = new DictService();
         $dictlist = $dictService->selectInfo(['type'=>DICT_PERSON_ELE_BUSINESS]);
         $this->assign('dictlist',$dictlist);
