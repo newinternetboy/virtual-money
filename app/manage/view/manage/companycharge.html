@@ -125,7 +125,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
-                <button type="button" class="btn btn-primary" onclick="charge();">{:lang('Save')}</button>
+                <button type="button" id="chargeButton" class="btn btn-primary" onclick="charge();">{:lang('Save')}</button>
             </div>
         </div>
     </div>
@@ -216,15 +216,18 @@
     }
 
     function charge(){
+        $('#chargeButton').prop('disabled',true);
         var cid = $('#cid').val();
         var charge_limit = $('#charge_limit').val();
 
         if( charge_limit == '' || charge_limit == null || charge_limit == 'undefined' ){
+            $('#chargeButton').prop('disabled',false);
             alertMsg("{:lang('Charge Limit Require')}");
             return false;
         }
         charge_limit = Number(charge_limit);
         if( charge_limit <= 0 ){
+            $('#chargeButton').prop('disabled',false);
             alertMsg("{:lang('Charge Limit Illegal')}");
             return false;
         }
@@ -242,8 +245,10 @@
                     alertMsg(res.msg);
                     window.location.href = '';
                 }
+                $('#chargeButton').prop('disabled',false);
             },
             error:function(){
+                $('#chargeButton').prop('disabled',false);
                 alertMsg("{:lang('Operation fail')}");
             }
         })
