@@ -114,7 +114,7 @@ return [
     ],
 
     //定义个人商铺根路径；
-    'grImgPath' => 'http://114.113.90.9:10086/',
+    'grImgPath' => APP_API_URL,
 
     //充值类型配置
     'meter_charge_type' => [
@@ -123,4 +123,7 @@ return [
         MONEY_CHANNEL_CARD => '充值卡',
         //MONEY_CHANNEL_BANK => '银行卡',
     ],
+
+    //回复消息的api
+    'reply_chat_api' => APP_API_URL.'notify/v1/pushNotification',
 ];

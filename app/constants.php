@@ -20,6 +20,9 @@ define('SHUANGDELI_NAME','双得利集团');
 define('ACTION_SUCCESS',1); //操作成功
 define('ACTION_FAIL',5);    //操作失败
 
+//app api 域名
+define('APP_API_URL','http://114.113.90.9:10086/');
+
 /***************表具信息***************/
 //表具类型
 define('METER_TYPE_WATER',1); //水
@@ -173,3 +176,10 @@ define('FIX_STATUS_DEAL',2);   //已处理
 /***************留言建议状态***************/
 define('ADVICE_STATUS_WAITING',1);//待处理
 define('ADVICE_STATUS_DEAL',2);   //已处理
+
+/***************消息阅读状态***************/
+define('CHAT_STATUS_UNCHECK',1);    //未读
+define('CHAT_STATUS_CHECKED',2);    //已读
+/***************消息发起方***************/
+define('CHAT_TYPE_SHOP',2);    //商铺
+define('CHAT_TYPE_CONSUMER',1);    //个人

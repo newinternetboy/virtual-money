@@ -130,7 +130,7 @@ class MeterParam extends Admin
 
     //指定用户下载
     public function saveDownload(){
-        $this->mustCheckRule($this->company_id,'');
+        $this->mustCheckRule();
         $data = input('data');
         $data = json_decode($data,true);
         $ret['code'] = 200;
@@ -171,7 +171,7 @@ class MeterParam extends Admin
                 $where['meter_life'] = METER_LIFE_ACTIVE;
                 $where['meter_status'] = METER_STATUS_BIND;
                 $where['M_Address'] = $data['area_id'];
-                if(!$meter_data= model('Meter')->selectInfo($where,'id,M_Code')){
+                if(!$meter_data= model('Meter')->selectInfo($where,'id,M_Code,P_ID')){
                     exception(lang('There are no downloadable M_Code'),ERROR_CODE_DATA_ILLEGAL);
                 }
             }elseif(isset($data['type']) && $data['type'] == 'all_user'){
@@ -213,7 +213,6 @@ class MeterParam extends Admin
             if(is_array($ret)){
                 $arrs[$key]['code']=$value['M_Code'];
                 $arrs[$key]['reason']=$ret['msg'];
-                continue;
             }
         }
         return $arrs;
