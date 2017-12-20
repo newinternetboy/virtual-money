@@ -11,10 +11,10 @@
                 <div class="ibox-content">
                     <!-- 用户控件（操作） -->
                     <div style="margin: 50px;">
-                        <button  class="btn-lg aaa btn-primary" type="button" id="special_user" >指定用户下载</button>
-                        <button style="margin-left: 50px;" class="btn-lg aaa" type="button" id="area_user" >地区用户下载</button>
-                        <button  class="btn-lg aaa" style="margin-left: 50px;" type="button" id="all_user" >所有用户下载</button>
-                        <button  class="btn btn-primary" style="margin-right: 50px;float:right;" type="button" onclick="history.back(-1);" >返回</button>
+                        <button  class="btn-lg aaa btn-primary" type="button" id="special_user" >{:lang('Spicial User Download')}</button>
+                        <button style="margin-left: 50px;" class="btn-lg aaa" type="button" id="area_user" >{:lang('Area User Download')}</button>
+                        <button  class="btn-lg aaa" style="margin-left: 50px;" type="button" id="all_user" >{:lang('All User Download')}</button>
+                        <button  class="btn btn-primary" style="margin-right: 50px;float:right;" type="button" onclick="history.back(-1);" >{:lang('Back')}</button>
                     </div>
                     <hr/>
                     <!-- 表格数据 -->
@@ -26,7 +26,7 @@
                         </div >
                         <div id="area_user_s" style="display:none;">
                             <div class="form-group">
-                                <label  class="col-sm-2 control-label">{:lang('End Time')}:</label>
+                                <label  class="col-sm-2 control-label">{:lang('Area User Download')}:</label>
                                 <div class="col-sm-10">
                                     <select id="area_val" class="form-control" style="width:500px;">
                                         {volist  name="arealist" id="vo"}
@@ -38,15 +38,14 @@
                         </div>
                         <div id="all_user_s" style="display:none;">
                             <div class="form-group">
-                                <label  class="col-sm-2 control-label">所有用户下载:</label>
+                                <label  class="col-sm-2 control-label">{:lang('All User Download')}:</label>
                                 <div class="col-sm-10" id="all_val">
-                                    <input type="radio" name="all" value="1" />是 &nbsp;
-                                    <input type="radio" name="all" value="2" />否
+                                    <input type="radio" name="all" value="1" checked />  {:lang('Yes')}
                                 </div>
                             </div>
                         </div>
                         <div style="margin-right: 100px;">
-                            <button  class="btn btn-primary" onclick="Sub()" style="float: right;" type="button" >确认控制</button>
+                            <button  class="btn btn-primary" id="sub" onclick="Sub()" style="float: right;" type="button" >{:lang('Sure Controll')}</button>
                             <div style="display:none;color:red;" id="message"></div>
                         </div>
                     </div>
@@ -84,21 +83,19 @@
         $('#message').hide();
     })
     function Sub(){
+        $('#sub').prop('disabled',true);
         var type = $('.btn-lg.aaa.btn-primary').attr('id');
         if(type=='special_user'){
             var M_Code=$('#spicial_val').val();
             if(M_Code==''||M_Code=='undifine'||M_Code==null){
                 alertMsg('表号不能为空')
+                $('#sub').prop('disabled',false);
                 return false
             }
         }else if(type=='area_user'){
             var area_id = $('#area_val').val()
         }else{
             var radio_type = $('input:radio[name="all"]:checked').val();
-            if(radio_type!=1){
-                alertMsg('如要选择所有用户请选择 是！')
-                return false
-            }
         }
         var data={type:type,M_Code: M_Code,area_id:area_id,radio_type:radio_type}
         $.ajax({
@@ -110,7 +107,7 @@
             success: function(res){
                 alertMsg(res.msg)
                 if(res.code==300){
-                   var str='';
+                    var str='';
                     $.each(res.data,function(i,n){
                         str+="<p>第"+(parseInt(i)+1)+"个出错，出错表号为:"+n+"</p>";
                     })
@@ -125,9 +122,16 @@
                     $('#message').html(str);
                     $('#message').show();
                 }
+                if(res.code==200){
+                    setTimeout(function(){
+                        window.location.href=''
+                    },3000)
+                }
+                $('#sub').prop('disabled',false);
             },
             error:function(){
                 alertMsg("{:lang('Operation fail')}");
+                $('#sub').prop('disabled',false);
             }
         })
     }

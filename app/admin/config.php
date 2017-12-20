@@ -134,7 +134,6 @@ return [
 
     //统计报表默认查询时间差
     'meterDataRangeTime' => 60*60*24*7,
-
     //充值金额列表
     'chargeList' => [
         50,

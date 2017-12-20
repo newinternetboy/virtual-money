@@ -134,18 +134,18 @@ class MeterParam extends Admin
         $data = input('data');
         $data = json_decode($data,true);
         $ret['code'] = 200;
-        $ret['msg'] = '操作成功';
+        $ret['msg'] = lang('Operation Success');
         try{
             if( !$data ){
-                exception('操作失败,信息不完整',ERROR_CODE_DATA_ILLEGAL);
+                exception(lang('Operation fail Incomplete Information'),ERROR_CODE_DATA_ILLEGAL);
             }
             if(!$param= model('MeterParam')->findInfo(['company_id'=>$this->company_id])){
-                exception('请先创建运行参数！',ERROR_CODE_DATA_ILLEGAL);
+                exception(lang('Please Create Meterdata First'),ERROR_CODE_DATA_ILLEGAL);
             }
             $param = $param->toArray();
             if( isset($data['type']) && $data['type'] == 'special_user' ){ //指定用户控制
                 if( !isset($data['M_Code']) || !$data['M_Code'] ){
-                    exception('请先输入表号',ERROR_CODE_DATA_ILLEGAL);
+                    exception(lang('Please enter M_Code First'),ERROR_CODE_DATA_ILLEGAL);
                 }
                 $M_Code= trim($data['M_Code'],';');
                 $codes = explode(';',$M_Code);
@@ -157,38 +157,41 @@ class MeterParam extends Admin
                 $diff = array_diff($codes,$meters);
                 if(!empty($diff)){
                     $ret['data'] = $diff;
-                    exception('请输入符合要求的表号,以下表号不符合要求！',300);
+                    exception(lang('These M_Code are incorrect! Please enter again'),300);
                 }
                 $meter_data = model('Meter')->selectInfo($where,'id,M_Code,P_ID');
             }elseif( isset($data['type']) && $data['type'] == 'area_user' ){
                 if( !isset($data['area_id']) || !$data['area_id'] ){
-                    exception('请先选择区域',ERROR_CODE_DATA_ILLEGAL);
+                    exception(lang('Please choose Area First'),ERROR_CODE_DATA_ILLEGAL);
+                }
+                if(!model('Area')->selectInfo(['id'=>$data['area_id'],'company_id'=>$this->company_id],'id')){
+                    exception(lang('You have no right to the area for this operation'),ERROR_CODE_DATA_ILLEGAL);
                 }
                 $where['company_id'] = $this->company_id;
                 $where['meter_life'] = METER_LIFE_ACTIVE;
                 $where['meter_status'] = METER_STATUS_BIND;
                 $where['M_Address'] = $data['area_id'];
                 if(!$meter_data= model('Meter')->selectInfo($where,'id,M_Code')){
-                    exception('您无权对该区域进行此操作',ERROR_CODE_DATA_ILLEGAL);
+                    exception(lang('There are no downloadable M_Code'),ERROR_CODE_DATA_ILLEGAL);
                 }
             }elseif(isset($data['type']) && $data['type'] == 'all_user'){
-                if( isset($data['area_id']) && $data['area_id']==1 ){
-                    exception('如要选择所有用户请选择 是！',ERROR_CODE_DATA_ILLEGAL);
+                if( !isset($data['radio_type']) || $data['radio_type']!=1 ){
+                    exception(lang('Data Illegal'),ERROR_CODE_DATA_ILLEGAL);
                 }
                 $where['company_id'] = $this->company_id;
                 $where['meter_life'] = METER_LIFE_ACTIVE;
                 $where['meter_status'] = METER_STATUS_BIND;
                 if(!$meter_data= model('Meter')->selectInfo($where,'id,M_Code')){
-                    exception('没有可以下载的表具！',ERROR_CODE_DATA_ILLEGAL);
+                    exception(lang('There are no downloadable M_Code'),ERROR_CODE_DATA_ILLEGAL);
                 }
             }else{
-                exception('方式选择不合法',ERROR_CODE_DATA_ILLEGAL);
+                exception(lang('Unlawful choice'),ERROR_CODE_DATA_ILLEGAL);
             }
 
             $result=$this->addTask($meter_data,$param);
             if(!empty($result)){
                 $ret['data'] = $result;
-                exception('以下表号未下载成功,企业已下载完成！',500);
+                exception(lang('The following M_Code number is not downloaded successfully, and the rest has been downloaded'),500);
             }
             $meter_data = array_map(function($item){return $item->toArray();},$meter_data);
             Loader::model('Logrecord')->record('Download Meterparam',$meter_data);
