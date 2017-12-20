@@ -1,0 +1,118 @@
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <div class="ibox float-e-margins" style="background: white; float: left; width: 100%;">
+                    <!-- 表单内容 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Chat View')}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <button class="btn btn-success" onclick="replyChat()">{:lang('Reply')}</button>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <!--消息列表-->
+                        <div id="detail" style="margin-left: 2vw;margin-right: 2vw">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{:lang('Reply')}</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <textarea placeholder="{:lang('Please Input Reply')}" id="reply_content" rows="3" cols="70"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" id="sub" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            url: "{:url('manage/shop/getDetail')}",
+            type: "POST",
+            dataType:"json",
+            data: {uid:"{$uid}"},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success:function (res) {
+                if(res.code==200){
+                   fillcontent(res.data);
+                }else{
+                    alertMsg("{:lang('Bad Network,Please Refresh the Page')}");
+                }
+            },
+            error: function () {
+                alertMsg("{:lang('Bad Network,Please Refresh the Page')}");
+            }
+        });
+    })
+
+    function fillcontent(data){
+        var html = '';
+        for(var x in data){
+            if(data[x].type == {$Think.const.CHAT_TYPE_SHOP}){
+                html += "<div class='form-group' style='float: left'><div class='form-control' style='border: hidden'><p>"+"{:lang('Shop Self')}"+" : "+data[x].content+"("+data[x].create_time+")"+"</p></div></div><div style='clear: both'>";
+            }else{
+                html += "<div class='form-group' style='float: right'><div class='form-control' style='border: hidden'><p>"+data[x].content+"("+data[x].create_time+")"+" : "+"{$consumer_name}"+"</p></div></div><div style='clear: both'>";
+            }
+        }
+        $('#detail').append(html);
+    }
+
+    function replyChat(){
+        $('#myModal').modal('show')
+    }
+
+    function sub(){
+        $('#sub').prop('disabled',true);
+        var reply_content = $('#reply_content').val();
+        if(reply_content == '' || reply_content == 'undefined' || reply_content == null){
+            $('#sub').prop('disabled',false);
+            alertMsg("{:lang('Reply Content Cannot Be Empty')}");
+            return false;
+        }
+        if(reply_content.length > 200){
+            $('#sub').prop('disabled',false);
+            alertMsg("{:lang('Reply Content Must Within 200 Chars')}");
+            return false;
+        }
+        var data = {uid : "{$uid}",content: reply_content};
+        $.ajax({
+            url:"{:url('manage/shop/reply')}",
+            method:'post',
+            dataType:'json',
+            data: data,
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                $('#sub').prop('disabled',false);
+                alertMsg(res.msg);
+                if(res.code == 200){
+                    $('#myModal').modal('hide')
+                    $('#reply_content').val('');
+                    appendReplay(reply_content);
+                }
+            },
+            error:function(){
+                $('#sub').prop('disabled',false);
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+    function appendReplay(reply_content){
+        var html = "<div class='form-group' style='float: left'><div class='form-control' style='border: hidden'><p>"+"{:lang('Shop Self')}"+" : "+reply_content+"("+'刚刚'+")"+"</p></div></div><div style='clear: both'>";
+        $('#detail').prepend(html);
+    }
+</script>
+
+
