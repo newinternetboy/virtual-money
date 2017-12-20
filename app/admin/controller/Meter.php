@@ -83,7 +83,6 @@ class Meter extends Admin
      * @return \think\response\Json
      */
     public function binding(){
-        $this->mustCheckRule();
         $data = input('data');
         $data = json_decode($data,true);
         $ret['code'] = 200;
@@ -169,7 +168,6 @@ class Meter extends Admin
      * @return \think\response\Json
      */
     public function passMeter(){
-        $this->mustCheckRule();
         $M_Code = input('M_Code');
         $new_consumer = input('consumer');
         $new_consumer = json_decode($new_consumer,true);
@@ -263,7 +261,6 @@ class Meter extends Admin
      * @return \think\response\Json
      */
     public function changeMeter(){
-        $this->mustCheckRule();
         $changeinfo = input('changeinfo');
         $changeinfo = json_decode($changeinfo,true);
         $ret['code'] = 200;
@@ -374,7 +371,6 @@ class Meter extends Admin
      * @return \think\response\Json
      */
     public function editMeter(){
-        $this->mustCheckRule();
         $data = input('data');
         $data = json_decode($data,true);
         $ret['code'] = 200;
@@ -446,7 +442,6 @@ class Meter extends Admin
      * @return \think\response\Json
      */
     public function delete(){
-        $this->mustCheckRule();
         $M_Code = input('M_Code');
         $ret['code'] = 200;
         $ret['msg'] = '操作成功';
@@ -594,7 +589,6 @@ class Meter extends Admin
      * @return \think\response\Json
      */
     public function doCharge(){
-        $this->mustCheckRule();
         $data = input('data');
         $data = json_decode($data,true);
         $ret['code'] = 200;

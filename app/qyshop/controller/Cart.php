@@ -97,7 +97,7 @@ class Cart extends Admin
         return json($ret);
     }
 
-    public function sendApi($post_data){
+    private function sendApi($post_data){
         $url= config('notificationUrl');
         $consumer = model('Consumer')->findInfo(['id'=>$post_data['uid']]);
         unset($post_data['uid']);

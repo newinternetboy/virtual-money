@@ -56,7 +56,6 @@ class Role extends Admin
 
     public function saveData()
     {
-        $this->mustCheckRule();
         if( !request()->isAjax() ) {
             $this->error(lang('Request type error'));
         }
@@ -83,7 +82,6 @@ class Role extends Admin
      * @param   string $id 数据ID（主键）支持多个id删除,逗号分隔
      */
     public function delete($id = 0){
-        $this->mustCheckRule();
         if(empty($id)){
             return info(lang('Data ID exception'), 0);
         }
