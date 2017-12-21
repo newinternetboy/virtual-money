@@ -1,3 +1,43 @@
+<style>
+    .shop-message {
+        background-color: #39649D;
+        color: #ffffff;
+        border-radius: 4px !important;
+        word-wrap: break-word;
+        height: auto;
+        width: auto;
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .shop-message p {
+        margin: 0;
+    }
+
+    .form-group span {
+        float: left;
+        width: 100%;
+        margin-bottom: 4px;
+    }
+
+    .form-right span {
+        float: right;
+        width: 100%;
+        margin-bottom: 4px;
+        text-align: right;
+    }
+
+    .customer-message {
+        background-color: #38CB97;
+        color: #ffffff;
+        border-radius: 4px !important;
+        word-wrap: break-word;
+        height: auto;
+        width: auto;
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+</style>
 <div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
     <section id="widget-grid">
         <div class="row">
@@ -61,9 +101,9 @@
         var html = '';
         for(var x in data){
             if(data[x].type == {$Think.const.CHAT_TYPE_SHOP}){
-                html += "<div class='form-group' style='float: left'><div class='form-control' style='border: hidden'><p>"+"{:lang('Shop Self')}"+" : "+data[x].content+"("+data[x].create_time+")"+"</p></div></div><div style='clear: both'>";
+                html += "<div class='form-group' style='float: left; max-width: 60%'>" + "<span>{:lang('Shop Self')} :"+" ("+data[x].create_time+")"+"</span>"+ "<div class='form-control shop-message' style='border: hidden; float: left; border-radius: 4px'><p>"+ data[x].content+"</p></div></div><div style='clear: both'>";
             }else{
-                html += "<div class='form-group' style='float: right'><div class='form-control' style='border: hidden'><p>"+data[x].content+"("+data[x].create_time+")"+" : "+"{$consumer_name}"+"</p></div></div><div style='clear: both'>";
+                html += "<div class='form-group form-right' style='float: right; max-width: 60%;'>" + "<span>{$consumer_name} :"+" ("+data[x].create_time+")"+"</span>"+"<div class='form-control customer-message' style='border: hidden; float: right;'><p>"+data[x].content+"</p></div></div><div style='clear: both'>";
             }
         }
         $('#detail').append(html);
@@ -110,7 +150,7 @@
     }
 
     function appendReplay(reply_content){
-        var html = "<div class='form-group' style='float: left'><div class='form-control' style='border: hidden'><p>"+"{:lang('Shop Self')}"+" : "+reply_content+"("+'刚刚'+")"+"</p></div></div><div style='clear: both'>";
+        var html = "<div class='form-group' style='float: left; max-width: 60%'>" + "<span>{:lang('Shop Self')} : "+" ("+'刚刚'+")"+"</span>"+ "<div class='form-control shop-message' style='border: hidden; float: left'><p>"+reply_content+"</p></div></div><div style='clear: both'>";
         $('#detail').prepend(html);
     }
 </script>
