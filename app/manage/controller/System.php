@@ -338,6 +338,8 @@ class System extends Admin
                 case 'Delete AuthRule':
                 case 'Delete Role':
                 case 'Delete User':
+                case 'Reply Comment':
+                case 'Delete Comment':
                     $vol['data'] = model('app\admin\model\LogRecord')->commonDeleteTrans($vol['data']);
                     break;
                 case 'Deduct':

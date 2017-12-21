@@ -992,6 +992,8 @@ return [
     'Reply Content Must Within 200 Chars'     => '回复内容限制200字符以内',
     'Please Input Reply'                => '请输入回复内容,限制200字符以内',
     'Reply Api Content'                 => '您有新的回复',
+    'Reply Comment'                     => '回复评论',
+    'Delete Comment'                    => '删除评论',
 
     /******************************表具上报api**************************/
     'Low Balance Title'                 => '余额过低提醒',

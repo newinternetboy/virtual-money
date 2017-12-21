@@ -188,6 +188,8 @@ return [
         'Save User',
         'Delete User',
         'Save AuthAccess',
+        'Reply Comment',
+        'Delete Comment'
     ],
 
     //充值日/月/年报 旧系统api
