@@ -8,6 +8,7 @@
 
 namespace app\manage\controller;
 
+use app\manage\service\ComchargeService;
 use app\manage\service\CompanyService;
 use app\manage\service\ConsumerService;
 use app\manage\service\FixService;
@@ -922,6 +923,14 @@ class Manage extends Admin
             if( !$companyService->charge($chargeData) ){
                 $error = $companyService->getError();
                 Log::record(['运营商充值失败:' => $error,'data' => $data],'error');
+                exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
+            }
+            $comchargeService = new ComchargeService();
+            $comcharge_data['company_id'] = $data['id'];
+            $comcharge_data['money'] = $data['charge_limit'];
+            if( !$comchargeService->upsert($comcharge_data,false) ){
+                $error = $comchargeService->getError();
+                Log::record(['运营商充值记录失败:' => $error,'data' => $comcharge_data],'error');
                 exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
             }
             model('app\admin\model\LogRecord')->record( 'company charge',$data);
