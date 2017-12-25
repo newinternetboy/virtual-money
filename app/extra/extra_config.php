@@ -126,4 +126,7 @@ return [
 
     //回复消息的api
     'reply_chat_api' => APP_API_URL.'notify/v1/pushNotification',
+
+    //3des key
+    'DesKey' => "sdl412!#\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",
 ];

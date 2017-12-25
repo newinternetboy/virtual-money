@@ -92,7 +92,7 @@
                                     <td>{$moneylog.meter.M_Code}</td>
                                     <td>{$moneylog.meter.consumer.username}</td>
                                     <td>{$moneylog.money}</td>
-                                    <td>{$Think.config.extra_config.meter_charge_type[$moneylog.channel]}
+                                    <td>{if condition="$source == 'new'"}{$Think.config.extra_config.meter_charge_type[$moneylog.channel]}{else /}{$moneylog.channel}{/if}
                                     </td>
                                     <td>{$moneylog.create_time}</td>
                                 </tr>

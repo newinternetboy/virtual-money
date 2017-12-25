@@ -97,7 +97,7 @@ class MoneyLogService extends BasicService
      * @param $endTime
      * @param $total
      */
-    public function downloadChargeDetail($data, $filename, $title, $startDate, $endDate, $total){
+    public function downloadChargeDetail($data, $filename, $title, $startDate, $endDate, $total,$source){
         $filename=$filename.".xlsx";
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
@@ -125,7 +125,8 @@ class MoneyLogService extends BasicService
             $objPHPExcel->getActiveSheet()->setCellValue('B' . $i,  isset($data[$i-4]->meter) ? $data[$i-4]->meter->consumer['username'] : $data[$i-4]['meter']['consumer']['username']);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $data[$i-4]['money']);
 //            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]['money_type'] == MONEY_TYPE_RMB ? '人民币' : '得力币');
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, config('extra_config.meter_charge_type')[$data[$i-4]['channel']] );
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $source == 'new' ?
+config('extra_config.meter_charge_type')[$data[$i-4]['channel']] : $data[$i-4]['channel'] );
             $objPHPExcel->getActiveSheet()->setCellValue('F' . $i, $data[$i-4]['create_time']);
         }
         $last = $count + 4;

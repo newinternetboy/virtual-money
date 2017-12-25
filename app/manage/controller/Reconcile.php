@@ -12,6 +12,7 @@ namespace app\manage\controller;
 use app\manage\service\CompanyService;
 use app\manage\service\MeterService;
 use app\manage\service\MoneyLogService;
+use think\Log;
 
 /**
  * 对账
@@ -157,9 +158,18 @@ class Reconcile extends Admin
             //        $all['chargeMoney_deli'] = $moneyLogService->sums($deli_where_all,'money');
         }else{
             $old_system_url = config('old_system_url');
-            $url = $old_system_url."?startDate=$startdate&endDate=$enddate";
-            $result = send_get($url);
-            $result = json_decode($result,true);
+            $url = $old_system_url;
+            $post_data = [
+                'type'  => des_encrypt('1'),
+                "startDate" => des_encrypt($startdate),
+                'endDate' => des_encrypt($enddate)
+            ];
+            $result_api = send_post($url,$post_data);
+            $result_api = des_decrypt($result_api);
+            $result = json_decode($result_api,true);
+            if(!is_array($result)){
+                Log::record(['获取旧系统数据失败' => $result_api],'error');
+            }
             $result = is_array($result) ? $result : [];
             $companys = [];
             foreach($result as $item){
@@ -224,9 +234,18 @@ class Reconcile extends Admin
             }
         }else{
             $old_system_url = config('old_system_url');
-            $url = $old_system_url."?startDate=$startdate&endDate=$enddate";
-            $result = send_get($url);
-            $result = json_decode($result,true);
+            $url = $old_system_url;
+            $post_data = [
+                'type'  => des_encrypt('1'),
+                "startDate" => des_encrypt($startdate),
+                'endDate' => des_encrypt($enddate)
+            ];
+            $result_api = send_post($url,$post_data);
+            $result_api = des_decrypt($result_api);
+            $result = json_decode($result_api,true);
+            if(!is_array($result)){
+                Log::record(['获取旧系统数据失败' => $result_api],'error');
+            }
             $result = is_array($result) ? $result : [];
             $companys = [];
             foreach($result as $item){
@@ -318,9 +337,22 @@ class Reconcile extends Admin
             }
         }else{
             $old_system_url = config('old_system_url');
-            $url = $old_system_url."?company=$company_name&M_Code=$M_Code&startDate=$startDate&endDate=$endDate&page=-1&pagesize=10";
-            $result = send_get($url);
-            $result = json_decode($result,true);
+            $url = $old_system_url;
+            $post_data = [
+                'type'      => des_encrypt('2'),
+                'startDate' => des_encrypt($startDate),
+                'endDate' => des_encrypt($endDate),
+                'M_Code' => $M_Code ? des_encrypt($M_Code) : null,
+                'company' => $company_name ? des_encrypt($company_name) : null,
+                'page'  => des_encrypt('-1'),
+                'pagesize' => des_encrypt('10'),
+            ];
+            $result_api = send_post($url,$post_data);
+            $result_api = des_decrypt($result_api);
+            $result = json_decode($result_api,true);
+            if(!is_array($result)){
+                Log::record(['获取旧系统数据失败' => $result_api],'error');
+            }
             $result = is_array($result) ? $result : [];
             $moneylogs = [];
             foreach($result as $item){
@@ -421,9 +453,22 @@ class Reconcile extends Admin
             }
         }else{
             $old_system_url = config('old_system_url');
-            $url = $old_system_url."?company=$company_name&M_Code=$M_Code&startDate=$startDate&endDate=$endDate&page=-1&pagesize=10";
-            $result = send_get($url);
-            $result = json_decode($result,true);
+            $url = $old_system_url;
+            $post_data = [
+                'type'      => des_encrypt('2'),
+                "startDate" => des_encrypt($startDate),
+                'endDate' => des_encrypt($endDate),
+                'M_Code' => $M_Code ? des_encrypt($M_Code) : null,
+                'company' => $company_name ? des_encrypt($company_name) : null,
+                'page'  => des_encrypt('-1'),
+                'pagesize' => des_encrypt('10'),
+            ];
+            $result_api = send_post($url,$post_data);
+            $result_api = des_decrypt($result_api);
+            $result = json_decode($result_api,true);
+            if(!is_array($result)){
+                Log::record(['获取旧系统数据失败' => $result_api],'error');
+            }
             $result = is_array($result) ? $result : [];
             $moneylogs = [];
             foreach($result as $item){
@@ -439,7 +484,7 @@ class Reconcile extends Admin
                 'total' => array_sum(array_column($moneylogs,'money'))
             ];
         }
-       (new MoneyLogService())->downloadChargeDetail($moneylogs,$company_name.$M_Code."充值明细($source)".date('Y-m-d'),$company_name.$M_Code."充值明细($source)",$startDate,$endDate,$total);
+       (new MoneyLogService())->downloadChargeDetail($moneylogs,$company_name.$M_Code."充值明细($source)".date('Y-m-d'),$company_name.$M_Code."充值明细($source)",$startDate,$endDate,$total,$source);
     }
 
     /**
@@ -473,9 +518,19 @@ class Reconcile extends Admin
             }
         }else{
             $old_system_url = config('old_system_url');
-            $url = $old_system_url."?company=$company_name&startDate=$startDate&endDate=$endDate";
-            $result = send_get($url);
-            $result = json_decode($result,true);
+            $url = $old_system_url;
+            $post_data = [
+                'type'      => des_encrypt('3'),
+                "startDate" => des_encrypt($startDate),
+                'endDate' => des_encrypt($endDate),
+                'company' => $company_name ? des_encrypt($company_name) : null,
+            ];
+            $result_api = send_post($url,$post_data);
+            $result_api = des_decrypt($result_api);
+            $result = json_decode($result_api,true);
+            if(!is_array($result)){
+                Log::record(['获取旧系统数据失败' => $result_api],'error');
+            }
             $result = is_array($result) ? $result : [];
             $reports = [];
             foreach($result as $item){
