@@ -579,6 +579,8 @@ class Meter extends Admin
      *现金缴费
      */
     public function charge(){
+        $company = model('Company')->getCompany(['id' => $this->company_id],'charge_limit');
+        $this->assign('charge_limit',$company['charge_limit']);
         $chargeList = config('chargeList');
         $this->assign('chargeList',$chargeList);
         return view();

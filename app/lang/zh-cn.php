@@ -588,6 +588,7 @@ return [
     'Set'                                      => '设置佣金',
     'Charge'                                   => '充值',
     'Company Not Exists'                       => '公司不存在',
+    'Limit Amount'                             => '限额%s元',
 
     //运营商管理
     'Company Management'                => '运营商管理',
