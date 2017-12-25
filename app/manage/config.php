@@ -193,5 +193,5 @@ return [
     ],
 
     //充值日/月/年报 旧系统api
-    'old_system_url' => 'http://10.101.138.154:8088/api/values',
+    'old_system_url' => 'http://192.168.223.220:8088/api/values',
 ];
