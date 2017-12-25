@@ -242,6 +242,7 @@
 
     function sub(){
         $('#sub').prop('disabled',true);
+        $('#sub').html('保存中');
         var id = $('#id').val();
         var rmbprice = $('#rmbprice').val();
         var name = $('#name').val();
@@ -252,21 +253,25 @@
         if($('#img').val()=="" && id==""){
             alertMsg('{:lang("Shop Img Require")}');
             $('#sub').prop('disabled',false);
+            $('#sub').html('保存');
             return false;
         }
         if( name == '' || name == 'undefined' || name == null ){
             alertMsg("{:lang('Production Name Require')}");
             $('#sub').prop('disabled',false);
+            $('#sub').html('保存');
             return false;
         }
         if( desc == '' || desc == 'undefined' || desc == null ){
             alertMsg("{:lang('Production Desc Require')}");
             $('#sub').prop('disabled',false);
+            $('#sub').html('保存');
             return false;
         }
         if(rmbprice == '' || rmbprice == 'undefined' || rmbprice == null ){
             alertMsg("人民币价格不能为空！");
             $('#sub').prop('disabled',false);
+            $('#sub').html('保存');
             return false;
         }
         var formData = new FormData();
@@ -292,15 +297,18 @@
                 if(res.code==200){
                     alertMsg(res.msg,3);
                     $('#sub').prop('disabled',false);
+                    $('#sub').html('保存');
                     setTimeout(function(){ window.location.href = ''},2000);
                 }else{
                     alertMsg(res.msg,3);
                     $('#sub').prop('disabled',false);
+                    $('#sub').html('保存');
                 }
             },
             error: function () {
                 alertMsg("{:lang('Operation fail')}");
                 $('#sub').prop('disabled',false);
+                $('#sub').html('保存');
             }
         });
     }

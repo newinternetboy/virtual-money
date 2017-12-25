@@ -57,7 +57,7 @@
                         </form>
                         <hr style="height:1px;border:none;border-top:1px solid #555555;" />
                         <div>
-                            <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
+                             <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
                             <thead>
                             <tr>
                                 <th>{:lang('Production Name')}</th>
@@ -340,6 +340,7 @@
 
     function sub(){
         $('#sub').prop('disabled',true);
+        $('#sub').html('保存中');
         var id = $('#id').val();
         var category = $('#category').val();
         var sdlprice = $('#sdlprice').val();
@@ -351,21 +352,25 @@
         if($('#img').val()=="" && id==""){
             alertMsg('{:lang("Shop Img Require")}');
             $('#sub').prop('disabled',false);
+            $('#sub').html('保存');
             return false;
         }
         if( name == '' || name == 'undefined' || name == null ){
             alertMsg("{:lang('Productionsss Name Require')}");
             $('#sub').prop('disabled',false);
+            $('#sub').html('保存');
             return false;
         }
         if( desc == '' || desc == 'undefined' || desc == null ){
             alertMsg("{:lang('商品描述必须')}");
             $('#sub').prop('disabled',false);
+            $('#sub').html('保存');
             return false;
         }
         if(sdlprice == '' || sdlprice == 'undefined' || sdlprice == null ){
             alertMsg("得利币价格不能为空！");
             $('#sub').prop('disabled',false);
+            $('#sub').html('保存');
             return false;
         }
         var formData = new FormData();
@@ -390,15 +395,18 @@
                 if(res.code==200){
                     alertMsg(res.msg,3);
                     $('#sub').prop('disabled',false);
+                    $('#sub').html('保存');
                     setTimeout(function(){ window.location.href = ''},2000);
                 }else{
                     alertMsg(res.msg,3);
                     $('#sub').prop('disabled',false);
+                    $('#sub').html('保存');
                 }
             },
             error: function () {
                 alertMsg("{:lang('Operation fail')}");
                 $('#sub').prop('disabled',false);
+                $('#sub').html('保存');
             }
         });
     }
