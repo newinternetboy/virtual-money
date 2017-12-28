@@ -104,6 +104,7 @@ return [
     'Auth Name' => '权限名称',
     'Auth Val'  => '权限规则值',
     'Debug Mode Already Open' => '调试模式已经打开',
+    'Url not Exists' => '您访问的页面不存在!',
     'JumpPrompt'      => '跳转提示',
     'PageAuto'        => '页面自动',
     'Jump'            => '跳转',
