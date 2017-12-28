@@ -14,4 +14,8 @@ class AreaModel extends BasicModel
     // 当前模型名称
     protected $name = 'Area';
 
+    public function columnInfo($where,$field){
+        return $this->where($where)->column($field);
+    }
+
 }

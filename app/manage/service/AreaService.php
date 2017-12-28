@@ -15,4 +15,8 @@ class AreaService extends BasicService
     public function __construct(){
         $this->dbModel = new AreaModel();
     }
+
+    public function columnInfo($where,$field){
+        return $this->dbModel->columnInfo($where,$field);
+    }
 }

@@ -198,4 +198,25 @@ config('extra_config.meter_charge_type')[$data[$i-4]['channel']] : $data[$i-4]['
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $PHPWriter->save("php://output");
     }
+
+    public function getAllGroupByCompany($table, $where){
+        $connectString = 'mongodb://';
+        if(config('database.username') && config('database.password')){
+            $connectString .= config('database.username') . ':' .config('database.password') . '@';
+        }
+        $connectString .= config('database.hostname') . ':' . config('database.hostport') . '/' . config('database.database');
+        $mongodb = new \MongoDB\Driver\Manager($connectString);
+        $database = config('database.database');
+        $command = new \MongoDB\Driver\Command([
+            'aggregate' => $table,
+            'pipeline' => [
+                ['$match' => $where],
+                ['$group' => ['_id' => ['company_id' => '$company_id'],'sum' => ['$sum' => '$money']]],
+                ['$sort' => ['sum'=> -1]],
+                ['$limit' => 5],
+            ],
+        ]);
+        $result = $mongodb->executeCommand($database,$command);
+        return $result->toArray();
+    }
 }
