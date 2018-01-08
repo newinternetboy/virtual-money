@@ -92,6 +92,46 @@ class Report extends Admin
 
     /**
      * @return mixed
+     * 导出表具余额的excel
+     */
+    public function meterBalance_excel(){
+        $M_Code= input('M_Code');
+        $company_name = input('company_name');
+        $where['meter_status'] = METER_STATUS_BIND;
+        $where['meter_life'] = METER_LIFE_ACTIVE;
+        if($company_name){
+            $companyService = new CompanyService();
+            if( $company = $companyService->findInfo(['company_name' => $company_name,'status' => COMPANY_STATUS_NORMAL]) ){
+                $where['company_id'] = $company['id'];
+            }
+        }
+        if($M_Code){
+            $where['M_Code'] = $M_Code ;
+        }
+        $meterService = new MeterService();
+        $allMeter = $meterService->selectInfo($where,'id,balance,detail_address,M_Address,U_ID,M_Code,totalCube');
+
+        $totalbalance = array_sum(array_column(array_map(function($x){return $x->toArray();},$allMeter),'balance'));
+        $number = count($allMeter);
+        $savbalance = 0 ;
+        $data=[];
+        foreach($allMeter as $key=>$value){
+            $data[$key]['M_Code'] = $value['M_Code'];
+            $data[$key]['username'] = $value->consumer['username'];
+            $data[$key]['address'] = $value->area['address'].$value['detail_address'];
+            $data[$key]['totalCube'] = $value['totalCube'];
+            $data[$key]['balance'] = $value['balance'];
+        }
+
+        if($number){
+            $savbalance = round($totalbalance/$number,2);
+        }
+        $total="累计余额:".$totalbalance."元；累计用户:".$number."户；平均每户:".$savbalance."元";
+        $meterService->create_xls($data,'meterbalance','表具余额excel',$total);
+    }
+
+    /**
+     * @return mixed
      * excel导出；
      */
     public function balanceStatistics_excel(){

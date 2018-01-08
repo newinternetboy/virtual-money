@@ -96,6 +96,60 @@ class MeterService extends BasicService
         $PHPWriter->save("php://output");
     }
 
+    public function create_xls($data,$filename,$title,$total){
+        $filename=$filename.".xlsx";
+        $path = dirname(__FILE__);
+        vendor("phpoffice.phpexcel.Classes.PHPExcel");
+        vendor("phpoffice.phpexcel.Classes.PHPExcel.Writer.Excel5");
+        vendor("phpoffice.phpexcel.Classes.PHPExcel.Writer.Excel2007");
+        vendor("phpoffice.phpexcel.Classes.PHPExcel.IOFactory");
+        $objPHPExcel = new \PHPExcel();
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:E2');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1',$title);
+        $objPHPExcel->getActiveSheet()->getDefaultStyle()->getFont()->setSize(18);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setName('宋体') //字体
+            ->setSize(20) //字体大小
+            ->setBold(true); //字体加粗
+        $objPHPExcel->getActiveSheet()->getStyle('A2')->getFont()->setName('宋体') //字体
+            ->setSize(14) //字体大小
+            ->setBold(true); //字体加粗
+        $objPHPExcel->getActiveSheet()->getStyle('A1:A2')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $objPHPExcel->getActiveSheet()->setCellValue('A2', '(导出日期：'.date('Y-m-d',time()).')');
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A3', '表号')
+            ->setCellValue('B3', '用户姓名')
+            ->setCellValue('C3', '地址')
+            ->setCellValue('D3', '表具用量')
+            ->setCellValue('E3', '表具余额');
+        $count = count($data);
+        for ($i = 4; $i <= $count+3; $i++) {
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $i, $data[$i-4]['M_Code']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $i, $data[$i-4]['username']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $data[$i-4]['address']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $data[$i-4]['totalCube']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $data[$i-4]['balance']);
+        }
+        $last = $count + 4;
+        $objPHPExcel->getActiveSheet()->setCellValue('A'.$last,$total);
+        $objPHPExcel->getActiveSheet()->mergeCells('A'.$last.':E'.$last);
+        $objPHPExcel->getActiveSheet()->getStyle('A'.$last)->getFont()->setName('宋体') //字体
+            ->setSize(16) //字体大小
+            ->setBold(true); //字体加粗
+        $objPHPExcel->getActiveSheet()->getStyle('A'.$last)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $objPHPExcel->getActiveSheet()->setTitle('balanceStatistics');      //设置sheet的名称
+        $objPHPExcel->setActiveSheetIndex(0);                   //设置sheet的起始位置
+        $PHPWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+        header('Content-Disposition: attachment;filename='.$filename);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $PHPWriter->save("php://output");
+    }
+
     public function columnInfo($where,$field){
         return $this->dbModel->columnInfo($where,$field);
     }
