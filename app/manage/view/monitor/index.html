@@ -4,14 +4,41 @@
 <script src="http://echarts.baidu.com/asset/map/js/china.js"></script>
 {js href="__JS__/dark.js" /}
 
+<style>
+    #chart1 {
+        text-align: center;
+        color: #ffffff;
+        height: 100%;
+        vertical-align: middle;
+        padding-top: 6vh;
+    }
+    
+    #showtime {
+        color: #97C1D3;
+    }
+
+    #month_recharge {
+        color: #DD5050;
+    }
+    
+    #month_setup {
+        color: #3BCC76;
+    }
+
+    #showtime {
+        font-size: 16px;
+    }
+</style>
 <body style="background: #1A1823;width:100%;height:100%">
 <div id="table" style="width:100%;height:100%;">
     <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false" style="height:100%;width:100%;">
         <tr>
             <td style="width: 33%;height:33%;">
                 <div id="chart1">
-                    <span id="month_recharge" style="font-size:30px;color:white;"></span>
-                    <span id="month_setup"  style="font-size:30px;color:white;"></span>
+                    <span>当前日期</span><br><br>
+                    <span id="showtime"></span><br><br><br>
+                    <span style="font-size: 14px">本月充值:&nbsp&nbsp</span><span id="month_recharge" style="font-size:30px;"></span><br>
+                    <span style="font-size: 14px">本月报装:&nbsp&nbsp</span><span id="month_setup"  style="font-size:30px;"></span>
                 </div>
             </td>
             <td style="width: auto;height:auto;" rowspan="2" colspan="3">
@@ -43,6 +70,27 @@
 </div>
 </body>
 <script>
+    function showTime(){
+        var show_day=new Array('星期一','星期二','星期三','星期四','星期五','星期六','星期日');
+        var time=new Date();
+        var year=time.getFullYear();
+        var month=time.getMonth();
+        var date=time.getDate();
+        var day=time.getDay();
+        var hour=time.getHours();
+        var minutes=time.getMinutes();
+        var second=time.getSeconds();
+        month<10?month='0'+month:month;
+        month=month+1;
+        hour<10?hour='0'+hour:hour;
+        minutes<10?minutes='0'+minutes:minutes;
+        second<10?second='0'+second:second;
+        var now_time=year+'年'+month+'月'+date+'日'+' '+show_day[day-1]+' '+hour+':'+minutes+':'+second;
+        document.getElementById('showtime').innerHTML=now_time;
+        setTimeout("showTime();",1000);
+    }
+
+
     function monthRecharge(){
         $.ajax({
             url:"{:url('manage/monitor/monthRecharge')}",
@@ -52,7 +100,7 @@
             data: {},
             beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
             success: function(res){
-                $('#month_recharge').html("本月充值："+res+"元")
+                $('#month_recharge').html(res+"元")
             },
             error:function(){
                 $('#month_recharge').html("")
@@ -475,7 +523,7 @@
             data: {},
             beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
             success: function(res){
-                $('#month_setup').html("本月报装："+(res[0]+res[1]+res[2])+"户")
+                $('#month_setup').html((res[0]+res[1]+res[2])+"户")
                 shuju = res;
             },
             error:function(){
@@ -655,10 +703,16 @@
         // 使用刚指定的配置项和数据显示图表。
         myChart7.setOption(option7);
     }
-    echarts7()
+    echarts7();
     setInterval(function(){
         echarts7()
-    },22000)
+    },22000);
+    window.onload = function () {
+        showTime();
+        var width = $("#month_recharge").width();
+        $("#month_setup").width(width);
+        debugger;
+    }
 </script>
 
 
