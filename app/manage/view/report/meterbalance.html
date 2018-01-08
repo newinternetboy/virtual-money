@@ -1,4 +1,3 @@
-{js href="__JS__/jquery.jqprint-0.3.js" /}
 {js href="__JS__/bootstrap-typeahead.js" /}
 <div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
     <section id="widget-grid">
@@ -31,6 +30,7 @@
                                 <label  class="col-sm-2 control-label"></label>
                                 <div class="col-sm-10">
                                     <button style="float: right" class="btn btn-success" type="submit" >{:lang('Search')}</button>
+                                    <button id="export" style="float: right;margin-right: 2vw" class="btn btn-primary" type="button" >{:lang('Download')}</button>
                                 </div>
                             </div>
                         </form>
@@ -66,18 +66,15 @@
                             </table>
                             <div>{$meter->render()}</div>
                         </div>
-                        <button id="print" style="float: right;margin-left: 1vw" class="btn btn-success" type="button" >{:lang('Print')}</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
-
-
 <script>
-    $('#print').click(function(){
-            $('#table').jqprint();
+    $('#export').click(function(){
+         window.location.href="{:url('manage/report/meterBalance_excel',['company_name'=>$company_name,'M_Code'=>$M_Code])}";
     })
 </script>
 <script>
@@ -106,6 +103,6 @@
                     alertMsg("{:lang('Operation fail')}");
                 }
             })
-        },
+        }
     });
 </script>
