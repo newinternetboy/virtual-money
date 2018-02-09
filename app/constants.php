@@ -128,7 +128,6 @@ define('COMPANY_STATUS_DEL',2);    //已删除
 define('PERSONAL_ELE_BUSINESS',0); //个人电商
 define('COMPANY_ELE_BUSINESS',1);  //企业电商
 define('DELI_ELE_BUSINESS_TYPE',2); //得利电商
-//店铺状态 status
 define('SHOP_STATUS_CLOSE',0); //关闭
 define('SHOP_STATUS_OPEN',1); //打开
 //店铺是否置顶 stick
@@ -164,6 +163,7 @@ define('DICT_COMPANY_ELE_BUSINESS',1); //企业电商类别
 define('DICT_PERSON_ELE_BUSINESS',2); //得利专供类别
 define('DICT_PERCENT',3); //充值时赠送得利币的比例
 define('DICT_BALANCE_THRESHOLD_VALUE',4); //表具余额阀值
+define('DICT_DEDECT_BALANCE_LOWEST_VALUE',5); //扣除余额后剩余最低值
 
 /***************通知类型***************/
 define('NOTICE_TYPE_LOW_BALANCE',1); //提醒充值

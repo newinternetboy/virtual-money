@@ -17,6 +17,7 @@ use app\manage\service\MoneyLogService;
 use app\manage\service\UserService;
 use app\manage\service\TaskService;
 use app\manage\service\AdviceService;
+use app\manage\service\DictService;
 use think\Loader;
 use think\Log;
 
@@ -346,7 +347,7 @@ class Manage extends Admin
                     if(!empty($diff)){
                         foreach($diff as $key=>$value){
                             $arr[$key]['code']=$value;
-                            $arr[$key]['reson'] = '表号不存在';
+                            $arr[$key]['reson'] = '表号不存在或不符合操作条件！';
                         }
                         $ajaxReturn['status'] = 202;
                         $ajaxReturn['msg'] = $arr;
@@ -393,11 +394,11 @@ class Manage extends Admin
         $highestRow = $sheet->getHighestRow();
         if($highestRow >= 4 ){
             for ($row = 4; $row <= $highestRow; $row++){//行数是以第2行开始
-                $M_Code = $sheet->getCellByColumnAndRow(0,$row)->getValue();
+                $M_Code = $sheet->getCellByColumnAndRow(1,$row)->getValue();
                 $M_Code = is_object($M_Code) ? $M_Code->__toString() : $M_Code; //避免导入的value是object
-                $number = $sheet->getCellByColumnAndRow(1,$row)->getValue();
+                $number = $sheet->getCellByColumnAndRow(2,$row)->getValue();
                 $number = is_object($number) ? $number->__toString() : $number; //避免导入的value是object
-                $remark = $sheet->getCellByColumnAndRow(2,$row)->getValue();
+                $remark = $sheet->getCellByColumnAndRow(3,$row)->getValue();
                 $remark = is_object($remark) ? $remark->__toString() : $remark; //避免导入的value是object
                 $data[] = ['M_Code' => trim(strval($M_Code)),'number'=> $number,'remark' => strval($remark)];
             }
@@ -517,16 +518,22 @@ class Manage extends Admin
     }
 
     private function addAllTask($datas){
+        $dictService = new DictService();
+        $lowestInfo = $dictService->findInfo(['type'=>DICT_DEDECT_BALANCE_LOWEST_VALUE]);
+        if($lowestInfo){
+            $lowest = $lowestInfo['value'];
+        }else{
+            $lowest = 0;
+        }
         $arrs=[];
         foreach($datas as $key=> $value){
             //检查表具信息
             $meterService = new MeterService();
             $where['M_Code'] = $value['M_Code'];
-            $where['meter_life'] = METER_LIFE_ACTIVE;
-            $where['meter_status'] = METER_STATUS_BIND;
+            $where['balance_rmb'] = ['>=',$value['number']+$lowest];
             if(!$meter=$meterService->findInfo($where,'id,company_id')){
                 $arrs[$key]['code'] = $value['M_Code'];
-                $arrs[$key]['reson'] = '表号不存在或不符合操作条件';
+                $arrs[$key]['reson'] = '该表扣除金额后余额不足'.$lowest."元";
                 continue;
             }
             //插入moneylog

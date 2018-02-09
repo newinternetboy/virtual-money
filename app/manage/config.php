@@ -136,7 +136,8 @@ return [
         DICT_COMPANY_ELE_BUSINESS => lang('Company Ele_business Type'),
         DICT_PERSON_ELE_BUSINESS  => lang('Deli Ele_business Type'),
         DICT_PERCENT              => lang('Deli_money Gifts'),
-        DICT_BALANCE_THRESHOLD_VALUE              => lang('Low Balance Valve'),
+        DICT_BALANCE_THRESHOLD_VALUE    => lang('Low Balance Valve'),
+        DICT_DEDECT_BALANCE_LOWEST_VALUE => lang('Deduct Balance Lowest Valve')
     ],
     //商铺封面图压缩尺寸限制
     'thumbMaxWidth' => 250,

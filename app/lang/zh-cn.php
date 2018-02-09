@@ -1001,6 +1001,7 @@ return [
     'Low Balance Title'                 => '余额过低提醒',
     'Low Balance Content'               => '表具余额低于%s元,请尽快充值',
     'Low Balance Valve'                 => '余额提醒阀值',
+    'Deduct Balance Lowest Valve'       => '扣除余额最低值',
     'Deal Fix'                          => '处理保修',
     'Deal Advice'                       => '处理留言',
     'Save Grshop'                       => '修改个人商铺',

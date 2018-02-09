@@ -22,12 +22,12 @@
                                 </div><!-- /form-group -->
                             </div><!-- /.col-lg-6 -->
                             <!--<div class="col-lg-6" style="float: right">-->
-                                <!--<div class="input-group">-->
-                                    <!--<input id="M_Code_S" type="text" class="form-control" placeholder="{:lang('Please enter M_Code')}">-->
-                                        <!--<span class="input-group-btn">-->
-                                            <!--<button id="search" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> </button>-->
-                                        <!--</span>-->
-                                <!--</div>&lt;!&ndash; /input-group &ndash;&gt;-->
+                            <!--<div class="input-group">-->
+                            <!--<input id="M_Code_S" type="text" class="form-control" placeholder="{:lang('Please enter M_Code')}">-->
+                            <!--<span class="input-group-btn">-->
+                            <!--<button id="search" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> </button>-->
+                            <!--</span>-->
+                            <!--</div>&lt;!&ndash; /input-group &ndash;&gt;-->
                             <!--</div>&lt;!&ndash; /.col-lg-6 &ndash;&gt;-->
                         </div>
                         <div class="form-group">
@@ -54,7 +54,7 @@
             </div>
         </div>
     </section>
-    </div>
+</div>
 </div>
 
 <script>
@@ -83,30 +83,30 @@
         }
     }
 
-//    $('#search').click(function(){
-//        var M_Code = $('#M_Code_S').val();
-//        if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
-//            $.ajax({
-//                url:"{:url('admin/meter/getMeterData')}",
-//                method:'post',
-//                dataType:'json',
-//                data:{M_Code: M_Code},
-//                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
-//                success: function(res){
-//                    if(res.code != 200){
-//                        alertMsg(res.msg);
-//                    }else{
-//                        fillTable(res);
-//                    }
-//                },
-//                error:function(){
-//                    alertMsg("{:lang('Operation fail')}");
-//                }
-//            })
-//        }else{
-//            alertMsg("{:lang('Please fill in the form M_Code first')}");
-//        }
-//    });
+    //    $('#search').click(function(){
+    //        var M_Code = $('#M_Code_S').val();
+    //        if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
+    //            $.ajax({
+    //                url:"{:url('admin/meter/getMeterData')}",
+    //                method:'post',
+    //                dataType:'json',
+    //                data:{M_Code: M_Code},
+    //                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+    //                success: function(res){
+    //                    if(res.code != 200){
+    //                        alertMsg(res.msg);
+    //                    }else{
+    //                        fillTable(res);
+    //                    }
+    //                },
+    //                error:function(){
+    //                    alertMsg("{:lang('Operation fail')}");
+    //                }
+    //            })
+    //        }else{
+    //            alertMsg("{:lang('Please fill in the form M_Code first')}");
+    //        }
+    //    });
 
     function fillTable(res){
         $("#table  tr:not(:first)").empty("");
@@ -122,38 +122,38 @@
         }
         var address = meter.meter_status ? meter.area +' '+ meter.detail_address : "{:lang('None')}";
         var html = '<tr>' +
-                        '<th data-width="50">'+ meter.M_Code +'</th>' +
-                        '<th data-width="50"  >'+ mtype +'</th>' +
-                        '<th data-width="50"  >'+ address +'</th>' +
-                        '<th data-width="20"><a onclick="del(\''+meter.M_Code+'\')" class="btn btn-xs delete" href="javascript:void(0)" title="{$Think.lang.Delete}">' +
+                '<th data-width="50">'+ meter.M_Code +'</th>' +
+                '<th data-width="50"  >'+ mtype +'</th>' +
+                '<th data-width="50"  >'+ address +'</th>' +
+                '<th data-width="20"><a onclick="del(\''+meter.M_Code+'\')" class="btn btn-xs delete" href="javascript:void(0)" title="{$Think.lang.Delete}">' +
                 '<i class="fa fa-trash"></i>' +
                 '</a></th>'+
-                    '</tr>';
+                '</tr>';
         $('#table').append(html);
     }
 
-function del(M_Code){
-    if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
-        alertConfirm("{:lang('Confirm delete meter')}"+M_Code+ ' ?',function(){
-            $.ajax({
-                url:"{:url('admin/meter/delete')}",
-                method:'post',
-                dataType:'json',
-                data:{M_Code: M_Code},
-                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
-                success: function(res){
-                    alertMsg(res.msg);
-                    if(res.code == 200) {
-                        setTimeout(function(){window.location.href = ''},1500);
+    function del(M_Code){
+        if( M_Code != 'undefined' && M_Code!= '' && M_Code != null){
+            alertConfirm("{:lang('Confirm delete meter')}"+M_Code+ ' ?',function(){
+                $.ajax({
+                    url:"{:url('admin/meter/delete')}",
+                    method:'post',
+                    dataType:'json',
+                    data:{M_Code: M_Code},
+                    beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                    success: function(res){
+                        alertMsg(res.msg);
+                        if(res.code == 200) {
+                            setTimeout(function(){window.location.href = ''},1500);
+                        }
+                    },
+                    error:function(){
+                        alertMsg("{:lang('Operation fail')}");
                     }
-                },
-                error:function(){
-                    alertMsg("{:lang('Operation fail')}");
-                }
-            })
-         });
-    }else{
-        alertMsg("{:lang('Please fill in the form M_Code first')}");
+                })
+            });
+        }else{
+            alertMsg("{:lang('Please fill in the form M_Code first')}");
+        }
     }
-}
 </script>
