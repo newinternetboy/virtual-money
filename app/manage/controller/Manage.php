@@ -919,11 +919,11 @@ class Manage extends Admin
         $ret['msg'] = lang('Operation Success');
         try{
             $companyService = new CompanyService();
-            if(!isset($data['id']) || !$data['id'] || !$companyService->findInfo(['id' => $data['id'],'status' => COMPANY_STATUS_NORMAL])){
+            if(!isset($data['id']) || !$data['id'] || !$companyInfo=$companyService->findInfo(['id' => $data['id'],'status' => COMPANY_STATUS_NORMAL])){
                 exception(lang('Company Not Exists'),ERROR_CODE_DATA_ILLEGAL);
             }
             $chargeData['id'] = $data['id'];
-            $chargeData['charge_limit'] = floatval($data['charge_limit']);
+            $chargeData['charge_limit'] = floatval($data['charge_limit']*(1+$companyInfo['percent']));
             if($chargeData['charge_limit'] <= 0 ){
                 exception(lang('Charge Limit Illegal'),ERROR_CODE_DATA_ILLEGAL);
             }
