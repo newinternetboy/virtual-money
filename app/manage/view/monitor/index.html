@@ -198,7 +198,7 @@
         };
 
         // 使用刚指定的配置项和数据显示图表。
-        myChart2.setOption(option2);
+        myChart2.setOption(option2,window.addEventListener('resize', function () { myChart2.resize(); }));
     }
     echarts2()
     monthRecharge()
@@ -294,7 +294,7 @@
             ]
         };
         // 使用刚指定的配置项和数据显示图表。
-        myChart3.setOption(option3);
+        myChart3.setOption(option3,window.addEventListener('resize', function () { myChart3.resize(); }));
     }
     echarts3()
     setInterval(function(){
@@ -400,7 +400,7 @@
             ]
         };
         // 使用刚指定的配置项和数据显示图表。
-        myChart4.setOption(option4);
+        myChart4.setOption(option4,window.addEventListener('resize', function () { myChart4.resize(); }));
     }
     echarts4()
     monthRecharge()
@@ -505,7 +505,7 @@
         };
 
         // 使用刚指定的配置项和数据显示图表。
-        myChart5.setOption(option5);
+        myChart5.setOption(option5,window.addEventListener('resize', function () { myChart5.resize(); }));
     }
     echarts5()
     setInterval(function(){
@@ -607,7 +607,7 @@
         };
 
         // 使用刚指定的配置项和数据显示图表。
-        myChart6.setOption(option6);
+        myChart6.setOption(option6,window.addEventListener('resize', function () { myChart6.resize(); }));
     }
     echarats6()
     setInterval(function(){
@@ -700,7 +700,8 @@
             ]
         };
         // 使用刚指定的配置项和数据显示图表。
-        myChart7.setOption(option7);
+        myChart7.setOption(option7,window.addEventListener('resize', function () { myChart7.resize(); }));
+
     }
     echarts7();
     setInterval(function(){
@@ -712,6 +713,7 @@
         $("#month_setup").width(width);
         debugger;
     }
+
 </script>
 
 
