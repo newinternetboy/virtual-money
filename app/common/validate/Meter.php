@@ -58,7 +58,7 @@ class Meter extends Validate
         //初始化新表具
         'init_new' => ['M_Code','meter_life','meter_status'],
         //表具上报
-        'report' => ['balance','initialCube','totalCube']
+        'report' => ['balance','totalCube']
     ];
 }
 

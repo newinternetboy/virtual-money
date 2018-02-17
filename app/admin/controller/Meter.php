@@ -133,6 +133,30 @@ class Meter extends Admin
             }
 
             //todo:给表具添加下发价格配置和运行参数配置信息任务
+            //初始化运行参数任务
+            $meterparam = model('MeterParam')->where(['company_id' => $this->company_id])->find();
+            $taskParam = [
+                'meter_id'  =>  $meter['id'],
+                'cmd'       =>  'init_meter_param',
+                'param'     =>  $meterparam->toArray()
+            ];
+            $task_param_result = upsertTask($taskParam);
+            if(is_array($task_param_result)){
+                Log::record(['报装表具初始化运行参数任务失败' => $task_param_result['msg'],'task_data' => $taskParam],'error');
+                exception($task_param_result['msg'],$task_param_result['code']);
+            }
+            //初始化阶梯价任务
+            $price = model('Price')->where(['id' => $data['meter']['P_ID']])->find();
+            $taskPrice = [
+                'meter_id'  =>  $meter['id'],
+                'cmd'       =>  'init_meter_price',
+                'param'     =>  $price->toArray()
+            ];
+            $task_price_result = upsertTask($taskPrice);
+            if(is_array($task_price_result)){
+                Log::record(['报装表具初始化阶梯价任务失败' => $task_price_result['msg'],'task_data' => $taskPrice],'error');
+                exception($task_price_result['msg'],$task_price_result['code']);
+            }
 
             //记录入表具上报数据表
             $meterData['M_Code'] =  $meter['M_Code'];
@@ -302,14 +326,24 @@ class Meter extends Admin
             }
             Loader::clearInstance();
             //更新新表状态
+//            $new_meter_data['id'] = $new_meter['id'];
+//            $new_meter_data['M_Type'] = $old_meter['M_Type'];
+//            $new_meter_data['P_ID'] = $old_meter['P_ID'];
+//            $new_meter_data['M_Address'] = $old_meter['M_Address'];
+//            $new_meter_data['detail_address'] = $old_meter['detail_address'];
+//            $new_meter_data['U_ID'] = $old_meter['U_ID'];
+//            $new_meter_data['company_id'] = $old_meter['company_id'];
+//            $new_meter_data['meter_status'] = METER_STATUS_BIND;
+//            $new_meter_data['change_time'] = time();
+            $new_meter_data = $old_meter->toArray();
+            unset($new_meter_data['id']);
+            unset($new_meter_data['M_Code']);
+            unset($new_meter_data['create_time']);
+            unset($new_meter_data['update_time']);
+            unset($new_meter_data['setup_time']);
             $new_meter_data['id'] = $new_meter['id'];
-            $new_meter_data['M_Type'] = $old_meter['M_Type'];
-            $new_meter_data['P_ID'] = $old_meter['P_ID'];
-            $new_meter_data['M_Address'] = $old_meter['M_Address'];
-            $new_meter_data['detail_address'] = $old_meter['detail_address'];
-            $new_meter_data['U_ID'] = $old_meter['U_ID'];
-            $new_meter_data['company_id'] = $old_meter['company_id'];
-            $new_meter_data['meter_status'] = METER_STATUS_BIND;
+            $new_meter_data['balance'] = $old_meter['balance']+$old_meter['balance_rmb'];
+            $new_meter_data['balance_rmb'] = 0;
             $new_meter_data['change_time'] = time();
             if( !model('Meter')->updateMeter($new_meter_data,'Meter.change_update_new_meter') ){
                 $error = model('Meter')->getError();
@@ -318,6 +352,49 @@ class Meter extends Admin
             }
 
             //TODO:旧表数据同步新表task
+            //初始化运行参数任务
+            $meterparam = model('MeterParam')->where(['company_id' => $this->company_id])->find();
+            $taskParam = [
+                'meter_id'  =>  $new_meter['id'],
+                'cmd'       =>  'init_meter_param',
+                'param'     =>  $meterparam->toArray()
+            ];
+            $task_param_result = upsertTask($taskParam);
+            if(is_array($task_param_result)){
+                Log::record(['报装表具初始化运行参数任务失败' => $task_param_result['msg'],'task_data' => $taskParam],'error');
+                exception($task_param_result['msg'],$task_param_result['code']);
+            }
+            //初始化阶梯价任务
+            $price = model('Price')->where(['id' => $old_meter['P_ID']])->find();
+            $taskPrice = [
+                'meter_id'  =>  $new_meter['id'],
+                'cmd'       =>  'init_meter_price',
+                'param'     =>  $price->toArray()
+            ];
+            $task_price_result = upsertTask($taskPrice);
+            if(is_array($task_price_result)){
+                Log::record(['报装表具初始化阶梯价任务失败' => $task_price_result['msg'],'task_data' => $taskPrice],'error');
+                exception($task_price_result['msg'],$task_price_result['code']);
+            }
+            //同步旧表其他字段
+            $fieldsParam = [
+                'meter_id'  =>  $new_meter['id'],
+                'cmd'       =>  'synchrodata',
+                'param'     =>  [
+                    'initialCube'       =>  $new_meter_data['initialCube'],
+                    'totalCube'         =>  $new_meter_data['totalCube'],
+                    'totalCube_cost'    =>  $new_meter_data['totalCube_cost'],
+                    'totalCost'         =>  $new_meter_data['totalCost'],
+                    'stsum'             =>  $new_meter_data['stsum'],
+                    'currentPrice'      =>  $new_meter_data['currentPrice'],
+                    'balance'           =>  $new_meter_data['balance']
+                ]
+            ];
+            $task_sync_result = upsertTask($fieldsParam);
+            if(is_array($task_sync_result)){
+                Log::record(['报装表具初始化阶梯价任务失败' => $task_sync_result['msg'],'task_data' => $fieldsParam],'error');
+                exception($task_sync_result['msg'],$task_sync_result['code']);
+            }
 
             //更新用户表号和密码
             $consumerInfo['id'] = $old_meter['U_ID'];

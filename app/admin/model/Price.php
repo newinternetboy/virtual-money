@@ -31,7 +31,7 @@ class Price extends Admin
     }
 
     //存储前转为浮点数
-    public function setBasicPriceAttr($value){
+    public function setLowCostAttr($value){
         return floatval($value);
     }
 
@@ -63,6 +63,31 @@ class Price extends Admin
     //存储前转为浮点数
     public function setFourthPriceAttr($value){
         return floatval($value);
+    }
+
+    //存储前转为整数
+    public function setFourthValAttr($value){
+        return intval($value);
+    }
+
+    //存储前转为浮点数
+    public function setFifthPriceAttr($value){
+        return floatval($value);
+    }
+
+    //存储前转为整数
+    public function setFifthValAttr($value){
+        return intval($value);
+    }
+
+    //存储前转为浮点数
+    public function setSixthPriceAttr($value){
+        return floatval($value);
+    }
+
+    //存储前转为整数
+    public function setSixthValAttr($value){
+        return intval($value);
     }
 
     //存储前转为浮点数

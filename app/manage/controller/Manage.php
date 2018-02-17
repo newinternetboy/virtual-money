@@ -893,7 +893,7 @@ class Manage extends Admin
                 Log::record(['设置佣金比例失败:' => $error,'data' => $data],'error');
                 exception(lang('Operation fail').' : '.$error,ERROR_CODE_DATA_ILLEGAL);
             }
-            model('app\admin\model\LogRecord')->record( 'set percent',$data);
+            model('app\admin\model\LogRecord')->record( 'set',$data);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();

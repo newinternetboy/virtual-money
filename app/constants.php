@@ -183,3 +183,7 @@ define('CHAT_STATUS_CHECKED',2);    //已读
 /***************消息发起方***************/
 define('CHAT_TYPE_SHOP',2);    //商铺
 define('CHAT_TYPE_CONSUMER',1);    //个人
+
+/*************报警信息状态***************/
+define('ALARM_STATUS_WAITING',1);//待处理
+define('ALARM_STATUS_DEAL',2);//已处理

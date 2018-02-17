@@ -131,6 +131,8 @@ return [
         'turn_off'      => lang('Cmd Turn Off'),
         'downloadPrice'  => lang('Cmd downloadPrice'),
         'downloadMeterparam'  => lang('Cmd downloadMeterparam'),
+        'init_meter_param'      =>  lang('初始化运行参数'),
+        'init_meter_price'      =>  lang('初始化阶梯价'),
     ],
     'dictType'=>[
         DICT_COMPANY_ELE_BUSINESS => lang('Company Ele_business Type'),

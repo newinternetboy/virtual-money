@@ -1,0 +1,212 @@
+{js href="__JS__/bootstrap-datetimepicker.min.js" /}
+{js href="__JS__/bootstrap-datetimepicker.zh-CN.js" /}
+{css href="__CSS__/bootstrap-datetimepicker.min.css" /}
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class=" table-responsive">
+                <div class="ibox float-e-margins" style="padding: 10px">
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>{:lang('Alarm')}</h5>
+                    </div>
+                    <!-- 表单内容 -->
+                    <div class="ibox-content">
+                        <!-- 搜索条件 -->
+                        <form action="" method="get" class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label for="M_Code" class="col-sm-4 control-label">{:lang('Alarm M_Code')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="M_Code" name="M_Code" value="{$M_Code ?? ''}" class="form-control">
+                                    </div>
+                                </div>
+                                <!--<div class="col-md-5">-->
+                                    <!--<label for="level" class="col-sm-4 control-label">{:lang('Alarm Level')}</label>-->
+                                    <!--<div class="col-sm-6">-->
+                                        <!--<select class="form-control selectOption" style="width: 100%;" name="level" id="level" >-->
+                                            <!--<option value="" selected >{:lang('Alarm All')}</option>-->
+                                            <!--{foreach $alarm_levels as $item}-->
+                                                <!--<option value="{$item}" {if condition="$item eq $level"}selected{/if}>{$item}</option>-->
+                                            <!--{/foreach}-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label for="startDate" class="col-sm-4 control-label">{:lang('Alarm Start Time')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="startDate" name="startDate" value="{$startDate ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="endDate" class="col-sm-4 control-label">{:lang('Alarm End Time')}</label>
+                                    <div class="col-sm-6">
+                                        <input id="endDate" name="endDate" value="{$endDate ?? ''}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label for="M_Code" class="col-sm-4 control-label">{:lang('Alarm Reason')}</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control selectOption" style="width: 100%;" name="reason" id="reason" >
+                                            <option value="" selected >{:lang('Alarm All')}</option>
+                                            {foreach $alarm_reasons as $index => $item}
+                                                <option value="{$index}" {if condition="$index eq $reason"}selected{/if}>{$item}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="level" class="col-sm-4 control-label">{:lang('Alarm Status')}</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control selectOption" style="width: 100%;" name="status" id="status" >
+                                            <option value="" selected >{:lang('Alarm All')}</option>
+                                            <option value="{$Think.const.ALARM_STATUS_WAITING}" {if condition="$status eq $Think.const.ALARM_STATUS_WAITING"}selected{/if} >{:lang('Alarm Waiting')}</option>
+                                            <option value="{$Think.const.ALARM_STATUS_DEAL}" {if condition="$status eq $Think.const.ALARM_STATUS_DEAL"}selected{/if} >{:lang('Alarm Deal')}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button style="float: right;margin-right: 20px" class="btn btn-success">{:lang('Search')}</button>
+                            </div>
+                        </form>
+                        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                        <!--报表-->
+                        <button class="btn btn-danger" onclick="dealAll()">{:lang('Deal All')}</button>
+                        <div id="table">
+                            <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
+                                <thead>
+                                <tr>
+                                    <th>{:lang('Alarm M_Code')}</th>
+                                    <!--<th>{:lang('Alarm Level')}</th>-->
+                                    <th>{:lang('Alarm Reason')}</th>
+                                    <th>{:lang('Alarm Time')}</th>
+                                    <th>{:lang('Alarm Status')}</th>
+                                    <th>{:lang('Deal Time')}</th>
+                                    <th>{:lang('Alarm Desc')}</th>
+                                    <th>{:lang('Operation')}</th>
+                                </tr>
+                                </thead>
+                                {foreach $alarms as $item}
+                                <tr>
+                                    <td>{$item.M_Code}</td>
+                                    <!--<td>$item.level</td>-->
+                                    <td>{$alarm_reasons[$item.reason]}</td>
+                                    <td>{$item.create_time}</td>
+                                    <td>{if condition='$item.status eq $Think.const.ALARM_STATUS_WAITING'}{:lang('Alarm Waiting')}{else /}{:lang('Alarm Deal')}{/if}</td>
+                                    <td>{if condition='$item.status eq $Think.const.ALARM_STATUS_WAITING'}-{else /}{$item.update_time}{/if}</td>
+                                    <td>{$item.desc ?? '-'}</td>
+                                    <td>{if condition='$item.status eq $Think.const.ALARM_STATUS_WAITING'}<button class="btn btn-primary" onclick="deal('{$item.id}')">{:lang('Operation')}{else /}-{/if}</td>
+                                </tr>
+                                {/foreach}
+                            </table>
+                        </div>
+                        <div>
+                            {$alarms->render()}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{:lang('Deal Alarm')}</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <input name="id" id="id" style="display: none">
+                <div class="form-group">
+                    <label for="desc" class="col-md-2 control-label">{:lang('Alarm Desc')}</label>
+                    <div class="col-md-10">
+                        <textarea id="desc" rows="3" cols="60"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button id='sub' type="button" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#startDate").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: false,
+        pickerPosition: "bottom-left",
+        startView: 4,
+        bootcssVer:3,
+        minView: 2,
+    });
+    $("#endDate").datetimepicker({
+        language:"zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: false,
+        pickerPosition: "bottom-left",
+        startView: 4,
+        bootcssVer:3,
+        minView: 2,
+    });
+</script>
+
+<script>
+    function deal(id){
+        $('#id').val(id)
+        $('#myModal').modal('show')
+    }
+
+    function sub(){
+        var id = $('#id').val()
+        var desc = $('#desc').val()
+        $.ajax({
+            url:"{:url('admin/alarm/deal')}",
+            method:'post',
+            dataType:'json',
+            data: {id:id,desc:desc},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                alertMsg(res.msg)
+                if(res.code == 200) {
+                    window.location.href = ''
+                }
+
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+    function dealAll(){
+        alertConfirm('确认批量处理预警?',function(){
+            $.ajax({
+                url:"{:url('admin/alarm/dealAll')}",
+                method:'post',
+                dataType:'json',
+                data: {M_Code:"{$M_Code}",status:"{$status}",startDate:"{$startDate}",endDate:"{$endDate}",level:"{$level}",reason:"{$reason}"},
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    alertMsg(res.msg)
+                    if(res.code == 200) {
+                        window.location.href = ''
+                    }
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
+                }
+            })
+        })
+    }
+</script>
