@@ -63,8 +63,8 @@
                             <tr>
                                 <th>{$company.OPT_ID}</th>
                                 <th>{$company.company_name}</th>
-                                <th>{$company.percent}</th>
-                                <th>{$company.charge_limit}</th>
+                                <th>{$company.percent ?? ''}</th>
+                                <th>{$company.charge_limit ?? ''}</th>
                                 <th><button class="btn btn-info" onclick="setCompany('{$company.id}',{$company.percent})">{:lang('Set')}</button><button style="margin-left: 1vw" class="btn btn-success" onclick="chargeCompany('{$company.id}')">{:lang('Charge')}</button> </th>
                             </tr>
                             {/foreach}

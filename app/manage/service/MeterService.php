@@ -65,11 +65,12 @@ class MeterService extends BasicService
         vendor("phpoffice.phpexcel.Classes.PHPExcel.Writer.Excel2007");
         vendor("phpoffice.phpexcel.Classes.PHPExcel.IOFactory");
         $objPHPExcel = new \PHPExcel();
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:C1');
-        $objPHPExcel->getActiveSheet()->mergeCells('A2:C2');
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:D2');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
         $objPHPExcel->getActiveSheet()->setCellValue('A1',$title);
         $objPHPExcel->getActiveSheet()->setCellValue('A2', '注：从第四行开始填入数据——'.date('Y-m-d',time()));
         $objPHPExcel->getActiveSheet()->getDefaultStyle()->getFont()->setSize(16);
@@ -85,9 +86,10 @@ class MeterService extends BasicService
         $objPHPExcel->getActiveSheet()->freezePane('A3');
         $objPHPExcel->getActiveSheet()->freezePane('A4');
         $objPHPExcel->setActiveSheetIndex()
-            ->setCellValue('A3', '表号')
-            ->setCellValue('B3', '扣除金额(元)')
-            ->setCellValue('C3', '备注');
+            ->setCellValue('A3', '序号')
+            ->setCellValue('B3', '表号')
+            ->setCellValue('C3', '扣除金额(元)')
+            ->setCellValue('D3', '备注');
         $objPHPExcel->getActiveSheet()->setTitle('balanceStatistics');      //设置sheet的名称
         $objPHPExcel->setActiveSheetIndex(0);                   //设置sheet的起始位置
         $PHPWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
