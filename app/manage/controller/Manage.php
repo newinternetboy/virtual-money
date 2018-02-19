@@ -947,4 +947,59 @@ class Manage extends Admin
         }
         return json($ret);
     }
+
+    public function downloadAttachment(){
+        $opt_id = input('OPT_ID');
+        if($opt_id){
+            $companyInfo = (new CompanyService())->findInfo(['OPT_ID' => $opt_id],'company_name,attachment');
+            if(isset($companyInfo['attachment'])){
+//                $path = 'company_attachment'.DS.$companyInfo['attachment'];
+//                $file = fopen($path, "r");
+//                Header("Content-type: application/octet-stream");
+//                Header("Accept-Ranges: bytes");
+//                Header("Accept-Length: " . filesize($path));
+//                Header("Content-Disposition: attachment; filename=" . $companyInfo['company_name']);
+//                echo fread ( $file, filesize ($path) );
+//                fclose($file);
+                $url = 'http://'.$_SERVER['HTTP_HOST'].DS.'company_attachment'.DS.$companyInfo['attachment'];
+                $this->redirect($url);
+            }else{
+                echo '附件不存在,请先更新附件!';
+            }
+        }else{
+            echo '请提供运营商编号!';
+        }
+    }
+
+    public function saveAttachment(){
+        $ret['code'] = 200;
+        $ret['msg'] = lang('Operation Success');
+        try {
+            $companyService = new CompanyService();
+            $opt_id = input('opt_id');
+            if(!$companyInfo = $companyService->findInfo(['OPT_ID' => $opt_id],'id')){
+                exception('公司编号不存在');
+            }
+            $attachment = request()->file('attachment');
+            if (!$attachment) {
+                exception('附件必须', ERROR_CODE_DATA_ILLEGAL);
+            } else {
+                $info = $attachment->validate(['size'=>1024*1024*10])->move(ROOT_PATH . 'public' . DS . 'company_attachment');
+                if($info){
+                    $updateData['id'] = $companyInfo['id'];
+                    $updateData['attachment'] = $info->getSaveName();
+                    if(!$companyService->upsert($updateData,false)){
+                        exception('更新失败',ERROR_CODE_DATA_ILLEGAL);
+                    }
+                }else{
+                    // 上传失败获取错误信息
+                    exception($attachment->getError(),ERROR_CODE_DATA_ILLEGAL);
+                }
+            }
+        } catch (\Exception $e) {
+            $ret['code'] = $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
 }
