@@ -25,7 +25,7 @@
                         <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Price Type')}</label>
                             <div class="col-sm-7">
-                                <input type="number" class="form-control" name="type"  required value="{$data.type ?? ''}" placeholder="{:lang('Please Input Number')}" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
+                                <input type="number" class="form-control" name="type"  required value="{$data.type ?? ''}" placeholder="请填写数字(1：天，2：月，3：年)" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
                             </div>
                         </div>
 
@@ -41,12 +41,19 @@
                     </div>
                     <div class="modal-body-content">
                         <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Low Cost')}</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" name="low_cost" required value="{$data.low_cost ?? ''}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
                             <label class="col-sm-3 control-label">{:lang('Price First Price')}</label>
                             <div class="col-sm-7">
                                 <input type="number" class="form-control" name="first_price" required value="{$data.first_price ?? ''}">
                             </div>
                         </div>
-
                     </div>
                     <div class="modal-body-content">
                         <div class="form-group must">
@@ -95,6 +102,46 @@
                             <label class="col-sm-3 control-label">{:lang('Price Fourth Price')}</label>
                             <div class="col-sm-7">
                                 <input type="number" class="form-control" name="fourth_price"  required value="{$data.fourth_price ?? ''}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Fourth Value')}</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" name="fourth_val" required value="{$data.fourth_val ?? ''}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Fifth Price')}</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" name="fifth_price"  required value="{$data.fifth_price ?? ''}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Fifth Value')}</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" name="fifth_val" required value="{$data.fifth_val ?? ''}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Sixth Price')}</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" name="sixth_price"  required value="{$data.sixth_price ?? ''}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body-content">
+                        <div class="form-group must">
+                            <label class="col-sm-3 control-label">{:lang('Price Sixth Value')}</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" name="sixth_val" required value="{$data.sixth_val ?? ''}">
                             </div>
                         </div>
                     </div>

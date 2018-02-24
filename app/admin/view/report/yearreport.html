@@ -53,6 +53,18 @@
                                 <tr>
                                     <th>{:lang('Years')}</th>
                                     <th>{:lang('Year User Number')}</th>
+                                    <th>第一阶梯用量</th>
+                                    <th>第一阶梯消费</th>
+                                    <th>第二阶梯用量</th>
+                                    <th>第二阶梯消费</th>
+                                    <th>第三阶梯用量</th>
+                                    <th>第三阶梯消费</th>
+                                    <th>第四阶梯用量</th>
+                                    <th>第四阶梯消费</th>
+                                    <th>第五阶梯用量</th>
+                                    <th>第五阶梯消费</th>
+                                    <th>第六阶梯用量</th>
+                                    <th>第六阶梯消费</th>
                                     <th>{:lang('This Year Cube')}</th>
                                     <th>{:lang('This year the amount(yuan)')}</th>
                                 </tr>
@@ -61,6 +73,18 @@
                                 <tr>
                                     <td>{$year}</td>
                                     <td>{$item.consumers}</td>
+                                    <td>{$item.la1}</td>
+                                    <td>{$item.lp1}</td>
+                                    <td>{$item.la2}</td>
+                                    <td>{$item.lp2}</td>
+                                    <td>{$item.la3}</td>
+                                    <td>{$item.lp3}</td>
+                                    <td>{$item.la4}</td>
+                                    <td>{$item.lp4}</td>
+                                    <td>{$item.la5}</td>
+                                    <td>{$item.lp5}</td>
+                                    <td>{$item.la6}</td>
+                                    <td>{$item.lp6}</td>
                                     <td>{$item.cube}</td>
                                     <td>{$item.cost}</td>
                                 </tr>
@@ -68,8 +92,20 @@
                                 <tr>
                                     <td>{:lang('total')}</td>
                                     <td></td>
-                                    <td>{$report|array_column=###,'cube'|array_sum=###}</td>
-                                    <td>{$report|array_column=###,'cost'|array_sum=###}</td>
+                                    <td>{$report|array_column=###,'la1'|array_sum=###|sprintf='%0.3f',###}</td>
+                                    <td>{$report|array_column=###,'lp1'|array_sum=###|sprintf='%0.2f',###}</td>
+                                    <td>{$report|array_column=###,'la2'|array_sum=###|sprintf='%0.3f',###}</td>
+                                    <td>{$report|array_column=###,'lp2'|array_sum=###|sprintf='%0.2f',###}</td>
+                                    <td>{$report|array_column=###,'la3'|array_sum=###|sprintf='%0.3f',###}</td>
+                                    <td>{$report|array_column=###,'lp3'|array_sum=###|sprintf='%0.2f',###}</td>
+                                    <td>{$report|array_column=###,'la4'|array_sum=###|sprintf='%0.3f',###}</td>
+                                    <td>{$report|array_column=###,'lp4'|array_sum=###|sprintf='%0.2f',###}</td>
+                                    <td>{$report|array_column=###,'la5'|array_sum=###|sprintf='%0.3f',###}</td>
+                                    <td>{$report|array_column=###,'lp5'|array_sum=###|sprintf='%0.2f',###}</td>
+                                    <td>{$report|array_column=###,'la6'|array_sum=###|sprintf='%0.3f',###}</td>
+                                    <td>{$report|array_column=###,'lp6'|array_sum=###|sprintf='%0.2f',###}</td>
+                                    <td>{$report|array_column=###,'cube'|array_sum=###|sprintf='%0.3f',###}</td>
+                                    <td>{$report|array_column=###,'cost'|array_sum=###|sprintf='%0.2f',###}</td>
                                 </tr>
                             </table>
                         </div>

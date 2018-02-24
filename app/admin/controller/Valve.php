@@ -22,6 +22,7 @@ class Valve extends Admin
      * 首页
      * @return \think\response\View
      */
+
 //    public function index(){
 //        $areas = model('Area')->getList(['company_id' => $this->company_id]);
 //        $this->assign('areas',$areas);
@@ -75,9 +76,13 @@ class Valve extends Admin
 //            }
 //
 //            $task['cmd'] = $data['option'];
+//            if($data['option'] == 'turn_off'){
+//                $task['sdoty'] = 1;
+//            }
 //            foreach($meters as $meter){
 //                $task['meter_id'] = $meter['id'];
-//                if(true !== $result = upsertTask($task)){
+//                $result = upsertTask($task);
+//                if(true !== $result){
 //                    $failresult[] = $result;
 //                    $fail .= $meter['M_Code'].';';
 //                }

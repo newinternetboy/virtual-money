@@ -122,7 +122,7 @@ function getAutoIncId($table, $query, $autoField, $step){
  * @return int|string
  */
 function initAuthoIncId($table, $data){
-    return Db($table)->insert($data);
+    return Db($table)->insertAll($data);
 }
 
 /**
@@ -162,6 +162,18 @@ function getNamedMonthReport($year, $month, $where){
     $tmp['consumers'] = Db($table)->where($where)->where([$month => ['neq',null]])->count();
     $tmp['cube'] = Db($table)->where($where)->sum($month);
     $tmp['cost'] = Db($table)->where($where)->sum($month.'_cost');
+    $tmp['la1'] = Db($table)->where($where)->sum($month.'_la1');
+    $tmp['lp1'] = Db($table)->where($where)->sum($month.'_lp1');
+    $tmp['la2'] = Db($table)->where($where)->sum($month.'_la2');
+    $tmp['lp2'] = Db($table)->where($where)->sum($month.'_lp2');
+    $tmp['la3'] = Db($table)->where($where)->sum($month.'_la3');
+    $tmp['lp3'] = Db($table)->where($where)->sum($month.'_lp3');
+    $tmp['la4'] = Db($table)->where($where)->sum($month.'_la4');
+    $tmp['lp4'] = Db($table)->where($where)->sum($month.'_lp4');
+    $tmp['la5'] = Db($table)->where($where)->sum($month.'_la5');
+    $tmp['lp5'] = Db($table)->where($where)->sum($month.'_lp5');
+    $tmp['la6'] = Db($table)->where($where)->sum($month.'_la6');
+    $tmp['lp6'] = Db($table)->where($where)->sum($month.'_lp6');
     return $tmp;
 }
 
@@ -183,9 +195,33 @@ function getYearReport($startYear, $endYear, $where){
             $monthFlow = getNamedMonthReport($startYear,$month,$where);
             $tmp['cube'][$index] = $monthFlow['cube'];
             $tmp['cost'][$index] = $monthFlow['cost'];
+            $tmp['la1'][$index] = $monthFlow['la1'];
+            $tmp['lp1'][$index] = $monthFlow['lp1'];
+            $tmp['la2'][$index] = $monthFlow['la2'];
+            $tmp['lp2'][$index] = $monthFlow['lp2'];
+            $tmp['la3'][$index] = $monthFlow['la3'];
+            $tmp['lp3'][$index] = $monthFlow['lp3'];
+            $tmp['la4'][$index] = $monthFlow['la4'];
+            $tmp['lp4'][$index] = $monthFlow['lp4'];
+            $tmp['la5'][$index] = $monthFlow['la5'];
+            $tmp['lp5'][$index] = $monthFlow['lp5'];
+            $tmp['la6'][$index] = $monthFlow['la6'];
+            $tmp['lp6'][$index] = $monthFlow['lp6'];
         }
         $report[$startYear]['cube'] = array_sum($tmp['cube']);
         $report[$startYear]['cost'] = array_sum($tmp['cost']);
+        $report[$startYear]['la1'] = array_sum($tmp['la1']);
+        $report[$startYear]['lp1'] = array_sum($tmp['lp1']);
+        $report[$startYear]['la2'] = array_sum($tmp['la2']);
+        $report[$startYear]['lp2'] = array_sum($tmp['lp2']);
+        $report[$startYear]['la3'] = array_sum($tmp['la3']);
+        $report[$startYear]['lp3'] = array_sum($tmp['lp3']);
+        $report[$startYear]['la4'] = array_sum($tmp['la4']);
+        $report[$startYear]['lp4'] = array_sum($tmp['lp4']);
+        $report[$startYear]['la5'] = array_sum($tmp['la5']);
+        $report[$startYear]['lp5'] = array_sum($tmp['lp5']);
+        $report[$startYear]['la6'] = array_sum($tmp['la6']);
+        $report[$startYear]['lp6'] = array_sum($tmp['lp6']);
         $report[$startYear]['consumers'] = Db($table)->where($where)->count();
         $startYear += 1;
     }
@@ -383,6 +419,9 @@ function upsertTask($data){
         $data['exec_times'] = isset($data['exec_times']) ? $data['exec_times'] : 1; //执行次数,默认为1
         $data['status'] = TASK_WAITING;
         $data['seq_id'] = getAutoIncId('autoinc',['name' => 'task','meter_id' => $meterInfo['id']],'seq_id',1);
+        if(in_array($data['cmd'],['charge','deduct'])){ //如果是扣款/充值任务,需要增加扣款/充值次数字段
+            $data['send_times'] = getAutoIncId('autoinc',['name' => $data['cmd'],'meter_id' => $meterInfo['id']],'seq_id',1);
+        }
         //改变表具余额的task,都需要此字段,值就是待下发给表具的金额,可以为负数,用于report api处理task
         if(isset($data['money_log_id'])){
             if(isset($data['balance_rmb'])){

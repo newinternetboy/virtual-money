@@ -31,6 +31,22 @@ class MeterParam extends Admin
         return intval($value);
     }
 
+    public function setUploadTimeAttr($value){
+        return intval($value);
+    }
+
+    public function setOverdraftTimeAttr($value){
+        return intval($value);
+    }
+
+    public function setFreezeTimeAttr($value){
+        return intval($value);
+    }
+
+    public function setOverFlimitAttr($value){
+        return intval($value);
+    }
+
     public function getList( $request )
     {
         $request = $this->fmtRequest( $request );

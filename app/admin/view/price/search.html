@@ -13,6 +13,7 @@
 								<th>{:lang('Price Name')}</th>
 								<th>{:lang('Price Type')}</th>
 								<th>{:lang('Price Period')}</th>
+								<th>{:lang('Price Low Cost')}</th>
 								<th>{:lang('Price First Price')}</th>
 								<th>{:lang('Price First Value')}</th>
 								<th>{:lang('Price Second Price')}</th>
@@ -20,6 +21,11 @@
 								<th>{:lang('Price Third Price')}</th>
 								<th>{:lang('Price Third Value')}</th>
 								<th>{:lang('Price Fourth Price')}</th>
+								<th>{:lang('Price Fourth Value')}</th>
+								<th>{:lang('Price Fifth Price')}</th>
+								<th>{:lang('Price Fifth Value')}</th>
+								<th>{:lang('Price Sixth Price')}</th>
+								<th>{:lang('Price Sixth Value')}</th>
 							</tr>
 							</thead>
 							<tbody>
@@ -28,6 +34,7 @@
 								<td>{$val.name}</td>
 								<td>{$val.type}</td>
 								<td>{$val.period}</td>
+								<td>{$val.low_cost ?? '-'}</td>
 								<td>{$val.first_price}</td>
 								<td>{$val.first_val}</td>
 								<td>{$val.second_price}</td>
@@ -35,6 +42,11 @@
 								<td>{$val.third_price}</td>
 								<td>{$val.third_val}</td>
 								<td>{$val.fourth_price}</td>
+								<td>{$val.fourth_val ?? '-'}</td>
+								<td>{$val.fifth_price  ?? '-'}</td>
+								<td>{$val.fifth_val  ?? '-'}</td>
+								<td>{$val.sixth_price  ?? '-'}</td>
+								<td>{$val.sixth_val  ?? '-'}</td>
 							</tr>
 							{/volist}
 							</tbody>
