@@ -58,7 +58,7 @@
                                 <tr>
                                     <td>{:lang('total')}</td>
                                     <td>{$money_log|array_column=###,'chargeTimes_rmb'|array_sum=###}</td>
-                                    <td>{$money_log|array_column=###,'chargeMoney_rmb'|array_sum=###}</td>
+                                    <td>{$money_log|array_column=###,'chargeMoney_rmb'|array_sum=###|sprintf='%0.2f',###}</td>
                                     <!--<td>{$all.chargeTimes_deli ?? '0'}</td>-->
                                     <!--<td>{$all.chargeMoney_deli ?? '0'}</td>-->
                                 </tr>

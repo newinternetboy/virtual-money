@@ -73,8 +73,8 @@
                                 <tr>
                                     <td>{:lang('total')}</td>
                                     <td></td>
-                                    <td>{$report|array_column=###,'cube'|array_sum=###}</td>
-                                    <td>{$report|array_column=###,'cost'|array_sum=###}</td>
+                                    <td>{$report|array_column=###,'cube'|array_sum=###|sprintf='%0.3f',###}</td>
+                                    <td>{$report|array_column=###,'cost'|array_sum=###|sprintf='%0.2f',###}</td>
                                 </tr>
                             </table>
                         </div>

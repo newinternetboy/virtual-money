@@ -32,7 +32,7 @@
                                 <tr>
                                     <td></td>
                                     <td>累计用户：{$company|array_column=###,'count'|array_sum=###}户</td>
-                                    <td>累计余额：{$company|array_column=###,'meterbalance'|array_sum=###}元</td>
+                                    <td>累计余额：{$company|array_column=###,'meterbalance'|array_sum=###|sprintf='%0.2f',###}元</td>
                                     <td></td>
                                 </tr>
                             </table>

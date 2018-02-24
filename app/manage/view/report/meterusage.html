@@ -72,7 +72,7 @@
                                     <td>{$item.consumer_name}</td>
                                     <td>{$item.detail_address}</td>
                                     <td>{$item.consumer_tel}</td>
-                                    <td>{$item.diffUsage}</td>
+                                    <td>{$item.diffUsage|sprintf='%0.3f',###}</td>
                                     <td>{$item.setup_time|date='Y-m-d H:i:s',###}</td>
                                 </tr>
                                 {/foreach}

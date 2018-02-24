@@ -74,8 +74,8 @@
                                     <td>{$vo.new_meter_M_Code}</td>
                                     <td>{$vo.user.username}</td>
                                     <td>{$vo.change_reason}</td>
-                                    <td>{$vo.balance}</td>
-                                    <td>{$vo.totalCube}</td>
+                                    <td>{$vo.balance|sprintf='%0.2f',###}</td>
+                                    <td>{$vo.totalCube|sprintf='%0.3f',###}</td>
                                     <td>{$vo.change_time|date="y-m-d H:i:s",###}</td>
                                 </tr>
                                 {/volist}

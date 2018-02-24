@@ -71,9 +71,9 @@
                                     <td>{$vo.price.name}</td>
                                     <td>{$vo.area.name}</td>
                                     <td>{$vo.detail_address}</td>
-                                    <td>{$vo.initialCube}</td>
-                                    <td>{$vo.totalCube}</td>
-                                    <td>{$vo.totalCost}</td>
+                                    <td>{$vo.initialCube|sprintf='%0.3f',###}</td>
+                                    <td>{$vo.totalCube|sprintf='%0.3f',###}</td>
+                                    <td>{$vo.totalCost|sprintf='%0.2f',###}</td>
                                 </tr>
                                 {/volist}
                                 </tbody>

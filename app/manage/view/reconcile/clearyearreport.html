@@ -67,7 +67,7 @@
                                 <tr>
                                     <td>{:lang('total')}</td>
                                     <td>{$all.chargeTimes_rmb}</td>
-                                    <td>{$all.chargeMoney_rmb}</td>
+                                    <td>{$all.chargeMoney_rmb|sprintf='%0.2f',###}</td>
                                     <!--<td>{$all.chargeTimes_deli ?? '0'}</td>-->
                                     <!--<td>{$all.chargeMoney_deli ?? '0'}</td>-->
                                 </tr>

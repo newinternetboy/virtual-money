@@ -85,7 +85,7 @@
                                     <td></td>
                                     <td>{foreach $total as $item}
                                         <div>
-                                            {$item.total}
+                                            {$item.total|sprintf='%0.2f',###}
                                         </div>
                                         {/foreach}
                                     </td>

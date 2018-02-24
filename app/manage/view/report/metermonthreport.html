@@ -65,8 +65,8 @@
                                 {/foreach}
                                 <tr>
                                     <td>{:lang('Total')}</td>
-                                    <td>{$reportLogs|array_column=###,'diffCube'|array_sum}</td>
-                                    <td>{$reportLogs|array_column=###,'diffCost'|array_sum}</td>
+                                    <td>{$reportLogs|array_column=###,'diffCube'|array_sum|sprintf='%0.3f',###}</td>
+                                    <td>{$reportLogs|array_column=###,'diffCost'|array_sum|sprintf='%0.2f',###}</td>
                                 </tr>
                             </table>
                         </div>

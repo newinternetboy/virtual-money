@@ -52,15 +52,15 @@
                                     <td>{$vo.M_Code}</td>
                                     <td>{$vo.consumer.username}</td>
                                     <td>{$vo.area.address}<br>{$vo.detail_address}</td>
-                                    <td>{$vo.totalCube}</td>
-                                    <td>{$vo.balance}</td>
+                                    <td>{$vo.totalCube|sprintf='%0.3f',###}</td>
+                                    <td>{$vo.balance|sprintf='%0.2f',###}</td>
                                 </tr>
                                 {/foreach}
                                 <tr>
                                     <td></td>
-                                    <td>累计余额：{$totalbalance}元</td>
+                                    <td>累计余额：{$totalbalance|sprintf='%0.2f',###}元</td>
                                     <td>累计用户：{$number}户</td>
-                                    <td>平均每户￥{$savbalance}元</td>
+                                    <td>平均每户￥{$savbalance|sprintf='%0.2f',###}元</td>
                                     <td></td>
                                 </tr>
                             </table>

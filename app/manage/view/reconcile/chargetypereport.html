@@ -77,7 +77,7 @@
                                 <tr>
                                     <td>{:lang('total')}</td>
                                     <td>{$reports|array_column=###,'times'|array_sum}</td>
-                                    <td>{$reports|array_column=###,'money'|array_sum}</td>
+                                    <td>{$reports|array_column=###,'money'|array_sum|sprintf='%0.2f',###}</td>
                                 </tr>
                             </table>
                         </div>
