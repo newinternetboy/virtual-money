@@ -913,10 +913,10 @@ class Index extends Controller
                 }else{
                     if(isset($price_data['la5'])) {
                         $price_data['la5'] += $diffCube-$newSTSUM;
-                        $price_data['lp5'] += ($lastSTSUM+$diffCube-$newSTSUM)*$price['fifth_price'];
+                        $price_data['lp5'] += ($diffCube-$newSTSUM)*$price['fifth_price'];
                     }else {
                         $price_data['la5'] = $diffCube-$newSTSUM;
-                        $price_data['lp5'] = ($lastSTSUM+$diffCube-$newSTSUM)*$price['fifth_price'];
+                        $price_data['lp5'] = ($diffCube-$newSTSUM)*$price['fifth_price'];
                     }
                 }
                 $this->calcPriceUsageAndCost(0,$newSTSUM,$price,$newSTSUM,$newSTSUM*$price['first_price'] ,$price_data);
@@ -954,10 +954,10 @@ class Index extends Controller
                 }else{
                     if(isset($price_data['la4'])) {
                         $price_data['la4'] += $diffCube-$newSTSUM;
-                        $price_data['lp4'] += ($lastSTSUM+$diffCube-$newSTSUM)*$price['fourth_price'];
+                        $price_data['lp4'] += ($diffCube-$newSTSUM)*$price['fourth_price'];
                     }else {
                         $price_data['la4'] = $diffCube-$newSTSUM;
-                        $price_data['lp4'] = ($lastSTSUM+$diffCube-$newSTSUM)*$price['fourth_price'];
+                        $price_data['lp4'] = ($diffCube-$newSTSUM)*$price['fourth_price'];
                     }
                 }
                 $this->calcPriceUsageAndCost(0,$newSTSUM,$price,$newSTSUM,$newSTSUM*$price['first_price'] ,$price_data);
@@ -995,10 +995,10 @@ class Index extends Controller
                 }else{
                     if(isset($price_data['la3'])) {
                         $price_data['la3'] += $diffCube-$newSTSUM;
-                        $price_data['lp3'] += ($lastSTSUM+$diffCube-$newSTSUM)*$price['third_price'];
+                        $price_data['lp3'] += ($diffCube-$newSTSUM)*$price['third_price'];
                     }else {
                         $price_data['la3'] = $diffCube-$newSTSUM;
-                        $price_data['lp3'] = ($lastSTSUM+$diffCube-$newSTSUM)*$price['third_price'];
+                        $price_data['lp3'] = ($diffCube-$newSTSUM)*$price['third_price'];
                     }
                 }
                 $this->calcPriceUsageAndCost(0,$newSTSUM,$price,$newSTSUM,$newSTSUM*$price['first_price'] ,$price_data);
@@ -1036,10 +1036,10 @@ class Index extends Controller
                 }else{
                     if(isset($price_data['la2'])) {
                         $price_data['la2'] += $diffCube-$newSTSUM;
-                        $price_data['lp2'] += ($lastSTSUM+$diffCube-$newSTSUM)*$price['second_price'];
+                        $price_data['lp2'] += ($diffCube-$newSTSUM)*$price['second_price'];
                     }else {
                         $price_data['la2'] = $diffCube-$newSTSUM;
-                        $price_data['lp2'] = ($lastSTSUM+$diffCube-$newSTSUM)*$price['second_price'];
+                        $price_data['lp2'] = ($diffCube-$newSTSUM)*$price['second_price'];
                     }
                 }
                 $this->calcPriceUsageAndCost(0,$newSTSUM,$price,$newSTSUM,$newSTSUM*$price['first_price'] ,$price_data);
@@ -1077,10 +1077,10 @@ class Index extends Controller
                 }else{
                     if(isset($price_data['la1'])) {
                         $price_data['la1'] += $diffCube-$newSTSUM;
-                        $price_data['lp1'] += ($lastSTSUM+$diffCube-$newSTSUM)*$price['first_price'];
+                        $price_data['lp1'] += ($diffCube-$newSTSUM)*$price['first_price'];
                     }else {
                         $price_data['la1'] = $diffCube-$newSTSUM;
-                        $price_data['lp1'] = ($lastSTSUM+$diffCube-$newSTSUM)*$price['first_price'];
+                        $price_data['lp1'] = ($diffCube-$newSTSUM)*$price['first_price'];
                     }
                 }
                 $this->calcPriceUsageAndCost(0,$newSTSUM,$price,$newSTSUM,$newSTSUM*$price['first_price'] ,$price_data);
