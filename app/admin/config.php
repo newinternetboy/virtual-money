@@ -99,6 +99,7 @@ return [
         'Pass Meter',
         'Change Meter',
         'Edit Meter',
+        'Charge Meter',
         'Delete Meter',
         'Edit MeterParam',
         'Delete MeterParam',

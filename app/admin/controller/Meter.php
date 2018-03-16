@@ -716,7 +716,11 @@ class Meter extends Admin
                 Log::record(['充值缴费扣除运营商限额失败' => $error,'data' => $data],'error');
                 exception('充值缴费失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
-            model('LogRecord')->record( 'Charge Meter',$data);
+            $meterInfo = model('meter')->findInfo(['id'=>$data['id']],'M_Code,detail_address');
+            $meterInfo = $meterInfo->toArray($meterInfo);
+            unset($meterInfo['id']);
+//            var_dump($meterInfo);die;
+            model('LogRecord')->record( 'Charge Meter',$meterInfo);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();

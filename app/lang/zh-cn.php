@@ -813,6 +813,7 @@ return [
     'Charge Money'                      => '充值金额',
     'Charge Type Report'                => '运营商(%s)充值类型统计表',
     'Please Input The Company Name'     => '请输入运营商名称',
+    'Charge Meter'                      => '表具充值',
 
     //订单管理；
     'Order List'                        => '订单列表',
