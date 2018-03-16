@@ -418,6 +418,7 @@ class Index extends Controller
         $newMeterData['meter_life'] = METER_LIFE_ACTIVE;
         $newMeterData['balance'] = $data['balance'];
         $newMeterData['stsum'] = $data['stsum'];
+        $newMeterData['currentPrice'] = isset($data['currentPrice']) ? intval($data['currentPrice']) : 0;
         $newMeterData['balance_deli'] = 0;
         $newMeterData['balance_rmb'] = 0;
         $newMeterData['company_id'] = SHUANGDELI_ID;
