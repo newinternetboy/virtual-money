@@ -27,7 +27,7 @@ class Admin extends Common
 	{
 		parent::_initialize();
 
-		//判断是否已经登录
+		//判断是否已经登录这是一个新的项目
 		if( !Session::has('userinfo', 'admin') ) {
 			$this->error(lang('Please login first'), url('admin/Login/index'));
 		}
