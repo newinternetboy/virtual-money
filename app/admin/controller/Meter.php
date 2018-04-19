@@ -170,6 +170,28 @@ class Meter extends Admin
                 Log::record(['报装数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入报装记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
+            switch($data['meter']['M_Type']){
+                case 1:
+                    $data['meter']['M_Type']="水表";
+                    break;
+                case 2:
+                    $data['meter']['M_Type']="电表";
+                    break;
+                case 3:
+                    $data['meter']['M_Type']="气表";
+                    break;
+            }
+            $price = model('Price')->findInfo(['id'=>$data['meter']['P_ID']],'name');
+            $data['meter']['P_ID'] = $price['name'];
+            $area = model('Area')->getAreaById($data['meter']['M_Address']);
+            $data['meter']['M_Address'] = $area['name'];
+            $data['meter']['setup_time'] = date('Y-m-d H:i:s',$data['meter']['setup_time']);
+            unset($data['meter']['U_ID']);
+            unset($data['meter']['id']);
+            unset($data['meter']['meter_status']);
+            unset($data['meter']['company_id']);
+            unset($data['consumer']['meter_id']);
+            unset($data['consumer']['company_id']);
             model('LogRecord')->record('Save Meter',$data );
             $ret['meter']=$data['meter']['M_Code'];
         }catch (\Exception $e){
@@ -264,7 +286,9 @@ class Meter extends Admin
                 Log::record(['过户数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入过户记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
-            model('LogRecord')->record( 'Pass Meter',['M_Code'=>$M_Code,'ori_consumer'=>$meter['U_ID'],'new_consumer'=>$new_consumer_id]);
+            $old_consumer_info = model('Consumer')->getConsumerById($meter['U_ID'],'username');
+            $new_consumer_info = model('Consumer')->getConsumerById($new_consumer_id,'username');
+            model('LogRecord')->record( 'Pass Meter',['M_Code'=>$M_Code,'ori_consumer'=>$old_consumer_info['username'],'new_consumer'=>$new_consumer_info['username']]);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
             $ret['msg'] = $e->getMessage();
@@ -499,6 +523,8 @@ class Meter extends Admin
                 Log::record(['修改数据记录失败' => $error,'data' => $meterData],'error');
                 exception('插入表具修改记录失败: '.$error, ERROR_CODE_DATA_ILLEGAL);
             }
+            $area = model('Area')->getAreaById($data['meter']['M_Address']);
+            $data['meter']['M_Address'] = $area['name'];
             model('LogRecord')->record( 'Edit Meter',$data);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;
@@ -718,8 +744,9 @@ class Meter extends Admin
             }
             $meterInfo = model('meter')->findInfo(['id'=>$data['id']],'M_Code,detail_address');
             $meterInfo = $meterInfo->toArray($meterInfo);
+            $meterInfo['money'] = $data['money'];
             unset($meterInfo['id']);
-//            var_dump($meterInfo);die;
+//            var_dump($data);die;
             model('LogRecord')->record( 'Charge Meter',$meterInfo);
         }catch (\Exception $e){
             $ret['code'] =  $e->getCode() ? $e->getCode() : ERROR_CODE_DEFAULT;

@@ -111,6 +111,7 @@ return [
         'value'            => 'log_value',
         'express_company'  => 'log_express_company',
         'express_number'   => 'log_express_number',
+        'money'            => 'log_money'
     ],
 
     //定义个人商铺根路径；

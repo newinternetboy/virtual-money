@@ -418,9 +418,11 @@
 
     function checkOrderNumber(){
         var order_number = $('#order_number').val();
-        if(order_number.length != 24 ){
-            alertMsg("{:lang('Order Number Not Illegal')}",3);
-            return false;
+        if(order_number !=""){
+            if(order_number.length != 24 ){
+                alertMsg("{:lang('Order Number Not Illegal')}",3);
+                return false;
+            }
         }
     }
 </script>

@@ -433,8 +433,8 @@ return [
     'log_param_name'       => '参数代号',
     'log_param_type'       => '参数类型',
     'log_opt_id'           => '参数',
-    'log_ori_consumer'     => '旧用户ID',
-    'log_new_consumer'     => '新用户ID',
+    'log_ori_consumer'     => '旧用户',
+    'log_new_consumer'     => '新用户',
     'log_old_M_Code'       => '旧表号',
     'log_new_M_Code'       => '新表号',
     'log_change_reason'    => '换表原因',
@@ -491,6 +491,7 @@ return [
     'log_value'            => '数字参数',
     'log_express_company'  => '快递公司',
     'log_express_number'   => '快递单号',
+    'log_money'            => '钱数',
 
     //统计报表
     'Meterdata report'                => '统计报表',
