@@ -64,11 +64,11 @@ class User extends Admin
 		$request = $this->fmtRequest( $request );
 
 		if( $request['offset'] == 0 && $request['limit'] == 0 ){
-			$data = $this->where('type',PLATFORM_ADMIN)->order('create_time desc')->where(['delete_time'=> null])->where( $request['map'] )->select();
+			$data = $this->order('create_time desc')->where( $request['map'] )->select();
 		}else{
-			$data = $this->where('type',PLATFORM_ADMIN)->order('create_time desc')->where(['delete_time' => null])->where( $request['map'] )->limit($request['offset'], $request['limit'])->select();
+			$data = $this->order('create_time desc')->where( $request['map'] )->limit($request['offset'], $request['limit'])->select();
 		}
-
+//        var_dump($data);die;
 		return $data;
 	}
 
@@ -85,7 +85,6 @@ class User extends Admin
 
 	public function add(array $data = [])
 	{
-        $data['type'] = PLATFORM_ADMIN;
 		$userValidate = validate('User');
 		if(!$userValidate->scene('add')->check($data)) {
 			return info(lang($userValidate->getError()), 4001);
@@ -139,9 +138,9 @@ class User extends Admin
 		return User::destroy($id);
 	}
 
-	public function getTotalUserNumber($where){
+	public function getTotalUserNumber(){
 
-		$data = $this->where('type',PLATFORM_ADMIN)->order('create_time desc')->where(['delete_time'=> null])->where($where)->count();
+		$data = $this->order('create_time desc')->count();
 
 		return $data;
 	}
@@ -155,9 +154,9 @@ class User extends Admin
      */
 	public function getUserInfo($where, $method, $field = ''){
 		if( !$field ){
-			return $this->where('type',PLATFORM_ADMIN)->where($where)->$method();
+			return $this->where($where)->$method();
 		}
-		return $this->where('type',PLATFORM_ADMIN)->where($where)->field($field)->$method();
+		return $this->where($where)->field($field)->$method();
 	}
 
     public function checkPasswd($data,$scene){
@@ -172,16 +171,5 @@ class User extends Admin
 		return $this->update($data);
 	}
 
-	/**
-	 * 用户管理批量操作校验
-	 * @param $id
-	 * @param $company_id
-	 * @return false|\PDOStatement|string|\think\Collection
-     */
-	public function getUsersById($id, $company_id)
-	{
-		$ids = explode(',', $id);
-		return $this->where('type',PLATFORM_ADMIN)->where('id', 'in', $ids)->where('company_id', $company_id)->select();
-	}
 
 }

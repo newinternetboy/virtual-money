@@ -12,7 +12,7 @@ use \think\Session;
 class LogRecord extends Admin
 {
     protected $updateTime = false;
-    protected $insert     = ['ip', 'user_id','browser','os','type','company_id'];
+    protected $insert     = ['ip', 'user_id','browser','os'];
     protected $type       = [
         'create_time' => 'timestamp',
     ];
@@ -61,39 +61,10 @@ class LogRecord extends Admin
         }
         return $user_id;
     }
-
-    /**
-     * 日志来源
-     * 1:运营商平台 2:清分平台
-     * @return int
-     */
-    protected function setTypeAttr(){
-        $type = PLATFORM_ADMIN;
-        if (Session::has('userinfo', 'admin') !== false) {
-            $user = Session::get('userinfo','admin');
-            $type = $user['type'];
-        }
-        return $type;
-    }
-
-    /**
-     * 日志所属公司
-     * @return int
-     */
-    protected function setCompanyIdAttr(){
-        $company_id = 0;
-        if (Session::has('userinfo', 'admin') !== false) {
-            $user = Session::get('userinfo','admin');
-            if( $user['type'] == PLATFORM_ADMIN ){
-                $company_id = $user['company_id'];
-            }
-        }
-        return $company_id;
-    }
  
     public function record($remark,$data = '')
     {
-        $this->save(['remark' => $remark,'data' => $data]);
+        $this->save(['remark' => $remark,'data' => serialize($data)]);
     }
 
 

@@ -33,17 +33,11 @@ class Admin extends Common
 		}
 
 		$userRow = Session::get('userinfo', 'admin');
-		//判断用户所属平台
-		if($userRow['type'] != PLATFORM_ADMIN){
-			$this->error(lang('Without the permissions page'),url('admin/Login/out'));
-		}
 		//验证权限
 		$request = Request::instance();
 		$rule_val = $request->module().'/'.$request->controller().'/'.$request->action();
 		$this->uid = $userRow['id'];
 		$this->username = $userRow['username'];
-		$this->company_id = $userRow['company_id'];
-		$this->company = model('Company')->getCompany(['id' => $this->company_id],'company_name');
 		$this->administrator = isset($userRow['administrator']) ? $userRow['administrator'] : 0 ;
 		$this->role_id = !$this->administrator ? $userRow['role_id'] : '';
 		if($userRow['administrator']!=1 && !$this->checkRule($this->uid, $rule_val)) {
@@ -60,7 +54,7 @@ class Admin extends Common
 		$menus = sortAuthRules($menus);
 		$this->assign('menus',$menus);
 		$this->assign('username',$this->username);
-		$this->assign('company',$this->company);
+
 	}
 
 	public function goLogin()

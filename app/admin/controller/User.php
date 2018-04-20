@@ -37,7 +37,7 @@ class User extends Admin
             $this->error(lang('Request type error'), 4001);
         }
         $request = request()->param();
-        $request['company_id'] = $this->company_id;
+
         if(!$this->administrator){
             $request['administrator'] = 0;
         }
@@ -47,7 +47,7 @@ class User extends Admin
                $user['role_name'] = array_values(model('Role')->where(['id' => $user['role_id']])->column('name'))[0];
             }
         }
-        $total = model('User')->getTotalUserNumber(['company_id' => $this->company_id]);
+        $total = model('User')->getTotalUserNumber();
         return json(["total" => $total,"rows" => $data]);
     }
 
@@ -130,12 +130,6 @@ class User extends Admin
             return info(lang('Delete without authorization'), 0);
         }
 
-        //判断当前用户是否对$id里的用户有操作权限
-        $users = model('User')->getUsersById($id,$this->company_id);
-        if( count($users) != count(explode(',',$id)) ){
-            Log::record(['删除用户失败' => 0,'data' => $id],'error');
-            $this->error('操作失败,信息有误');
-        }
 
         if( !Loader::model('User')->deleteById($id) ){
             Log::record(['删除用户失败' => model('User')->getError(),'data' => $id],'error');
