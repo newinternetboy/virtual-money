@@ -86,10 +86,14 @@ class Authrule extends Admin
 			$levelData = model('AuthRule')->getLevelData();
 		}else{
 			$currentAuthRules  = model('AuthAccess')->getIds( $this->role_id );
-			$levelData = model('AuthRule')->getLevelData(['id' => ['in',$currentAuthRules]]);
+			$levelData = model('AuthRule')->getLevelData(['id' => ['in',unserialize($currentAuthRules)]]);
 		}
+
 		$this->assign('data', $levelData);
 		$ids = model('AuthAccess')->getIds( $role_id );
+        if($ids){
+            $ids= unserialize($ids);
+        }
 		$this->assign('rule_ids', $ids);
 		$this->assign('role_id',$role_id);
 		return view();

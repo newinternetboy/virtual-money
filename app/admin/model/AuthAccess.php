@@ -40,7 +40,9 @@ class AuthAccess extends Admin
         if(empty($data)) {
             return true;
         }
-        $rule_id = array_values($data);
+
+        $rule_id = serialize(array_values($data));
+//        var_dump($rule_id);die;
         if( $this->where(['role_id' => $role_id])->find() ){
             return $this->where(['role_id' => $role_id])->update([ 'rule_id' => $rule_id ]);
         }else{

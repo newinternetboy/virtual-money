@@ -448,10 +448,10 @@ function upsertTask($data){
  * @param $thumbPath
  * @return string
  */
-function saveImg($img, $oriPath, $thumbPath){
+function saveImg($img, $oriPath, $thumbPath,$width,$height){
     $publicPath =  ROOT_PATH . 'public' ;
     // 保存原图
-    $info = $img->validate(['size' => 10 * 1024 * 1024, 'ext' => 'jpg,jpeg,png'])->rule('uniqid')->move($publicPath.$oriPath);
+    $info = $img->validate(['size' => 10 * 1024 * 1024, 'ext' => 'jpg,jpeg,png,svg'])->rule('uniqid')->move($publicPath.$oriPath);
     if ($info) {
         $filename = $info->getSaveName();
         //保存缩略图
@@ -459,8 +459,8 @@ function saveImg($img, $oriPath, $thumbPath){
             mkdir($publicPath.$thumbPath);
         }
         $image = \think\Image::open($publicPath.$oriPath . DS . $filename);
-        if (!$image->thumb(config('thumbMaxWidth'), config('thumbMaxHeight'))->save($publicPath.$thumbPath . DS . $filename)) {
-            exception();
+        if (!$image->thumb($width,$height)->save($publicPath.$thumbPath . DS . $filename)) {
+            exception('错误');
         }
     }else{
         exception($img->getError());

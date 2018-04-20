@@ -34,9 +34,8 @@ class Role extends Admin
             $this->error(lang('Request type error'), 4001);
         }
         $request = request()->param();
-        $request['company_id'] = $this->company_id;
         $data = model('Role')->getList( $request );
-        $total = model('Role')->getTotalRoleNumber(['company_id' => $this->company_id]);
+        $total = model('Role')->getTotalRoleNumber();
         return json(['total' => $total,'rows' => $data]);
     }
 
@@ -64,11 +63,10 @@ class Role extends Admin
             unset($data['id']);
         }
         if( isset($data['id']) ){
-            if( !$role = model('Role')->getRolesById($data['id'],$this->company_id) ){
+            if( !$role = model('Role')->getRolesById($data['id']) ){
                 $this->error('角色不存在');
             }
         }
-        $data['company_id'] = $this->company_id;
         if( !model('role')->saveData( $data ) ){
             Log::record(['保存角色失败' => model('Role')->getError(),'data' => $data],'error');
             $this->error('操作失败');
@@ -86,7 +84,7 @@ class Role extends Admin
             return info(lang('Data ID exception'), 0);
         }
         //判断当前用户是否对$id里的角色有操作权限
-        $roles = model('Role')->getRolesById($id,$this->company_id);
+        $roles = model('Role')->getRolesById($id);
         if( count($roles) != count(explode(',',$id)) ){
             Log::record(['删除角色失败' => 0,'data' => $id],'error');
             $this->error('操作失败,信息有误');

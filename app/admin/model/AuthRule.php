@@ -21,14 +21,12 @@ class AuthRule extends Admin
         return intval($value);
     }
 
+
     //排序的状态,存储前转为整数
     public function setSortnumAttr($value){
         return intval($value);
     }
 
-    public function setTypeAttr(){
-        return PLATFORM_ADMIN;
-    }
 
     public function getList($request = [])
     {
@@ -47,6 +45,7 @@ class AuthRule extends Admin
         if(isset($data['rule_val'])) {
             $data['rule_val'] = strtolower($data['rule_val']);
         }
+//        var_dump($data);die;
         if(isset($data['id']) && !empty($data['id'])) {
             return $this->isUpdate(true)->save($data);
         } else {
@@ -76,7 +75,7 @@ class AuthRule extends Admin
      */
     public function getLevelData($where = [])
     {
-        $data = $this->where('type',PLATFORM_ADMIN)->where($where)->order('pid asc')->order('sortnum','asc')->select();
+        $data = $this->where($where)->order('pid asc')->order('sortnum','asc')->select();
         if( empty($data) ) {
             return $data;
         }

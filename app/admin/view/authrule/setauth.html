@@ -23,7 +23,7 @@
                                         {notempty name="vo['children']"}
                                         {volist name="vo['children']" id="sub"}
                                         <div class="checkbox checkbox-inline" style="margin-left: auto">
-                                            <input type="checkbox" id="authrule{$sub.id}" name="authrule[]" <?php if(in_array($sub['id'], $rule_ids)) {echo 'checked';}; ?> value="{$sub.id}">
+                                            <input type="checkbox" id="authrule{$sub.id}" name="authrule[]" <?php if(in_array($sub['id'], $rule_ids)) {echo 'checked';}; ?> value="{$sub['id']}">
                                             <label for="authrule{$sub.id}">{$sub.title}</label>
                                         </div>
                                         {/volist}

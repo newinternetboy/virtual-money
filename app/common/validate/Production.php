@@ -1,33 +1,31 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: hawk2fly
+ * Date: 2018/1/12
+ * Time: 下午2:05
+ */
+
 namespace app\common\validate;
+
 
 use think\Validate;
 
 class Production extends Validate
 {
-
     protected $rule =   [
-        'name'          =>  'require',
-        'sdlenable'     =>  'require',
-        'rmbenable'     =>  'require',
-        'desc'          =>  'require',
-        'img'           =>  'require',
-        'status'        =>  'require',
+        'name'                   => 'require|unique:production',
+        'fund_number'             => 'require|unique:production',
     ];
 
     protected $message  =   [
-        'name.require'             => '{%Production Name Reuqire}',
-        'sdlenable.require'        => '{%Production Sdlenable Reuqire}',
-        'rmbenable.require'        => '{%Production Rmbenable Reuqire}',
-        'desc.require'             => '{%Production Desc Reuqire}',
-        'img.require'              => '{%Production Img Reuqire}',
-        'status.require'           => '{%Production Status Reuqire}'
+        'name.require'               => '基金名称必须',
+        'name.unique'                => '基金名称已存在',
+        'fund_number.require'         => '基金编号必须',
+        'fund_number.unique'          => '基金编号已存在',
     ];
 
     protected $scene = [
-        'editProduction'      =>      ['name','sdlenable','desc','status'],
+        'upsert'        =>      ['name']
     ];
-
 }
-
-
