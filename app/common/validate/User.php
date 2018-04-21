@@ -10,21 +10,19 @@ class User extends Validate
         'login_name'                => 'require',
         'password'                  => 'require',
         'role_id'                   => 'require',
-        'company_id'                =>  'require'
     ];
 
     protected $message  =   [
         'login_name.require'        => '登录名必须',
         'password.require'          => '密码必须',
         'role_id.require'           => '角色必须',
-        'company_id.require'        => '公司必须',
     ];
 
     protected $scene = [
-        'add' => ['login_name','password', 'role_id','company_id'],
+        'add' => ['login_name','password', 'role_id'],
         'login' =>  ['login_name','password'],
         'edit' => ['login_name', 'password', 'role_id'],
-        'insert'    =>  ['login_name','password', 'role_id','company_id'],
+        'insert'    =>  ['login_name','password', 'role_id'],
     ];
 }
 

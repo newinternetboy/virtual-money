@@ -13,7 +13,7 @@ class Logrecord extends Admin
         $end_time   = input( 'end_time' );
         $logtypes = config('logtypes');
         $this->assign('logtypes',$logtypes);
-        $users = model('User')->getUserInfo(['company_id'=>$this->company_id],'select','id,username');
+        $users = model('User')->getUserInfo([],'select','id,username');
         $this->assign('users',$users);
         $where['company_id'] = $this->company_id;
         $where['type'] = PLATFORM_ADMIN ;
