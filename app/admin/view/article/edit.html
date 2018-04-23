@@ -1,0 +1,172 @@
+{js href="__JS__/ueditor/ueditor.config.js" /}
+{js href="__JS__/ueditor/ueditor.all.js" /}
+<script>
+    //图片上传预览    IE是用了滤镜。
+    function previewImage(file)
+    {
+        var MAXWIDTH  = 120;
+        var MAXHEIGHT = 120;
+        var div = document.getElementById('preview');
+        if (file.files && file.files[0])
+        {
+            div.innerHTML ='<img id=imghead onclick=$("#previewImg").click()>';
+            var img = document.getElementById('imghead');
+            img.onload = function(){
+                var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+                img.width  =  rect.width;
+                img.height =  rect.height;
+//                 img.style.marginLeft = rect.left+'px';
+                img.style.marginTop = rect.top+'px';
+            }
+            var reader = new FileReader();
+            reader.onload = function(evt){img.src = evt.target.result;}
+            reader.readAsDataURL(file.files[0]);
+        }
+        else //兼容IE
+        {
+            var sFilter='filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
+            file.select();
+            var src = document.selection.createRange().text;
+            div.innerHTML = '<img id=imghead>';
+            var img = document.getElementById('imghead');
+            img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+            var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+            status =('rect:'+rect.top+','+rect.left+','+rect.width+','+rect.height);
+            div.innerHTML = "<div id=divhead style='width:"+rect.width+"px;height:"+rect.height+"px;margin-top:"+rect.top+"px;"+sFilter+src+"\"'></div>";
+        }
+    }
+    function clacImgZoomParam( maxWidth, maxHeight, width, height ){
+        var param = {top:0, left:0, width:width, height:height};
+        if( width>maxWidth || height>maxHeight ){
+            rateWidth = width / maxWidth;
+            rateHeight = height / maxHeight;
+
+            if( rateWidth > rateHeight ){
+                param.width =  maxWidth;
+                param.height = Math.round(height / rateWidth);
+            }else{
+                param.width = Math.round(width / rateHeight);
+                param.height = maxHeight;
+            }
+        }
+        param.left = Math.round((maxWidth - param.width) / 2);
+        param.top = Math.round((maxHeight - param.height) / 2);
+        return param;
+    }
+</script>
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+<section id="widget-grid">
+<div class="row">
+<div class="col-lg-12">
+<div class="ibox float-e-margins" style="background: white;">
+<!-- 表单标题概要 -->
+<div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+    <h5>添加/编辑新闻</h5>
+    <div class="ibox-tools">
+
+    </div>
+</div>
+
+<!-- 表单内容 -->
+<div class="ibox-content">
+<!-- 表格数据 -->
+
+<form id="save" action="" data-validate="true" method="post" class="form-horizontal" role="form" novalidate="novalidate">
+
+    <div class="form-group" style="margin-top:40px;">
+        <label for="title" class="col-md-2 control-label">新闻标题</label>
+        <div class="col-md-8">
+            <input class="form-control" style="display: none;" name="id" id="id" value="{$article.id ?? ''}" >
+            <input class="form-control" name="title" id="title" value="{$article.title ??''}" >
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">所属分类</label>
+        <div class="col-md-8" style="padding-bottom:12px;" >
+            <input type="radio" name="type" {if condition="isset($article.type)&&$article.type eq 1"}checked{/if}  value="1" style="margin-top:10px;" />公告 &nbsp;
+            <input type="radio" name="type" {if condition="isset($article.type)&&$article.type eq 2"}checked{/if}  value="2" style="margin-top:10px;" />咨询
+        </div>
+    </div>
+    <div class="form-group" id="value_num">
+        <label for="container" class="col-md-2 control-label">新闻内容</label>
+        <div class="col-md-8">
+            <script id="container" name="content" type="text/plain">
+                {$article.content ?? ''}
+            </script>
+        </div>
+    </div>
+    <div class="form-group" id="value_number">
+        <label for="sort" class="col-md-2 control-label">新闻排序</label>
+        <div class="col-md-8">
+            <input class="form-control" name="sort" value="{$article.sort ?? ''}" id="sort">
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-md-2 control-label">图片</label>
+
+        <div class="col-md-9 big-photo">
+            <div id="preview">
+                <img id="imghead" border="0" src="{$article.img??$config}" width="120" height="120" onclick="$('#previewImg').click();">
+            </div>
+            <input type="file" onchange="previewImage(this)" style="display: none;" id="previewImg"><div style="margin-left:10px;margin-top:10px;">(点击图片编辑)</div>
+        </div>
+    </div>
+    <div class="form-group" style="float: left; width: 100%;">
+        <label  class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+            <button style="float: right" class="btn btn-primary col-sm-1" onclick="sub()" type="button"  >提交</button>
+            <button style="float: right;margin-right:1vw;" onclick="history.back(-1);" class="btn btn-success col-sm-1"  type="button" >返回</button>
+        </div>
+    </div>
+
+</form>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</div>
+<script type="text/javascript">
+    var ue = UE.getEditor('container');
+</script>
+<script>
+    function sub(){
+        $('#sub').prop('disabled',true);
+        var id = $('#id').val();
+        var title = $('#title').val();
+        var type =$('input[name="type"]:checked').val();
+        var content = UE.getEditor('container').getContent();
+        var sort = $('#sort').val();
+        var img = document.getElementById("previewImg").files[0];
+        var formData = new FormData();
+        formData.append('id',id);
+        formData.append('title',title);
+        formData.append('content',content);
+        formData.append('sort',sort);
+        formData.append('type',type);
+        formData.append('img',img);
+        $.ajax({
+            url:"{:url('admin/article/saveArticle')}",
+            method:'post',
+            dataType:'json',
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    console.log(res.msg);
+                    alertMsg(res.msg,2000);
+                }else{
+                    alertMsg(res.msg,2000);
+                    setTimeout(function(){window.location.href='{:url("admin/article/index")}'},2000)
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+</script>
+
