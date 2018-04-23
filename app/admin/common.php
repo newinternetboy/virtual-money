@@ -28,4 +28,3 @@ function trimMCode($M_Code){
 }
 
 
-?>
