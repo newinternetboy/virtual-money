@@ -1,0 +1,116 @@
+{js href="__JS__/ueditor/ueditor.config.js" /}
+{js href="__JS__/ueditor/ueditor.all.js" /}
+{js href="__JS__/bootstrap-tags-master/dist/js/bootstrap-tags.min.js" /}
+{css href="__JS__/bootstrap-tags-master/dist/css/bootstrap-tags.css" /}
+<style>
+    table img{
+        width: 100px;
+    }
+</style>
+
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class=" table-responsive">
+                <div class="ibox float-e-margins" style="padding: 10px">
+                    <!-- 表单内容 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>新闻列表</h5>
+                    </div>
+                    <div class="ibox-content form-horizontal">
+                        <div class="form-group">
+
+                            <div class="col-md-4">
+                                <div id="my-tag-list" class="tag-list"></div>
+                            </div>
+                            <div class="col-md-8">
+                                <button class="btn btn-primary" style="float: right;margin-right: 1vw;" id="selector">查询</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div  class="col-sm-2">
+                                <button style="float: left;" onclick="article_add()" class="btn btn-primary" type="button"  >{:lang('Add')}</button>
+                            </div>
+
+                        </div>
+                        <div>
+                            <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
+                                <thead>
+                                <tr>
+                                    <th>标题</th>
+                                    <th>所属分类</th>
+                                    <th>内容</th>
+                                    <th>图片</th>
+                                    <th>排序</th>
+                                    <th>添加时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name='articlelist' id='vo'}
+                                <tr>
+                                    <td>{$vo.title ?? '-'}</td>
+                                    <td>
+                                        {switch name="$vo.type"}
+                                        {case value="1"}公告{/case}
+                                        {case value="2"}资讯{/case}
+                                        {default /}
+                                        {/switch}
+                                    </td>
+                                    <td>{$vo.content ?? '-'}</td>
+                                    <td><img src="{$vo.img ?? ''}" /></td>
+                                    <td>{$vo.sort}</td>
+                                    <td>
+                                        {$vo.create_time ?? '-'}
+                                    </td>
+                                    <td><button class="btn btn-primary" onclick="article_edit('{$vo.id}')">{:lang('Edit')}</button> &nbsp;<button class="btn btn-danger" onclick="deleteDict('{$vo.id}')">{:lang('Delete')}</button></td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                            </table></div>
+                        <div>
+                            {$articlelist->render()}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<script>
+    function article_add(){
+        window.location.href="{:url('admin/article/add')}"
+    }
+
+    function article_edit(id){
+        window.location.href="{:url('admin/article/edit')}?id="+id;
+    }
+
+    function deleteDict(id){
+        alertConfirm('确定要这一项吗？',function(){
+            $.ajax({
+                url:"{:url('admin/article/deleteArticleByid')}",
+                method:'post',
+                dataType:'json',
+                data: {id: id},
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    if(res.code != 200){
+                        alertMsg(res.msg,2);
+                    }else{
+                        alertMsg(res.msg,2);
+                        setTimeout(function(){window.location.href=''},2000)
+                    }
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
+                }
+            })
+        })
+    }
+</script>
+
+
