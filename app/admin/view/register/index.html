@@ -1,58 +1,4 @@
-<script>
-    //图片上传预览    IE是用了滤镜。
-    function previewImage(file)
-    {
-        var MAXWIDTH  = 120;
-        var MAXHEIGHT = 120;
-        var div = document.getElementById('preview');
-        if (file.files && file.files[0])
-        {
-            div.innerHTML ='<img id=imghead onclick=$("#previewImg").click()>';
-            var img = document.getElementById('imghead');
-            img.onload = function(){
-                var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
-                img.width  =  rect.width;
-                img.height =  rect.height;
-//                 img.style.marginLeft = rect.left+'px';
-                img.style.marginTop = rect.top+'px';
-            }
-            var reader = new FileReader();
-            reader.onload = function(evt){img.src = evt.target.result;}
-            reader.readAsDataURL(file.files[0]);
-        }
-        else //兼容IE
-        {
-            var sFilter='filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
-            file.select();
-            var src = document.selection.createRange().text;
-            div.innerHTML = '<img id=imghead>';
-            var img = document.getElementById('imghead');
-            img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
-            var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
-            status =('rect:'+rect.top+','+rect.left+','+rect.width+','+rect.height);
-            div.innerHTML = "<div id=divhead style='width:"+rect.width+"px;height:"+rect.height+"px;margin-top:"+rect.top+"px;"+sFilter+src+"\"'></div>";
-        }
-    }
-    function clacImgZoomParam( maxWidth, maxHeight, width, height ){
-        var param = {top:0, left:0, width:width, height:height};
-        if( width>maxWidth || height>maxHeight ){
-            rateWidth = width / maxWidth;
-            rateHeight = height / maxHeight;
 
-            if( rateWidth > rateHeight ){
-                param.width =  maxWidth;
-                param.height = Math.round(height / rateWidth);
-            }else{
-                param.width = Math.round(width / rateHeight);
-                param.height = maxHeight;
-            }
-        }
-        param.left = Math.round((maxWidth - param.width) / 2);
-        param.top = Math.round((maxHeight - param.height) / 2);
-        return param;
-    }
-</script>
-</head>
 <div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
     <section id="widget-grid">
         <div class="row">
@@ -60,7 +6,7 @@
                 <div class="ibox float-e-margins" style="padding: 10px">
                     <!-- 表单内容 -->
                     <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
-                        <h5>幻灯片列表</h5>
+                        <h5>客户登记列表</h5>
                     </div>
                     <div class="ibox-content form-horizontal">
                         <div class="form-group">
@@ -73,19 +19,27 @@
                             <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
                             <thead>
                             <tr>
-                                <th>图片描述</th>
-                                <th>幻灯片图片</th>
+                                <th>客户名称</th>
+                                <th>手机号</th>
+                                <th>身份证号码</th>
+                                <th>购买的产品</th>
+                                <th>购买的数量</th>
+                                <th>单价</th>
+                                <th>赠送币的数量</th>
                                 <th>{:lang('Operate')}</th>
                             </tr>
                             </thead>
                             <tbody>
                             {volist name='registerlist' id='vo'}
                             <tr>
-                                <td>{$vo.desc ?? '-'}</td>
-                                <td>
-                                    <img style="width:120px;height:120px;" src="{$vo.img}" alt=""/>
-                                </td>
-                                <td><button class="btn btn-primary" onclick="slide_eidt('{$vo.id}')">{:lang('Edit')}</button> &nbsp;<button class="btn btn-danger" onclick="deleteSlide('{$vo.id}')">{:lang('Delete')}</button></td>
+                                <td>{$vo.name ?? '-'}</td>
+                                <td>{$vo.tel ?? '-'}</td>
+                                <td>{$vo.identity ?? '-'}</td>
+                                <td>{$vo.production ?? '-'}</td>
+                                <td>{$vo.price ?? '-'}</td>
+                                <td>{$vo.number ?? '-'}</td>
+                                <td>{$vo.give_num ?? '-'}</td>
+                                <td><button class="btn btn-primary" onclick="register_edit('{$vo.id}')">{:lang('Edit')}</button> &nbsp;<button class="btn btn-danger" onclick="deleteSlide('{$vo.id}')">{:lang('Delete')}</button></td>
                             </tr>
                             {/volist}
                             </tbody>
@@ -106,7 +60,7 @@
 
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">修改/添加幻灯片</h4>
+                <h4 class="modal-title" id="myModalLabel">修改/添加登记客户</h4>
             </div>
 
             <div class="modal-body form-horizontal">
@@ -164,8 +118,8 @@
 </div>
 <script>
     function slide_add(){
-        clearModal()
-        $('#myModal').modal('show')
+        clearModal();
+        $('#myModal').modal('show');
     }
 
     function clearModal(){
@@ -173,9 +127,9 @@
         $('#desc').val('');
     }
 
-    function slide_eidt(id){
+    function register_edit(id){
         $.ajax({
-            url:"{:url('admin/slide/getSlideInfoById')}",
+            url:"{:url('admin/register/getRegisterInfoById')}",
             method:'post',
             dataType:'json',
             data: {id: id},
@@ -197,21 +151,41 @@
 
     function fillModal(data){
         $('#id').val(data.id);
-        $('#desc').val(data.desc);
-
-
-
+        $('#name').val(data.name);
+        $('#tel').val(data.tel);
+        $('#identity').val(data.identity);
+        $('#production').val(data.production);
+        $('#number').val(data.number);
+        $('#price').val(data.price);
+        $('#give_num').val(data.give_num);
     }
 
     function sub(){
         $('#sub').prop('disabled',true);
-        let
+        var id = $('#id').val();
+        var name = $('#name').val();
+        var tel = $('#tel').val();
+        var identity = $('#identity').val();
+        var production = $('#production').val();
+        var number = $('#number').val();
+        var price = $('#price').val();
+        var give_num = $('#give_num').val();
         var formData = new FormData();
-        formData.append('img',img);
-        formData.append('id',$('#id').val());
-        formData.append('name',$('#desc').val());
+        if(!tel&&!identity){
+            alertMsg("手机号和身份证号不能同时为空！");
+            $('#sub').prop('disabled',false);
+            return;
+        }
+        formData.append('id',id);
+        formData.append('name',name);
+        formData.append('tel',tel);
+        formData.append('identity',identity);
+        formData.append('production',production);
+        formData.append('number',number);
+        formData.append('price',price);
+        formData.append('give_num',give_num);
         $.ajax({
-            url: "{:url('admin/slide/saveSlide')}",
+            url: "{:url('admin/register/saveRegister')}",
             type: "POST",
             dataType:"json",
             data: formData,

@@ -50,6 +50,7 @@ class Register extends Admin
         $ret['msg'] = "操作成功！";
         try {
             $data = input('post.');
+//            var_dump($data);die;
             $registerService = new RegisterService();
             if (!$registerService->upsert($data, false)) {
                 exception($registerService->getError());
