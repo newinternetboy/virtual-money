@@ -28,6 +28,10 @@ function trimMCode($M_Code){
 }
 
 
+function formatName($name){
+    return substr($name,'**',1,2);
+}
+
 
 
 
