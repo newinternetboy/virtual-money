@@ -1,11 +1,87 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d95fd083fe8e8814bb0666d1fc4ad89b",
+    "content-hash": "9a6b8b433143ef7a2c170707a4e8af5c",
     "packages": [
+        {
+            "name": "anerg2046/alidayu",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/anerg2046/alidayu.git",
+                "reference": "301bf0e3a755793a9348f0defc649977ffef3723"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/anerg2046/alidayu/301bf0e3a755793a9348f0defc649977ffef3723.zip",
+                "reference": "301bf0e3a755793a9348f0defc649977ffef3723",
+                "shasum": ""
+            },
+            "require": {
+                "anerg2046/helper": "^1.0",
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "anerg\\Alidayu\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Coeus",
+                    "email": "r.anerg@gmail.com"
+                }
+            ],
+            "description": "alidayu sms library",
+            "time": "2017-01-05T08:23:46+00:00"
+        },
+        {
+            "name": "anerg2046/helper",
+            "version": "1.0.6.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/anerg2046/helper.git",
+                "reference": "7e58d17ebd3bf6233de97795ca2d8b95b92e906e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/anerg2046/helper/7e58d17ebd3bf6233de97795ca2d8b95b92e906e.zip",
+                "reference": "7e58d17ebd3bf6233de97795ca2d8b95b92e906e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "anerg\\helper\\": "src"
+                },
+                "files": [
+                    "src/helper.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Coeus",
+                    "email": "r.anerg@gmail.com"
+                }
+            ],
+            "description": "some helper libaray function",
+            "time": "2017-08-07T07:14:23+00:00"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.0.5",
@@ -261,6 +337,7 @@
                 "xls",
                 "xlsx"
             ],
+            "abandoned": "phpoffice/phpspreadsheet",
             "time": "2015-05-01T07:00:55+00:00"
         },
         {

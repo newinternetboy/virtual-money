@@ -39,7 +39,12 @@
                                 <td>{$vo.price ?? '-'}</td>
                                 <td>{$vo.number ?? '-'}</td>
                                 <td>{$vo.give_num ?? '-'}</td>
-                                <td><button class="btn btn-primary" onclick="register_edit('{$vo.id}')">{:lang('Edit')}</button> &nbsp;<button class="btn btn-danger" onclick="deleteSlide('{$vo.id}')">{:lang('Delete')}</button></td>
+                                <td>
+
+                                    <button class="btn btn-primary" onclick="build('{$vo.id}')">生成用户</button> &nbsp;
+                                    <button class="btn btn-primary" onclick="register_edit('{$vo.id}')">{:lang('Edit')}</button> &nbsp;
+                                    <button class="btn btn-danger" onclick="deleteSlide('{$vo.id}')">{:lang('Delete')}</button>
+                                </td>
                             </tr>
                             {/volist}
                             </tbody>
@@ -104,6 +109,16 @@
                 <div class="form-group">
                     <label for="give_num" class="col-md-2 control-label">赠币的数量</label>
                     <div class="col-md-10">
+                        <select name="coin_id" id="coin_id">
+                            {volist name="coinlist" id="vo"}
+                            <option value="{$vo.id}">{$vo.name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="give_num" class="col-md-2 control-label">赠币的数量</label>
+                    <div class="col-md-10">
                         <input id="give_num" name="give_num" class="form-control" type="text"/>
                     </div>
                 </div>
@@ -125,6 +140,26 @@
     function clearModal(){
         $('#id').val('');
         $('#desc').val('');
+    }
+
+    function build(id){
+        $.ajax({
+            url:"{:url('admin/register/buildCustomer')}",
+            method:'post',
+            dataType:'json',
+            data: {id: id},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    alertMsg("生成用户成功");
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
     }
 
     function register_edit(id){

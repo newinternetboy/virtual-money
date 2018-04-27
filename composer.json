@@ -23,6 +23,7 @@
         "topthink/think-mongo": "1.*",
         "phpoffice/phpexcel": "^1.8",
         "topthink/think-image": "^1.0"
+
     },
     "extra": {
         "think-path": "thinkphp"

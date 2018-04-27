@@ -3,7 +3,9 @@ namespace app\admin\controller;
 
 use think\Loader;
 use app\common\service\RegisterService;
-
+use app\common\service\CustomerService;
+use app\common\service\CurrencyService;
+//use \aliyun\SmsDemo;
 
 class Register extends Admin
 {
@@ -74,5 +76,64 @@ class Register extends Admin
         }
         return json($ret);
     }
+
+    public function buildCustomer(){
+        $id = input('id');
+        $ret['code'] = 200;
+        try{
+            $registerService = new RegisterService();
+            if( !$registerInfo = $registerService->findInfo(['id' => $id]) ){
+                exception("此登记数据不存在");
+            }
+            if(empty($registerInfo['tel'])){
+                exception("此登记数据手机号不能为空，请添加完成再生成用户！");
+            }
+            if($registerInfo['identity']){
+                $password = substr($registerInfo['identity'],-6);
+            }else{
+                $password = substr($registerInfo['tel'],-6);
+            }
+            $customer = [
+                'name' =>$registerInfo['name'],
+                'login_name' =>$registerInfo['tel'],
+                'password' => mduser($password),
+                'tel' => $registerInfo['tel'],
+                'identity'=>$registerInfo['identity'],
+                'rid' => $registerInfo['id']
+            ];
+            $customerService = new CustomerService();
+            if(!$result = $customerService->upsert($customer,false)){
+                exception($customerService->error());
+            }
+            $currency = [
+                'cid' => $result,
+                'coin_id'=>$registerInfo['coin_id'],
+                'rid' => $registerInfo['id'],
+                'number' =>$registerInfo['give_num'],
+                'send' => 0
+            ];
+            $currencyService = new CurrencyService();
+            if(!$currencyService->upsert($currency,false)){
+                exception($customerService->error());
+            }
+            //此处发送短信；
+
+            $res = [
+                'id' => $id,
+                'build'=>1
+            ];
+            if(!$registerService->upsert($res,false)){
+                exception("修改登记表状态失败");
+            }
+        }catch (\Exception $e){
+            $ret['code'] = 400;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+
+
+
 
 }
