@@ -284,6 +284,8 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
         foreach ($this->items as $key => $item) {
             if ($callback($item, $key) === false) {
                 break;
+            }else{
+                $this->items[$key] =  $item;//JERRIE修正
             }
         }
 
