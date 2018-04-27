@@ -40,9 +40,10 @@
                                 <td>{$vo.number ?? '-'}</td>
                                 <td>{$vo.give_num ?? '-'}</td>
                                 <td>
-
+                                {if condition="$vo.build neq 1"}
                                     <button class="btn btn-primary" onclick="build('{$vo.id}')">生成用户</button> &nbsp;
                                     <button class="btn btn-primary" onclick="register_edit('{$vo.id}')">{:lang('Edit')}</button> &nbsp;
+                                {/if}
                                     <button class="btn btn-danger" onclick="deleteSlide('{$vo.id}')">{:lang('Delete')}</button>
                                 </td>
                             </tr>
@@ -107,11 +108,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="give_num" class="col-md-2 control-label">赠币的数量</label>
+                    <label for="coin_id" class="col-md-2 control-label">赠送的币种</label>
                     <div class="col-md-10">
-                        <select name="coin_id" id="coin_id">
+                        <select name="coin_id" id="coin_id" class="form-control">
                             {volist name="coinlist" id="vo"}
-                            <option value="{$vo.id}">{$vo.name}</option>
+                            <option value="{$vo.id}" >{$vo.name}</option>
                             {/volist}
                         </select>
                     </div>
@@ -138,8 +139,15 @@
     }
 
     function clearModal(){
-        $('#id').val('');
-        $('#desc').val('');
+        $('#id').val("");
+        $('#name').val("");
+        $('#tel').val("");
+        $('#identity').val("");
+        $('#production').val("");
+        $('#number').val("");
+        $('#price').val("");
+        $('#give_num').val("");
+        $("#coin_id").find("option").attr("selected",false);
     }
 
     function build(id){
@@ -154,6 +162,7 @@
                     alertMsg(res.msg);
                 }else{
                     alertMsg("生成用户成功");
+                    setTimeout(function(){window.location.href=''},2000)
                 }
             },
             error:function(){
@@ -193,6 +202,7 @@
         $('#number').val(data.number);
         $('#price').val(data.price);
         $('#give_num').val(data.give_num);
+        $("#coin_id").find("option[value="+data.coin_id+"]").attr("selected",true);
     }
 
     function sub(){
@@ -205,9 +215,10 @@
         var number = $('#number').val();
         var price = $('#price').val();
         var give_num = $('#give_num').val();
+        var coin_id = $('#coin_id').val();
         var formData = new FormData();
-        if(!tel&&!identity){
-            alertMsg("手机号和身份证号不能同时为空！");
+        if(!tel){
+            alertMsg("手机号不能为空！");
             $('#sub').prop('disabled',false);
             return;
         }
@@ -218,6 +229,7 @@
         formData.append('production',production);
         formData.append('number',number);
         formData.append('price',price);
+        formData.append('coin_id',coin_id);
         formData.append('give_num',give_num);
         $.ajax({
             url: "{:url('admin/register/saveRegister')}",
@@ -245,7 +257,7 @@
     function deleteSlide(id){
         alertConfirm('确定要这一项吗？',function(){
             $.ajax({
-                url:"{:url('admin/slide/deleteSlideByid')}",
+                url:"{:url('admin/register/deleteRegisterByid')}",
                 method:'post',
                 dataType:'json',
                 data: {id: id},

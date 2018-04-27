@@ -5,14 +5,17 @@ use think\Loader;
 use app\common\service\RegisterService;
 use app\common\service\CustomerService;
 use app\common\service\CurrencyService;
-//use \aliyun\SmsDemo;
+use app\common\service\CoinService;
 
 class Register extends Admin
 {
 
     public function index(){
+        $coinService = new CoinService();
+        $coinlist = $coinService->selectInfo();
         $registerService = new RegisterService();
         $registerlist = $registerService->getInfoPaginate();
+        $this->assign('coinlist',$coinlist);
         $this->assign('registerlist',$registerlist);
         return $this->fetch();
     }
@@ -102,11 +105,17 @@ class Register extends Admin
                 'rid' => $registerInfo['id']
             ];
             $customerService = new CustomerService();
-            if(!$result = $customerService->upsert($customer,false)){
-                exception($customerService->error());
+            if($customerInfo = $customerService->findInfo(['login_name'])){
+                $cid = $customerInfo['id'];
+            }else{
+                if(!$result = $customerService->upsert($customer,false)){
+                    exception($customerService->error());
+                }
+                $cid = $result;
             }
+
             $currency = [
-                'cid' => $result,
+                'cid' => $cid,
                 'coin_id'=>$registerInfo['coin_id'],
                 'rid' => $registerInfo['id'],
                 'number' =>$registerInfo['give_num'],
