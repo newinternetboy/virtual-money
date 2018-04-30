@@ -13,4 +13,9 @@ class CustomerModel extends Common
 {
     public $table = 'customer';
 
+    public function wallet(){
+        return $this->hasOne('WalletModel','u_id');
+    }
+
+
 }

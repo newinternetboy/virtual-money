@@ -11,49 +11,42 @@
                     <div class="ibox-content form-horizontal">
                         <div class="form-group">
                             <div  class="col-sm-2">
-                                <button style="float: left;" onclick="slide_add()" class="btn btn-primary" type="button"  >{:lang('Add')}</button>
+                                <button style="float: left;" onclick="customer_add()" class="btn btn-primary" type="button"  >{:lang('Add')}</button>
                             </div>
-
                         </div>
                         <div>
                             <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
                             <thead>
                             <tr>
                                 <th>客户名称</th>
+                                <th>登录名</th>
                                 <th>手机号</th>
                                 <th>身份证号码</th>
-                                <th>购买的产品</th>
-                                <th>购买的数量</th>
-                                <th>单价</th>
-                                <th>赠送币的数量</th>
+                                <th>已有瑞福币的数量</th>
                                 <th>创建时间</th>
                                 <th>{:lang('Operate')}</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {volist name='registerlist' id='vo'}
+                            {volist name='customerlist' id='vo'}
                             <tr>
                                 <td>{$vo.name ?? '-'}</td>
+                                <td>{$vo.login_name ?? '-'}</td>
                                 <td>{$vo.tel ?? '-'}</td>
                                 <td>{$vo.identity ?? '-'}</td>
-                                <td>{$vo.production ?? '-'}</td>
-                                <td>{$vo.price ?? '-'}</td>
-                                <td>{$vo.number ?? '-'}</td>
-                                <td>{$vo.give_num ?? '-'}</td>
-                                <td>{$vo.create_time ?? '-'}</td>
+                                <td>{$vo.wallet? $vo.wallet.account_balance : '0'}</td>
+                                <td>{$vo.create_time}</td>
                                 <td>
-                                {if condition="$vo.build neq 1"}
-                                    <button class="btn btn-primary" onclick="build('{$vo.id}')">生成用户</button> &nbsp;
-                                    <button class="btn btn-primary" onclick="register_edit('{$vo.id}')">{:lang('Edit')}</button> &nbsp;
-                                {/if}
-                                    <button class="btn btn-danger" onclick="deleteSlide('{$vo.id}')">{:lang('Delete')}</button>
+                                    <button class="btn btn-primary" onclick="currency('{$vo.id}','{$vo.name}')">详情</button> &nbsp
+                                    <button class="btn btn-primary" onclick="customer_edit('{$vo.id}')">{:lang('Edit')}</button> &nbsp
+                                    <button class="btn btn-danger" onclick="deleteCustomer('{$vo.id}')">{:lang('Delete')}</button>
                                 </td>
                             </tr>
                             {/volist}
                             </tbody>
                         </table></div>
                         <div>
-                            {$registerlist->render()}
+                            {$customerlist->render()}
                         </div>
 
                     </div>
@@ -65,7 +58,6 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">修改/添加登记客户</h4>
@@ -76,7 +68,25 @@
                 <div class="form-group">
                     <label for="name" class="col-md-2 control-label">客户姓名</label>
                     <div class="col-md-10">
-                        <input id="name" name="name" class="form-control" type="text"/>
+                        <input id="name" name="name" required class="form-control" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="login_name" class="col-md-2 control-label">登录名</label>
+                    <div class="col-md-10">
+                        <input id="login_name" name="login_name" required class="form-control" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="col-md-2 control-label">密码</label>
+                    <div class="col-md-10">
+                        <input id="password" name="password" class="form-control" type="password"  required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sure_password" class="col-md-2 control-label">确认密码</label>
+                    <div class="col-md-10">
+                        <input id="sure_password" name="sure_password" class="form-control" type="password" required />
                     </div>
                 </div>
                 <div class="form-group">
@@ -92,37 +102,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="production" class="col-md-2 control-label">购买的商品</label>
+                    <label for="state" class="col-md-2 control-label">身份证号</label>
                     <div class="col-md-10">
-                        <input id="production" name="production" class="form-control" type="text"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="number" class="col-md-2 control-label">购买的数量</label>
-                    <div class="col-md-10">
-                        <input id="number" name="number" class="form-control" type="text"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="price" class="col-md-2 control-label">单价</label>
-                    <div class="col-md-10">
-                        <input id="price" name="price" class="form-control" type="text"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="coin_id" class="col-md-2 control-label">赠送的币种</label>
-                    <div class="col-md-10">
-                        <select name="coin_id" id="coin_id" class="form-control">
-                            {volist name="coinlist" id="vo"}
-                            <option value="{$vo.id}" >{$vo.name}</option>
-                            {/volist}
+                        <select name="state" id="state" class="form-control">
+                            <option value="0">启用</option>
+                            <option value="1">禁用</option>
                         </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="give_num" class="col-md-2 control-label">赠币的数量</label>
-                    <div class="col-md-10">
-                        <input id="give_num" name="give_num" class="form-control" type="text"/>
                     </div>
                 </div>
             </div>
@@ -130,52 +115,31 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
                 <button type="button" id="sub" class="btn btn-primary" onclick="sub();">{:lang('Save')}</button>
             </div>
-
         </div>
     </div>
 </div>
 <script>
-    function slide_add(){
+    function customer_add(){
         clearModal();
         $('#myModal').modal('show');
+    }
+
+    function currency(id,name){
+        window.location.href="{:url('admin/customer/detail')}?id="+id+"&name="+name;
     }
 
     function clearModal(){
         $('#id').val("");
         $('#name').val("");
+        $('#login_name').val("");
         $('#tel').val("");
         $('#identity').val("");
-        $('#production').val("");
-        $('#number').val("");
-        $('#price').val("");
-        $('#give_num').val("");
-        $("#coin_id").find("option").attr("selected",false);
+        $("#state").find("option").attr("selected",false);
     }
 
-    function build(id){
+    function customer_edit(id){
         $.ajax({
-            url:"{:url('admin/register/buildCustomer')}",
-            method:'post',
-            dataType:'json',
-            data: {id: id},
-            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
-            success: function(res){
-                if(res.code != 200){
-                    alertMsg(res.msg);
-                }else{
-                    alertMsg("生成用户成功");
-                    setTimeout(function(){window.location.href=''},2000)
-                }
-            },
-            error:function(){
-                alertMsg("{:lang('Operation fail')}");
-            }
-        })
-    }
-
-    function register_edit(id){
-        $.ajax({
-            url:"{:url('admin/register/getRegisterInfoById')}",
+            url:"{:url('admin/customer/getCustomerInfoById')}",
             method:'post',
             dataType:'json',
             data: {id: id},
@@ -198,43 +162,68 @@
     function fillModal(data){
         $('#id').val(data.id);
         $('#name').val(data.name);
+        $('#login_name').val(data.login_name);
         $('#tel').val(data.tel);
         $('#identity').val(data.identity);
-        $('#production').val(data.production);
-        $('#number').val(data.number);
-        $('#price').val(data.price);
-        $('#give_num').val(data.give_num);
-        $("#coin_id").find("option[value="+data.coin_id+"]").attr("selected",true);
+        $('#state').find('option[value='+data.state+']').attr('selected',true);
     }
 
     function sub(){
         $('#sub').prop('disabled',true);
         var id = $('#id').val();
         var name = $('#name').val();
+        var login_name = $('#login_name').val();
+        var password = $('#password').val();
+        var sure_password = $('#sure_password').val();
         var tel = $('#tel').val();
         var identity = $('#identity').val();
-        var production = $('#production').val();
-        var number = $('#number').val();
-        var price = $('#price').val();
-        var give_num = $('#give_num').val();
-        var coin_id = $('#coin_id').val();
+        var state = $('#state').val();
         var formData = new FormData();
-        if(!tel){
-            alertMsg("手机号不能为空！");
+        if(name == ""){
+            alertMsg("客户姓名不能为空");
             $('#sub').prop('disabled',false);
             return;
         }
+        if(login_name == ""){
+            alertMsg("客户登录名不能为空");
+            $('#sub').prop('disabled',false);
+            return;
+        }
+        if(id == ""){
+            if(password == ""){
+                alertMsg("密码不能为空88");
+                $('#sub').prop('disabled',false);
+                return;
+            }
+            if(password != sure_password){
+                alertMsg("密码和确认密码必须相同");
+                $('#sub').prop('disabled',false);
+                return;
+            }
+        }else{
+            if(password != sure_password){
+                alertMsg("密码和确认密码必须相同");
+                $('#sub').prop('disabled',false);
+                return;
+            }
+        }
+
+        if(tel == ""){
+            alertMsg("手机号码不能为空");
+            $('#sub').prop('disabled',false);
+            return;
+        }
+
         formData.append('id',id);
         formData.append('name',name);
+        formData.append('login_name',login_name);
         formData.append('tel',tel);
+        formData.append('state',state);
         formData.append('identity',identity);
-        formData.append('production',production);
-        formData.append('number',number);
-        formData.append('price',price);
-        formData.append('coin_id',coin_id);
-        formData.append('give_num',give_num);
+        formData.append('password',password);
+        formData.append('sure_password',sure_password);
         $.ajax({
-            url: "{:url('admin/register/saveRegister')}",
+            url: "{:url('admin/customer/saveCustomer')}",
             type: "POST",
             dataType:"json",
             data: formData,
@@ -248,6 +237,8 @@
                     alertMsg(res.msg);
                     setTimeout(function(){window.location.href=''},2000)
                 }
+                $('#sub').prop('disabled',false);
+
             },
             error: function () {
                 alertMsg("操作失败");
@@ -256,10 +247,10 @@
         });
     }
 
-    function deleteSlide(id){
+    function deleteCustomer(id){
         alertConfirm('确定要这一项吗？',function(){
             $.ajax({
-                url:"{:url('admin/register/deleteRegisterByid')}",
+                url:"{:url('admin/customer/deleteCustomerByid')}",
                 method:'post',
                 dataType:'json',
                 data: {id: id},
