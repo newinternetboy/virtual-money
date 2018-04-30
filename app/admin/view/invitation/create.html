@@ -1,0 +1,78 @@
+
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class=" table-responsive">
+                <div class="ibox float-e-margins" style="padding: 10px">
+                    <!-- 表单内容 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>生成邀请码</h5>
+                    </div>
+                    <div class="ibox-content form-horizontal" style="height:200px;" >
+
+                        <div class="form-group">
+                            <label for="number" class="col-md-3 control-label"></label>
+                            <div class="col-md-4">
+                                <input class="form-control" name="number" id="number" placeholder="请输入生成邀请码的数量！" >
+                            </div>
+                            <div class="col-md-1">
+
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary" id="button" >生成</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"></label>
+                            <div class="col-md-4" style="color:red;">
+                                每次生成邀请码的数量不要超过1000
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    $('#button').click(function(){
+        $('#button').prop('disabled',true);
+        var number = $('#number').val();
+        if(isNaN(number)){
+            alertMsg("请输入数字");
+            $('#button').prop('disabled',false);
+            return;
+        }
+        if(number>1000||number<1){
+            alertMsg("您输入一个1-1000的数字");
+            $('#button').prop('disabled',false);
+            return;
+        }
+        $.ajax({
+            url:"{:url('admin/invitation/createInvitation')}",
+            method:'post',
+            dataType:'json',
+            data: {number: number},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                    $('#button').prop('disabled',false);
+                }else{
+                    alertMsg("生成邀请码成功！");
+                    $('#button').prop('disabled',false);
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+                $('#button').prop('disabled',false);
+            }
+        })
+
+
+    })
+
+</script>
+
+                   
