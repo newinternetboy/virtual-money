@@ -15,5 +15,4 @@ class OrderService extends CommonService
     {
         $this->dbModel = new OrderModel();
     }
-
 }
