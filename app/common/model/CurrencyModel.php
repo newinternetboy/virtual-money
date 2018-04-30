@@ -13,4 +13,8 @@ class CurrencyModel extends Common
 {
     public $table = 'currency';
 
+    public function coin(){
+        return $this->belongsTo('CoinModel','coin_id');
+    }
+
 }

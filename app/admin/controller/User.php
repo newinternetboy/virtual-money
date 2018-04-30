@@ -56,7 +56,7 @@ class User extends Admin
      */
     public function add()
     {
-        $roleData = model('role')->getKvData($this->company_id);
+        $roleData = model('role')->getKvData();
         $this->assign('roleData', $roleData);
         return $this->fetch('edit');
     }
@@ -98,13 +98,6 @@ class User extends Admin
         if(empty($data['id'])){
             unset($data['id']);
         }
-        if( isset($data['id']) ){
-            $result=model('User')->getUsersById($data['id'],$this->company_id);
-            if( !$result ){
-                $this->error('用户不存在');
-            }
-        }
-        $data['company_id'] = $this->company_id;
         $result = model('User')->saveData( $data );
         if( $result['code'] != 1 ){
             Log::record(['保存用户失败' => $result['msg'],'data' => $data],'error');

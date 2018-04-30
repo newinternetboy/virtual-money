@@ -96,18 +96,19 @@ class Register extends Admin
             }else{
                 $password = substr($registerInfo['tel'],-6);
             }
-            $customer = [
-                'name' =>$registerInfo['name'],
-                'login_name' =>$registerInfo['tel'],
-                'password' => mduser($password),
-                'tel' => $registerInfo['tel'],
-                'identity'=>$registerInfo['identity'],
-                'rid' => $registerInfo['id']
-            ];
+
             $customerService = new CustomerService();
-            if($customerInfo = $customerService->findInfo(['login_name'])){
+            if($customerInfo = $customerService->findInfo(['login_name'=>$registerInfo['tel']])){
                 $cid = $customerInfo['id'];
             }else{
+                $customer = [
+                    'name' =>$registerInfo['name'],
+                    'login_name' =>$registerInfo['tel'],
+                    'password' => mduser($password),
+                    'tel' => $registerInfo['tel'],
+                    'identity'=>$registerInfo['identity'],
+                    'rid' => $registerInfo['id'],
+                ];
                 if(!$result = $customerService->upsert($customer,false)){
                     exception($customerService->error());
                 }

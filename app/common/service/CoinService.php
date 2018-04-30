@@ -8,7 +8,6 @@
 
 namespace app\common\service;
 
-use app\common\service\CommonService;
 use app\common\model\CoinModel;
 class CoinService extends CommonService
 {
