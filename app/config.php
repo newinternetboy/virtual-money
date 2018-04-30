@@ -62,7 +62,7 @@ return [
     // 禁止访问模块
     'deny_module_list'       => ['common'],
     //允许访问模块
-    'allow_module_list'      => ['manage','admin','api'],
+    'allow_module_list'      => ['manage','admin','api','timetask'],
     // 默认控制器名
     'default_controller'     => 'Index',
     // 默认操作名
@@ -132,10 +132,10 @@ return [
         'taglib_end'   => '}',
     ],
 
-    // 视图输出字符串内容替换
+/*    // 视图输出字符串内容替换
     'view_replace_str'       => [
         '__STATIC__DOMAIN__'=>STATIC_PATH,
-    ],
+    ],*/
     // 默认跳转页面对应的模板文件
     'dispatch_success_tmpl'  => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
     'dispatch_error_tmpl'    => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
