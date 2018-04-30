@@ -114,19 +114,19 @@ return [
         'money'            => 'log_money'
     ],
 
-    //定义个人商铺根路径；
-    'grImgPath' => APP_API_URL,
+/*    //定义个人商铺根路径；
+    'grImgPath' => APP_API_URL,*/
 
-    //充值类型配置
+/*    //充值类型配置
     'meter_charge_type' => [
         MONEY_CHANNEL_WEIXIN => '微信',
         MONEY_CHANNEL_MANAGE => '系统',
         MONEY_CHANNEL_CARD => '充值卡',
         //MONEY_CHANNEL_BANK => '银行卡',
-    ],
+    ],*/
 
-    //回复消息的api
-    'reply_chat_api' => APP_API_URL.'notify/v1/pushNotification',
+/*    //回复消息的api
+    'reply_chat_api' => APP_API_URL.'notify/v1/pushNotification',*/
 
     //3des key
     'DesKey' => "sdl412!#\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",

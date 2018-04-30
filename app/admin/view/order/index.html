@@ -8,6 +8,21 @@
                     <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
                         <h5>交易账单</h5>
                     </div>
+                    </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <input type="text" id="searchPayOrder" placeholder="请输入交易单号或用户名">
+                    </div>
+<div class="col-sm-3">
+    <select id="searchType">
+        <option value ="">请选择</option>
+        <option value ="u_id">用户名</option>
+        <option value="order_id">订单编号</option>
+    </select>
+</div>
+                    <div  class="col-sm-3">
+                        <button style="float: left;" onclick="search_order()" class="btn btn-primary" type="button" id="search"  >{:lang('查询')}</button>
+                    </div>
                     <div class="ibox-content form-horizontal">
                         <div>
                             <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
@@ -143,6 +158,44 @@
                 }
             })
         })
+    }
+
+    function search_order(){
+        /*$('#search').prop('disabled',true);
+        var order_id = $('#searchPayOrder').val();
+        var formData = new FormData();
+        if(!order_id){
+            alertMsg("交易单号不能为空！");
+            $('#search').prop('disabled',false);
+            return;
+        }
+        formData.append('order_id',order_id);
+        $.ajax({
+            url: "{:url('admin/order/index')}",
+            type: "POST",
+            dataType:"json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success:function (res) {
+            },
+            error: function () {
+            }
+        });*/
+        var id = $('#searchPayOrder').val();
+        var type = $('#searchType').val();
+        if(!id){
+            alertMsg("请输入交易单号或者用户名！");
+            $('#search').prop('disabled',false);
+            return;
+        }
+        if(!type){
+            alertMsg("查询类型不能为空！");
+            $('#search').prop('disabled',false);
+            return;
+        }
+        window.location.href ="/admin/order/searchPayOrder?type="+type+'&id='+id;
     }
 </script>
 
