@@ -6,7 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    '5255c38a0faeba867671b61dfda6d864' => $vendorDir . '/paragonie/random_compat/lib/random.php',
     '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => $vendorDir . '/symfony/polyfill-mbstring/bootstrap.php',
+    '023d27dca8066ef29e6739335ea73bad' => $vendorDir . '/symfony/polyfill-php70/bootstrap.php',
+    'b9118ae149d0ad190a8abf45189312f2' => $vendorDir . '/anerg2046/helper/src/helper.php',
+    'a9ed0d27b5a698798a89181429f162c5' => $vendorDir . '/khanamiryan/qrcode-detector-decoder/lib/Common/customFunctions.php',
     '9b552a3cc426e3287cc811caefa3cf53' => $vendorDir . '/topthink/think-helper/src/helper.php',
     '1cfd2761b63b0a29ed23657ea394cb2d' => $vendorDir . '/topthink/think-captcha/src/helper.php',
     '72c97b53391125cae04082a81029f42d' => $vendorDir . '/topthink/think-testing/src/config.php',
