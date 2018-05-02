@@ -67,4 +67,5 @@ class Coin extends Admin
         }
         return json($ret);
     }
+
 }
