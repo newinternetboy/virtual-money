@@ -11,7 +11,7 @@
                     <div class="ibox-content form-horizontal">
                         <div class="form-group">
                             <div  class="col-sm-2">
-                                <button style="float: left;" onclick="customer_add()" class="btn btn-primary" type="button"  >{:lang('Add')}</button>
+                                <button style="float: left;" onclick="currency_add()" class="btn btn-primary" type="button"  >{:lang('Add')}</button>
                             </div>
                         </div>
                         <div>
@@ -19,7 +19,7 @@
                             <thead>
                             <tr>
                                 <th>币种</th>
-                                <th>总数</th>
+                                <th>数量</th>
                                 <th>剩余的数量</th>
                                 <th>已发送的数量</th>
                                 <th>状态</th>
@@ -59,56 +59,28 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">修改/添加登记客户</h4>
+                <h4 class="modal-title" id="myModalLabel">添加待发币</h4>
             </div>
 
             <div class="modal-body form-horizontal">
-                <input type="hidden" id="id" name="id" />
+                <input type="hidden" id="cid" name="cid" value="{$cid}" />
                 <div class="form-group">
-                    <label for="name" class="col-md-2 control-label">客户姓名</label>
+                    <label for="coin_id" class="col-md-2 control-label">币种</label>
                     <div class="col-md-10">
-                        <input id="name" name="name" required class="form-control" type="text"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="login_name" class="col-md-2 control-label">登录名</label>
-                    <div class="col-md-10">
-                        <input id="login_name" name="login_name" required class="form-control" type="text"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="password" class="col-md-2 control-label">密码</label>
-                    <div class="col-md-10">
-                        <input id="password" name="password" class="form-control" type="password"  required />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="sure_password" class="col-md-2 control-label">确认密码</label>
-                    <div class="col-md-10">
-                        <input id="sure_password" name="sure_password" class="form-control" type="password" required />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="tel" class="col-md-2 control-label">手机号</label>
-                    <div class="col-md-10">
-                        <input id="tel" name="tel" class="form-control" type="text"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="identity" class="col-md-2 control-label">身份证号</label>
-                    <div class="col-md-10">
-                        <input id="identity" name="identity" class="form-control" type="text"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="state" class="col-md-2 control-label">身份证号</label>
-                    <div class="col-md-10">
-                        <select name="state" id="state" class="form-control">
-                            <option value="0">启用</option>
-                            <option value="1">禁用</option>
+                        <select name="coin_id" id="coin_id" class="form-control" >
+                            {volist name="coinlist" id="vo"}
+                            <option value="{$vo.id}">{$vo.name}</option>
+                            {/volist}
                         </select>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="number" class="col-md-2 control-label">数量</label>
+                    <div class="col-md-10">
+                        <input id="number" name="number" class="form-control" type="number"/>
+                    </div>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
@@ -119,7 +91,48 @@
 </div>
 <script>
 
+    function currency_add(){
+        $('#myModal').modal('show');
+    }
 
+    function sub(){
+        $('#sub').prop('disabled',true);
+        var cid = $('#cid').val();
+        var coin_id = $('#coin_id').val();
+        var number = $('#number').val();
+        var formData = new FormData();
+        if(Number(number) <= 0){
+            alertMsg("添加的数量不能小于等于0");
+            $('#sub').prop('disabled',false);
+            return;
+        }
+        formData.append('cid',cid);
+        formData.append('coin_id',coin_id);
+        formData.append('number',number);
+        $.ajax({
+            url: "{:url('admin/customer/saveCurrency')}",
+            type: "POST",
+            dataType:"json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success:function (res) {
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    alertMsg(res.msg);
+                    setTimeout(function(){window.location.href=''},2000)
+                }
+                $('#sub').prop('disabled',false);
+
+            },
+            error: function () {
+                alertMsg("操作失败");
+                $('#submitBtn').prop('disabled',false);
+            }
+        });
+    }
 
     function deleteCustomer(id){
         alertConfirm('确定要这一项吗？',function(){

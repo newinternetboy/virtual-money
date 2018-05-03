@@ -2,9 +2,11 @@
 namespace app\admin\controller;
 
 use app\common\service\CurrencyService;
+use app\common\service\WalletService;
 use think\Loader;
 use app\common\service\CustomerService;
 use app\common\service\CoinService;
+use think\Session;
 
 class Customer extends Admin
 {
@@ -78,6 +80,24 @@ class Customer extends Admin
         return json($ret);
     }
 
+    public function saveCurrency(){
+        $ret['code'] = 200;
+        $ret['msg'] = "操作成功！";
+        try {
+            $data = input('post.');
+            $data['rest_number'] = $data['number'];
+            $currencyService = new CurrencyService();
+            if (!$currencyService->upsert($data,false)) {
+                exception($currencyService->getError());
+            }
+            model('LogRecord')->record('添加待下发币',$data);
+        } catch (\Exception $e) {
+            $ret['code'] = 400;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
     public function deleteCustomerByid(){
         $id = input('id');
         $ret['code'] = 200;
@@ -90,13 +110,51 @@ class Customer extends Admin
         return json($ret);
     }
 
+    public function confirmPassword(){
+        $password = input('password');
+        $ret['code'] = 200;
+        $ret['msg'] = "操作成功！";
+        try {
+            $userinfo = Session::get('userinfo','admin');
+            $user = model('User')->getUserInfo(['id'=>$userinfo['id']],'find','password');
+            if($user['password'] != mduser($password)){
+                exception("密码不正确请重试");
+            }
+        } catch (\Exception $e) {
+            $ret['code'] = 400;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    public function addCurrency(){
+        $uid = input('uid');
+        $number = input('number');
+        $ret['code'] = 200;
+        $ret['msg'] = "操作成功！";
+        try {
+            $walletService = new WalletService();
+            if(!$res = $walletService->doSetInc(['u_id'=>$uid],['account_balance',$number])){
+                exception($walletService->getError());
+            }
+        } catch (\Exception $e) {
+            $ret['code'] = 400;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
     public function detail(){
         $id = input('id');
         $name = input('name');
+        $coinService = new CoinService();
+        $coinlist = $coinService->selectInfo();
         $currencyService = new CurrencyService();
         $currencylist = $currencyService->selectInfo(['cid'=>$id]);
+        $this->assign('coinlist',$coinlist);
         $this->assign('currencylist',$currencylist);
         $this->assign('name',$name);
+        $this->assign('cid',$id);
         return $this->fetch();
     }
 

@@ -17,5 +17,9 @@ class WalletService extends CommonService
         $this->dbModel = new WalletModel();
     }
 
+    public function doSetInc($where,$data){
+        return $this->dbModel->doSetInc($where,$data);
+    }
+
 
 }

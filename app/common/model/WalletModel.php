@@ -13,4 +13,8 @@ class WalletModel extends Common
 {
     public $table = 'wallet';
 
+    public function doSetInc($where,$data){
+        return $this->where($where)->setInc($data[0],$data[1]);
+    }
+
 }

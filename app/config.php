@@ -255,5 +255,11 @@ return [
 
     //app 添加用户推送消息的api url
     'notificationUrl'  => 'http://localhost:10086/notify/v1/push',
+    //短信配置
+    'SMS_CONFIG'    =>  array(
+        "sign"              =>      '久久舍得社区', //审核通过的签名
+        "key"               =>      'LTAIEUNtmooDVa6a', //阿里云生成的 accessKeyId
+        "secret"            =>      '6TXvFSICkveYe5XTsWgMABNzvSqf16', // 阿里云生成的 accessKeySecret
+    ),
 
 ];
