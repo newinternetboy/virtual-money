@@ -12,13 +12,13 @@
                         <form action="">
                             <div class="form-group">
                                 <div class="form-group">
-                                    <label for="state" class="col-md-2 control-label">客户姓名</label>
+                                    <label for="state" class="col-md-2 control-label">状态</label>
                                     <div class="col-md-4">
                                         <select name="state" id="state" class="form-control" >
                                             <option value="">所有</option>
-                                            <option value="1">未使用</option>
-                                            <option value="2">待使用</option>
-                                            <option value="3">已使用</option>
+                                            <option value="1" {if condition="$state eq 1"}selected{/if} >未使用</option>
+                                            <option value="2" {if condition="$state eq 2"}selected{/if} >待使用</option>
+                                            <option value="3" {if condition="$state eq 3"}selected{/if} >已使用</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3">
@@ -30,6 +30,10 @@
                                 </div>
                             </div>
                         </form>
+                        <hr/>
+                        <div style="">
+                            <button class="btn btn-primary" style="float:right;margin-right:1vw;margin-bottom:10px;" onclick="download()" >导出</button>
+                        </div>
                         <div>
                             <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
                             <thead>
@@ -54,7 +58,7 @@
                                     {/switch}
                                 </td>
 
-                                <td><button class="btn btn-danger" onclick="deleteManager('{$vo.id}')">{:lang('Delete')}</button></td>
+                                <td><button class="btn btn-danger" onclick="deleteInvitation('{$vo.id}')">{:lang('Delete')}</button></td>
                             </tr>
                             {/volist}
                             </tbody>
@@ -71,10 +75,10 @@
 </div>
 
 <script>
-    function deleteManager(id){
+    function deleteInvitation(id){
         alertConfirm('确定要这一项吗？',function(){
             $.ajax({
-                url:"{:url('admin/news/deleteManagerByid')}",
+                url:"{:url('admin/invitation/deleteInvitationByid')}",
                 method:'post',
                 dataType:'json',
                 data: {id: id},
@@ -92,6 +96,11 @@
                 }
             })
         })
+    }
+
+    function download(){
+       window.location.href="{:url('admin/invitation/download')}";
+
     }
 </script>
 

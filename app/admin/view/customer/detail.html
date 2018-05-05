@@ -37,8 +37,8 @@
                                 <td>{$vo.send ?? '0'}</td>
                                 <td>{$vo.start_send_time ?? ''}</td>
                                 <td>
-                                    <button class="btn btn-primary" onclick="customer_edit('{$vo.id}')">开始/取消发币</button>
-                                    <button class="btn btn-danger" onclick="deleteCustomer('{$vo.id}')">{:lang('Delete')}</button>
+
+                                    <button class="btn btn-danger" onclick="deleteCurrency('{$vo.id}')">{:lang('Delete')}</button>
                                 </td>
                             </tr>
                             {/volist}
@@ -134,10 +134,10 @@
         });
     }
 
-    function deleteCustomer(id){
+    function deleteCurrency(id){
         alertConfirm('确定要这一项吗？',function(){
             $.ajax({
-                url:"{:url('admin/customer/deleteCustomerByid')}",
+                url:"{:url('admin/customer/deleteCurrencyByid')}",
                 method:'post',
                 dataType:'json',
                 data: {id: id},

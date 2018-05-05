@@ -114,7 +114,7 @@ class Register extends Admin
                     'rid' => $registerInfo['id'],
                 ];
                 if(!$result = $customerService->upsert($customer,false)){
-                    exception($customerService->error());
+                    exception($customerService->getError());
                 }
                 $cid = $result;
                 $walletInfo = [
@@ -136,11 +136,14 @@ class Register extends Admin
             ];
             $currencyService = new CurrencyService();
             if(!$currencyService->upsert($currency,false)){
-                exception($customerService->error());
+                exception($customerService->getError());
             }
 
             if($state == 1){
-
+                $smscode = 'SMS_133962893';
+                $params = [
+                    'num' =>$registerInfo['give_num']
+                ];
             }else{
                 $smscode = 'SMS_133972148';
                 $params =[
@@ -149,8 +152,8 @@ class Register extends Admin
                     'phone'=>$registerInfo['tel'],
                     'num' => $registerInfo['give_num']
                 ];
-                $this->sendSms($registerInfo['tel'],$smscode,$params);
             }
+            $this->sendSms($registerInfo['tel'],$smscode,$params);
 
             $res = [
                 'id' => $id,

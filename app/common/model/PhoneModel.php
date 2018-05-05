@@ -9,9 +9,9 @@
 namespace app\common\model;
 
 
-class InvitationModel extends Common
+class PhoneModel extends Common
 {
-    public $table = 'invitation';
+    public $table = 'phone';
 
     public function getInfoPaginateNoorder($where = [], $param = [], $field = ''){
         if( $field ){
@@ -19,7 +19,5 @@ class InvitationModel extends Common
         }
         return $this->where($where)->paginate()->appends($param);
     }
-
-
 
 }

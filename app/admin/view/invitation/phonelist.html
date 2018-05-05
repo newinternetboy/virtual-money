@@ -1,0 +1,231 @@
+
+<div id="content" style="opacity: 1; background-color: #e6e6e6; border: 1px #cccccc solid; margin-bottom: 40px;">
+    <section id="widget-grid">
+        <div class="row">
+            <div class=" table-responsive">
+                <div class="ibox float-e-margins" style="padding: 10px">
+                    <!-- 表单内容 -->
+                    <div class="ibox-title" style="background-color: #2377AF; color: #ffffff;">
+                        <h5>手机号列表</h5>
+                    </div>
+                    <div class="ibox-content form-horizontal">
+                        <form action="">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="state" class="col-md-2 control-label">状态</label>
+                                    <div class="col-md-3">
+                                        <select name="state" id="state" class="form-control" >
+                                            <option value="">所有号码</option>
+                                            <option value="1" {if condition="$state eq 1"}selected{/if} >未邀请过的</option>
+                                            <option value="2" {if condition="$state eq 2"}selected{/if} >邀请过的</option>
+                                        </select>
+                                    </div>
+                                    <label for="state" class="col-md-2 control-label">手机号码</label>
+                                    <div class="col-md-3">
+                                        <input type="text" name="tel" class="form-control" value="{$tel ?? ''}" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="state" class="col-md-11 control-label"></label>
+                                    <div class="col-md-1">
+                                        <button class="btn btn-primary" >查询</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <hr/>
+                        <div style="">
+                            <button class="btn btn-primary" style="float:right;margin-right:1vw;margin-bottom:10px;" onclick="send()" >发送邀请码</button>   <button class="btn btn-primary" style="float:right;margin-right:1vw;margin-bottom:10px;" onclick="upload()" >导入</button>
+                        </div>
+                        <div>
+                            <table class="table table-bordered" data-striped="true" data-toolbar="#toolbar" data-show-columns="true" data-page-size="10" data-page-list="" data-unique-id="id" data-pagination="true" data-side-pagination="server" data-click-to-select="false">
+                            <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>手机号</th>
+                                <th>状态</th>
+                                <th>{:lang('Operate')}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {volist name='phonelist' id='vo'}
+                            <tr>
+                                <td>{$vo.id ?? ''}</td>
+                                <td>{$vo.tel}</td>
+                                <td>
+                                    {switch name="vo.state"}
+                                    {case value="1"}<span style="color:green;">未邀请过的</span>{/case}
+                                    {case value="2"}<span style="color:orange;">邀请过的</span>{/case}
+                                    {default /}未定义
+                                    {/switch}
+                                </td>
+                                <td><button class="btn btn-danger" onclick="deleteInvitation('{$vo.id}')">{:lang('Delete')}</button></td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table></div>
+                        <div>
+                            {$phonelist->render()}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">上传excel</h4>
+            </div>
+
+            <div class="modal-body form-horizontal">
+                <div class="form-group">
+                    <label for="file" class="col-md-4 control-label">文件</label>
+                    <div class="col-md-6">
+                        <input type="file" style="margin-top: 6px;" name="file" id="file">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" id="sub" class="btn btn-primary" onclick="sub();">上传</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel1">发送邀请码</h4>
+            </div>
+
+            <div class="modal-body form-horizontal">
+                <div class="form-group">
+                    <label for="send_state" class="col-md-3 control-label">发送的号码</label>
+                    <div class="col-md-8">
+                        <select name="send_state" id="send_state" class="form-control" >
+                            <option value="">所有号码</option>
+                            <option value="1" >未邀请过的</option>
+                            <option value="2" >邀请过的</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" id="sub1" class="btn btn-primary" onclick="sub1();">发送</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function deleteInvitation(id){
+        alertConfirm('确定要这一项吗？',function(){
+            $.ajax({
+                url:"{:url('admin/invitation/deleteInvitationByid')}",
+                method:'post',
+                dataType:'json',
+                data: {id: id},
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    if(res.code != 200){
+                        alertMsg(res.msg,2);
+                    }else{
+                        alertMsg(res.msg,2);
+                        setTimeout(function(){window.location.href=''},3000)
+                    }
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
+                }
+            })
+        })
+    }
+
+    function upload(){
+        $('#myModal').modal('show');
+
+    }
+
+    function send(){
+        $('#myModal1').modal('show');
+    }
+
+    function sub(){
+        $('#sub').prop('disabled',true);
+        if($('#file').val()==""){
+            alertMsg("请选excel文件！");
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        var extend=$('#file').val().substr($('#file').val().lastIndexOf(".")+1);
+        if("xls|xlsx".indexOf(extend) == -1){
+            alertMsg("请输入excel文件!");
+            $('#sub').prop('disabled',false);
+            return false;
+        }
+        var formData = new FormData();
+        formData.append("excel", document.getElementById("file").files[0]);
+        formData.append('type','123');
+        $.ajax({
+            url: "{:url('admin/invitation/uploadexcel')}",
+            type: "POST",
+            dataType:"json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend:function(){},
+            success:function (res) {
+                if(res.code==200){
+                    alertMsg(res.msg,2);
+                    setTimeout(function(){window.location.href=""},2000);
+                }else{
+                    alertMsg(res.msg);
+                }
+                $('#sub').prop('disabled',false);
+            },
+            error: function () {
+                alert("上传失败！");
+                $('#sub').prop('disabled',false);
+            }
+        });
+    }
+
+    function sub1(){
+        var state = $('#send_state').val();
+        $.ajax({
+            url:"{:url('admin/invitation/sendAll')}",
+            method:'post',
+            dataType:'json',
+            data: {state:state},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    alertMsg(res.msg,2);
+                    setTimeout(function(){window.location.href=''},2000)
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+</script>
+
+                   

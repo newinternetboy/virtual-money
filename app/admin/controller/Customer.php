@@ -85,11 +85,20 @@ class Customer extends Admin
         $ret['msg'] = "操作成功！";
         try {
             $data = input('post.');
+            $customerService = new CustomerService();
+            if(!$customer = $customerService->findInfo(['id'=>$data['cid']])){
+                exception("该用户不存在");
+            }
             $data['rest_number'] = $data['number'];
             $currencyService = new CurrencyService();
             if (!$currencyService->upsert($data,false)) {
                 exception($currencyService->getError());
             }
+            $smscode = 'SMS_133962893';
+            $params = [
+                'num' =>$data['number']
+            ];
+            $this->sendSms($customer['tel'],$smscode,$params);
             model('LogRecord')->record('添加待下发币',$data);
         } catch (\Exception $e) {
             $ret['code'] = 400;
@@ -109,6 +118,19 @@ class Customer extends Admin
         }
         return json($ret);
     }
+    //根据id删除待下发信息；
+    public function deleteCurrencyByid(){
+        $id = input('id');
+        $ret['code'] = 200;
+        $ret['msg'] = "删除成功！";
+        $currencyService = new CurrencyService();
+        if(!$currencyService->del($id)){
+            $ret['code'] = 201;
+            $ret['msg'] = "删除失败";
+        }
+        return json($ret);
+    }
+
 
     public function confirmPassword(){
         $password = input('password');
