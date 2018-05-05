@@ -1,11 +1,13 @@
 <?php
 namespace app\admin\controller;
 
+use app\common\service\WalletService;
 use think\Loader;
 use app\common\service\RegisterService;
 use app\common\service\CustomerService;
 use app\common\service\CurrencyService;
 use app\common\service\CoinService;
+
 
 class Register extends Admin
 {
@@ -99,8 +101,10 @@ class Register extends Admin
 
             $customerService = new CustomerService();
             if($customerInfo = $customerService->findInfo(['login_name'=>$registerInfo['tel']])){
+                $state = 1;
                 $cid = $customerInfo['id'];
             }else{
+                $state = 2;
                 $customer = [
                     'name' =>$registerInfo['name'],
                     'login_name' =>$registerInfo['tel'],
@@ -110,9 +114,16 @@ class Register extends Admin
                     'rid' => $registerInfo['id'],
                 ];
                 if(!$result = $customerService->upsert($customer,false)){
-                    exception($customerService->error());
+                    exception($customerService->getError());
                 }
                 $cid = $result;
+                $walletInfo = [
+                    'u_id' => $cid
+                ];
+                $walletService = new WalletService();
+                if(!$walletService->upsert($walletInfo,false)){
+                    exception("创建钱包失败");
+                }
             }
 
             $currency = [
@@ -120,13 +131,29 @@ class Register extends Admin
                 'coin_id'=>$registerInfo['coin_id'],
                 'rid' => $registerInfo['id'],
                 'number' =>$registerInfo['give_num'],
+                'rest_number' =>$registerInfo['give_num'],
                 'send' => 0
             ];
             $currencyService = new CurrencyService();
             if(!$currencyService->upsert($currency,false)){
-                exception($customerService->error());
+                exception($customerService->getError());
             }
-            //此处发送短信；
+
+            if($state == 1){
+                $smscode = 'SMS_133962893';
+                $params = [
+                    'num' =>$registerInfo['give_num']
+                ];
+            }else{
+                $smscode = 'SMS_133972148';
+                $params =[
+                    'name'=>$registerInfo['name'],
+                    'password'=>$password,
+                    'phone'=>$registerInfo['tel'],
+                    'num' => $registerInfo['give_num']
+                ];
+            }
+            $this->sendSms($registerInfo['tel'],$smscode,$params);
 
             $res = [
                 'id' => $id,

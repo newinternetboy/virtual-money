@@ -126,4 +126,8 @@ class Common extends Model
         return $this->where($where)->delete();
     }
 
+    public function updateData($where,$data){
+        return $this->where($where)->update($data);
+    }
+
 }

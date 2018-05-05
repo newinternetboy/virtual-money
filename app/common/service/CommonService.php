@@ -118,4 +118,8 @@ class CommonService
     public function delMany($where){
         return $this->dbModel->delMany($where);
     }
+
+    public function update($where,$data){
+        return $this->dbModel->updateData($where,$data);
+    }
 }

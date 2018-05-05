@@ -37,6 +37,7 @@
                                 <td>{$vo.wallet? $vo.wallet.account_balance : '0'}</td>
                                 <td>{$vo.create_time}</td>
                                 <td>
+                                    <button class="btn btn-primary" onclick="add_curr('{$vo.id}')">增加瑞福币</button> &nbsp
                                     <button class="btn btn-primary" onclick="currency('{$vo.id}','{$vo.name}')">详情</button> &nbsp
                                     <button class="btn btn-primary" onclick="customer_edit('{$vo.id}')">{:lang('Edit')}</button> &nbsp
                                     <button class="btn btn-danger" onclick="deleteCustomer('{$vo.id}')">{:lang('Delete')}</button>
@@ -118,6 +119,53 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel1">验证密码</h4>
+            </div>
+
+            <div class="modal-body form-horizontal">
+                <div class="form-group">
+                    <label for="confirm_password" class="col-md-2 control-label">密码</label>
+                    <div class="col-md-10">
+                        <input id="confirm_password" name="confirm" placeholder="请输入管理员密码" required class="form-control" type="password"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" id="sub1" class="btn btn-primary" onclick="sub1();">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel2">添加瑞福币</h4>
+            </div>
+
+            <div class="modal-body form-horizontal">
+                <input type="hidden" id="uid" name="uid" />
+                <div class="form-group">
+                    <label for="number" class="col-md-2 control-label">数量</label>
+                    <div class="col-md-10">
+                        <input id="number" name="number" placeholder="请输入添加的数量" class="form-control" type="number"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" id="sub2" class="btn btn-primary" onclick="sub2();">{:lang('Save')}</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     function customer_add(){
         clearModal();
@@ -126,6 +174,66 @@
 
     function currency(id,name){
         window.location.href="{:url('admin/customer/detail')}?id="+id+"&name="+name;
+    }
+
+    function add_curr(id){
+        $('#uid').val(id);
+        $('#myModal1').modal('show');
+    }
+
+    function sub1(){
+        var password = $('#confirm_password').val();
+        $.ajax({
+            url:"{:url('admin/customer/confirmPassword')}",
+            method:'post',
+            dataType:'json',
+            data: {password:password},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+                }else{
+                    $('#confirm_password').val('');
+                    $('#myModal1').modal('hide');
+                    $('#myModal2').modal('show');
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
+        })
+    }
+
+    function sub2(){
+        $('#sub2').prop('disabled',true);
+        var uid = $('#uid').val();
+        var number = $('#number').val();
+        if(Number(number)<=0){
+            alertMsg('数量必须大于0');
+            $('#sub2').prop('disabled',false);
+            return;
+        }
+        $.ajax({
+            url:"{:url('admin/customer/addCurrency')}",
+            method:'post',
+            dataType:'json',
+            data: {uid:uid,number:number},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg);
+
+                }else{
+                    alertMsg(res.msg);
+                    setTimeout(function(){window.location.href=''},2000)
+                }
+                $('#sub2').prop('disabled',false);
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+                $('#sub2').prop('disabled',false);
+            }
+        })
     }
 
     function clearModal(){
