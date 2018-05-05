@@ -151,6 +151,7 @@ class Invitation extends Admin
         return $data;
     }
 
+    //发送多条短信；
     public function sendAll(){
         $state = input('state');
         $ret['code'] = 200;
@@ -162,7 +163,7 @@ class Invitation extends Admin
             }
             $phoneService = new PhoneService();
             if(!$phonelist = $phoneService->selectInfo($where)){
-                exception("没有符合条件的号码");
+                exception("没有符合条件的手机号码");
             }
             $invitationService = new InvitationService();
             $invitation_num = $invitationService->counts(['state'=>1]);
@@ -185,6 +186,52 @@ class Invitation extends Admin
         } catch (\Exception $e) {
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    public function sendOne(){
+        $id = input('id');
+        $ret['code'] = 200;
+        $ret['msg'] = "操作成功！";
+        try {
+            $phoneService = new PhoneService();
+            if(!$phoneInfo = $phoneService->findInfo(['id'=>$id])){
+                exception("没有符合条件的手机号码");
+            }
+            $invitationService = new InvitationService();
+            $invitation_num = $invitationService->counts(['state'=>1]);
+
+            if($invitation_num<1){
+                exception("未使用的邀请码数量不够");
+            }
+
+            $code = $invitationService->findInfo(['state'=>1]);
+            $smscode = 'SMS_133962885';
+
+            $params = [
+                'name'=>$phoneInfo['tel'],
+                'code' =>$code['in_code']
+            ];
+            $this->sendSms($phoneInfo['tel'],$smscode,$params);
+            $invitationService->update(['in_code'=>$code['in_code']],['state'=>2]);
+            $phoneService->update(['tel'=>$phoneInfo['tel']],['state'=>2]);
+            model('LogRecord')->record('发送邀请码',$id);
+        } catch (\Exception $e) {
+            $ret['code'] = 400;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
+
+    public function deletePhoneByid(){
+        $id = input('id');
+        $ret['code'] = 200;
+        $ret['msg'] = "删除成功！";
+        $phoneService = new PhoneService();
+        if(!$phoneService->del($id)){
+            $ret['code'] = 201;
+            $ret['msg'] = "操作失败";
         }
         return json($ret);
     }
