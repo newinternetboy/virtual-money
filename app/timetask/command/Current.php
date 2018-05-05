@@ -58,15 +58,18 @@ class Current extends Command
                 //执行更新操作
                 Db::startTrans();
                 try {
-                    $sql = "update currency set rest_number=rest_number-{$day_releast},send_number=send_number+{$day_releast} where id={$list2['id']}";
-                    Db::query($sql);
+/*                    $sql = "update currency set rest_number=rest_number-{$day_releast},send_number=send_number+{$day_releast} where id={$list2['id']}";*/
+                    Db::table('currency')->where('id',$list2['id'])->setDec('rest_number',$day_releast);
+                    Db::table('currency')->where('id',$list2['id'])->setInc('send_number',$day_releast);
+//                    Db::query($sql);
                     //发币成功则记录发币信息到发币信息表(release)
                     $this->release->currency_id = $k;
                     $this->release->release_number = $day_releast;
                     $this->release->isUpdate(false)->save();
                     //更新钱包表
-                    $sql2 = "update wallet set account_balance =account_balance+{$day_releast} where u_id={$list2['cid']}";
-                    Db::query($sql2);
+/*                    $sql2 = "update wallet set account_balance =account_balance+{$day_releast} where u_id={$list2['cid']}";*/
+                    Db::table('wallet')->where('u_id',$list2['cid'])->setInc('account_balance',$day_releast);
+//                    Db::query($sql2);
                     Db::commit();
                 } catch (\Exception $e) {
                     //发币失败日志表

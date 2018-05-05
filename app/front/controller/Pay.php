@@ -18,7 +18,6 @@ use Endroid\QrCode\LabelAlignment;
 use Endroid\QrCode\QrCode;
 
 use app\timetask\model\Wallet;
-use app\timetask\model\Currency;
 use app\admin\model\Payorder;
 class Pay extends Controller
 {
@@ -110,7 +109,8 @@ class Pay extends Controller
         }
         //获取该用户钱包的虚拟币的数量
         $u_id = $_SESSION['user']['cid'];
-        $wallet = Wallet::get(['u_id' => $u_id])->getData('account_balance');
+//        $wallet = Wallet::get(['u_id' => $u_id])->getData('account_balance');
+        $wallet = Db::table('wallet')->where('u_id',$u_id)->value('account_balance');
         $checkresult = bcsub($wallet,$pay_amount,4);
         if(!$checkresult){
             return json([
@@ -143,11 +143,14 @@ class Pay extends Controller
         Db::startTrans();
         try{
             //支付方扣币
-            $sql1 = "update wallet set account_balance =account_balance-{$this->pay_amount} where u_id={$u_id}";
+            Db::table('wallet')->where('u_id',$u_id)->setDec('account_balance',$this->pay_amount);
+/*            $sql1 = "update wallet set account_balance =account_balance-{$this->pay_amount} where u_id={$u_id}";*/
             //接收方收币
-            $sql2 = "update wallet set account_balance =account_balance+{$this->pay_amount} where u_id={$u_id_to}";
-            Db::query($sql1);
-            Db::query($sql2);
+/*            $sql2 = "update wallet set account_balance =account_balance+{$this->pay_amount} where u_id={$u_id_to}";*/
+            Db::table('wallet')->where('u_id',$u_id_to)->setInc('account_balance',$this->pay_amount);
+//            Db::query($sql1);
+//            Db::query($sql2);
+
             //记下交易记录
             $pay_order = new Payorder();
             $order_id_to = 't_'.$u_id_to.date('YmdHis').mt_rand(1000,9999);
@@ -172,5 +175,4 @@ class Pay extends Controller
             ]);
         }
     }
-
 }
