@@ -62,7 +62,9 @@
                                     {default /}未定义
                                     {/switch}
                                 </td>
-                                <td><button class="btn btn-danger" onclick="deleteInvitation('{$vo.id}')">{:lang('Delete')}</button></td>
+                                <td>
+                                    <button class="btn btn-primary" onclick="sendOne('{$vo.id}')">邀请</button>
+                                    <button class="btn btn-danger" onclick="deletePhone('{$vo.id}')">{:lang('Delete')}</button></td>
                             </tr>
                             {/volist}
                             </tbody>
@@ -132,10 +134,10 @@
     </div>
 </div>
 <script>
-    function deleteInvitation(id){
+    function deletePhone(id){
         alertConfirm('确定要这一项吗？',function(){
             $.ajax({
-                url:"{:url('admin/invitation/deleteInvitationByid')}",
+                url:"{:url('admin/invitation/deletePhoneByid')}",
                 method:'post',
                 dataType:'json',
                 data: {id: id},
@@ -205,6 +207,7 @@
     }
 
     function sub1(){
+        $('#sub1').prop('disabled',true);
         var state = $('#send_state').val();
         $.ajax({
             url:"{:url('admin/invitation/sendAll')}",
@@ -215,9 +218,33 @@
             success: function(res){
                 if(res.code != 200){
                     alertMsg(res.msg);
+                    $('#sub1').prop('disabled',false);
                 }else{
                     alertMsg(res.msg,2);
                     setTimeout(function(){window.location.href=''},2000)
+                    $('#sub1').prop('disabled',false);
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+                $('#sub1').prop('disabled',false);
+            }
+        })
+    }
+
+    function sendOne(id){
+        $.ajax({
+            url:"{:url('admin/invitation/sendOne')}",
+            method:'post',
+            dataType:'json',
+            data: {id: id},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code != 200){
+                    alertMsg(res.msg,2);
+                }else{
+                    alertMsg(res.msg,2);
+                    setTimeout(function(){window.location.href=''},3000)
                 }
             },
             error:function(){

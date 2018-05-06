@@ -1,0 +1,31 @@
+<!--底部导航栏-->
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<div  class="am-navbar am-cf am-navbar-default "
+      id="nav-wrap">
+    <ul id="bottom-nav" class="am-navbar-nav am-cf am-avg-sm-4">
+        <li >
+            <a href="{:url('front/index/index')}" id="first" >
+                <span class="am-icon-newspaper-o" ></span>
+                <span class="am-navbar-label" >资讯</span>
+            </a>
+        </li>
+        <li>
+            <a href="{:url('front/pay/payMoney')}" id="second">
+                <span class="am-icon-credit-card"></span>
+                <span class="am-navbar-label">支付</span>
+            </a>
+        </li>
+        <li>
+            <a href="{:url('front/user/user')}" id="three">
+                <span class="am-icon-user"></span>
+                <span class="am-navbar-label">我的</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<script>
+    $(function(){
+        var nav = $('#nav').val();
+        $('#'+nav).find('span').css('color','rgb(92,109,249)');
+    })
+</script>

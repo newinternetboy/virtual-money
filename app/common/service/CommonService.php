@@ -111,9 +111,6 @@ class CommonService
         return $this->dbModel->getColumn($where,$col);
     }
 
-    public function selectLimitInfo($where,$field,$skip,$limit){
-        return $this->dbModel->selectLimitInfo($where,$field,$skip,$limit);
-    }
 
     public function delMany($where){
         return $this->dbModel->delMany($where);

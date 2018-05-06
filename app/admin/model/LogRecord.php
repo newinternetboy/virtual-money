@@ -12,11 +12,7 @@ use \think\Session;
 class LogRecord extends Admin
 {
     protected $updateTime = false;
-    protected $insert     = ['ip', 'user_id','browser','os'];
-    protected $type       = [
-        'create_time' => 'timestamp',
-    ];
-
+    protected $insert     = ['ip', 'user_id'];
     /*
      * 关联user表;
      */
@@ -34,22 +30,6 @@ class LogRecord extends Admin
     }
 
     /**
-     * 浏览器把版本
-     */
-    protected function setBrowserAttr()
-    {
-        return \app\common\tools\Visitor::getBrowser().'-'.\app\common\tools\Visitor::getBrowserVer();
-    }
-
-    /**
-     * 系统类型
-     */
-    protected function setOsAttr()
-    {
-        return \app\common\tools\Visitor::getOs();
-    }
-
-    /**
      * 用户id
      */
     protected function setUserIdAttr()
@@ -62,9 +42,9 @@ class LogRecord extends Admin
         return $user_id;
     }
  
-    public function record($remark,$data = '')
+    public function record($data)
     {
-        $this->save(['remark' => $remark,'data' => serialize($data)]);
+        $this->save($data);
     }
 
 
@@ -79,92 +59,9 @@ class LogRecord extends Admin
      */
     public function getLogrecord($where,$data)
     {
-        return $this->order('create_time')->where($where)->paginate()->appends($data);
+        return $this->order('create_time desc')->where($where)->paginate()->appends($data);
     }
 
-    //解析数据；
-    public function translate($data){
-        $arr=[];
-        foreach($data as $key=>$value){
-            foreach(config('extra_config.changeData') as $k=>$val){
-                if($key == $k ){
-                    $arr[lang($val)] = $value;
-                }
-            }
-        }
-        return $arr;
-    }
-    //公共的解析方法；
-    public function common_trans($data){
-        $datas = $this->translate($data);
-        return json_encode($datas,JSON_UNESCAPED_UNICODE);
-    }
-    //解析表具修改
-    public function MeterUpdate($data){
-        $meter = $this->translate($data['meter']);
-        $consumer = $this->translate($data['consumer']);
-        $datas = array_merge($meter,$consumer);
-        return json_encode($datas,JSON_UNESCAPED_UNICODE);
-    }
-    //解析表具报装
-    public function MeterBinding($data){
-        $meter = $this->translate($data['meter']);
-        $consumer = $this->translate($data['consumer']);
-        $datas = array_merge($meter,$consumer);
-        return json_encode($datas,JSON_UNESCAPED_UNICODE);
-    }
-    //解析登录成功；
-    public function LoginSucceed($data){
-        return '登录成功';
-    }
 
-    //解析登出成功；
-    public function Loginout($data){
-        return '登出成功';
-    }
-
-    //解析删除公共的方法；
-    public function commonDeleteTrans($data){
-        $arr['id'] = $data;
-        $datas = $this->translate($arr);
-        return json_encode($datas,JSON_UNESCAPED_UNICODE);
-    }
-
-    //解析表具删除；
-    public function MeterDelete($data){
-        $arr['M_Code'] = $data;
-        $datas = $this->translate($arr);
-        return json_encode($datas,JSON_UNESCAPED_UNICODE);
-    }
-
-    public function downloadTrans($data){
-        foreach($data as & $value){
-            $value=$this->translate($value);
-        }
-        return json_encode($data,JSON_UNESCAPED_UNICODE);
-    }
-    /********以下未清分平台的解析***********/
-    //解析扣除余额；
-    public function deduct($data){
-        if(is_array($data['source'])){
-            foreach($data['source'] as & $value){
-            $value = $this->translate($value);
-            }
-            $source = $data['source'];
-        }else{
-            $arr=['excel_file_path'=>$data['source']];
-            $source = $this->translate($arr);
-        }
-        if(empty($data['faildata'])){
-            $faildata = [];
-        }else{
-            foreach($data['faildata'] as & $value){
-                $value = $this->translate($value);
-            }
-            $faildata = $data['faildata'];
-        }
-        $datas = array_merge($source,$faildata);
-        return json_encode($datas,JSON_UNESCAPED_UNICODE);
-    }
 
 }

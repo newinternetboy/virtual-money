@@ -2,18 +2,22 @@
 /**
  * Created by PhpStorm.
  * User: Administrator
+<<<<<<< HEAD
  * Date: 2018/5/2 0002
  * Time: 21:34
+=======
+ * Date: 2018/5/1 0001
+ * Time: 14:02
+>>>>>>> upstream/master
  */
 
 namespace app\front\controller;
 
-use think\Controller;
-class User extends Controller
+
+class User extends Home
 {
-    public function login(){
-/*            $phone = input('post.phone');
-            $password = input('post.password');*/
-    echo '111';
+    public function user(){
+        return $this->fetch();
     }
+
 }

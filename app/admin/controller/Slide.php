@@ -65,7 +65,11 @@ class Slide extends Admin
             if (!$slideService->upsert($data, false)) {
                 exception($slideService->getError());
             }
-            model('LogRecord')->record('Save Slide',$data);
+            $logdata=[
+                'remark'=>'编辑幻灯片',
+                'desc' => '添加/修改了描述为 '.$data['desc'].'的幻灯片'
+            ];
+            model('LogRecord')->record($logdata);
         } catch (\Exception $e) {
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();
@@ -82,6 +86,11 @@ class Slide extends Admin
             $ret['code'] = 201;
             $ret['msg'] = lang('Delete Fail');
         }
+        $logdata=[
+            'remark'=>'删除幻灯片',
+            'desc' => '删除了一张幻灯片'
+        ];
+        model('LogRecord')->record($logdata);
         return json($ret);
     }
 

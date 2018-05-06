@@ -175,4 +175,8 @@ class Pay extends Controller
             ]);
         }
     }
+
+    public function payMoney(){
+        return $this->fetch('pay');
+    }
 }

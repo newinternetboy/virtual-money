@@ -1,0 +1,8 @@
+*{ padding:0; margin:0; font-size:12px;color:rgb(84,84,84);}
+ul,li{ list-style:none;}
+.news_box{ height:40px; overflow:hidden;box-sizing: border-box;width: 100%;padding: 0 31px;line-height: 40px;}
+.t_news{background: #fff;box-sizing: border-box;border-radius: 40px;width: 100%;  color:#000; padding-left:11px; overflow:hidden; position:relative;}
+/*.t_news b{ line-height:19px; font-weight:bold; display:inline-block;}*/
+.news_li,.swap{ margin:0;line-height:40px; display:inline-block; position:absolute; top:0; left:30px;}
+.news_li a,.swap a{ color:rgb(84, 84, 84);}
+.swap{top:40px;}

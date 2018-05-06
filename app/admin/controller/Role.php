@@ -68,10 +68,14 @@ class Role extends Admin
             }
         }
         if( !model('role')->saveData( $data ) ){
-            Log::record(['保存角色失败' => model('Role')->getError(),'data' => $data],'error');
             $this->error('操作失败');
         }
-        Loader::model('LogRecord')->record( 'Save Role',$data );
+        $logdata=[
+            'remark'=>'修改/添加角色',
+            'desc' => '修改/添加了'.$data['name'],
+            'data' => $data
+        ];
+        Loader::model('LogRecord')->record($logdata);
         $this->success(lang('Save success'));
     }
 
@@ -86,15 +90,18 @@ class Role extends Admin
         //判断当前用户是否对$id里的角色有操作权限
         $roles = model('Role')->getRolesById($id);
         if( count($roles) != count(explode(',',$id)) ){
-            Log::record(['删除角色失败' => 0,'data' => $id],'error');
             $this->error('操作失败,信息有误');
         }
 
         if( !model('Role')->deleteById($id) ){
-            Log::record(['删除角色失败' => model('Role')->getError(),'data' => $id],'error');
             $this->error('操作失败');
         }
-        Loader::model('LogRecord')->record( 'Delete Role',$id );
+        $logdata=[
+            'remark'=>'删除角色',
+            'desc' => '删除了一个角色',
+            'data' => $id
+        ];
+        Loader::model('LogRecord')->record($logdata);
         $this->success(lang('Delete succeed'));
     }
 }

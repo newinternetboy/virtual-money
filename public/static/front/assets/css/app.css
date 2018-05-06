@@ -1,0 +1,132 @@
+/* Write your styles */
+body{
+	background: #f5f5f5;
+}
+h2{
+	padding: 0;
+	margin: 0;
+}
+#change{
+	background: white;
+	height: 44px;
+	line-height: 44px;
+	padding: 0 21px;
+	margin-top: 20px;
+}
+#change button{
+	margin-top: 13px;
+	float: right;
+	height: 18px;
+	width: 36px;
+	box-sizing: border-box;
+	padding: 0;
+	/*line-height: 36px;*/
+}
+#hangqingTitle{
+	height: 32px;
+	line-height: 32px;
+	text-align: center;
+}
+#hangqingTitle .hr{
+	display: inline-block;
+	height: 1px;
+	width: 134px;
+	border-top: 1px solid #e2e1e1;
+	margin-top: 15.5px;
+}
+#hangqingTitle h2{
+	display: inline-block;
+	color: #545454;
+	font-size: 12px;
+}
+#news-header{
+	height: 44px;
+	box-sizing: border-box;
+	padding-left: 21px;
+	background: white;
+	line-height: 44px;
+	border-bottom: 1px solid #e2e1e1;
+}
+#news-header h2{
+	height: 14px;
+	color: #5c6df9;
+	font-size:14px;
+}
+#news-list{
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+#news-list li{
+	box-sizing: border-box;
+	padding: 10.5px 10.5px;
+	border-bottom: 1px solid rgb(237,235,235);
+	width: 100%;
+	background: white;
+}
+.news-img{
+	width:108px;
+	height: 74px;
+	border-radius: 12px;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+}
+.news-text{
+	display: inline-block;
+	width: 180px;
+	vertical-align: top;
+	margin: 0;
+	padding: 0;
+	/*margin-left: 25px;*/
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+	font-size: 14px;
+}
+.artical{
+	margin-left: 10px;
+	display: inline-block;
+	width: 180px;
+	vertical-align: top;
+	position: relative;
+	height: 74px;
+}
+.user-header{
+	height: 165px;
+	width: 100%;
+	background-image: url(../../img/userbg.jpg);
+	background-size: cover;
+	text-align: center;
+}
+.user-header h1{
+	color: white;
+	text-align:center;
+	padding-top: 20px;
+}
+.user-header .am-btn{
+	background: none;
+	padding: 5px 25px;
+	border: 1px solid white;
+	color: white;
+	display: inline-block;
+	margin-top: 30px;
+}
+.am-g{
+	height: 44px;
+	background: white;
+	text-align: center;
+	line-height: 44px;
+}
+#bottom-nav{
+	background: white;
+
+}
+#bottom-nav a{
+	color: #545454;
+	
+}
+#nav-wrap{
+	border-top: 1px solid #edebeb;
+}

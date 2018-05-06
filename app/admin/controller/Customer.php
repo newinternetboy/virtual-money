@@ -33,6 +33,12 @@ class Customer extends Admin
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();
         }
+        $logdata=[
+            'remark'=>'删除客户',
+            'desc' => '删除了手机号为'.$customerInfo['tel'].'的客户',
+            'data' => serialize($customerInfo)
+        ];
+        model('LogRecord')->record($logdata);
         return json($ret);
     }
 
@@ -72,7 +78,12 @@ class Customer extends Admin
             if (!$customerService->upsert($data,'Customer.upsert')) {
                 exception($customerService->getError());
             }
-            model('LogRecord')->record('Save Register',$data);
+            $logdata=[
+                'remark'=>'修改/添加客户',
+                'desc' => '修改/添加了手机号为'.$data['tel'].'的客户',
+                'data' => serialize($data)
+            ];
+            model('LogRecord')->record($logdata);
         } catch (\Exception $e) {
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();
@@ -99,7 +110,12 @@ class Customer extends Admin
                 'num' =>$data['number']
             ];
             $this->sendSms($customer['tel'],$smscode,$params);
-            model('LogRecord')->record('添加待下发币',$data);
+            $logdata=[
+                'remark'=>'添加待下发的币',
+                'desc' => '给客户'.$customer['login_name'].'增加了'.$data['number'].'待下发的瑞福通！',
+                'data' => serialize($data)
+            ];
+            model('LogRecord')->record($logdata);
         } catch (\Exception $e) {
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();
@@ -112,10 +128,18 @@ class Customer extends Admin
         $ret['code'] = 200;
         $ret['msg'] = "删除成功！";
         $customerService = new CustomerService();
+        if(!$customer = $customerService->findInfo(['id'=>$id])){
+            exception('此客户不存在');
+        }
         if(!$customerService->del($id)){
             $ret['code'] = 201;
             $ret['msg'] = lang('Delete Fail');
         }
+        $logdata=[
+            'remark'=>'删除客户',
+            'desc' => '删除登录名为'.$customer['login_name'].'的客户！'
+        ];
+        model('LogRecord')->record($logdata);
         return json($ret);
     }
     //根据id删除待下发信息；
@@ -124,10 +148,16 @@ class Customer extends Admin
         $ret['code'] = 200;
         $ret['msg'] = "删除成功！";
         $currencyService = new CurrencyService();
+        $currency = $currencyService->findInfo(['id'=>$id]);
         if(!$currencyService->del($id)){
             $ret['code'] = 201;
             $ret['msg'] = "删除失败";
         }
+        $logdata=[
+            'remark'=>'删除待下发币',
+            'desc' => '删除了一条数量为'.$currency['number'].'的待下发记录！'
+        ];
+        model('LogRecord')->record($logdata);
         return json($ret);
     }
 
@@ -156,9 +186,18 @@ class Customer extends Admin
         $ret['msg'] = "操作成功！";
         try {
             $walletService = new WalletService();
+            $customerService = new CustomerService();
+            if(!$customer = $customerService->findInfo(['id'=>$uid])){
+                exception('该用户不存在');
+            }
             if(!$res = $walletService->doSetInc(['u_id'=>$uid],['account_balance',$number])){
                 exception($walletService->getError());
             }
+            $logdata=[
+                'remark'=>'增加福瑞通',
+                'desc' => '给登录名为'.$customer['login_name'].'的客户增加了'.$number.'个福瑞通！'
+            ];
+            model('LogRecord')->record($logdata);
         } catch (\Exception $e) {
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();

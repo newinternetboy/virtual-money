@@ -13,10 +13,10 @@ class ArticleModel extends Common
 {
     public $table = 'article';
 
-    public function selectLimitInfo($where,$field,$skip,$limit){
+    public function selectLimitInfo($where,$field,$skip,$limit,$order){
         if( $field ){
-            return $this->where($where)->limit($skip,$limit)->field($field)->order('recommend_level','desc')->order('create_time','desc')->select();
+            return $this->where($where)->limit($skip,$limit)->field($field)->order($order)->select();
         }
-        return $this->where($where)->limit($skip,$limit)->order('recommend_level','desc')->order('create_time','desc')->select();
+        return $this->where($where)->limit($skip,$limit)->order($order)->select();
     }
 }

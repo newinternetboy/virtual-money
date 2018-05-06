@@ -62,7 +62,12 @@ class Register extends Admin
             if (!$registerService->upsert($data, false)) {
                 exception($registerService->getError());
             }
-            model('LogRecord')->record('Save Register',$data);
+            $logdata=[
+                'remark'=>'添加客户登记',
+                'desc' => '登记了一条手机号为'.$data['tel'].'的信息',
+                'data' => serialize($data)
+            ];
+            model('LogRecord')->record($logdata);
         } catch (\Exception $e) {
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();
@@ -75,10 +80,19 @@ class Register extends Admin
         $ret['code'] = 200;
         $ret['msg'] = "删除成功！";
         $registerService = new RegisterService();
+        if(!$register = $registerService->findInfo(['id'=>$id])){
+            $ret['code'] = 201;
+            $ret['msg'] = '登记信息不存在!';
+        }
         if(!$registerService->del($id)){
             $ret['code'] = 201;
             $ret['msg'] = lang('Delete Fail');
         }
+        $logdata=[
+            'remark'=>'删除客户登记',
+            'desc' => '删除了一条手机号为'.$register['tel'].'的客户登记信息'
+        ];
+        model('LogRecord')->record($logdata);
         return json($ret);
     }
 
@@ -162,6 +176,11 @@ class Register extends Admin
             if(!$registerService->upsert($res,false)){
                 exception("修改登记表状态失败");
             }
+            $logdata=[
+                'remark'=>'生成客户或增币',
+                'desc' => '给手机号为'.$registerInfo['tel'].'的客户生成一条客户信息，赠送了'.$registerInfo['number'].'个待下发的福瑞通！',
+            ];
+            model('LogRecord')->record($logdata);
         }catch (\Exception $e){
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();
