@@ -23,6 +23,7 @@ class Pay extends Controller
 {
     public $wallet_address;
     public $pay_amount;
+    public $pay_msg;
     //二维码（根据钱包地址生成）
     public function codeImage(){
 /*
@@ -67,7 +68,8 @@ class Pay extends Controller
     //获取明文钱包地址
     public function getUserWalletAdress(){
         //登陆后用户的id，要存在session中
-        $cid = $_SESSION['user']['cid'];
+        $u_info = session('users');
+        $cid = $u_info['id'];
         //获取钱包地址
         $wallet_address = Customer::get(['id'=>$cid])->getData('wallet_address');
         if($wallet_address){
@@ -108,7 +110,8 @@ class Pay extends Controller
             ]);
         }
         //获取该用户钱包的虚拟币的数量
-        $u_id = $_SESSION['user']['cid'];
+        $u_info = session('users');
+        $u_id = $u_info['id'];
 //        $wallet = Wallet::get(['u_id' => $u_id])->getData('account_balance');
         $wallet = Db::table('wallet')->where('u_id',$u_id)->value('account_balance');
         $checkresult = bcsub($wallet,$pay_amount,4);
@@ -116,7 +119,7 @@ class Pay extends Controller
             return json([
                 'msg' => '钱包余额不足',
                 'code' => 300,
-                'status' => fasle
+                'status' => false
             ]);
         }
         return true;
@@ -124,9 +127,11 @@ class Pay extends Controller
 
     //支付
     public function pay(){
-        $u_id = $_SESSION['user']['cid'];
+        $u_info = session('users');
+        $u_id = $u_info['id'];
         $this->pay_amount = trim(input('post.pay_amount'));
         $this->wallet_address = trim(input('post.wallet_address'));
+        $this->pay_msg = trim(input('post.pay_msg'));
         $checkWallet = $this->getAllWalletAdress();
         if($checkWallet!==true){
             return $checkWallet;
@@ -155,9 +160,10 @@ class Pay extends Controller
             $pay_order = new Payorder();
             $order_id_to = 't_'.$u_id_to.date('YmdHis').mt_rand(1000,9999);
             $order_id_from = 'f_'.$u_id.date('YmdHis').mt_rand(1000,9999);
+            $pay_msg =$this->pay_msg;
             $list =[
-                ['order_id'=>$order_id_to,'u_id'=>$u_id,'volume'=>$this->pay_amount,'pay_type'=>1],
-                ['order_id'=>$order_id_from,'u_id'=>$u_id_to,'volume'=>$this->pay_amount,'pay_type'=>2],
+                ['order_id'=>$order_id_to,'u_id'=>$u_id,'volume'=>$this->pay_amount,'pay_type'=>1,'pay_msg'=>$pay_msg],
+                ['order_id'=>$order_id_from,'u_id'=>$u_id_to,'volume'=>$this->pay_amount,'pay_type'=>2,'pay_msg'=>$pay_msg],
             ];
             $pay_order->saveAll($list);
         Db::commit();
@@ -179,4 +185,22 @@ class Pay extends Controller
     public function payMoney(){
         return $this->fetch('pay');
     }
+
+    //交易记录
+    public function orderList(){
+        $u_info = session('users');
+        $u_id = $u_info['id'];
+        $order_list = Db::table('payorder')->field('order_id,volume,pay_type,pay_msg')->where('u_id',$u_id)->select();
+        if($order_list){
+            $ret['code'] = 200;
+            $ret['status'] = true;
+            $ret['data'] = $order_list;
+            return json($ret);
+        }
+        $ret['code'] = 300;
+        $ret['status'] = false;
+        $ret['msg'] = '暂无交易记录';
+        return json($ret);
+    }
+
 }
