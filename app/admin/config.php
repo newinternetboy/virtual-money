@@ -86,34 +86,18 @@ return [
         'list_rows' => 10
     ],
 
-//    'logtypes'    =>[
-//        'Save Area',
-//        'Delete Area',
-//        'Save AuthRule',
-//        'Delete AuthRule',
-//        'Save AuthAccess',
-//        'Update Blacklist Param',
-//        'Delete Blacklist Param',
-//        'Login succeed',
-//        'Logout succeed',
-//        'Save Meter',
-//        'Pass Meter',
-//        'Change Meter',
-//        'Edit Meter',
-//        'Charge Meter',
-//        'Delete Meter',
-//        'Edit MeterParam',
-//        'Delete MeterParam',
-//        'Save Price',
-//        'Delete Price',
-//        'Save Role',
-//        'Delete Role',
-//        'Save User',
-//        'Delete User',
-//        'Update Password',
-//        'Download Price',
-//        'Download Meterparam'
-//    ],
-
-//测试提交的一行注释
+    'phoneState'   =>[
+        1 =>'未邀请过的',
+        2 => '邀请过的'
+    ],
+    'logtypes' =>[
+        '添加/修改权限',
+        '增加福瑞通',
+        '修改/添加客户',
+        '删除客户',
+        '发送邀请码',
+        '删除邀请码',
+        '生成邀请码',
+        '删除手机号',
+    ],
 ];

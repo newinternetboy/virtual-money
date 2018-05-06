@@ -43,7 +43,11 @@ class Article extends Admin
             if (!$articleService->upsert($data, false)) {
                 exception($articleService->getError());
             }
-            model('LogRecord')->record('Save Article',$data);
+            $logdata=[
+                'remark'=>'添加/修改文章',
+                'desc' => '添加/修改了标题为'.$data['title'].'的文章'
+            ];
+            model('LogRecord')->record($logdata);
         } catch (\Exception $e) {
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();
@@ -60,6 +64,11 @@ class Article extends Admin
             $ret['code'] = 201;
             $ret['msg'] = lang('Delete Fail');
         }
+        $logdata=[
+            'remark'=>'删除文章',
+            'desc' => '删除了一篇文章'
+        ];
+        model('LogRecord')->record($logdata);
         return json($ret);
     }
 

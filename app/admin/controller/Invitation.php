@@ -30,7 +30,12 @@ class Invitation extends Admin
             if (!$invitationService->insertAll($arr)) {
                 exception($invitationService->getError());
             }
-            model('LogRecord')->record('生成邀请码',$arr);
+            $logdata=[
+               'remark'=>'生成邀请码',
+               'data' => serialize($arr),
+               'desc' => '生成了'.$number.'条邀请码'
+            ];
+            model('LogRecord')->record($logdata);
         } catch (\Exception $e) {
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();
@@ -58,10 +63,21 @@ class Invitation extends Admin
         $ret['code'] = 200;
         $ret['msg'] = "删除成功！";
         $invitationService = new InvitationService();
+        if(!$int_Info=$invitationService->findInfo(['id'=>$id])){
+            $ret['code'] = 201;
+            $ret['msg'] = "没有此邀请码！";
+        }
         if(!$invitationService->del($id)){
             $ret['code'] = 201;
             $ret['msg'] = "操作失败";
         }
+
+
+        $logdata=[
+            'remark'=>'删除邀请码',
+            'desc' => '删除了邀请码为'.$int_Info['in_code'].'的邀请码'
+        ];
+        model('LogRecord')->record($logdata);
         return json($ret);
     }
 
@@ -120,6 +136,12 @@ class Invitation extends Admin
             if(!$phoneService->insertAll($filedata)){
                 exception("添加失败！请重试");
             }
+            $logdata=[
+                'remark'=>'导入手机号',
+                'desc' => '导入了手机号的excel',
+                'data' => serialize($filedata)
+            ];
+            model('LogRecord')->record($logdata);
         }catch (\Exception $e){
             $ajaxReturn['code'] = 400;
             $ajaxReturn['msg'] = $e->getMessage();
@@ -182,7 +204,16 @@ class Invitation extends Admin
                 $invitationService->update(['in_code'=>$code['in_code']],['state'=>2]);
                 $phoneService->update(['tel'=>$value['tel']],['state'=>2]);
             }
-            model('LogRecord')->record('发送邀请码',$state);
+            //解析$state;
+            $phonestate = "所有号码";
+            if($state){
+                $phonestate = config('phoneState')[$state];
+            }
+            $logdata=[
+                'remark'=>'发送邀请码',
+                'desc' => '给状态为'.$phonestate.'的手机号发送了邀请码'
+            ];
+            model('LogRecord')->record($logdata);
         } catch (\Exception $e) {
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();
@@ -216,7 +247,11 @@ class Invitation extends Admin
             $this->sendSms($phoneInfo['tel'],$smscode,$params);
             $invitationService->update(['in_code'=>$code['in_code']],['state'=>2]);
             $phoneService->update(['tel'=>$phoneInfo['tel']],['state'=>2]);
-            model('LogRecord')->record('发送邀请码',$id);
+            $logdata=[
+                'remark'=>'发送邀请码',
+                'desc' => '给手机号码为'.$phoneInfo['tel'].'的手机号发送了邀请码'
+            ];
+            model('LogRecord')->record($logdata);
         } catch (\Exception $e) {
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();
@@ -229,10 +264,19 @@ class Invitation extends Admin
         $ret['code'] = 200;
         $ret['msg'] = "删除成功！";
         $phoneService = new PhoneService();
+        if(!$phoneInfo=$phoneService->findInfo(['id'=>$id])){
+            $ret['code'] = 201;
+            $ret['msg'] = "没有此手机号码！";
+        }
         if(!$phoneService->del($id)){
             $ret['code'] = 201;
             $ret['msg'] = "操作失败";
         }
+        $logdata=[
+            'remark'=>'删除手机号',
+            'desc' => '删除了手机号码为'.$phoneInfo['tel'].'的手机号'
+        ];
+        model('LogRecord')->record($logdata);
         return json($ret);
     }
 

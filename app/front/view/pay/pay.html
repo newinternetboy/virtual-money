@@ -1,0 +1,127 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Hello Amaze UI</title>
+
+  <!-- Set render engine for 360 browser -->
+  <meta name="renderer" content="webkit">
+
+  <!-- No Baidu Siteapp-->
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+  <link rel="icon" type="image/png" href="__front__/assets/i/favicon.png">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="__front__/assets/i/app-icon72x72@2x.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+  <link rel="apple-touch-icon-precomposed" href="__front__/assets/i/app-icon72x72@2x.png">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="__front__assets/i/app-icon72x72@2x.png">
+  <meta name="msapplication-TileColor" content="#0e90d2">
+
+  <link rel="stylesheet" href="__front__/assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="__front__/assets/css/app.css">
+  <link rel="stylesheet" href="__front__/assets/css/yuan.css">
+  <link type="text/css" href="__front__/css/jq22.css" rel="stylesheet" />
+  <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
+  <script type="text/javascript" src="__front__/js/jq22.js"></script>
+</head>
+<body>
+	<!--页头-->
+	<header class="am-header" style="background-image:url(__front__/img/header2.jpg) ;background-size: cover;">
+        <input type="hidden" id="nav" value="second" />
+      <h1 class="am-header-title" style="color: white;font-size: 18px;">     
+            		支付     
+      </h1>
+
+  </header>
+	<!--页头结束-->
+<!--接收方-->
+	<div class="pay_accept">
+		<div>
+			<p class="pay_tit">接收方</p>
+			<div>
+				<input class="pay_ipt" id="payurl" placeholder="輸入或掃碼添加對方地址"/>
+				<span class="am-icon-minus-square-o" id="saoma"></span>
+			</div>
+			
+		</div>
+	</div>
+	<!--接收方结束-->
+	<!--数量开始-->
+	<div class="pay_num">
+		<div>
+			<p class="pay_tit">數量</p>
+			<div>
+				<input class="pay_ipt" placeholder="0.0000" />
+				<span style="float:right;color:#6275F8;">RFT</span>
+			</div>
+		</div>
+	</div>
+	<!--数量结束-->
+	<!--备注开始-->
+	<div class="pay_remark">
+		<div>
+			<p class="pay_tit">備註</p>
+			<input class="pay_ipt" placeholder="添加备注（20字以内）"/>
+		</div>
+	</div>
+	<!--备注结束-->
+	<!--确认支付按钮开始-->
+	<div class="pay_btn">
+		 	<div id="PayBtn">確認支付</div>
+	</div>
+	<!--确认支付按钮结束-->
+
+	
+
+<script>
+	$(function(){
+		
+		if(GetQueryString("url")==""||GetQueryString("url")==null){
+			
+		}else{
+			$('#payurl').val(GetQueryString("url"))
+		}
+		
+		
+	
+		$('#saoma').click(function(){
+			window.location.assign('saoma.html')
+		})
+		
+		
+		function GetQueryString(name) {
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  unescape(r[2]); return null;
+}
+	})
+</script>
+<!--底部导航栏结束-->
+
+<!--在这里编写你的代码-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--<script src="assets/js/jquery.min.js"></script>-->
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="__front__/assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="__front__/assets/js/amazeui.min.js"></script>
+</body>
+</html>

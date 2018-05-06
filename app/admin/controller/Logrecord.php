@@ -15,8 +15,7 @@ class Logrecord extends Admin
         $this->assign('logtypes',$logtypes);
         $users = model('User')->getUserInfo([],'select','id,username');
         $this->assign('users',$users);
-        $where['company_id'] = $this->company_id;
-        $where['type'] = PLATFORM_ADMIN ;
+        $where = [];
         if($user_name){
             $where['user_id'] = $user_name;
         }
@@ -37,43 +36,6 @@ class Logrecord extends Admin
         $data['start_time'] = $start_time;
         $data['end_time']   = $end_time;
         $logrecord = model('LogRecord')->getLogrecord( $where , $data);
-//        var_dump($logrecord[0]['data']);die;
-        //对取出来的数据按照remark字段的值进行解析；返回的结果重新赋值给$logrecord;
-        foreach($logrecord as & $vol){
-            switch($vol['remark']){
-                case 'Edit Meter':
-                    $vol['data'] = model('LogRecord')->MeterUpdate($vol['data']);
-                    break;
-                case 'Save Meter':
-                    $vol['data'] = model('LogRecord')->MeterBinding($vol['data']);
-                    break;
-                case 'Delete Meter':
-                    $vol['data'] = model('LogRecord')->MeterDelete($vol['data']);
-                    break;
-                case 'Delete Area':
-                case 'Delete AuthRule':
-                case 'Delete Blacklist Param':
-                case 'Delete MeterParam':
-                case 'Delete Price':
-                case 'Delete Role':
-                case 'Delete User':
-                    $vol['data'] = model('LogRecord')->commonDeleteTrans($vol['data']);
-                    break;
-                case 'Download Price':
-                case 'Download Meterparam':
-                $vol['data'] = model('LogRecord')->downloadTrans($vol['data']);
-                    break;
-                case 'Login succeed':
-                    $vol['data'] = model('LogRecord')->LoginSucceed($vol['data']);
-                    break;
-                case 'Logout succeed':
-                    $vol['data'] = model('LogRecord')->Loginout($vol['data']);
-                    break;
-                default:
-                    $vol['data'] = model('LogRecord')->common_trans($vol['data']);
-                    break;
-            }
-        }
         $this->assign('user_name',$user_name);
         $this->assign('remark',$remark);
         $this->assign('start_time',$start_time);

@@ -115,12 +115,12 @@ class Common extends Model
         return $this->where($where)->column($col);
     }
 
-    public function selectLimitInfo($where,$field,$skip,$limit){
-        if( $field ){
-            return $this->where($where)->limit($skip,$limit)->field($field)->order('create_time','desc')->select();
-        }
-        return $this->where($where)->limit($skip,$limit)->order('create_time','desc')->select();
-    }
+//    public function selectLimitInfo($where,$field,$skip,$limit,$order){
+//        if( $field ){
+//            return $this->where($where)->limit($skip,$limit)->field($field)->order($order)->select();
+//        }
+//        return $this->where($where)->limit($skip,$limit)->order($order)->select();
+//    }
 
     public function delMany($where){
         return $this->where($where)->delete();

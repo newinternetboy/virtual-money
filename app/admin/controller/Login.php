@@ -50,7 +50,8 @@ class Login extends Common
 		}
 		unset($ret['data']['password']);
 		Session::set('userinfo', $ret['data'], 'admin');
-		Loader::model('LogRecord')->record( 'Login succeed' );
+
+		model('LogRecord')->record( ['remark'=>'登录成功']);
         return $this->success($ret['msg'], url('admin/index/index'));
 	}
 
@@ -59,7 +60,7 @@ class Login extends Common
 	 */
 	public function out()
 	{
-		Loader::model('LogRecord')->record('Logout succeed');
+		Loader::model('LogRecord')->record(['remark'=>'退出登录']);
 		session::clear('admin');
 		return $this->success('退出成功！', url('admin/login/index'));
 	}

@@ -62,7 +62,7 @@ return [
     // 禁止访问模块
     'deny_module_list'       => ['common'],
     //允许访问模块
-    'allow_module_list'      => ['manage','admin','api','timetask'],
+    'allow_module_list'      => ['manage','admin','api','timetask','front'],
     // 默认控制器名
     'default_controller'     => 'Index',
     // 默认操作名

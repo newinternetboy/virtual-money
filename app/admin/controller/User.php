@@ -100,12 +100,16 @@ class User extends Admin
         }
         $result = model('User')->saveData( $data );
         if( $result['code'] != 1 ){
-            Log::record(['保存用户失败' => $result['msg'],'data' => $data],'error');
             $this->error($result['msg']);
         }
         unset($data['password']);
         unset($data['password2']);
-        Loader::model('LogRecord')->record( 'Save User',$data );
+        $logdata=[
+            'remark'=>'修改/添加用户',
+            'desc' => '修改添加了用户'.$data['username'],
+            'data' => $data
+        ];
+        Loader::model('LogRecord')->record($logdata);
         $this->success(lang('Save success'));
     }
 
@@ -122,13 +126,15 @@ class User extends Admin
         if( in_array(1,array_values($administrators )) ){
             return info(lang('Delete without authorization'), 0);
         }
-
-
         if( !Loader::model('User')->deleteById($id) ){
-            Log::record(['删除用户失败' => model('User')->getError(),'data' => $id],'error');
             $this->error('操作失败');
         }
-        Loader::model('LogRecord')->record( 'Delete User',$id );
+        $logdata=[
+            'remark'=>'删除用户',
+            'desc' => '删除了一个用户',
+            'data' => $id
+        ];
+        Loader::model('LogRecord')->record($logdata);
         $this->success(lang('Delete succeed'));
     }
 

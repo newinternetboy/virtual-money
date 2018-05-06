@@ -16,4 +16,8 @@ class ArticleService extends CommonService
     {
         $this->dbModel = new ArticleModel();
     }
+
+    public function selectLimitInfo($where,$field,$skip,$limit,$order){
+        return $this->dbModel->selectLimitInfo($where,$field,$skip,$limit,$order);
+    }
 }

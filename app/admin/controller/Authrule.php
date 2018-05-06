@@ -128,7 +128,11 @@ class Authrule extends Admin
 			Log::record(['添加权限失败' => model('AuthRule')->getError(),'data' => json_encode($data)],'error');
 			$this->error('操作失败');
 		}
-		Loader::model('LogRecord')->record('Save AuthRule',$data );
+        $logdata=[
+            'remark'=>'添加/修改权限',
+            'desc' => '添加/修改了'.$data['title'],
+        ];
+		Loader::model('LogRecord')->record($logdata);
 		$this->success(lang('Save success'));
 	}
 
@@ -140,10 +144,14 @@ class Authrule extends Admin
 			return info(lang('Data ID exception'), 0);
 		}
 		if( !model('AuthRule')->deleteById($id) ){
-			Log::record(['删除权限失败' => model('AuthRule')->getError(),'data' => $id],'error');
 			$this->error('操作失败');
 		}
-		Loader::model('LogRecord')->record( 'Delete AuthRule',$id );
+        $logdata=[
+            'remark'=>'删除权限',
+            'desc' => '删除了一条权限',
+            'data' => $id
+        ];
+		Loader::model('LogRecord')->record($logdata);
 		$this->success(lang('Delete succeed'));
 	}
 
@@ -159,10 +167,14 @@ class Authrule extends Admin
 		$post_data = input('post.');
 		$data = isset($post_data['authrule'])?$post_data['authrule']:[];
 		if( !$res = model('AuthAccess')->saveData($post_data['role_id'], $data) ){
-			Log::record(['角色权限保存失败' => model('AuthAccess')->getError(),'data' => json_encode($post_data)],'error');
 			$this->error('操作失败');
 		}
-		Loader::model('LogRecord')->record('Save AuthAccess',$post_data );
+        $logdata=[
+            'remark'=>'配置角色权限',
+            'desc' => '配置了一条角色权限',
+            'data' => $post_data
+        ];
+		Loader::model('LogRecord')->record($logdata);
 		return $this->success(lang("Save success"),'admin/role/index');
 	}
 }
