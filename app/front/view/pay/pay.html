@@ -53,7 +53,7 @@
 		<div>
 			<p class="pay_tit">接收方</p>
 			<div>
-				<input class="pay_ipt" id="payurl" placeholder="輸入或掃碼添加對方地址"/>
+				<input class="pay_ipt" id="payurl" placeholder="輸入或掃碼添加對方地址" value="{$address}"/>
 				<span class="am-icon-minus-square-o" id="saoma"></span>
 			</div>
 			
@@ -65,7 +65,7 @@
 		<div>
 			<p class="pay_tit">數量</p>
 			<div>
-				<input class="pay_ipt" placeholder="0.0000" />
+				<input class="pay_ipt" id="amount" placeholder="0.0000" />
 				<span style="float:right;color:#6275F8;">RFT</span>
 			</div>
 		</div>
@@ -75,13 +75,13 @@
 	<div class="pay_remark">
 		<div>
 			<p class="pay_tit">備註</p>
-			<input class="pay_ipt" placeholder="添加备注（20字以内）"/>
+			<input class="pay_ipt" id ='pm' placeholder="添加备注（20字以内）"/>
 		</div>
 	</div>
 	<!--备注结束-->
 	<!--确认支付按钮开始-->
 	<div class="pay_btn">
-		 	<div id="PayBtn">確認支付</div>
+		 	<div id="PayBtn" onclick="pay()">確認支付</div>
 	</div>
 	<!--确认支付按钮结束-->
 
@@ -113,7 +113,30 @@
 <!--底部导航栏结束-->
 
 <!--在这里编写你的代码-->
-
+<script>
+function pay(){
+	var pay_amount = $('#amount').val();
+	var wa = $('#payurl').val();
+	var pay_msg = $('#pm').val();
+	$.ajax({
+		url:"{:url('front/Pay/pay')}",
+		method:'post',
+		dataType:'json',
+		data: {pay_amount: pay_amount,wallet_address:wa,pay_msg:pay_msg},
+		beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+		success: function(res){
+			if(res.code != 200){
+				alert(res.msg);
+			}else{
+				window.location.href='/front/index/index';
+			}
+		},
+		error:function(){
+			alert('系统错误，请稍后再试');
+		}
+	})
+}
+</script>>
 <!--[if (gte IE 9)|!(IE)]><!-->
 <!--<script src="assets/js/jquery.min.js"></script>-->
 <!--<![endif]-->

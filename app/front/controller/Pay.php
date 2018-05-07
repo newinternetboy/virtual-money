@@ -26,16 +26,16 @@ class Pay extends Controller
     public $pay_msg;
     //二维码（根据钱包地址生成）
     public function codeImage(){
-/*
-       var_dump($locolName);die;
-        $locolName = $_SERVER['SERVER_NAME'];
 
-        $url = 'https://'.$locolName.'/admin/coin/index';//加http://这样扫码可以直接跳转url*/
+//       var_dump($locolName);die;
+        //http://www.mycoin.com/front/pay/paymoney
+        $locolName = $_SERVER['SERVER_NAME'];
         $qrCode = new QrCode();
         $text = $this->getUserWalletAdress();
         if(!$text){
             $text = '暂无对应的钱包地址,请联系客户';
         }
+        $url = 'http://'.$locolName.'/front/pay/paymoney?wa='.urlencode($text);//加http://这样扫码可以直接跳转url
         $qrCode->setText($text);
         $qrCode->setSize(300);
 
@@ -183,7 +183,11 @@ class Pay extends Controller
     }
 
     public function payMoney(){
-        return $this->fetch('pay');
+        $wa = input('get.wa');
+        if ($wa){
+            return $this->fetch('pay',['address'=>$wa]);
+        }
+        return $this->fetch('pay',['address'=>'']);
     }
 
     //交易记录
@@ -201,6 +205,38 @@ class Pay extends Controller
         $ret['status'] = false;
         $ret['msg'] = '暂无交易记录';
         return json($ret);
+    }
+
+
+    public function codeImages(){
+        /*
+               var_dump($locolName);die;
+                $locolName = $_SERVER['SERVER_NAME'];
+
+                $url = 'https://'.$locolName.'/admin/coin/index';//加http://这样扫码可以直接跳转url*/
+        $qrCode = new QrCode();
+        $text = $this->getUserWalletAdress();
+        if(!$text){
+            $text = '暂无对应的钱包地址,请联系客户';
+        }
+        $qrCode->setText($text);
+        $qrCode->setSize(300);
+
+// Set advanced options
+        $qrCode->setWriterByName('png');
+        $qrCode->setMargin(10);
+        $qrCode->setEncoding('UTF-8');
+        $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH);
+        $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
+        $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
+        $qrCode->setLabel('Scan the code', 16, __DIR__.'/../../../vendor/endroid/qrcode/assets/noto_sans.otf', LabelAlignment::CENTER);
+        $qrCode->setLogoPath(__DIR__.'/../../../public/static/admin/images/coin.jpg');
+        $qrCode->setLogoWidth(100);
+        $qrCode->setValidateResult(false);
+
+// Directly output the QR code
+        header('Content-Type: '.$qrCode->getContentType());
+        echo $qrCode->writeString();exit;
     }
 
 }
