@@ -58,7 +58,7 @@ return [
     // +----------------------------------------------------------------------
 
     // 默认模块名
-    'default_module'         => 'admin',
+    'default_module'         => 'front',
     // 禁止访问模块
     'deny_module_list'       => ['common'],
     //允许访问模块
