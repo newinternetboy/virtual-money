@@ -29,54 +29,30 @@
 			<div style="text-align:center;">最新價</div>
 			<div style="text-align:right;">漲跌幅</div>
 		</div>
+		{if condition="$result"}
+		{volist name='result' id='vo' key='k'}
 		<div class="market_inner">
 			<a class="market_link">
-				<div class="market_inners" style="text-align:left;padding-left:6%;line-height:70px;color:rgb(47,47,47);">RFT</div>
+				<div class="market_inners" style="text-align:left;padding-left:6%;line-height:70px;color:rgb(47,47,47);">{$vo.name ?? '-'}</div>
 				<div class="market_inners" style="padding-top:8px;">
-					<p class="chinese_market">¥5171.40</p>
-					<p class="dollar_market">$782.95</p>
+					<p class="chinese_market">¥{$vo.price_now ?? '-'}</p>
+					<p class="dollar_market">${$vo.us_price ?? '-'}</p>
 				</div>
 				<div class="market_inners" style="text-align:center;line-height:70px;">
-					<div class="add_btn">+782.9</div>
+					{if condition="$vo.rate >=0"}
+					<div class="add_btn">{$vo.rate}%</div>
+					{else /}
+					<div class="reduce_btn">{$vo.rate}%</div>
+					{/if}
 				</div>
 			</a>
 		</div>
-		<div class="market_inner">
-			<a class="market_link">
-				<div class="market_inners" style="text-align:left;padding-left:6%;line-height:70px;color:rgb(47,47,47);">RFT</div>
-				<div class="market_inners" style="padding-top:8px;">
-					<p class="chinese_market">¥5171.40</p>
-					<p class="dollar_market">$782.95</p>
-				</div>
-				<div class="market_inners" style="text-align:center;line-height:70px;">
-					<div class="add_btn">+782.9</div>
-				</div>
-			</a>
-		</div>
-		<div class="market_inner">
-			<a class="market_link">
-				<div class="market_inners" style="text-align:left;padding-left:6%;line-height:70px;color:rgb(47,47,47);">RFT</div>
-				<div class="market_inners" style="padding-top:8px;">
-					<p class="chinese_market">¥5171.40</p>
-					<p class="dollar_market">$782.95</p>
-				</div>
-				<div class="market_inners" style="text-align:center;line-height:70px;">
-					<div class="reduce_btn">+782.9</div>
-				</div>
-			</a>
-		</div>
-		<div class="market_inner">
-			<a class="market_link">
-				<div class="market_inners" style="text-align:left;padding-left:6%;line-height:70px;color:rgb(47,47,47);">RFT</div>
-				<div class="market_inners" style="padding-top:8px;">
-					<p class="chinese_market">¥5171.40</p>
-					<p class="dollar_market">$782.95</p>
-				</div>
-				<div class="market_inners" style="text-align:center;line-height:70px;">
-					<div class="add_btn">+782.9</div>
-				</div>
-			</a>
-		</div>
+		{/volist}
+		{else /}
+			<div class="market_inner" style="">
+				<div style="text-align:center;line-height:70px;color:rgb(47,47,47);">暂无行情</div>
+			</div>
+		{/if}
 	</div>
 	<!--页面内容-->
 </body>
