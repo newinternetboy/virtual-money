@@ -21,11 +21,11 @@
                         <form action="">
                             <div class="form-group">
 
-                                <label  class="col-md-2 control-label">新闻排序</label>
+                                <label  class="col-md-2 control-label">标题</label>
                                 <div class="col-md-3">
                                     <input name="title" type="text" value="{$title}" class="form-control" />
                                 </div>
-                                <label  class="col-md-2 control-label">新闻排序</label>
+                                <label  class="col-md-2 control-label">所属分类</label>
                                 <div class="col-md-3">
                                     <select name="type" id="type" class="form-control">
                                         <option value="">所有</option>
@@ -70,7 +70,7 @@
                                         {default /}
                                         {/switch}
                                     </td>
-                                    <td style="max-width: 190px;overflow: hidden;white-space:nowrap;text-overflow: ellipsis;">{$vo.content ?? '-'}</td>
+                                    <td style="max-width: 190px;overflow: hidden;text-overflow: ellipsis;">{$vo.content ?? '-'}</td>
                                     <td><img src="{$vo.img ?? ''}" /></td>
                                     <td>{$vo.sort}</td>
                                     <td>

@@ -8,6 +8,7 @@
 
 namespace app\front\controller;
 use app\common\service\ArticleService;
+use app\common\service\CoinService;
 use app\common\service\SlideService;
 
 class Index extends Home
@@ -16,10 +17,28 @@ class Index extends Home
         $slidesService = new SlideService();
         $slidelist = $slidesService->selectInfo();
         $articleService = new ArticleService();
-        $gonggao = $articleService->selectLimitInfo(['type'=>1],'id,title',0,5,'sort');
+        $gonggao = $articleService->selectLimitInfo(['type'=>1],'id,title',0,5,'sort desc,sort_time desc');
+        $CoinService = new CoinService();
+        $coinlist = $CoinService->selectInfo();
+        $this->assign('coinlist',$coinlist);
         $this->assign('gonggao',$gonggao);
         $this->assign('slidelist',$slidelist);
         return $this->fetch();
+    }
+
+    public function getInformation(){
+        $data = input('post.');
+        $panyi = ($data['num']-1)*$data['size'];
+        $articleService = new ArticleService();
+        $infomation = $articleService->selectLimitInfo(['type'=>2],'',$panyi,$data['size'],'sort desc,sort_time desc');
+        return json($infomation);
+    }
+
+    public function getNewInfo(){
+        $last_info = input('last_info');
+        $articleService = new ArticleService();
+        $data = $articleService->selectInfo(['type'=>2,'sort'=>1,'sort_time'=>['>',$last_info]]);
+        return json($data);
     }
 
 }
