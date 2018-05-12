@@ -10,7 +10,6 @@ namespace app\front\controller;
 use app\common\service\ArticleService;
 use app\common\service\CoinService;
 use app\common\service\SlideService;
-
 class Index extends Home
 {
     public function index(){

@@ -33,7 +33,7 @@
                                     <td>{$vo.name ?? '-'}</td>
                                     <td>{$vo.price ?? '-'}</td>
                                     <td>{$vo.code ?? '-'}</td>
-                                    <td><button class="btn btn-primary" onclick="register_edit('{$vo.id}')">{:lang('Edit')}</button> &nbsp;<button class="btn btn-danger" onclick="deleteSlide('{$vo.id}')">{:lang('Delete')}</button></td>
+                                    <td><button class="btn btn-primary" onclick="register_edit('{$vo.id}')">{:lang('Edit')}</button> &nbsp;<button class="btn btn-danger" onclick="deleteSlide('{$vo.id}')">{:lang('Delete')}</button>  <button type="button" id="decprice" class="btn btn-primary" onclick="decprice('{$vo.id}');">降低币价</button></td>
                                 </tr>
                                 {/volist}
                                 </tbody>
@@ -175,6 +175,28 @@
                     }else{
                         alertMsg(res.msg,2);
                         setTimeout(function(){window.location.href=''},3000)
+                    }
+                },
+                error:function(){
+                    alertMsg("{:lang('Operation fail')}");
+                }
+            })
+        })
+    }
+    function decprice(id){
+        alertConfirm('确定降低虚拟币价格？',function(){
+            $.ajax({
+                url:"{:url('admin/coin/decCoinPrice')}",
+                method:'post',
+                dataType:'json',
+                data: {id: id},
+                beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+                success: function(res){
+                    console.log(res);
+                    if(res.code != 200){
+                        alertMsg(res.msg);
+                    }else{
+                        window.location.href='';
                     }
                 },
                 error:function(){

@@ -11,4 +11,5 @@
 
 return [
     'app\timetask\command\Current',
+    'app\timetask\command\Coinprice'
 ];

@@ -28,13 +28,15 @@
 	    <form method="post" class="am-form">
 	    	<div class="login_part" >
 	    		<span><i class="icon iconfont icon-shouji-copy" style="color:white;vertical-align:middle;font-size:18px;"></i></span>
-	      	<input class="login_one" placeholder="請輸入手機號">
+	      	<input class="login_one" id="mobile" placeholder="請輸入手機號">
 	    	</div>
 	      <div class="login_part">
 	      	<span><i class="icon iconfont icon-suo"  style="color:white;vertical-align:middle;font-size:18px;"></i></span>
-	      	<input class="login_two" placeholder="請輸入密碼">
+	      	<input class="login_two" id="password" placeholder="請輸入密碼">
 	      </div>
-	      <div class="login_btn">
+			<div style="color: #f00000;text-align:center " id="errorMsg"  >
+			</div>
+	      <div class="login_btn" onclick="login()">
 					登錄
 				</div>
 	      <div class="login_num">
@@ -104,6 +106,27 @@
 		    	}
 		    })
 		})
+		function login(){
+			var mobile = $('#mobile').val();
+			var password = $('#password').val();
+			$.ajax({
+				url:"{:url('front/User/login')}",
+				method:'post',
+				dataType:'json',
+				data: {mobile: mobile,password:password},
+				beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+				success: function(res){
+					if(res.code != 200){
+					$("#errorMsg").html(res.msg)
+					}else{
+						window.location.href='/front/index/index';
+					}
+				},
+				error:function(){
+					alert('系统错误，请稍后再试');
+				}
+			})
+		}
   	</script>
 </body>
 </html>

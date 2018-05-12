@@ -36,7 +36,7 @@
 				<input class="pay_ipt" id="payurl" placeholder="輸入或掃碼添加對方地址"/>
 				<span id="saoma"><i class="icon iconfont icon-saoyisao"></i></span>
 			</div>
-			
+
 		</div>
 	</div>
 	<!--接收方结束-->
@@ -45,7 +45,7 @@
 		<div>
 			<p class="pay_tit">數量</p>
 			<div>
-				<input class="pay_ipt" placeholder="0.0000" />
+				<input class="pay_ipt" id="amount" placeholder="0.0000" />
 				<span style="float:right;color:#6275F8;">RFT</span>
 			</div>
 		</div>
@@ -61,25 +61,25 @@
 	<!--备注结束-->
 	<!--确认支付按钮开始-->
 	<div class="pay_btn">
-		 	<div id="PayBtn">確認支付</div>
+		 	<div id="PayBtn" onclick="pay()">確認支付</div>
 	</div>
 	<!--确认支付按钮结束-->
 <script>
 	$(function(){
-		
+
 		if(GetQueryString("url")==""||GetQueryString("url")==null){
-			
+
 		}else{
 			$('#payurl').val(GetQueryString("url"))
 		}
-		
-		
-	
+
+
+
 		$('#saoma').click(function(){
 			window.location.assign('saoma.html')
 		})
-		
-		
+
+
 		function GetQueryString(name) {
      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
      var r = window.location.search.substr(1).match(reg);
@@ -89,7 +89,7 @@
 </script>
 <!--底部导航栏结束-->
 
-
+<!--在这里编写你的代码-->
 <!--[if (gte IE 9)|!(IE)]><!-->
 <!--<script src="assets/js/jquery.min.js"></script>-->
 <!--<![endif]-->
