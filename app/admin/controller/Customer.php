@@ -33,12 +33,6 @@ class Customer extends Admin
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();
         }
-        $logdata=[
-            'remark'=>'删除客户',
-            'desc' => '删除了手机号为'.$customerInfo['tel'].'的客户',
-            'data' => serialize($customerInfo)
-        ];
-        model('LogRecord')->record($logdata);
         return json($ret);
     }
 
@@ -60,6 +54,7 @@ class Customer extends Admin
         $ret['msg'] = "操作成功！";
         try {
             $data = input('post.');
+
             if($data['password'] != $data['sure_password']){
                 exception("两次输入的密码不一致");
             }

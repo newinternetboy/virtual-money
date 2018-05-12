@@ -16,7 +16,7 @@ use think\Db;
 use think\Request;
 class User extends Home
 {
-    public function user(){
+    public function index(){
         return $this->fetch();
     }
 

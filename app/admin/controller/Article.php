@@ -11,16 +11,23 @@ class Article extends Admin
 
 
     public function index(){
-        $keyword = input('keyword');
-        $where_dict=[];
+        $title = input('title');
+        $type = input('type');
+        $where=[];
         $param=[];
-        if(isset($keyword)&&!empty($keyword)){
-            $where_dict['title'] = ['like',$keyword];
-            $this->assign('keywords',$keyword);
+        if($title){
+            $where['title'] = $title;
+            $param['title'] = $title;
+        }
+        if($type){
+            $where['type'] = $type;
+            $param['type'] = $type;
         }
         $articleService = new ArticleService();
-        $articlelist = $articleService->getInfoPaginate($where_dict,$param);
+        $articlelist = $articleService->getInfoPaginate($where,$param);
         $this->assign('articlelist',$articlelist);
+        $this->assign('title',$title);
+        $this->assign('type',$type);
         return $this->fetch();
     }
 
@@ -40,6 +47,16 @@ class Article extends Admin
                 $data['img'] = saveImg($logo,$oriPath,$thumbPath,$width,$height);
             }
             $articleService = new ArticleService();
+            if(!$data['id']){
+                $data['sort_time'] = time();
+            }else{
+                if(!$article = $articleService->findInfo(['id'=>$data['id']])){
+                    exception("该公告资讯不存在");
+                }
+                if($data['sort'] == 1 && $data['sort'] != $article['sort']){
+                    $data['sort_time'] = time();
+                }
+            }
             if (!$articleService->upsert($data, false)) {
                 exception($articleService->getError());
             }

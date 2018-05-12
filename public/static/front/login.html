@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+  <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="assets/css/yuan.css"/>
+  <!--font-->
+	<link rel="stylesheet" type="text/css" href="font/iconfont.css">
+	<script src="font/iconfont.js"></script>
+</head>
+<body class="login_body" >
+		<div class="am-header">
+			 <h1 class="am-header-title"  style="margin:0;"><a href="user.html"><i class="icon iconfont icon-guanbi"></i></a></h1>
+		</div>
+		<div class="login_logo">
+				<img src="img/logo.png" style="">
+		</div>	
+		<button class="change_english">Switch to Chinese</button>
+		<div class="am-u-lg-6 am-u-md-8 am-u-sm-centered login_inner" >
+	    <form method="post" class="am-form">
+	    	<div class="login_part" >
+	    		<span><i class="icon iconfont icon-shouji-copy" style="color:white;vertical-align:middle;font-size:18px;"></i></span>
+	      	<input class="login_one" placeholder="請輸入手機號">
+	    	</div>
+	      <div class="login_part">
+	      	<span><i class="icon iconfont icon-suo"  style="color:white;vertical-align:middle;font-size:18px;"></i></span>
+	      	<input class="login_two" placeholder="請輸入密碼">
+	      </div>
+	      <div class="login_btn">
+					登錄
+				</div>
+	      <div class="login_num">
+	      	<a class="register_num yes" href="register.html">註冊賬號</a>
+	      	<a class="forget_num yes" href="forget_password.html">忘記密碼</a>
+	      </div>
+	    </form>
+  	</div>
+  	<script src="js/jquery-1.10.1.min.js"></script>
+  	<script>
+  	
+  		var index = {
+	    initPage: function() {
+	        var self = this;
+	        self.initBtn(self);
+	    },
+	    initBtn: function(self) {
+	        var english = ["click register","forget password?"];
+	        var chinese = [];
+	        $(".login_num").children(".yes").each(function(i, item) {
+	            var pag_val = $.trim($(item).text());
+	            chinese.push(pag_val);
+	        });
+	        $(".change_english").click(function() {
+	            if ($.trim($(this).text()) == "中文") {
+	                $(this).text("english")
+	                $(".login_num").children(".yes").each(function(i, item) {
+	                    $(item).text(chinese[i]);
+	                });
+	                $(".login_one").each(function(){
+	                	$(this).attr('placeholder','請輸入手機號')
+	                });
+	                $(".login_two").each(function(){
+	                	$(this).attr('placeholder','請輸入密碼')
+	                });
+	                $(".login_btn").each(function(){
+	                	$(this).html('登錄');
+	                })
+	            } else {
+	                $(this).text("中文");
+	                $(".login_num").children(".yes").each(function(i, item) {
+	                    $(item).text(english[i]);
+	                });
+	                $(".login_one").each(function(){
+	                	$(this).attr('placeholder','Moblie phone number or username')
+	                });
+	                $(".login_two").each(function(){
+	                	$(this).attr('placeholder','password')
+	                });
+	                $(".login_btn").each(function(){
+	                	$(this).html('log in');
+	                })
+	            }
+	        })
+	    }
+	};
+		$(function() {
+		    index.initPage();
+		    $('.login_one').blur(function(){
+		    	if($(this).val()==null||$(this).val()==""){
+		    		alert('手机号不能为空')
+		    	}
+		    })
+		    $('.login_two').blur(function(){
+		    	if($(this).val()==null||$(this).val()==""){
+		    		alert('请输入密码')
+		    	}
+		    })
+		})
+  	</script>
+</body>
+</html>

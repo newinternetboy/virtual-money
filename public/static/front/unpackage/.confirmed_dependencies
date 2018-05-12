@@ -1,0 +1,200 @@
+{
+	"index.html": {
+		"refer": [
+			"pay.html",
+			"user.html",
+			"market.html"
+		],
+		"resources": [
+			"assets/js/amazeui.min.js",
+			"img/img.png",
+			"js/jq22.js",
+			"assets/fonts/fontawesome-webfont.woff2",
+			"img/header1.jpg",
+			"css/jq22.css",
+			"assets/css/app.css",
+			"assets/css/amazeui.min.css",
+			"pay.html",
+			"js/mui.min.js",
+			"user.html",
+			"img/logo.png",
+			"market.html"
+		]
+	},
+	"user.html": {
+		"refer": [
+			"index.html",
+			"pay.html",
+			"login.html",
+			"wallet_address.html",
+			"Mykey_password.html",
+			"bill.html"
+		],
+		"resources": [
+			"assets/js/amazeui.min.js",
+			"login.html",
+			"js/jq22.js",
+			"assets/css/amazeui.min.css",
+			"img/userbg.jpg",
+			"index.html",
+			"css/jq22.css",
+			"assets/css/app.css",
+			"pay.html",
+			"wallet_address.html",
+			"Mykey_password.html",
+			"bill.html"
+		]
+	},
+	"pay.html": {
+		"refer": [
+			"user.html",
+			"index.html",
+			"saoma.html",
+			"pay.html"
+		],
+		"resources": [
+			"assets/i/favicon.png",
+			"assets/i/app-icon72x72@2x.png",
+			"index.html",
+			"assets/js/amazeui.min.js",
+			"img/paybtn.jpg",
+			"img/header2.jpg",
+			"user.html",
+			"js/jq22.js",
+			"assets/css/yuan.css",
+			"css/jq22.css",
+			"assets/css/app.css",
+			"assets/css/amazeui.min.css",
+			"saoma.html"
+		]
+	},
+	"saoma.html": {
+		"refer": [
+			"pay.html"
+		],
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"img/header1.jpg",
+			"pay.html"
+		]
+	},
+	"login.html": {
+		"resources": [
+			"img/paybtn.jpg",
+			"assets/css/yuan.css",
+			"img/background.jpg",
+			"img/logo.png",
+			"assets/css/amazeui.min.css",
+			"login_english.html",
+			"forget_password.html",
+			"register.html",
+			"user.html"
+		],
+		"refer": [
+			"login_english.html",
+			"forget_password.html",
+			"register.html",
+			"user.html"
+		]
+	},
+	"forget_password.html": {
+		"resources": [
+			"assets/css/yuan.css",
+			"img/header1.jpg",
+			"assets/css/amazeui.min.css",
+			"login.html"
+		],
+		"refer": [
+			"login.html"
+		]
+	},
+	"login_english.html": {
+		"resources": [
+			"forget_password.html",
+			"assets/css/yuan.css",
+			"assets/css/amazeui.min.css",
+			"login.html",
+			"user.html"
+		],
+		"refer": [
+			"forget_password.html",
+			"login.html",
+			"user.html"
+		]
+	},
+	"register.html": {
+		"resources": [
+			"login.html",
+			"assets/css/yuan.css",
+			"assets/css/amazeui.min.css",
+			"img/header1.jpg",
+			"img/paybtn.jpg",
+			"assets/fonts/fontawesome-webfont.woff2"
+		],
+		"refer": [
+			"login.html"
+		]
+	},
+	"market.html": {
+		"resources": [
+			"assets/css/yuan.css",
+			"assets/css/app.css",
+			"pay.html",
+			"assets/css/amazeui.min.css"
+		],
+		"refer": [
+			"pay.html"
+		]
+	},
+	"wallet_address.html": {
+		"resources": [
+			"img/wallet_background.jpg",
+			"assets/css/yuan.css",
+			"img/QR_Code_img.png",
+			"assets/css/amazeui.min.css",
+			"user.html"
+		],
+		"refer": [
+			"user.html"
+		]
+	},
+	"Mykey_password.html": {
+		"resources": [
+			"assets/js/amazeui.min.js",
+			"assets/css/yuan.css",
+			"assets/css/amazeui.min.css",
+			"user.html",
+			"Key.html"
+		],
+		"refer": [
+			"user.html",
+			"Key.html"
+		]
+	},
+	"Key.html": {
+		"resources": [
+			"Mykey_password.html",
+			"assets/css/yuan.css",
+			"assets/css/amazeui.min.css",
+			"img/wallet_background.jpg",
+			"assets/fonts/fontawesome-webfont.woff2",
+			"img/QR_Code_img.png"
+		],
+		"refer": [
+			"Mykey_password.html"
+		]
+	},
+	"bill.html": {
+		"resources": [
+			"user.html",
+			"assets/css/yuan.css",
+			"img/header1.jpg",
+			"assets/css/amazeui.min.css"
+		],
+		"refer": [
+			"user.html"
+		]
+	}
+}
