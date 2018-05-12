@@ -1,0 +1,305 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>捨得社區</title>
+
+  <!-- Set render engine for 360 browser -->
+  <meta name="renderer" content="webkit">
+
+  <!-- No Baidu Siteapp-->
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+  <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+  <meta name="msapplication-TileColor" content="#0e90d2">
+  	
+  <!--妹子ui样式-->	
+  <link rel="stylesheet" href="assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  	
+  <!--公告轮播-->
+  <link type="text/css" href="css/jq22.css" rel="stylesheet" />
+  <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
+  <script type="text/javascript" src="js/jq22.js"></script>
+
+	<!--刷新樣式-->
+	<link rel="stylesheet" href="css/mescroll.css">
+	<link rel="stylesheet" href="option/mescroll-option.css">
+		
+	<!--font-->
+	<link rel="stylesheet" type="text/css" href="font/iconfont.css">
+	<script src="font/iconfont.js"></script>
+	
+	
+
+</head>
+<body>
+	<!--页头-->
+	<header class="am-header index_header" style="background-image:url(img/header1.jpg) ;background-size: cover;z-index:9990;">
+	  <h1 class="am-header-title">資訊</h1>
+  </header>
+	<!--页头结束-->
+	
+	<!--下拉刷新回调的提示-->
+	<p id="downloadTip" class="download-tip">1条新内容</p>
+	<div  id="mescroll" class="mescroll">
+		<!--轮播图开始-->
+		<div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
+		  <ul class="am-slides">
+		    <li><img src="http://s.amazeui.org/media/i/demos/bing-1.jpg" /></li>
+		    <li><img src="http://s.amazeui.org/media/i/demos/bing-2.jpg" /></li>
+		    <li><img src="http://s.amazeui.org/media/i/demos/bing-1.jpg" /></li>
+		  </ul>
+		</div>
+		<!--轮播图结束-->
+		<!--公告轮播-->
+		<div class="news_box">
+			<div class="t_news">
+				<span><i class="icon iconfont icon-icon06"></i></span>
+				<ul class="news_li">
+					<li><a href="#" >水果忍者：穿靴子的猫</a></li>
+					<li><a href="#" >乐动魔方 Plus</a></li>
+					<li><a href="#" >亡灵杀手 汉化版</a></li>
+					<li><a href="#" >jq22 搜集整理</a></li>
+					<li><a href="#" >你疯啦 iphone壁纸</a></li>
+				</ul>
+				<ul class="swap"></ul>
+			</div>
+		</div>
+		<!--公告轮播结束-->
+		<!--货币切换-->
+		<div id="change">
+			<span style="width:23%;text-align:left;">當前價</span>
+			<span style="width:50%;text-align:center;"><span style="font-size:16px;color: rgb(92,102,249);">0.0029</span> CNY</span>
+			<span style="width:13%;text-align:right;">RFT</span>
+			<button type="button" class="am-btn am-btn-primary am-btn-xs">切換</button>
+		</div>
+		<div id="hangqingTitle">
+			<span class="hr" style="float: left;"></span>
+			<h2>行情趨勢</h2>
+			<span class="hr" style="float: right;"></span>
+		</div>
+		<!--货币切换结束-->
+		<!--资讯列表-->
+		<div id="news-header">
+			<h2>最新咨詢</h2>
+		</div>
+		<ul id="news-list" class="news-list">
+			<!--<li>
+				<a href="inform_detail.html">
+					<div class="news-img">
+						<img src="img/img.png"/>
+					</div>
+					<div class="artical">
+						<p class="news-text ">这是一段话，很长很长很长很长很长</p>
+					  <p style="display: inline-block;margin: 0;padding: 0;margin-top: 35px;color:rgb(153,153,153);">4月29日</p>
+					</div>	
+				</a>
+			</li>
+			<li>
+				<div class="news-img">
+					<img src="img/img.png"/>
+				</div>
+				<div class="artical">
+					<p class="news-text ">这是一段话，很长很长很长很长很长</p>
+				  <p style="display: inline-block;margin: 0;padding: 0;margin-top: 35px;color:rgb(153,153,153);">4月29日</p>
+				</div>		
+			</li>
+			<li>
+				<div class="news-img">
+					<img src="img/img.png"/>
+				</div>
+				<div class="artical">
+					<p class="news-text ">这是一段话，很长很长很长很长很长</p>
+				  <p style="display: inline-block;margin: 0;padding: 0;margin-top: 35px;color:rgb(153,153,153);">4月29日</p>
+				</div>		
+			</li>-->
+		</ul>
+		<!--资讯列表结束-->
+	</div>
+		
+	
+	<!--底部导航栏-->
+  <div  class="am-navbar am-cf am-navbar-default " id="nav-wrap">
+	  <ul id="bottom-nav" class="am-navbar-nav am-cf am-avg-sm-4">
+	      <li >
+	        <a href="index.html" class="" >
+	            <span class="am-icon"><i class="icon iconfont icon-zixun am-icon" style="color:rgb(92,109,249);"></i></span>
+	            <span class="am-navbar-label" style="color:rgb(92,109,249);">資訊</span>
+	        </a>
+	      </li>
+	      <li>
+	        <a href="market.html" class="">
+	            <span class="am-icon"><i class="icon iconfont icon-trend"></i></span>
+	            <span class="am-navbar-label">行情</span>
+	        </a>
+	      </li>
+	      <li>
+	        <a href="pay.html" class="">
+	            <span class="am-icon"><i class="icon iconfont icon-Ankerwebicon- am-icon"></i></span>
+	            <span class="am-navbar-label">支付</span>
+	        </a>
+	      </li>
+	      <li>
+	        <a href="user.html" class="">
+	            <span class="am-icon"><i class="icon iconfont icon-wode am-icon"></i></span>
+	            <span class="am-navbar-label">我的</span>
+	        </a>
+	      </li>
+	  </ul>
+  </div>
+	
+	<!--底部导航栏结束-->
+
+
+	<!--[if (gte IE 9)|!(IE)]><!-->
+	<!--<script src="assets/js/jquery.min.js"></script>-->
+	<!--<![endif]-->
+	<!--[if lte IE 8 ]>
+	<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+	<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+	<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+	<![endif]-->
+	
+	<!--刷新js-->
+	<script src="js/mescroll.js" type="text/javascript" charset="utf-8"></script>
+	<script src="option/mescroll-option.js" type="text/javascript" charset="utf-8"></script>
+	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<!--妹子js-->
+	<script src="assets/js/amazeui.min.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		$(function(){
+					//创建MeScroll对象
+					var mescroll = initMeScroll("mescroll", {
+						down:{
+							auto:false,//是否在初始化完毕之后自动执行下拉回调callback; 默认true
+							callback: downCallback, //下拉刷新的回调
+						},
+						up: {
+							auto:true,//初始化完毕,是否自动触发上拉加载的回调
+							isBoth: true, //上拉加载时,如果滑动到列表顶部是否可以同时触发下拉刷新;默认false,两者不可同时触发; 这里为了演示改为true,不必等列表加载完毕才可下拉;
+							callback: upCallback, //上拉加载的回调
+						}
+					});
+					
+					/*下拉刷新的回调 */
+					function downCallback(){
+						//加载轮播数据..
+						//...
+						//加载列表数据
+						getListDataFromNet(0, 1, function(data){
+							//联网成功的回调,隐藏下拉刷新的状态
+							mescroll.endSuccess();
+							//设置列表数据
+							setListData(data, false);
+							//显示提示
+							$("#downloadTip").css("top","30px");
+							setTimeout(function () {
+								$("#downloadTip").css("top","0px");
+							},2000);
+						}, function(){
+							//联网失败的回调,隐藏下拉刷新的状态
+			              mescroll.endErr();
+						});
+					}
+					
+					/*上拉加载的回调 page = {num:1, size:10}; num:当前页 从1开始, size:每页数据条数 */
+					function upCallback(page){
+						//联网加载数据
+						console.log("page.num="+page.num);
+						getListDataFromNet(page.num, page.size, function(data){
+							//联网成功的回调,隐藏上拉加载的状态
+							mescroll.endSuccess(data.length);//传参:数据的总数; mescroll会自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+							//设置列表数据
+							setListData(data, true);
+						}, function(){
+							//联网失败的回调,隐藏上拉加载的状态
+			                mescroll.endErr();
+						});
+					}
+					
+					/*设置列表数据*/
+					function setListData(data, isAppend) {
+						var listDom=document.getElementById("news-list");
+						console.log(listDom)
+						for (var i = 0; i < data.length; i++) {
+							var newObj=data[i];
+							console.log("++++"+data.length)
+						
+						
+							var str='<a>'+
+										 '<div class="news-img">'+
+											'<img src="'+newObj.img+'"/>'+
+											'</div>'+
+											'<div class="artical">'+
+												'<p class="news-text ">'+newObj.text+'</p>'+
+											  '<p style="display: inline-block;margin: 0;padding: 0;margin-top: 35px;color:rgb(153,153,153);">'+newObj.time+'</p>'+
+											'</div>'+
+							'</a>	';				
+							var liDom=document.createElement("li");
+							liDom.innerHTML=str;
+							console.log("6666"+newObj)
+							
+							if (isAppend) {
+								console.log("777"+liDom)
+								console.log(liDom)
+								listDom.appendChild(liDom);//加在列表的后面,上拉加载
+							} else{
+								listDom.insertBefore(liDom, listDom.firstChild);//加在列表的前面,下拉刷新
+							}
+						}
+					}
+					
+					/*联网加载列表数据*/
+					var downIndex=0;
+					function getListDataFromNet(pageNum,pageSize,successCallback,errorCallback) {
+						//延时一秒,模拟联网
+		                setTimeout(function () {
+		                	try{
+		                		var newArr=[];
+			                	if(pageNum==0){
+			                		//此处模拟下拉刷新返回的数据
+			                		downIndex++;
+			                		var newObj={img:"img/img.png",text:"【內容"+downIndex+"】 新增內容",time:"新增话题的时间"};
+			                		newArr.push(newObj);
+			                	}else{
+			                		//此处模拟上拉加载返回的数据
+			                		for (var i = 0; i < pageSize; i++) {
+			                			var upIndex=(pageNum-1)*pageSize+i+1;
+			                			var newObj={img:"img/img.png",text:"【內容"+upIndex+"】 內容",time:"时间时间时间"};
+			                			newArr.push(newObj);
+			                		}
+			                	}
+			                	//联网成功的回调
+			                	successCallback&&successCallback(newArr);
+		                	}catch(e){
+		                		//联网失败的回调
+		                		errorCallback&&errorCallback();
+		                	}
+		                },2000)
+					}
+					
+					//禁止PC浏览器拖拽图片,避免与下拉刷新冲突;如果仅在移动端使用,可删除此代码
+					document.ondragstart=function() {return false;}
+				});
+		</script>
+</body>
+</html>

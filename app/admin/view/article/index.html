@@ -1,7 +1,7 @@
 {js href="__JS__/ueditor/ueditor.config.js" /}
 {js href="__JS__/ueditor/ueditor.all.js" /}
-{js href="__JS__/bootstrap-tags-master/dist/js/bootstrap-tags.min.js" /}
-{css href="__JS__/bootstrap-tags-master/dist/css/bootstrap-tags.css" /}
+<!--{js href="__JS__/bootstrap-tags-master/dist/js/bootstrap-tags.min.js" /}-->
+<!--{css href="__JS__/bootstrap-tags-master/dist/css/bootstrap-tags.css" /}-->
 <style>
     table img{
         width: 100px;
@@ -18,15 +18,28 @@
                         <h5>新闻列表</h5>
                     </div>
                     <div class="ibox-content form-horizontal">
-                        <div class="form-group">
+                        <form action="">
+                            <div class="form-group">
 
-                            <div class="col-md-4">
-                                <div id="my-tag-list" class="tag-list"></div>
+                                <label  class="col-md-2 control-label">新闻排序</label>
+                                <div class="col-md-3">
+                                    <input name="title" type="text" value="{$title}" class="form-control" />
+                                </div>
+                                <label  class="col-md-2 control-label">新闻排序</label>
+                                <div class="col-md-3">
+                                    <select name="type" id="type" class="form-control">
+                                        <option value="">所有</option>
+                                        <option value="1" {if condition="$type eq 1"}selected{/if} >公告</option>
+                                        <option value="2" {if condition="$type eq 2"}selected{/if}>咨询</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="col-md-8">
-                                <button class="btn btn-primary" style="float: right;margin-right: 1vw;" id="selector">查询</button>
+                            <div class="form-group">
+
+                                    <button class="btn btn-primary" style="float: right;margin-right: 3vw;" id="selector">查询</button>
+
                             </div>
-                        </div>
+                        </form>
                         <div class="form-group">
                             <div  class="col-sm-2">
                                 <button style="float: left;" onclick="article_add()" class="btn btn-primary" type="button"  >{:lang('Add')}</button>
@@ -57,7 +70,7 @@
                                         {default /}
                                         {/switch}
                                     </td>
-                                    <td>{$vo.content ?? '-'}</td>
+                                    <td style="max-width: 190px;overflow: hidden;white-space:nowrap;text-overflow: ellipsis;">{$vo.content ?? '-'}</td>
                                     <td><img src="{$vo.img ?? ''}" /></td>
                                     <td>{$vo.sort}</td>
                                     <td>

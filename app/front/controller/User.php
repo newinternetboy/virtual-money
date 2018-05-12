@@ -10,7 +10,7 @@ namespace app\front\controller;
 
 class User extends Home
 {
-    public function user(){
+    public function index(){
         return $this->fetch();
     }
 

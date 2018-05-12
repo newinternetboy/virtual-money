@@ -11,16 +11,23 @@ class Article extends Admin
 
 
     public function index(){
-        $keyword = input('keyword');
-        $where_dict=[];
+        $title = input('title');
+        $type = input('type');
+        $where=[];
         $param=[];
-        if(isset($keyword)&&!empty($keyword)){
-            $where_dict['title'] = ['like',$keyword];
-            $this->assign('keywords',$keyword);
+        if($title){
+            $where['title'] = $title;
+            $param['title'] = $title;
+        }
+        if($type){
+            $where['type'] = $type;
+            $param['type'] = $type;
         }
         $articleService = new ArticleService();
-        $articlelist = $articleService->getInfoPaginate($where_dict,$param);
+        $articlelist = $articleService->getInfoPaginate($where,$param);
         $this->assign('articlelist',$articlelist);
+        $this->assign('title',$title);
+        $this->assign('type',$type);
         return $this->fetch();
     }
 

@@ -173,8 +173,8 @@ class Pay extends Controller
         }
     }
 
-    public function payMoney(){
-        return $this->fetch('pay');
+    public function index(){
+        return $this->fetch();
     }
 
 }

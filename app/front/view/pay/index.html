@@ -1,0 +1,103 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"content="width=device-width, initial-scale=1">
+  <title>捨得社區</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="image/png" href="__front__/assets/i/favicon.png">
+  <link rel="stylesheet" href="__front__/assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="__front__/assets/css/app.css">
+  <link rel="stylesheet" href="__front__/assets/css/yuan.css">
+  <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
+  <!--font-->
+	<link rel="stylesheet" type="text/css" href="__front__/font/iconfont.css">
+	<script src="__front__/font/iconfont.js"></script>
+</head>
+<body>
+	<!--页头-->
+	<header class="am-header" style="background-image:url(__front__/img/header2.jpg) ;background-size: cover;">
+      <h1 class="am-header-title">支付</h1>
+
+  </header>
+	<!--页头结束-->
+	<!--接收方-->
+    <input type="hidden" id="nav" value="nav3"/>
+	<div class="pay_accept">
+		<div>
+			<p class="pay_tit">接收方</p>
+			<div>
+				<input class="pay_ipt" id="payurl" placeholder="輸入或掃碼添加對方地址"/>
+				<span id="saoma"><i class="icon iconfont icon-saoyisao"></i></span>
+			</div>
+			
+		</div>
+	</div>
+	<!--接收方结束-->
+	<!--数量开始-->
+	<div class="pay_num">
+		<div>
+			<p class="pay_tit">數量</p>
+			<div>
+				<input class="pay_ipt" placeholder="0.0000" />
+				<span style="float:right;color:#6275F8;">RFT</span>
+			</div>
+		</div>
+	</div>
+	<!--数量结束-->
+	<!--备注开始-->
+	<div class="pay_remark">
+		<div>
+			<p class="pay_tit">備註</p>
+			<input class="pay_ipt" placeholder="添加備註（15字以內）"/>
+		</div>
+	</div>
+	<!--备注结束-->
+	<!--确认支付按钮开始-->
+	<div class="pay_btn">
+		 	<div id="PayBtn">確認支付</div>
+	</div>
+	<!--确认支付按钮结束-->
+<script>
+	$(function(){
+		
+		if(GetQueryString("url")==""||GetQueryString("url")==null){
+			
+		}else{
+			$('#payurl').val(GetQueryString("url"))
+		}
+		
+		
+	
+		$('#saoma').click(function(){
+			window.location.assign('saoma.html')
+		})
+		
+		
+		function GetQueryString(name) {
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  unescape(r[2]); return null;
+}
+	})
+</script>
+<!--底部导航栏结束-->
+
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--<script src="assets/js/jquery.min.js"></script>-->
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="__front__/assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="__front__/assets/js/amazeui.min.js"></script>
+</body>
+</html>

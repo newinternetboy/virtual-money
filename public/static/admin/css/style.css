@@ -7522,7 +7522,7 @@ body.skin-3 {
 }
 
 #index_BG {
-  background-image: url('../images/IndexBG.jpg');
+  /*background-image: url('../images/IndexBG.jpg');*/
   background-size: cover;
 }
 
