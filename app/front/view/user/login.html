@@ -1,3 +1,4 @@
+{__NOLAYOUT__}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -17,7 +18,7 @@
 </head>
 <body class="login_body" >
 		<div class="am-header">
-			 <h1 class="am-header-title"  style="margin:0;"><a href="user.html"><i class="icon iconfont icon-guanbi"></i></a></h1>
+			 <h1 class="am-header-title"  style="margin:0;"><a onclick="javascript:history.back(-1)" href="#"><i class="icon iconfont icon-guanbi"></i></a></h1>
 		</div>
 		<div class="login_logo">
 				<img src="__front__/img/logo.png" style="">
@@ -39,7 +40,7 @@
 					登錄
 				</div>
 	      <div class="login_num">
-	      	<a class="register_num yes" href="register.html">註冊賬號</a>
+	      	<a class="register_num yes" href="{:url('front/user/register')}">註冊賬號</a>
 	      	<a class="forget_num yes" href="forget_password.html">忘記密碼</a>
 	      </div>
 	    </form>

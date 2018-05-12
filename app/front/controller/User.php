@@ -53,4 +53,12 @@ class User extends Home
         return json($ret);
     }
 
+    public function register(){
+        return $this->fetch();
+    }
+
+    public function userAgreement(){
+        return $this->fetch('useragreement');
+    }
+
 }
