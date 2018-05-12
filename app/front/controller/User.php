@@ -21,6 +21,9 @@ class User extends Home
     }
 
     public function login(){
+        if(!($this->request->isAjax())){
+            return $this->fetch();
+        }
         $mobile = trim(input('post.mobile'));
         $password = trim(input('post.password'));
         //检查用户是否存在
@@ -28,6 +31,7 @@ class User extends Home
         //记录用户id
         $users['cid']=$user_info['id'];
         $users['wa']=$user_info['wallet_address'];
+        $users['tel']=$user_info['tel'];
         session('users',$user_info);
         if(!$user_info){
             $ret['code'] = 300;
@@ -48,7 +52,5 @@ class User extends Home
 
         return json($ret);
     }
-
-
 
 }
