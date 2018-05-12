@@ -31,24 +31,24 @@
 	<div class="register_container">
 			<div class="reg_inner">
 				<span>邀請碼</span>
-				<input class="notNull" placeholder="輸入邀請碼" style="margin-left:36px;" />
+				<input id="invite" class="notNull" placeholder="輸入邀請碼" style="margin-left:36px;" />
 			</div>
 			<div class="reg_inner">
 				<span>手機號</span>
-				<input class="notNull" placeholder="輸入手機號" style="margin-left:36px;"/>
+				<input id="tel" class="notNull" placeholder="輸入手機號" style="margin-left:36px;"/>
 			</div>
 			<div class="reg_inner">
 				<span>驗證碼</span>
-				<input class="notNull"  placeholder="短信驗證碼" style="margin-left:36px;width: 30%;"/>
-				<div class="get_code">獲取短信驗證碼</button>
+				<input id="validate" class="notNull"  placeholder="短信驗證碼" style="margin-left:36px;width: 30%;"/>
+				<div id="validate_send" class="get_code">獲取短信驗證碼</button>
 			</div>
 			<div class="reg_inner">
 				<span>密碼</span>
-				<input class="notNull"  placeholder="建議不少於8位,包含字母數字" style="margin-left:52px;width: 65%;"/>
+				<input id="password" class="notNull"  placeholder="建議不少於8位,包含字母數字" style="margin-left:52px;width: 65%;"/>
 			</div>
 			<div class="reg_inner">
 				<span>確認密碼</span>
-				<input class="notNull"  placeholder="建議不少於8位,包含字母數字" style="margin-left:19px;width: 65%;"/>
+				<input id="sure_password" class="notNull"  placeholder="建議不少於8位,包含字母數字" style="margin-left:19px;width: 65%;"/>
 			</div>
 			
 			<div class="reg_btn" onclick="sub()">
@@ -63,7 +63,18 @@
 </body>
 </html>
 <script>
-       function sub(){
-           $
-       }
+        $('.notNull').blur(function(){
+            if($(this).val()==null||$(this).val()==""){
+//					alert('不能為空')
+            }
+        })
+    function sub(){
+        var invite = $('#invite').val();
+        var tel = $('#tel').val();
+        var validate = $('#validate').val();
+        var password = $('#password').val();
+        var sure_password = $('#sure_password').val();
+        var state = true;
+        if(invite == null||)
+    }
 </script>
