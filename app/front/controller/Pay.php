@@ -69,7 +69,7 @@ class Pay extends Controller
     public function getUserWalletAdress(){
         //登陆后用户的id，要存在session中
         $u_info = session('users');
-        $cid = $u_info['id'];
+        $cid = $u_info['cid'];
         //获取钱包地址
         $wallet_address = Customer::get(['id'=>$cid])->getData('wallet_address');
         if($wallet_address){
@@ -111,7 +111,7 @@ class Pay extends Controller
         }
         //获取该用户钱包的虚拟币的数量
         $u_info = session('users');
-        $u_id = $u_info['id'];
+        $u_id = $u_info['cid'];
 //        $wallet = Wallet::get(['u_id' => $u_id])->getData('account_balance');
         $wallet = Db::table('wallet')->where('u_id',$u_id)->value('account_balance');
         $checkresult = bcsub($wallet,$pay_amount,4);
@@ -128,7 +128,7 @@ class Pay extends Controller
     //支付
     public function pay(){
         $u_info = session('users');
-        $u_id = $u_info['id'];
+        $u_id = $u_info['cid'];
         $this->pay_amount = trim(input('post.pay_amount'));
         $this->wallet_address = trim(input('post.wallet_address'));
         $this->pay_msg = trim(input('post.pay_msg'));
@@ -192,20 +192,22 @@ class Pay extends Controller
     }
 
     //交易记录
-    public function orderList(){
+    public function bill(){
         $u_info = session('users');
-        $u_id = $u_info['id'];
-        $order_list = Db::table('payorder')->field('order_id,volume,pay_type,pay_msg')->where('u_id',$u_id)->select();
-        if($order_list){
-            $ret['code'] = 200;
-            $ret['status'] = true;
-            $ret['data'] = $order_list;
-            return json($ret);
-        }
-        $ret['code'] = 300;
-        $ret['status'] = false;
-        $ret['msg'] = '暂无交易记录';
-        return json($ret);
+        $u_id = $u_info['cid'];
+/*        $payorderlist = Payorder::all(function($query) use($u_id){
+            $query->where('u_id',$u_id);
+        });*/
+        //用户钱包地址
+        $wd = Customer::get([$u_id])->value('wallet_address');
+        $order_list = Db::table('payorder')->field('volume,pay_type,pay_msg,create_time')->where('u_id',$u_id)->select();
+        //发币记录
+        $release_list = Db::table("release")->field('id as coinrelease,release_number as volume,create_time')->where('c_id',$u_id)->select();
+        $result = array_merge($order_list,$release_list);
+        $column = array_column($result,'create_time');
+        array_multisort($column,SORT_DESC,$result);
+//        var_dump($result);die;
+        return $this->fetch('bill',['result'=>$result,'wd'=>$wd]);
     }
 
 
