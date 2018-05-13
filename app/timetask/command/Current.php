@@ -64,6 +64,7 @@ class Current extends Command
 //                    Db::query($sql);
                     //发币成功则记录发币信息到发币信息表(release)
                     $this->release->currency_id = $k;
+                    $this->release->c_id = $v['cid'];
                     $this->release->release_number = $day_releast;
                     $this->release->isUpdate(false)->save();
                     //更新钱包表
