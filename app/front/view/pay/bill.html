@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>bill賬單</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  
+  <link rel="alternate icon" type="image/png" href="__front__/assets/i/favicon.png">
+  <link rel="stylesheet" href="__front__/assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="__front__/assets/css/yuan.css"/>
+  <link rel="stylesheet" href="__front__/css/idangerous.swiper.css">
+  		 <!--font-->
+	<link rel="stylesheet" type="text/css" href="__front__/font/iconfont.css">
+	<script src="__front__/font/iconfont.js"></script>
+  <style>
+    .header {
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 200%;
+      color: #333;
+      margin-top: 30px;
+    }
+    .header p {
+      font-size: 14px;
+    }
+    .preloader {
+			position: absolute;
+			left: 0;
+			top: -100px;
+			z-index: 0;
+			color: #fff;
+			text-align: center;
+			line-height: 100px;
+			height: 100px;
+			width: 100%;
+			opacity: 0;
+			font-size: 25px;
+			-webkit-transition: 300ms;
+			-moz-transition: 300ms;
+			-ms-transition: 300ms;
+			-o-transition: 300ms;
+			transition: 300ms;
+			background: rgba(0,0,0,0.1);
+		}
+		.preloader.visible {
+			top: 0;
+			opacity: 1;
+		}
+		.swiper-slide-visible {
+			opacity: 1;
+		}
+		.bill_inner{
+			-webkit-transition: 300ms;
+			-moz-transition: 300ms;
+			-ms-transition: 300ms;
+			-o-transition: 300ms;
+			transition: 300ms;
+		}
+
+  </style>
+</head>
+<body style="background:#F5F5F5;">
+	<!--页头-->
+	<header class="am-header" style="background-image:url(__front__/img/header1.jpg) ;background-size: cover;">
+	  <h1 class="am-header-title" style="color:white;font-size:18px;margin:0;">
+			<a  href="user.html" style="color:white;float:left;"><i class="icon iconfont icon-huida" style="color:white;"></i></a>	
+			賬單     
+	  </h1>
+  </header>
+	<!--页头结束-->
+	<div class="preloader"> Loading... </div>
+	<div class="bill_container">
+		<div class="swiper-wrapper" style="width:100%!important;height:900px!important;">
+			{if condition="$result"}
+			{volist name='result' id='vo' key='k'}
+			<div class="swiper-slide red-slide">
+				<div class="bill_inner">
+					<a class="bill_link">
+						<p style="font-size:12px;color:rgb(84,84,84);">{$wd|mb_substr=0,10,'utf-8'}...</p>
+						{if condition="isset($vo.coinrelease)"}
+						<p><span>[备注：舍得社区]</span><span class="bill_num">+{$vo.volume}</span></p>
+						{else /}
+						<p><span>[备注：{$vo.pay_msg}]</span>
+							{if condition="$vo.pay_type ==1"}
+							<span class="bill_num">-{$vo.volume}</span>
+							{else /}
+							<span class="bill_num">+{$vo.volume}</span>
+							{/if}
+						</p>
+						{/if}
+						<p>{$vo.create_time|date='Y-m-d H:i:s',###}</p>
+					</a>
+				</div>
+			</div>
+			{/volist}
+			{else /}
+			<div class="swiper-slide red-slide" style="text-align: center;color: black;font-size: larger">
+				暂无交易记录
+			</div>
+			{/if}
+		</div>
+	</div>
+<script src="__front__/js/jquery-1.10.1.min.js"></script>
+<script src="__front__/js/idangerous.swiper.min.js"></script>
+<script>
+  var holdPosition = 0;
+  var mySwiper = new Swiper('.bill_container',{
+    slidesPerView:'auto',
+    mode:'vertical',
+    watchActiveIndex: true,
+    onTouchStart: function() {
+      holdPosition = 0;
+    },
+    onResistanceBefore: function(s, pos){
+      holdPosition = pos;
+    },
+    onTouchEnd: function(){
+      if (holdPosition>100) {
+        mySwiper.setWrapperTranslate(0,100,0)
+        mySwiper.params.onlyExternal=true
+        $('.preloader').addClass('visible');
+        loadNewSlides();
+      }
+    }
+  })
+  var slideNumber = 0;
+  function loadNewSlides(){
+    setTimeout(function(){
+      //Prepend new slide
+      mySwiper.prependSlide(
+      	'<div class="bill_inner">'+
+      	'<a class="bill_link">'+
+					'<p style="font-size:12px;color:rgb(84,84,84);">'+slideNumber+'</p>'+
+					'<p><span>'+111+'</span><span class="bill_num">'+"+5100.0000"+'</span></p>'+
+					'<p>'+"2018-04-19 13:18:21"+'</p>'+
+				'</a>'+
+				'</div>'
+				
+				);
+      //Release interactions and set wrapper
+      mySwiper.setWrapperTranslate(0,0,0)
+      mySwiper.params.onlyExternal=false;
+      //Update active slide
+      mySwiper.updateActiveSlide(0)
+      //Hide loader
+      $('.preloader').removeClass('visible');
+    },1000)
+    slideNumber++;
+  }
+  </script>
+</body>
+</html>
