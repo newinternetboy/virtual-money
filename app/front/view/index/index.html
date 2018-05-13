@@ -239,7 +239,7 @@
 							console.log("++++"+data.length)
 						
 						
-							var str='<a>'+
+							var str='<a onclick="detail('+newObj.id+')">'+
 										 '<div class="news-img">'+
 											'<img src="'+newObj.img+'"/>'+
 											'</div>'+
@@ -310,6 +310,10 @@
             $('#code').html(coinlist[key]['code']);
             $('#button').attr('data',key);
         })
+
+        function detail(id){
+            location.href="{:url('front/index/detail')}?id="+id;
+        }
     </script>
 </body>
 </html>

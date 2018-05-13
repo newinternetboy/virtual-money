@@ -1,0 +1,52 @@
+{__NOLAYOUT__}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>inform_detail资讯详情页</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="image/png" href="__front__/assets/i/favicon.png">
+  <link rel="stylesheet" href="__front__/assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="__front__/assets/css/yuan.css"/>
+  <link href="__front__/css/share.css" rel="stylesheet" type="text/css">
+  <!--font-->
+	<link rel="stylesheet" type="text/css" href="__front__/font/iconfont.css">
+	<script src="__front__/font/iconfont.js"></script>
+</head>
+<body>
+	<!--页头-->
+	<header class="am-header"  style="background-image:url(__front__/img/header1.jpg) ;background-size: cover;">
+	  <h1 class="am-header-title" style="color:white;font-size:18px;margin:0;">
+			<a href="{:url('front/index/index')}" style="color:white;float:left;"><i class="icon iconfont icon-huida"></i></a>
+		    {$detail.title}
+			<a href="javascript:void(0)" class="share" style="float:right;"><img src="__front__/images/share-ico.png" style="margin-top: 17px;height: 18px;vertical-align: top;"/></a>
+	  </h1>
+	  
+  </header>
+	<!--页头结束-->
+	<!--内容开始-->
+	<div class="informdetail_container">
+		<h6>{$detail.title}</h6>
+		<span>{$detail.create_time}</span>
+        <div style="text-align: center;margin-top:10px;"><img style="height:150px;" src="{$detail.img}" alt=""/></div>
+
+        {$detail.content}
+	</div>
+	<!--内容结束-->
+	<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="__front__/js/share.js"></script>
+	<script  type="text/javascript">
+		$('.share').shareConfig({
+			Shade : true, //是否显示遮罩层
+			Event:'click', //触发事件
+			Content : 'Share', //内容DIV ID
+			Title : '' //显示标题
+		});
+	</script>
+</body>
+</html>
+

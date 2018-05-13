@@ -1,3 +1,4 @@
+{__NOLAYOUT__}
 <!doctype html>
 <html class="no-js">
 <head>
@@ -7,7 +8,7 @@
   <meta name="keywords" content="">
   <meta name="viewport"
         content="width=device-width, initial-scale=1">
-  <title>Hello Amaze UI</title>
+  <title>Account_Security賬戶安全</title>
 
   <!-- Set render engine for 360 browser -->
   <meta name="renderer" content="webkit">
@@ -33,43 +34,39 @@
 
   <link rel="stylesheet" href="__front__/assets/css/amazeui.min.css">
   <link rel="stylesheet" href="__front__/assets/css/app.css">
+  <link rel="stylesheet" href="__front__/assets/css/yuan.css">
   <link type="text/css" href="__front__/css/jq22.css" rel="stylesheet" />
-  <!--font-->
+  		 <!--font-->
 	<link rel="stylesheet" type="text/css" href="__front__/font/iconfont.css">
 	<script src="__front__/font/iconfont.js"></script>
-  
   <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
   <script type="text/javascript" src="__front__/js/jq22.js"></script>
 </head>
 <body>
 	<!--页头-->
-	<div class="user-header">
+	<header class="am-header" style="background-image:url(__front__/img/header1.jpg) ;background-size: cover;">
 
-      <h1 class="">
-          		我的賬戶
+      <h1 class="am-header-title" style="color: white;font-size: 18px;margin:0;">
+    		<a href="#" style="color:white;float:left;"><i class="icon iconfont icon-huida" style="color:white;"></i></a>
+    		賬戶安全    
       </h1>
-			<div class="loginBtn">
-				<a href="{:url('front/user/login')}" class="am-btn am-round">登錄</a>
-			</div>
-  </div>
-    <input type="hidden" id="nav" value="nav4"/>
+
+  	</header>
 	<!--页头结束-->
-<div class="am-g">
-  <div class="am-u-sm-6"><a href="wallet_address.html"><span style="padding-right:7px;"><i class="icon iconfont icon-qianbao"></i></span><span>錢包地址</span></div></a>
-  <div class="am-u-sm-6"><a href="Mykey_password.html"><span style="padding-right:7px;"><i class="icon iconfont icon-3"></i></span><span>錢包密鑰</span></div></a>
-</div>
-	<div class="row" style="margin-top: 20px;padding:0 16px;height: 44px;line-height: 44px;background: white;border-bottom: 1px solid #E2E1E1;">
-		<a href="My_assets .html"><span style="padding-right:7px;"><i class="icon iconfont icon-zichan" style="vertical-align: middle;"></i></span><span>我的資產</span></a>
+	<!--內容-->
+	<div class="setup_container">
+		<div onclick="certification()" class="setup_inner">
+			<a href="#">
+				<span class="setup_text">實名認證</span>
+				<a href="#" style="color:#848484;float:right;line-height:44px;"> <i class="icon iconfont icon-iconfontjiantou5"></i></a>	
+			</a>
+		</div>
 	</div>
-	<div class="row" style="padding:0 16px;height: 44px;line-height: 44px;background: white;">
-		<a href="bill.html"><span style="padding-right:7px;"><i class="icon iconfont icon-zhangdan-" style="vertical-align: middle;"></i></span><span>賬單</span></a>
-	</div>
-	<div onclick="toSetup()" class="row" style="margin-top: 20px;padding:0 16px;height: 44px;line-height: 44px;background: white;">
-		<a href="#"><span style="padding-right:7px;"><i class="icon iconfont icon-shezhi01" style="vertical-align: middle;"></i></span><span>設置</span></a>
-	</div>
+	<!--內容結束-->
+
+	
 
 
-<!--在这里编写你的代码-->
 
 <!--[if (gte IE 9)|!(IE)]><!-->
 <!--<script src="assets/js/jquery.min.js"></script>-->
@@ -83,8 +80,7 @@
 </body>
 </html>
 <script>
-    function toSetup(){
-        location.href="{:url('front/user/setUp')}";
+    function certification(){
+        location.href="{:url('front/user/certification')}";
     }
-
 </script>

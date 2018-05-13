@@ -7,7 +7,7 @@
   <meta name="keywords" content="">
   <meta name="viewport"
         content="width=device-width, initial-scale=1">
-  <title>Hello Amaze UI</title>
+  <title>About关于</title>
 
   <!-- Set render engine for 360 browser -->
   <meta name="renderer" content="webkit">
@@ -33,43 +33,48 @@
 
   <link rel="stylesheet" href="__front__/assets/css/amazeui.min.css">
   <link rel="stylesheet" href="__front__/assets/css/app.css">
+  <link rel="stylesheet" href="__front__/assets/css/yuan.css">
   <link type="text/css" href="__front__/css/jq22.css" rel="stylesheet" />
-  <!--font-->
-	<link rel="stylesheet" type="text/css" href="__front__/font/iconfont.css">
-	<script src="__front__/font/iconfont.js"></script>
-  
   <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
   <script type="text/javascript" src="__front__/js/jq22.js"></script>
 </head>
 <body>
 	<!--页头-->
-	<div class="user-header">
+	<header class="am-header" style="background-image:url(__front__/img/header1.jpg) ;background-size: cover;">
 
-      <h1 class="">
-          		我的賬戶
-      </h1>
-			<div class="loginBtn">
-				<a href="{:url('front/user/login')}" class="am-btn am-round">登錄</a>
-			</div>
-  </div>
-    <input type="hidden" id="nav" value="nav4"/>
+	    <h1 class="am-header-title" style="color: white;font-size: 18px;margin:0;">     
+			<a  class="am-icon-angle-left" href="{:url('front/user/setUp')}" style="color:white;float:left;"></a>
+			关于     
+	    </h1>
+
+  	</header>
 	<!--页头结束-->
-<div class="am-g">
-  <div class="am-u-sm-6"><a href="wallet_address.html"><span style="padding-right:7px;"><i class="icon iconfont icon-qianbao"></i></span><span>錢包地址</span></div></a>
-  <div class="am-u-sm-6"><a href="Mykey_password.html"><span style="padding-right:7px;"><i class="icon iconfont icon-3"></i></span><span>錢包密鑰</span></div></a>
-</div>
-	<div class="row" style="margin-top: 20px;padding:0 16px;height: 44px;line-height: 44px;background: white;border-bottom: 1px solid #E2E1E1;">
-		<a href="My_assets .html"><span style="padding-right:7px;"><i class="icon iconfont icon-zichan" style="vertical-align: middle;"></i></span><span>我的資產</span></a>
+	<!--內容-->
+	<div class="login_logo">
+		<img src="__front__/img/logo.png" style="">
 	</div>
-	<div class="row" style="padding:0 16px;height: 44px;line-height: 44px;background: white;">
-		<a href="bill.html"><span style="padding-right:7px;"><i class="icon iconfont icon-zhangdan-" style="vertical-align: middle;"></i></span><span>賬單</span></a>
+	<p class="about_title">捨得社區1.0</p>
+	<div onclick='shequ()' class="setup_inner">
+		<a class="setup_text" href="Community_profile.html">社區簡介</a>
+		<a  class="am-icon-angle-right" href="#" style="color:#848484;float:right;line-height:44px;"></a>	
 	</div>
-	<div onclick="toSetup()" class="row" style="margin-top: 20px;padding:0 16px;height: 44px;line-height: 44px;background: white;">
-		<a href="#"><span style="padding-right:7px;"><i class="icon iconfont icon-shezhi01" style="vertical-align: middle;"></i></span><span>設置</span></a>
+	<div class="setup_container">
+		<div class="setup_inner">
+			<a class="setup_text">客服電話</a>
+			
+			<a  class="am-icon-angle-right" href="#" style="color:#848484;float:right;line-height:44px;"><span style="font-size:12px;color:rgb(92,109,249);float: left;padding-right:10px;">400-888-8888</span></a>	
+		</div>
+		<div class="setup_inner" style="border-top:1px solid #edebeb;">
+			<a class="setup_text">客服郵箱</a>
+			
+			<a  class="am-icon-angle-right" href="#" style="color:#848484;float:right;line-height:44px;"><span style="font-size:12px;color:rgb(92,109,249);float: left;padding-right:10px;">123456711@163.com</span></a>	
+		</div>
 	</div>
+	<!--內容結束-->
+
+	
 
 
-<!--在这里编写你的代码-->
 
 <!--[if (gte IE 9)|!(IE)]><!-->
 <!--<script src="assets/js/jquery.min.js"></script>-->
@@ -77,14 +82,13 @@
 <!--[if lte IE 8 ]>
 <script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
 <script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
-<script src="__front__/assets/js/amazeui.ie8polyfill.min.js"></script>
+<script src="assets/__front__/js/amazeui.ie8polyfill.min.js"></script>
 <![endif]-->
-<script src="__front__/assets/js/amazeui.min.js"></script>
+<script src="assets/__front__/js/amazeui.min.js"></script>
 </body>
 </html>
 <script>
-    function toSetup(){
-        location.href="{:url('front/user/setUp')}";
+    function shequ(){
+        location.href="{:url('front/user/communityProfile')}"
     }
-
 </script>

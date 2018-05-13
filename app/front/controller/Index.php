@@ -40,4 +40,13 @@ class Index extends Home
         return json($data);
     }
 
+    public function detail(){
+        $id= input('id');
+        $articleService = new ArticleService();
+        $detail = $articleService->findInfo(['id'=>$id]);
+        $this->assign('detail',$detail);
+        return $this->fetch();
+
+    }
+
 }
