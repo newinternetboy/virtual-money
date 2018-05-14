@@ -32,7 +32,7 @@ class User extends Home
         $users['cid']=$user_info['id'];
         $users['wa']=$user_info['wallet_address'];
         $users['tel']=$user_info['tel'];
-        session('users',$user_info);
+        session('users',$users);
         if(!$user_info){
             $ret['code'] = 300;
             $ret['status'] = false;
@@ -149,5 +149,9 @@ class User extends Home
         return $this->fetch('forget_password');
     }
 
+    public function loginOut(){
+        session('users',null);
+        $this->redirect('/front/index/index');
+    }
 
 }
