@@ -154,4 +154,9 @@ class User extends Home
         $this->redirect('/front/index/index');
     }
 
+    //秘钥
+    public function mykeypassword(){
+        return $this->fetch();
+    }
+
 }

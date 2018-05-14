@@ -55,7 +55,7 @@
 	<div class="pay_remark">
 		<div>
 			<p class="pay_tit">備註</p>
-			<input class="pay_ipt" placeholder="添加備註（15字以內）"/>
+			<input class="pay_ipt" id="pay_msg" placeholder="添加備註（15字以內）"/>
 		</div>
 	</div>
 	<!--备注结束-->
@@ -90,6 +90,30 @@
 <!--底部导航栏结束-->
 
 <!--在这里编写你的代码-->
+	<script>
+		function pay(){
+			var pay_amount = $("#amount").val();
+			var wallet_address = $("#payurl").val();
+			var pay_msg = $("#pay_msg").val();
+			$.ajax({
+				url:"{:url('front/pay/pay')}",
+				method:'post',
+				dataType:'json',
+				data: {pay_amount: pay_amount,wallet_address:wallet_address,pay_msg:pay_msg},
+				beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+				success: function(res){
+					if(res.code != 200){
+						alert(res.msg);
+					}else{
+						window.location ="{:url('front/pay/bill')}"
+					}
+				},
+				error:function(){
+					alert("系统错误");
+				}
+			})
+		}
+	</script>
 <!--[if (gte IE 9)|!(IE)]><!-->
 <!--<script src="assets/js/jquery.min.js"></script>-->
 <!--<![endif]-->
