@@ -100,6 +100,7 @@ class Pay extends Controller
 
     //校验当前用户虚拟币数量是否大于交易量
     public function checkPayMount(){
+
         $pay_amount = $this->pay_amount;
         //检验数量是否合法
         if(!is_numeric($pay_amount)){
@@ -127,6 +128,9 @@ class Pay extends Controller
 
     //支付
     public function pay(){
+        if(!session('users')){
+            return $this->fetch('/user/login');
+        }
         $u_info = session('users');
         $u_id = $u_info['cid'];
         $this->pay_amount = trim(input('post.pay_amount'));
@@ -184,6 +188,9 @@ class Pay extends Controller
 
 
     public function payMoney(){
+        if(!session('users')){
+            return $this->fetch('/user/login');
+        }
         $wa = input('get.wa');
         if ($wa){
             return $this->fetch('pay',['address'=>$wa]);
@@ -193,6 +200,12 @@ class Pay extends Controller
 
     //交易记录
     public function bill(){
+        if(!session('users')){
+            $this->redirect('front/user/login');
+        }
+        if(!session('users')){
+            return $this->fetch('/user/login');
+        }
         $u_info = session('users');
         $u_id = $u_info['cid'];
 /*        $payorderlist = Payorder::all(function($query) use($u_id){
@@ -218,6 +231,9 @@ class Pay extends Controller
 
 
     public function wallet_address(){
+        if(!session('users')){
+            $this->redirect('front/user/login');
+        }
         //获取明文钱包地址
         $wd = $this->getUserWalletAdress();
         if($wd==false){
@@ -228,6 +244,9 @@ class Pay extends Controller
 
     //用户资产
     public function myasset(){
+        if(!session('users')){
+            $this->redirect('front/user/login');
+        }
         //用户钱包的余额
         $u_id = session('users.cid');
         $coin_list = Db::query("select w.account_balance,c.name,c.code,c.id from wallet w
@@ -235,10 +254,12 @@ class Pay extends Controller
         where w.u_id = ? limit 1
         ",[$u_id]);
         //账户余额
-        $wallet_info = $coin_list[0];
+        $wallet_info = $coin_list?$coin_list[0]:0.0000;
         $coin_id = $coin_list[0]['id'];
         //获取用户的固定资产
-        $rest_money = Db::table('currency')->field('rest_number')->where('coin_id',$coin_id)->select();
+        $rest_money = Db::table('currency')->field('rest_number')->where('coin_id',$coin_id)
+            ->where('cid',$u_id)
+            ->select();
         $myasset = 0;
         foreach ($rest_money as $k=>$v){
             $myasset += $v['rest_number'];
