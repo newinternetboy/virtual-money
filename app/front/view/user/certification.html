@@ -57,43 +57,37 @@
 	<div class="certification_container">
 		<div class="centi_inner">
 			真實姓名
-			<input class="centi_inner_ipt" placeholder="請輸入您的真實姓名,認證后不可更改"/>
+			<input id="name" class="centi_inner_ipt" placeholder="請輸入您的真實姓名,認證后不可更改"/>
 		</div>
 		<div class="centi_inner">
 			身份證號
-			<input class="centi_inner_ipt" placeholder="請輸入您真實姓名對應的身份證號"/>
+			<input id="identity" class="centi_inner_ipt" placeholder="請輸入您真實姓名對應的身份證號"/>
 		</div>
 		<div class="centi_inner" style="border:none;">
 			上傳證件材料
 		</div>
-		<div class="upload-picfront">
+		<div  id="preview1" class="upload-picfront">
 			<!--<p>+</p>
 			<span>身份證正面照片</span>-->
-			<img style="width: 100%;" src="__front__/img/front.jpg"/>
+			<img   onclick="$('#previewImg1').click();" style="width: 100%;" src="__front__/img/front.jpg"/>
 		</div>
-		<div class="upload-picfront">
+        <input type="file" onchange="previewImage1(this)" style="display: none;" id="previewImg1">
+
+        <div id="preview" class="upload-picfront">
 			<!--<p>+</p>
 			<span>身份證反面照片</span>-->
-			<img style="width: 100%;" src="__front__/img/the_back.jpg" />
+			<img style="width:100%;"  id="imghead" onclick="$('#previewImg').click();" src="__front__/img/the_back.jpg" />
 		</div>
+        <input type="file" onchange="previewImage(this)" style="display: none;" id="previewImg">
+
 		<!--提交審核按钮开始-->
 		<div class="sub_btn">
-			<div id="Sub_Auditing">提交審核</div>
+			<div onclick="sub()" id="Sub_Auditing">提交審核</div>
 		</div>
 		<!--提交審核按钮结束-->
 	</div>
 	
-	
-	
-	
-	
-	
-	
 	<!--內容結束-->
-
-	
-
-
 
 <!--[if (gte IE 9)|!(IE)]><!-->
 <!--<script src="assets/js/jquery.min.js"></script>-->
@@ -101,8 +95,177 @@
 <!--[if lte IE 8 ]>
 <script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
 <script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
-<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<script src="__front__/assets/js/amazeui.ie8polyfill.min.js"></script>
 <![endif]-->
-<script src="assets/js/amazeui.min.js"></script>
+<script src="__front__/assets/js/amazeui.min.js"></script>
 </body>
 </html>
+<script>
+    //图片上传预览    IE是用了滤镜。
+    function previewImage(file)
+    {
+        var MAXWIDTH  = 202;
+        var MAXHEIGHT = 111;
+        var div = document.getElementById('preview');
+        if (file.files && file.files[0])
+        {
+            div.innerHTML ='<img id=imghead onclick=$("#previewImg").click()>';
+            var img = document.getElementById('imghead');
+            img.onload = function(){
+                var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+                img.width  =  rect.width;
+                img.height =  rect.height;
+//                 img.style.marginLeft = rect.left+'px';
+                img.style.marginTop = rect.top+'px';
+            }
+            var reader = new FileReader();
+            reader.onload = function(evt){img.src = evt.target.result;}
+            reader.readAsDataURL(file.files[0]);
+        }
+        else //兼容IE
+        {
+            var sFilter='filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
+            file.select();
+            var src = document.selection.createRange().text;
+            div.innerHTML = '<img id=imghead>';
+            var img = document.getElementById('imghead');
+            img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+            var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+            status =('rect:'+rect.top+','+rect.left+','+rect.width+','+rect.height);
+            div.innerHTML = "<div id=divhead style='width:"+rect.width+"px;height:"+rect.height+"px;margin-top:"+rect.top+"px;"+sFilter+src+"\"'></div>";
+        }
+    }
+    function clacImgZoomParam( maxWidth, maxHeight, width, height ){
+        var param = {top:0, left:0, width:width, height:height};
+        if( width>maxWidth || height>maxHeight ){
+            rateWidth = width / maxWidth;
+            rateHeight = height / maxHeight;
+
+            if( rateWidth > rateHeight ){
+                param.width =  maxWidth;
+                param.height = Math.round(height / rateWidth);
+            }else{
+                param.width = Math.round(width / rateHeight);
+                param.height = maxHeight;
+            }
+        }
+        param.left = Math.round((maxWidth - param.width) / 2);
+        param.top = Math.round((maxHeight - param.height) / 2);
+        return param;
+    }
+</script>
+<script>
+    //图片上传预览    IE是用了滤镜。
+    function previewImage1(file)
+    {
+        var MAXWIDTH  = 202;
+        var MAXHEIGHT = 111;
+        var div = document.getElementById('preview1');
+        if (file.files && file.files[0])
+        {
+            div.innerHTML ='<img id=imghead1 onclick=$("#previewImg1").click()>';
+            var img = document.getElementById('imghead1');
+            img.onload = function(){
+                var rect = clacImgZoomParam1(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+                img.width  =  rect.width;
+                img.height =  rect.height;
+//                 img.style.marginLeft = rect.left+'px';
+                img.style.marginTop = rect.top+'px';
+            }
+            var reader = new FileReader();
+            reader.onload = function(evt){img.src = evt.target.result;}
+            reader.readAsDataURL(file.files[0]);
+        }
+        else //兼容IE
+        {
+            var sFilter='filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
+            file.select();
+            var src = document.selection.createRange().text;
+            div.innerHTML = '<img id=imghead1>';
+            var img = document.getElementById('imghead1');
+            img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+            var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+            status =('rect:'+rect.top+','+rect.left+','+rect.width+','+rect.height);
+            div.innerHTML = "<div id=divhead1 style='width:"+rect.width+"px;height:"+rect.height+"px;margin-top:"+rect.top+"px;"+sFilter+src+"\"'></div>";
+        }
+    }
+    function clacImgZoomParam1( maxWidth, maxHeight, width, height ){
+        var param = {top:0, left:0, width:width, height:height};
+        if( width>maxWidth || height>maxHeight ){
+            rateWidth = width / maxWidth;
+            rateHeight = height / maxHeight;
+
+            if( rateWidth > rateHeight ){
+                param.width =  maxWidth;
+                param.height = Math.round(height / rateWidth);
+            }else{
+                param.width = Math.round(width / rateHeight);
+                param.height = maxHeight;
+            }
+        }
+        param.left = Math.round((maxWidth - param.width) / 2);
+        param.top = Math.round((maxHeight - param.height) / 2);
+        return param;
+    }
+</script>
+<script>
+    function sub(){
+        var positive_img = document.getElementById("previewImg1").files[0];
+        var negative_img = document.getElementById("previewImg").files[0];
+        var name = $('#name').val();
+        var identity = $('#identity').val();
+        if(name == ""||name== undefined || name== null){
+            alert('真实姓名不能为空');
+            return;
+        }
+        var regName =/^[\u4e00-\u9fa5]{2,4}$/;
+        if(!regName.test(name)){
+            alert('真实姓名填写有误');
+            return false;
+        }
+        if(identity == ""||identity == undefined || identity == null){
+            alert('身份证号不能为空');
+            return;
+        }
+        var regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        if(!regIdNo.test(identity)){
+            alert('身份证号填写有误');
+            return false;
+        }
+        if($('#previewImg1').val()==""){
+            alert('身份证正面照片为空');
+            return;
+        }
+        if($('#previewImg').val()==""){
+            alert('身份证反面照片为空');
+            return;
+        }
+        var formData = new FormData();
+        formData.append('positive_img',positive_img);
+        formData.append('negative_img',negative_img);
+        formData.append('name',name);
+        formData.append('identity',identity);
+        $.ajax({
+            url: "{:url('front/user/saveCertification')}",
+            type: "POST",
+            dataType:"json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success:function (res) {
+                if(res.code != 200){
+                    alert(res.msg);
+                }else{
+                    alert(res.msg);
+                    setTimeout(function(){window.location.href=''},2000)
+                }
+                $('#Sub_Auditing').prop('disabled',false);
+            },
+            error: function () {
+                alertMsg("操作失败");
+                $('#Sub_Auditing').prop('disabled',false);
+            }
+        });
+    }
+</script>

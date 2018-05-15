@@ -10,6 +10,7 @@ namespace app\front\controller;
 use app\common\service\InvitationService;
 use app\common\service\CustomerService;
 use app\common\service\WalletService;
+use app\common\service\CertificationService;
 use think\Db;
 use think\Request;
 use think\Session;
@@ -135,6 +136,41 @@ class User extends Home
 
     public function certification(){
         return $this->fetch();
+    }
+
+    public function saveCertification(){
+        $ret['code'] = 200;
+        $ret['msg'] = "操作成功！";
+        try {
+            $data = input('post.');
+            $positive_img = request()->file('positive_img');
+            $negative_img = request()->file('negative_img');
+            unset($data['positive_img']);
+            unset($data['negative_img']);
+            if ($positive_img) {
+                $oriPath = DS . 'certificationImg' . DS . 'origin';
+                $thumbPath = DS .'certificationImg' . DS . 'thumb';
+                $width = config('common_config.ImgWidth');
+                $height = config('common_config.ImgHeight');
+                $data['positive_img'] = saveImg($positive_img,$oriPath,$thumbPath,$width,$height);
+            }
+            if ($negative_img) {
+                $oriPath = DS . 'certificationImg' . DS . 'origin';
+                $thumbPath = DS .'certificationImg' . DS . 'thumb';
+                $width = config('common_config.ImgWidth');
+                $height = config('common_config.ImgHeight');
+                $data['negative_img'] = saveImg($negative_img,$oriPath,$thumbPath,$width,$height);
+            }
+            $data['cid'] = 999999;
+            $certificationService = new CertificationService();
+            if (!$certificationService->upsert($data, false)) {
+                exception($certificationService->getError());
+            }
+        } catch (\Exception $e) {
+            $ret['code'] = 400;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
     }
 
     public function about(){
