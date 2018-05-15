@@ -71,7 +71,7 @@
 	<!--內容結束-->
 	<!--退出登錄按钮开始-->
 	<div class="pay_btn">
-		<div id="log_off">退出登錄</div>
+		<div id="log_off" onclick="loginOut()">退出登錄</div>
 	</div>
 	<!--退出登錄按钮结束-->
 
@@ -96,5 +96,8 @@
     }
     function about(){
         location.href= "{:url('front/user/about')}";
+    }
+    function loginOut(){
+        location.href ="{:url('front/user/loginOut')}";
     }
 </script>

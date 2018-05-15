@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>wallet錢包地址</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="image/png" href="__front__/assets/i/favicon.png">
+  <link rel="stylesheet" href="__front__/assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="__front__/assets/css/yuan.css"/>
+  <!--font-->
+	<link rel="stylesheet" type="text/css" href="__front__/font/iconfont.css">
+	<script src="__front__/font/iconfont.js"></script>
+</head>
+<script type="text/javascript">
+function copyUrl1()
+    {
+        var Url1=document.getElementById("walletnum").innerText;
+        var oInput = document.createElement('input');
+        oInput.value = Url1;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        oInput.className = 'oInput';
+        oInput.style.display='none';
+        alert('复制成功');
+    }
+</script>
+<body style="background-image:url(__front__/img/wallet_background.jpg) ;background-size: cover;">
+	<!--页头-->
+	<header class="am-header" >
+	  <h1 class="am-header-title" style="color:white;font-size:18px;margin:0;">
+			<a href="{:url('front/user/index')}" style="color:white;float:left;"><i class="icon iconfont icon-huida"></i></a>
+			錢包地址     
+	  </h1>
+  </header>
+	<!--页头结束-->
+
+	<div class="wallet_container">
+		<p class="QR_num" id="walletnum">{$wd}</p>
+		<div class="QR_Code">
+			<p>掃一掃支付</p>
+			<div class="QR_Code_img">
+				<img src="{:url('front/pay/codeImage')}">
+			</div>
+		</div>
+		<div class="btn copy_address"  onClick="copyUrl1()">複製收款地址</div>
+		<div class="btn Save_to_the_album">保存到相冊</div>
+	</div>
+
+</body>
+</html>
+
