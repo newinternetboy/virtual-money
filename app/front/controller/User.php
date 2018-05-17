@@ -234,5 +234,8 @@ class User extends Home
     public function mykeypassword(){
         return $this->fetch();
     }
-
+    public function test(){
+        $secret = Db::table('wallet')->where('u_id',26)->value('scret_key');
+        var_dump($secret);
+    }
 }

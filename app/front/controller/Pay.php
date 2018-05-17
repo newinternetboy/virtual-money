@@ -26,6 +26,7 @@ class Pay extends Controller
     public $wallet_address;
     public $pay_amount;
     public $pay_msg;
+    public $secret_key;
     //二维码（根据钱包地址生成）
     public function codeImage(){
 
@@ -138,6 +139,7 @@ class Pay extends Controller
         $this->pay_amount = trim(input('post.pay_amount'));
         $this->wallet_address = trim(input('post.wallet_address'));
         $this->pay_msg = trim(input('post.pay_msg'));
+        $this->secret_key = trim(input('post.secret_key'));
         $checkWallet = $this->getAllWalletAdress();
         if($checkWallet!==true){
             return $checkWallet;
@@ -145,6 +147,15 @@ class Pay extends Controller
         $checkAmount = $this->checkPayMount();
         if($checkAmount!==true){
             return $checkAmount;
+        }
+        //校验密钥
+        $secret_key = Db::table('wallet')->where('u_id',$u_id)->value('scret_key');
+        if($this->secret_key != $secret_key){
+            return json([
+                'status'=>false,
+                'code'=>'300',
+                'msg'=>'秘钥错误,请重新输入'
+            ]);
         }
         $u_to_info = $this->getUserInfoByWI();
         $u_id_to = $u_to_info['id'];
