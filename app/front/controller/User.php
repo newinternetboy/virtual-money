@@ -62,9 +62,12 @@ class User extends Home
                 if ($secret_key){
                     //将钱包地址，密钥放到用户表和钱包表
                     Db::table('customer')->where('id',$user_info['id'])->update(['wallet_address'=>$wallet_adress]);
+                    //初始化钱包余额
+                    $account_balance = Rpcutils::getBalance($user_info['id'],$wallet_info);
                     Db::table('wallet')->where('u_id',$user_info['id'])->update([
                         'wallet_address'=>$wallet_adress,
-                        'scret_key' => $secret_key
+                        'scret_key' => $secret_key,
+                        'account_balance' => $account_balance
                     ]);
                 }else{
                     $ret['code'] = 300;

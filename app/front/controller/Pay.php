@@ -148,6 +148,19 @@ class Pay extends Controller
         }
         $u_to_info = $this->getUserInfoByWI();
         $u_id_to = $u_to_info['id'];
+        $wallet_info = Db::table('coin')
+            ->field('rpc_user,rpc_pwd,rpc_url,rpc_port')
+            ->where('code','RFT')
+            ->find();
+//        从钱包转币
+        $result = Rpcutils::sendfrom($u_id,$this->wallet_address,$this->pay_amount,$wallet_info);
+        if($result==false){
+            return json([
+                'status'=>false,
+                'code'=>'300',
+                'msg'=>'系统繁忙，请稍后'
+            ]);
+        }
         //执行交易
         //交易逻辑 1 从用户的钱包转出，转到接受方  地址
         // 2 记录到 payorder；两条一条支出一条收入
