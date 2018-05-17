@@ -14,6 +14,7 @@ use app\common\service\CertificationService;
 use think\Db;
 use think\Request;
 use think\Session;
+use app\common\controller\Rpcutils;
 
 class User extends Home
 {
@@ -21,6 +22,14 @@ class User extends Home
         return $this->fetch();
     }
 
+    //获取钱包对应的配置信息
+    public function getWalletInfo(){
+        $info = Db::table('coin')
+            ->field('rpc_user,rpc_pwd,rpc_url,rpc_port')
+            ->where('code','RFT')
+            ->find();
+        return $info;
+    }
     public function login(){
         if(!($this->request->isAjax())){
             return $this->fetch();
@@ -28,12 +37,8 @@ class User extends Home
         $mobile = trim(input('post.mobile'));
         $password = trim(input('post.password'));
         //检查用户是否存在
-        $user_info = Db::table('customer')->field('id,tel,password,wallet_address')->where('tel',$mobile)->find();
-        //记录用户id
-        $users['cid']=$user_info['id'];
-        $users['wa']=$user_info['wallet_address'];
-        $users['tel']=$user_info['tel'];
-        session('users',$users);
+        $user_info = Db::table('customer')->where('tel',$mobile)->find();
+
         if(!$user_info){
             $ret['code'] = 300;
             $ret['status'] = false;
@@ -47,10 +52,42 @@ class User extends Home
             $ret['msg'] = '用户名或密码错误';
             return json($ret);
         }
+        if(!$user_info['wallet_address']){
+            //生成钱包地址
+            $wallet_info = $this->getWalletInfo();
+            $wallet_adress = Rpcutils::getAccountAddress($user_info['id'],$wallet_info);
+            if($wallet_adress){
+                //生成钱包秘钥
+                $secret_key = Rpcutils::dumpprivkey($wallet_adress,$wallet_info);
+                if ($secret_key){
+                    //将钱包地址，密钥放到用户表和钱包表
+                    Db::table('customer')->where('id',$user_info['id'])->update(['wallet_address'=>$wallet_adress]);
+                    Db::table('wallet')->where('u_id',$user_info['id'])->update([
+                        'wallet_address'=>$wallet_adress,
+                        'scret_key' => $secret_key
+                    ]);
+                }else{
+                    $ret['code'] = 300;
+                    $ret['status'] = false;
+                    $ret['msg'] = '系统错误';
+                    return json($ret);
+                }
+            }else{
+                $ret['code'] = 300;
+                $ret['status'] = false;
+                $ret['msg'] = '系统错误';
+                return json($ret);
+            }
+
+        }
             $ret['code'] = 200;
             $ret['status'] = true;
             $ret['msg'] = '登录成功';
-
+            //记录用户id
+            $users['cid']=$user_info['id'];
+            $users['wa']=$user_info['wallet_address'];
+            $users['tel']=$user_info['tel'];
+            session('users',$users);
         return json($ret);
     }
 
