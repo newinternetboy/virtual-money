@@ -17,6 +17,7 @@ use app\timetask\model\Currency;
 use app\timetask\model\Releaselog;
 use think\Db;
 use app\timetask\model\Release;
+use app\common\controller\Rpcutils;
 
 class Current extends Command
 {
@@ -48,6 +49,17 @@ class Current extends Command
         $list = $current->field(['id', 'cid', 'number'])
             ->where('rest_number', '>', 0)
             ->where('send', '=', 1)->select();
+        //获取对应的coin链接信息
+        $wallet_info = Db::table('coin')
+            ->field('rpc_user,rpc_pwd,rpc_url,rpc_port')
+            ->where('code','RFT')
+            ->find();
+        if (!$wallet_info){
+            $data['errormsg'] = '无对应的钱包链接信息';
+            $data['type'] = 3;
+            $this->addErrorLog($data);
+            return;
+        }
         if ($list) {
             foreach ($list as $k => $v) {
                 $list2 = $v->toArray();
@@ -55,6 +67,16 @@ class Current extends Command
                 // $k 每条记录对应的id $v 没条记录对应的总的虚拟币数
                 //计算每条记录应该每天每次需要派发的虚拟币数
                 $day_releast = round($list2['number'] * 0.1 / 365 / 2, 4);
+                //根据uid获取钱包地址
+                $wd = Db::table('customer')->where('id',$list2['cid'])->value('wallet_address');
+                //发币
+                $releast_result =Rpcutils::generalAccountSendfrom($wd,$day_releast,$wallet_info);
+                if($releast_result == false){
+                    $data['errormsg'] = '发币报错';
+                    $data['type'] = 4;
+                    $this->addErrorLog($data);
+                    return;
+                }
                 //执行更新操作
                 Db::startTrans();
                 try {
