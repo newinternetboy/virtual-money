@@ -39,6 +39,14 @@
 
 		</div>
 	</div>
+	<div class="pay_remark">
+		<div>
+			<p class="pay_tit">密钥</p>
+			<div>
+				<input class="pay_ipt" id="secret_key" placeholder="请输入密钥" />
+			</div>
+		</div>
+	</div>
 	<!--接收方结束-->
 	<!--数量开始-->
 	<div class="pay_num">
@@ -95,11 +103,12 @@
 			var pay_amount = $("#amount").val();
 			var wallet_address = $("#payurl").val();
 			var pay_msg = $("#pay_msg").val();
+			var secret_key = $("#secret_key").val();
 			$.ajax({
 				url:"{:url('front/pay/pay')}",
 				method:'post',
 				dataType:'json',
-				data: {pay_amount: pay_amount,wallet_address:wallet_address,pay_msg:pay_msg},
+				data: {pay_amount: pay_amount,wallet_address:wallet_address,pay_msg:pay_msg,secret_key:secret_key},
 				beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
 				success: function(res){
 					if(res.code != 200){
