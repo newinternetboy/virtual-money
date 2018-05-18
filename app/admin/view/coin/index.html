@@ -23,6 +23,10 @@
                                     <th>虚拟币名称</th>
                                     <th>虚拟币价格</th>
                                     <th>虚拟币标识</th>
+                                    <th>虚拟币总账户名</th>
+                                    <th>虚拟币密码</th>
+                                    <th>虚拟币账户url</th>
+                                    <th>虚拟币端口</th>
                                     <th>{:lang('Operate')}</th>
                                 </tr>
                                 </thead>
@@ -33,11 +37,18 @@
                                     <td>{$vo.name ?? '-'}</td>
                                     <td>{$vo.price ?? '-'}</td>
                                     <td>{$vo.code ?? '-'}</td>
+                                    <td>{$vo.rpc_user ?? '-'}</td>
+                                    <td>{$vo.rpc_pwd ?? '-'}</td>
+                                    <td>{$vo.rpc_url ?? '-'}</td>
+                                    <td>{$vo.rpc_port ?? '-'}</td>
                                     <td><button class="btn btn-primary" onclick="register_edit('{$vo.id}')">{:lang('Edit')}</button> &nbsp;<button class="btn btn-danger" onclick="deleteSlide('{$vo.id}')">{:lang('Delete')}</button>  <button type="button" id="decprice" class="btn btn-primary" onclick="decprice('{$vo.id}');">降低币价</button></td>
                                 </tr>
                                 {/volist}
                                 </tbody>
                             </table></div>
+                        <div>
+                            {$coin_list->render()}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -71,6 +82,30 @@
                     <label for="code" class="col-md-2 control-label">虚拟币标识</label>
                     <div class="col-md-10">
                         <input id="code" name="code" class="form-control" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="rpc_user" class="col-md-2 control-label">虚拟币总账户名</label>
+                    <div class="col-md-10">
+                        <input id="rpc_user" name="rpc_user" class="form-control" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="rpc_pwd" class="col-md-2 control-label">虚拟币密码</label>
+                    <div class="col-md-10">
+                        <input id="rpc_pwd" name="rpc_pwd" class="form-control" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="rpc_url" class="col-md-2 control-label">虚拟币账户url</label>
+                    <div class="col-md-10">
+                        <input id="rpc_url" name="rpc_url" class="form-control" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="rpc_port" class="col-md-2 control-label">虚拟币端口</label>
+                    <div class="col-md-10">
+                        <input id="rpc_port" name="rpc_port" class="form-control" type="text"/>
                     </div>
                 </div>
             </div>
@@ -120,6 +155,10 @@
         $('#name').val(data.name);
         $('#price').val(data.price);
         $('#code').val(data.code);
+        $('#rpc_user').val(data.rpc_user);
+        $('#rpc_pwd').val(data.rpc_pwd);
+        $('#rpc_url').val(data.rpc_url);
+        $('#rpc_port').val(data.rpc_port);
     }
 
     function sub(){
@@ -128,6 +167,10 @@
         var name = $('#name').val();
         var price = $('#price').val();
         var code = $('#code').val();
+        var rpc_user = $('#rpc_user').val();
+        var rpc_pwd = $('#rpc_pwd').val();
+        var rpc_url = $('#rpc_url').val();
+        var rpc_port = $('#rpc_port').val();
         var formData = new FormData();
         if(!name){
             alertMsg("虚拟币名称不能为空！");
@@ -138,6 +181,10 @@
         formData.append('name',name);
         formData.append('price',price);
         formData.append('code',code);
+        formData.append('rpc_user',rpc_user);
+        formData.append('rpc_pwd',rpc_pwd);
+        formData.append('rpc_url',rpc_url);
+        formData.append('rpc_port',rpc_port);
         $.ajax({
             url: "{:url('admin/coin/saveCoin')}",
             type: "POST",
