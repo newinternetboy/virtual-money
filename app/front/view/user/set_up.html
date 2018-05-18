@@ -55,12 +55,14 @@
 	<!--页头结束-->
 	<!--內容-->
 	<div class="setup_container">
+        {if condition="!empty($sessioninfo)"}
 			<div onclick="accountSecurity()" class="setup_inner">
 				<a href="#">
 					<span class="setup_text">賬戶安全</span>
 					<a href="#" style="color:#848484;float:right;line-height:44px;"> <i class="icon iconfont icon-iconfontjiantou5"></i></a>
 				</a>
 			</div>
+        {/if}
 			<div class="setup_inner" onclick="about();" style="border-top:1px solid #edebeb;">
 				<a href="#">
 					<span class="setup_text">關於</span>
@@ -70,9 +72,11 @@
 	</div>
 	<!--內容結束-->
 	<!--退出登錄按钮开始-->
+    {if condition="!empty($sessioninfo)"}
 	<div class="pay_btn">
 		<div id="log_off" onclick="loginOut()">退出登錄</div>
 	</div>
+    {/if}
 	<!--退出登錄按钮结束-->
 
 	

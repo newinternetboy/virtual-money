@@ -17,6 +17,19 @@ use Aliyun\Api\Sms\Request\V20170525\SendSmsRequest;
 
 class Home extends Controller
 {
+    function _initialize()
+    {
+        parent::_initialize();
+
+
+        $sessioninfo = [];
+        if(session('users')){
+            $sessioninfo = session('users');
+        }
+        $this->assign('sessioninfo',$sessioninfo);
+
+    }
+
     public function sendSms($mobile,$smscode,$params)
     {
         require_once VENDOR_PATH .'/aliyunsms/vendor/autoload.php';

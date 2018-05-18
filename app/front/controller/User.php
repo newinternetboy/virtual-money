@@ -28,12 +28,12 @@ class User extends Home
         $mobile = trim(input('post.mobile'));
         $password = trim(input('post.password'));
         //检查用户是否存在
-        $user_info = Db::table('customer')->field('id,tel,password,wallet_address')->where('tel',$mobile)->find();
+        $user_info = Db::table('customer')->field('id,tel,password,wallet_address,certification')->where('tel',$mobile)->find();
         //记录用户id
         $users['cid']=$user_info['id'];
         $users['wa']=$user_info['wallet_address'];
         $users['tel']=$user_info['tel'];
-        session('users',$users);
+        $users['certification']=$user_info['certification'];
         if(!$user_info){
             $ret['code'] = 300;
             $ret['status'] = false;
@@ -50,7 +50,7 @@ class User extends Home
             $ret['code'] = 200;
             $ret['status'] = true;
             $ret['msg'] = '登录成功';
-
+        session('users',$users);
         return json($ret);
     }
 
@@ -83,6 +83,7 @@ class User extends Home
         return json($ret);
     }
 
+    //注册用户；
     public function saveRegister(){
         $data = input('post.');
         $ret['code'] = 200;
@@ -161,11 +162,19 @@ class User extends Home
                 $height = config('common_config.ImgHeight');
                 $data['negative_img'] = saveImg($negative_img,$oriPath,$thumbPath,$width,$height);
             }
-            $data['cid'] = 999999;
+            $data['state'] = 1;
+            $sessionInfo= session('users');
+            if($sessionInfo){
+                $data['cid'] = $sessionInfo['cid'];
+            }
             $certificationService = new CertificationService();
             if (!$certificationService->upsert($data, false)) {
                 exception($certificationService->getError());
             }
+            $customerService = new CustomerService();
+            $customerService->upsert(['id'=>$sessionInfo['cid'],'certification'=>1],false);
+            $sessionInfo['certification']=1;
+            session('users',$sessionInfo);
         } catch (\Exception $e) {
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();

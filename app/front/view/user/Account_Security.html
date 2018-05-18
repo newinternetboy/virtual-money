@@ -47,7 +47,7 @@
 	<header class="am-header" style="background-image:url(__front__/img/header1.jpg) ;background-size: cover;">
 
       <h1 class="am-header-title" style="color: white;font-size: 18px;margin:0;">
-    		<a href="#" style="color:white;float:left;"><i class="icon iconfont icon-huida" style="color:white;"></i></a>
+    		<a href="{:url('front/user/setUp')}" style="color:white;float:left;"><i class="icon iconfont icon-huida" style="color:white;"></i></a>
     		賬戶安全    
       </h1>
 
@@ -55,12 +55,28 @@
 	<!--页头结束-->
 	<!--內容-->
 	<div class="setup_container">
+        {if condition="$sessioninfo['certification'] eq 0"}
 		<div onclick="certification()" class="setup_inner">
 			<a href="#">
 				<span class="setup_text">實名認證</span>
 				<a href="#" style="color:#848484;float:right;line-height:44px;"> <i class="icon iconfont icon-iconfontjiantou5"></i></a>	
 			</a>
 		</div>
+        {elseif condition="$sessioninfo['certification'] eq 1"}
+        <div class="setup_inner">
+            <a href="#">
+                <span class="setup_text">實名認證</span>
+                <a href="#" style="color:#1d2e84;float:right;line-height:44px;"> 认证中...</a>
+            </a>
+        </div>
+        {else /}
+        <div class="setup_inner">
+            <a href="#">
+                <span class="setup_text">實名認證</span>
+                <a href="#" style="color:#0e8448;float:right;line-height:44px;"> 已认证</i></a>
+            </a>
+        </div>
+        {/if}
 	</div>
 	<!--內容結束-->
 
