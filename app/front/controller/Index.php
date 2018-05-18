@@ -10,6 +10,7 @@ namespace app\front\controller;
 use app\common\service\ArticleService;
 use app\common\service\CoinService;
 use app\common\service\SlideService;
+use app\front\controller\Market;
 class Index extends Home
 {
     public function index(){
@@ -19,6 +20,10 @@ class Index extends Home
         $gonggao = $articleService->selectLimitInfo(['type'=>1],'id,title',0,5,'sort desc,sort_time desc');
         $CoinService = new CoinService();
         $coinlist = $CoinService->selectInfo();
+        $coinlist = $coinlist[0]->getData();
+        $usb = (new Market())->convertCurrency();
+        $coinlist['usa_price'] = round($coinlist['price']*$usb,2);
+        $coinlist['price'] = round($coinlist['price'],2);
         $this->assign('coinlist',$coinlist);
         $this->assign('gonggao',$gonggao);
         $this->assign('slidelist',$slidelist);

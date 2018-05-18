@@ -87,8 +87,13 @@
 		<!--货币切换-->
 		<div id="change">
 			<span style="width:23%;text-align:left;">當前價</span>
-			<span style="width:50%;text-align:center;"><span id="price" style="font-size:16px;color: rgb(92,102,249);">{$coinlist[0]?$coinlist[0]['price']:''}</span> <span id="name">{$coinlist[0]?$coinlist[0]['name']:''}</span></span>
-			<span id="code" style="width:13%;text-align:right;">{$coinlist[0]?$coinlist[0]['code']:''}</span>
+			<span style="width:50%;text-align:center;"><span id="price" style="font-size:16px;color: rgb(92,102,249);">
+				￥{$coinlist['price']?$coinlist['price']:''}
+				${$coinlist['usa_price']?$coinlist['usa_price']:''}
+			</span>
+				<span id="name">{$coinlist['name']?$coinlist['name']:''}</span>
+			</span>
+			<span id="code" style="width:13%;text-align:right;">{$coinlist['code']?$coinlist['code']:''}</span>
 			<button type="button" id="button" data="0" class="am-btn am-btn-primary am-btn-xs">切換</button>
 		</div>
 		<div id="hangqingTitle">
