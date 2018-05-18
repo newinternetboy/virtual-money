@@ -39,7 +39,7 @@ class Pay extends Controller
             $text = '暂无对应的钱包地址,请联系客户';
         }
         $url = 'http://'.$locolName.'/front/pay/paymoney?wa='.urlencode($text);//加http://这样扫码可以直接跳转url
-        $qrCode->setText($text);
+        $qrCode->setText($url);
         $qrCode->setSize(300);
 
 // Set advanced options
@@ -293,6 +293,44 @@ class Pay extends Controller
         $myasset = $myasset ? $myasset :0.0000;
         //用户该币待发数
         return $this->fetch('myasset',['wi'=>$wallet_info,'rest_m'=>$myasset]);
+    }
+
+    //二维码（根据钱包地址生成）
+    public function codeImageSecret(){
+        $qrCode = new QrCode();
+        $text = Db::table('wallet')->where('u_id',session('users.cid'))->value('scret_key');
+        if(!$text){
+            $text = '暂无对应的钱包密钥,请联系管理员';
+        }
+        $qrCode->setText($text);
+        $qrCode->setSize(300);
+
+// Set advanced options
+        $qrCode->setWriterByName('png');
+        $qrCode->setMargin(10);
+        $qrCode->setEncoding('UTF-8');
+        $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH);
+        $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
+        $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
+        $qrCode->setLabel('Scan the code', 16, __DIR__.'/../../../vendor/endroid/qrcode/assets/noto_sans.otf', LabelAlignment::CENTER);
+        $qrCode->setLogoPath(__DIR__.'/../../../public/static/admin/images/coin.jpg');
+        $qrCode->setLogoWidth(100);
+        $qrCode->setValidateResult(false);
+
+// Directly output the QR code
+        header('Content-Type: '.$qrCode->getContentType());
+        echo $qrCode->writeString();exit;
+    }
+
+    public function key(){
+        if(!session('users')){
+            $this->redirect('front/user/login');
+        }
+        $secret_key = Db::table('wallet')->where('u_id',session('users.cid'))->value('scret_key');
+        if(!$secret_key){
+            $secret_key = '暂无钱包密钥,请联系管理员生成';
+        }
+        return $this->fetch('key',['secret_key'=>$secret_key]);
     }
 
 }

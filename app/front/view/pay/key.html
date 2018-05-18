@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>key我的密鑰</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="image/png" href="__front__/assets/i/favicon.png">
+  <link rel="stylesheet" href="__front__/assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="__front__/assets/css/yuan.css"/>
+  <style>
+    .header {
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 200%;
+      color: #333;
+      margin-top: 30px;
+    }
+    .header p {
+      font-size: 14px;
+    }
+  </style>
+</head>
+<script type="text/javascript">
+function copyUrl2()
+    {
+        var Url2=document.getElementById("QRnum").innerText;
+        var oInput = document.createElement('input');
+        oInput.value = Url2;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        oInput.className = 'oInput';
+        oInput.style.display='none';
+        alert('复制成功');
+    }
+</script>
+<body style="background-image:url(__front__/img/wallet_background.jpg) ;background-size: cover;">
+	<!--页头-->
+	<header class="am-header" >
+	  <h1 class="am-header-title" style="color:white;font-size:18px;margin:0;">
+			<a  class="am-icon-angle-left" href="{:url('front/user/index')}" style="color:white;float:left;"></a>
+			     我的密匙
+	  </h1>
+  </header>
+	<!--页头结束-->
+
+	<div class="wallet_container">
+		<p class="QR_num" id="QRnum">{$secret_key}</p>
+		<div class="QR_Code">
+			<p style="font-size:12px;width: 165px;">妥善保管密鑰,勿讓他人知道</p>
+			<div class="QR_Code_img">
+				<img src="{:url('/front/pay/codeImageSecret')}">
+			</div>
+		</div>
+		<div class="btn copy_address"  onClick="copyUrl2()">複製密匙文本</div>
+		<div class="btn Save_to_the_album">保存到相冊</div>
+	</div>
+
+</body>
+</html>
+
