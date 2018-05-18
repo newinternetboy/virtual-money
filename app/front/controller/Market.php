@@ -11,7 +11,7 @@ use think\Db;
 class Market extends Home
 {
     public function index(){
-        $result = Db::query("select c.name,cl.price_now,cl.rate from coinpricelog cl
+        $result = Db::query("select c.name,c.code,cl.price_now,cl.rate from coinpricelog cl
         left join coin c on cl.coin_id = c.id
         order by cl.create_time desc limit 1");
         //1人民币兑美元

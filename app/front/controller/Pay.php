@@ -19,11 +19,14 @@ use Endroid\QrCode\QrCode;
 
 use app\timetask\model\Wallet;
 use app\admin\model\Payorder;
+
+use app\common\controller\Rpcutils;
 class Pay extends Controller
 {
     public $wallet_address;
     public $pay_amount;
     public $pay_msg;
+    public $secret_key;
     //二维码（根据钱包地址生成）
     public function codeImage(){
 
@@ -36,7 +39,7 @@ class Pay extends Controller
             $text = '暂无对应的钱包地址,请联系客户';
         }
         $url = 'http://'.$locolName.'/front/pay/paymoney?wa='.urlencode($text);//加http://这样扫码可以直接跳转url
-        $qrCode->setText($text);
+        $qrCode->setText($url);
         $qrCode->setSize(300);
 
 // Set advanced options
@@ -136,6 +139,7 @@ class Pay extends Controller
         $this->pay_amount = trim(input('post.pay_amount'));
         $this->wallet_address = trim(input('post.wallet_address'));
         $this->pay_msg = trim(input('post.pay_msg'));
+        $this->secret_key = trim(input('post.secret_key'));
         $checkWallet = $this->getAllWalletAdress();
         if($checkWallet!==true){
             return $checkWallet;
@@ -144,8 +148,30 @@ class Pay extends Controller
         if($checkAmount!==true){
             return $checkAmount;
         }
+        //校验密钥
+        $secret_key = Db::table('wallet')->where('u_id',$u_id)->value('scret_key');
+        if($this->secret_key != $secret_key){
+            return json([
+                'status'=>false,
+                'code'=>'300',
+                'msg'=>'秘钥错误,请重新输入'
+            ]);
+        }
         $u_to_info = $this->getUserInfoByWI();
         $u_id_to = $u_to_info['id'];
+        $wallet_info = Db::table('coin')
+            ->field('rpc_user,rpc_pwd,rpc_url,rpc_port')
+            ->where('code','RFT')
+            ->find();
+//        从钱包转币
+        $result = Rpcutils::sendfrom($u_id,$this->wallet_address,$this->pay_amount,$wallet_info);
+        if($result==false){
+            return json([
+                'status'=>false,
+                'code'=>'300',
+                'msg'=>'系统繁忙，请稍后'
+            ]);
+        }
         //执行交易
         //交易逻辑 1 从用户的钱包转出，转到接受方  地址
         // 2 记录到 payorder；两条一条支出一条收入
@@ -267,6 +293,44 @@ class Pay extends Controller
         $myasset = $myasset ? $myasset :0.0000;
         //用户该币待发数
         return $this->fetch('myasset',['wi'=>$wallet_info,'rest_m'=>$myasset]);
+    }
+
+    //二维码（根据钱包地址生成）
+    public function codeImageSecret(){
+        $qrCode = new QrCode();
+        $text = Db::table('wallet')->where('u_id',session('users.cid'))->value('scret_key');
+        if(!$text){
+            $text = '暂无对应的钱包密钥,请联系管理员';
+        }
+        $qrCode->setText($text);
+        $qrCode->setSize(300);
+
+// Set advanced options
+        $qrCode->setWriterByName('png');
+        $qrCode->setMargin(10);
+        $qrCode->setEncoding('UTF-8');
+        $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH);
+        $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
+        $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
+        $qrCode->setLabel('Scan the code', 16, __DIR__.'/../../../vendor/endroid/qrcode/assets/noto_sans.otf', LabelAlignment::CENTER);
+        $qrCode->setLogoPath(__DIR__.'/../../../public/static/admin/images/coin.jpg');
+        $qrCode->setLogoWidth(100);
+        $qrCode->setValidateResult(false);
+
+// Directly output the QR code
+        header('Content-Type: '.$qrCode->getContentType());
+        echo $qrCode->writeString();exit;
+    }
+
+    public function key(){
+        if(!session('users')){
+            $this->redirect('front/user/login');
+        }
+        $secret_key = Db::table('wallet')->where('u_id',session('users.cid'))->value('scret_key');
+        if(!$secret_key){
+            $secret_key = '暂无钱包密钥,请联系管理员生成';
+        }
+        return $this->fetch('key',['secret_key'=>$secret_key]);
     }
 
 }
