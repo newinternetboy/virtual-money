@@ -333,4 +333,8 @@ class Pay extends Controller
         return $this->fetch('key',['secret_key'=>$secret_key]);
     }
 
+    public function saoma(){
+        $this->fetch();
+    }
+
 }
