@@ -7,16 +7,24 @@ use app\common\service\RegisterService;
 use app\common\service\CustomerService;
 use app\common\service\CurrencyService;
 use app\common\service\CoinService;
+use app\common\service\ProvinceService;
+use app\common\service\CityService;
+use think\DB;
 
 
 class Register extends Admin
 {
 
     public function index(){
+        $country = config('common_config.country');
+        $provinceService = new ProvinceService();
+        $province = $provinceService->selectProvinceInfo();
         $coinService = new CoinService();
         $coinlist = $coinService->selectInfo();
         $registerService = new RegisterService();
         $registerlist = $registerService->getInfoPaginate();
+        $this->assign('country',$country);
+        $this->assign('province',$province);
         $this->assign('coinlist',$coinlist);
         $this->assign('registerlist',$registerlist);
         return $this->fetch();
@@ -39,6 +47,20 @@ class Register extends Admin
         return json($ret);
     }
 
+    public function getCity(){
+        $id = input('id');
+        $ret['code'] = 200;
+        try{
+            $cityService = new CityService();
+            $city = $cityService->selectCityInfo(['pid' => $id]);
+            $ret['data'] = $city;
+        }catch (\Exception $e){
+            $ret['code'] = 400;
+        }
+        return json($ret);
+    }
+
+
     public function getRegisterCount(){
         $ret['code'] = 200;
         try{
@@ -57,7 +79,6 @@ class Register extends Admin
         $ret['msg'] = "操作成功！";
         try {
             $data = input('post.');
-//            var_dump($data);die;
             $registerService = new RegisterService();
             if (!$registerService->upsert($data, false)) {
                 exception($registerService->getError());
@@ -126,6 +147,9 @@ class Register extends Admin
                     'tel' => $registerInfo['tel'],
                     'identity'=>$registerInfo['identity'],
                     'rid' => $registerInfo['id'],
+                    'country' => $registerInfo['country'],
+                    'province' => $registerInfo['province'],
+                    'city' => $registerInfo['city'],
                 ];
                 if(!$result = $customerService->upsert($customer,false)){
                     exception($customerService->getError());
@@ -159,7 +183,7 @@ class Register extends Admin
                     'num' =>$registerInfo['give_num']
                 ];
             }else{
-                $smscode = 'SMS_133972148';
+                $smscode = 'SMS_133962930';
                 $params =[
                     'name'=>$registerInfo['name'],
                     'password'=>$password,

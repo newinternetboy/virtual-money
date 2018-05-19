@@ -92,6 +92,36 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="coin_id" class="col-md-2 control-label">国籍</label>
+                    <div class="col-md-10">
+                        <select name="country" onchange="changeCountry()" id="country" class="form-control">
+                            <option value="">请选择国籍</option>
+                            {volist name="country" id="vo"}
+                            <option value="{$vo}" >{$vo}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group province_city" style="display:none;">
+                    <label for="coin_id" class="col-md-2 control-label">省份</label>
+                    <div class="col-md-10">
+                        <select name="province" onchange="changeProvince()" id="province" class="form-control">
+                            <option value="">请选择省份</option>
+                            {volist name="province" id="vo"}
+                            <option value="{$vo.id}" >{$vo.name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group province_city" style="display:none;">
+                    <label for="coin_id" class="col-md-2 control-label">城市</label>
+                    <div class="col-md-10">
+                        <select name="city" id="city" class="form-control">
+                            <option value="">请选择城市</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="production" class="col-md-2 control-label">购买的商品</label>
                     <div class="col-md-10">
                         <input id="production" name="production" class="form-control" type="text"/>
@@ -213,6 +243,9 @@
         var name = $('#name').val();
         var tel = $('#tel').val();
         var identity = $('#identity').val();
+        var country = $('#country').val();
+        var province = $('#province').val();
+        var city = $('#city').val();
         var production = $('#production').val();
         var number = $('#number').val();
         var price = $('#price').val();
@@ -224,6 +257,10 @@
             $('#sub').prop('disabled',false);
             return;
         }
+        if(country != '中国'){
+            province = "";
+            city = "";
+        }
         formData.append('id',id);
         formData.append('name',name);
         formData.append('tel',tel);
@@ -233,6 +270,9 @@
         formData.append('price',price);
         formData.append('coin_id',coin_id);
         formData.append('give_num',give_num);
+        formData.append('country',country);
+        formData.append('province',province);
+        formData.append('city',city);
         $.ajax({
             url: "{:url('admin/register/saveRegister')}",
             type: "POST",
@@ -276,6 +316,42 @@
                     alertMsg("{:lang('Operation fail')}");
                 }
             })
+        })
+    }
+</script>
+<script>
+    function changeCountry(){
+        if($('#country').val() == '中国'){
+
+            $('.province_city').show();
+        }else{
+            $('.province_city').hide();
+        }
+    }
+
+    function changeProvince(){
+        var id = $('#province').val();
+        $.ajax({
+            url:"{:url('admin/register/getCity')}",
+            method:'post',
+            dataType:'json',
+            data: {id: id},
+            beforeSend:function(){}, //覆盖main.js中的方法,否则不能正常使用
+            success: function(res){
+                if(res.code == 200){
+                    var data =res.data;
+                    var str = "";
+                    for(var key in data){
+                        str += "<option value='"+data[key]['id']+"'>"+data[key]['name']+"</option>";
+                    }
+                    $('#city').html(str);
+                }else{
+
+                }
+            },
+            error:function(){
+                alertMsg("{:lang('Operation fail')}");
+            }
         })
     }
 </script>

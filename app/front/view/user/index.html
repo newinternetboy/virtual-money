@@ -49,7 +49,7 @@
           		我的賬戶
       </h1>
             {if condition="session('users')"}
-                <div class="loginBtn"><a href="{:url('front/user/loginout')}" class="am-btn am-round">欢迎,{$Think.session.users.tel}</a>
+                <div class="loginBtn"><a href="{:url('front/user/myprofile')}" class="am-btn am-round">欢迎,{$Think.session.users.tel}</a>
                 </div>
             {else /}
                 <div class="loginBtn">
