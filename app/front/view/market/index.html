@@ -17,7 +17,7 @@
 </head>
 <body>
 	<!--页头-->
-	<header class="am-header" style="background-image:url(__front__/img/header1.jpg);background-size:cover;">
+	<header class="am-header" style="background-color: #6275F8;background-size:cover;">
 	  <h1 class="am-header-title">行情</h1>
   </header>
 	<!--页头结束-->
@@ -40,9 +40,9 @@
 				</div>
 				<div class="market_inners" style="text-align:center;line-height:70px;">
 					{if condition="$vo.rate >=0"}
-					<div class="add_btn">{$vo.rate}%</div>
-					{else /}
 					<div class="reduce_btn">{$vo.rate}%</div>
+					{else /}
+					<div class="add_btn">{$vo.rate}%</div>
 					{/if}
 				</div>
 			</a>

@@ -89,6 +89,7 @@ class User extends Home
             $users['cid']=$user_info['id'];
             $users['wa']=$user_info['wallet_address'];
             $users['tel']=$user_info['tel'];
+            $users['certification'] = $user_info['certification'];
             session('users',$users);
         return json($ret);
     }
@@ -121,6 +122,8 @@ class User extends Home
         }
         return json($ret);
     }
+
+
 
     //注册用户；
     public function saveRegister(){
@@ -158,7 +161,40 @@ class User extends Home
                 exception("创建钱包失败");
             }
             $invitationService->update(['in_code'=>$data['invite']],['state'=>3]);
+            $users['cid']=$res;
+            $users['wa']="";
+            $users['tel']=$data['tel'];
+            $users['certification'] = 0;
+            session('users',$users);
+        }catch (\Exception $e){
+            $ret['code'] = 400;
+            $ret['msg'] = $e->getMessage();
+        }
+        return json($ret);
+    }
 
+    //忘记密码
+    public function updatePassword(){
+        $data = input('post.');
+        $ret['code'] = 200;
+        $ret['msg'] = "修改成功";
+        try{
+            if($data['validate'] != Session::get('validate','validate')){
+                exception('验证码错误');
+            }
+            if(!$data['tel']){
+                exception('手机号不能为空');
+            }
+            if($data['password'] != $data['sure_password']){
+                exception('两次输入的密码不一致');
+            }
+            $customerService = new CustomerService();
+            if(!$customerService->findInfo(['tel'=>$data['tel']])){
+                exception('此用户不存在');
+            }
+            if(!$res = $customerService->update(['tel'=>$data['tel']],['password'=>mduser($data['password'])])){
+                exception('修改密码失败');
+            }
         }catch (\Exception $e){
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();
@@ -167,7 +203,7 @@ class User extends Home
     }
 
     public function setUp(){
-        return $this->fetch('set_up');
+        return $this->fetch('setup');
     }
 
     public function accountSecurity(){
@@ -242,8 +278,17 @@ class User extends Home
     public function mykeypassword(){
         return $this->fetch();
     }
+
     public function test(){
         $secret = Db::table('wallet')->where('u_id',26)->value('scret_key');
         var_dump($secret);
+    }
+
+    public function myprofile(){
+        $sessioninfo = session('users');
+        $customerService = new CustomerService();
+        $customer = $customerService->findInfo(['id'=>$sessioninfo['cid']]);
+        $this->assign('customer',$customer);
+        return $this->fetch();
     }
 }
