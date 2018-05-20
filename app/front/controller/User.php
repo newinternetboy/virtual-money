@@ -161,11 +161,11 @@ class User extends Home
                 exception("创建钱包失败");
             }
             $invitationService->update(['in_code'=>$data['invite']],['state'=>3]);
-            $users['cid']=$res;
-            $users['wa']="";
-            $users['tel']=$data['tel'];
-            $users['certification'] = 0;
-            session('users',$users);
+//            $users['cid']=$res;
+//            $users['wa']="";
+//            $users['tel']=$data['tel'];
+//            $users['certification'] = 0;
+//            session('users',$users);
         }catch (\Exception $e){
             $ret['code'] = 400;
             $ret['msg'] = $e->getMessage();

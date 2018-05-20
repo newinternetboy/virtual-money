@@ -51,9 +51,9 @@
                                 <td>{$vo.in_code}</td>
                                 <td>
                                     {switch name="vo.state"}
-                                    {case value="1"}未使用{/case}
-                                    {case value="2"}待使用{/case}
-                                    {case value="3"}已使用{/case}
+                                    {case value="1"}<span style="color:#5effc8;">未使用</span>{/case}
+                                    {case value="2"}<span style="color:#2e8dff;">待使用</span>{/case}
+                                    {case value="3"}<span style="color:#ffe55f;">已使用</span>{/case}
                                     {default /}未定义
                                     {/switch}
                                 </td>
