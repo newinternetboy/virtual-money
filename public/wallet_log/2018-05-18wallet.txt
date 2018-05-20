@@ -1,0 +1,8 @@
+2018-05-18 23:16:40: 用户id为1Failed to connect to 127.0.0.1 port 38868: Connection refused
+2018-05-18 23:16:45: 用户id为1Failed to connect to 127.0.0.1 port 38868: Connection refused
+2018-05-18 23:18:11: 用户id为1Failed to connect to 127.0.0.1 port 38868: Connection refused
+2018-05-18 23:39:48: 用户id为1Failed to connect to 127.0.0.1 port 38868: Connection refused
+2018-05-18 23:50:35: 用户id为1Failed to connect to 127.0.0.1 port 38868: Connection refused
+2018-05-18 23:51:18: 用户id为1Failed to connect to 127.0.0.1 port 38868: Connection refused
+2018-05-18 23:51:53: 用户id为1Failed to connect to 127.0.0.1 port 38868: Connection refused
+2018-05-18 23:52:16: 用户id为1Failed to connect to 127.0.0.1 port 38868: Connection refused
