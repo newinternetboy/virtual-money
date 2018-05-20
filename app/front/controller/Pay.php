@@ -118,7 +118,19 @@ class Pay extends Controller
         $u_id = $u_info['cid'];
 //        $wallet = Wallet::get(['u_id' => $u_id])->getData('account_balance');
         $wallet = Db::table('wallet')->where('u_id',$u_id)->value('account_balance');
-        $checkresult = bcsub($wallet,$pay_amount,4);
+        if($pay_amount-0.001<0){
+            return json([
+                'msg' => '交易量不可低于0.001',
+                'code' => 300,
+                'status' => false
+            ]);
+        }
+//        $checkresult = bcsub($wallet,$pay_amount,4);
+        if($wallet-$pay_amount>=0){
+            $checkresult = true;
+        }else{
+            $checkresult = false;
+        }
         if(!$checkresult){
             return json([
                 'msg' => '钱包余额不足',
@@ -164,7 +176,10 @@ class Pay extends Controller
             ->where('code','RFT')
             ->find();
 //        从钱包转币
-        $result = Rpcutils::sendfrom($u_id,$this->wallet_address,$this->pay_amount,$wallet_info);
+        $wd = $this->wallet_address;
+        $pa = $this->pay_amount;
+        $pa = number_format($pa,6,'.','');
+        $result = Rpcutils::sendfrom($u_id,$wd,$pa,$wallet_info);
         if($result==false){
             return json([
                 'status'=>false,
@@ -280,7 +295,7 @@ class Pay extends Controller
         where w.u_id = ? limit 1
         ",[$u_id]);
         //账户余额
-        $wallet_info = $coin_list?$coin_list[0]:0.0000;
+        $wallet_info = $coin_list?$coin_list[0]:0.000000;
         $coin_id = $coin_list[0]['id'];
         //获取用户的固定资产
         $rest_money = Db::table('currency')->field('rest_number')->where('coin_id',$coin_id)
@@ -290,7 +305,7 @@ class Pay extends Controller
         foreach ($rest_money as $k=>$v){
             $myasset += $v['rest_number'];
         }
-        $myasset = $myasset ? $myasset :0.0000;
+        $myasset = $myasset ? $myasset :0.000000;
         //用户该币待发数
         return $this->fetch('myasset',['wi'=>$wallet_info,'rest_m'=>$myasset]);
     }

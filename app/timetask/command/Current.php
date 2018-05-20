@@ -66,7 +66,7 @@ class Current extends Command
                 //每条记录当天对应的发币量  每天每次释放量 = 单次获赠虚拟币数量*0.1/365/2
                 // $k 每条记录对应的id $v 没条记录对应的总的虚拟币数
                 //计算每条记录应该每天每次需要派发的虚拟币数
-                $day_releast = round($list2['number'] * 0.1 / 365 / 2, 4);
+                $day_releast = round($list2['number'] * 0.1 / 365 / 2,6);
                 //根据uid获取钱包地址
                 $wd = Db::table('customer')->where('id',$list2['cid'])->value('wallet_address');
                 //发币
